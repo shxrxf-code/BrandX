@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function SEOServices() {
   return (
     <div className="page-enter min-h-screen bg-gray-950 pt-32">
@@ -55,23 +57,23 @@ export default function SEOServices() {
               </p>
               <ul className="space-y-3 text-gray-400">
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Site speed optimization for Core Web Vitals</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>XML sitemaps and robots.txt optimization</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Mobile-first indexing compliance</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Structured data markup and schema</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>URL structure optimization</span>
                 </li>
               </ul>
@@ -85,23 +87,23 @@ export default function SEOServices() {
               </p>
               <ul className="space-y-3 text-gray-400">
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Keyword research and semantic optimization</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Title tags, meta descriptions, header optimization</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Content depth and relevance enhancement</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Internal linking architecture</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>User experience signals optimization</span>
                 </li>
               </ul>
@@ -115,23 +117,23 @@ export default function SEOServices() {
               </p>
               <ul className="space-y-3 text-gray-400">
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>High-quality backlink acquisition</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Competitor link analysis and replication</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Digital PR and outreach campaigns</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Brand mentions and citation building</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Toxic link detection and removal</span>
                 </li>
               </ul>
@@ -145,23 +147,23 @@ export default function SEOServices() {
               </p>
               <ul className="space-y-3 text-gray-400">
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Content strategy and editorial planning</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Topic clustering and pillar content</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Professional content creation</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Search intent alignment</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-blue-400 flex-shrink-0">✓</span>
+                  <span className="text-blue-400 shrink-0">✓</span>
                   <span>Evergreen and seasonal content mix</span>
                 </li>
               </ul>
@@ -230,9 +232,9 @@ export default function SEOServices() {
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
           Let's discuss your SEO strategy and build your path to top rankings.
         </p>
-        <a href="/contact" className="btn-primary inline-block">
+        <Link to="/contact" className="btn-primary inline-block">
           Schedule a Strategy Session
-        </a>
+        </Link>
       </section>
     </div>
   );

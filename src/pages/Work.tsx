@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Work() {
   const projects = [
     {
@@ -65,7 +67,7 @@ export default function Work() {
                 <h3 className="text-2xl font-bold mb-4">{project.title}</h3>
 
                 {/* Description */}
-                <p className="text-gray-300 leading-relaxed mb-6 flex-grow">
+                <p className="text-gray-300 leading-relaxed mb-6 grow">
                   {project.description}
                 </p>
 
@@ -88,9 +90,9 @@ export default function Work() {
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
           These results are just the beginning. Let's discuss your project and build something remarkable.
         </p>
-        <a href="/contact" className="btn-primary inline-block">
+        <Link to="/contact" className="btn-primary inline-block">
           Start Your Project
-        </a>
+        </Link>
       </section>
     </div>
   );

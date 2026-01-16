@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function WebDevelopment() {
   return (
     <div className="page-enter bg-gray-950 pt-16">
@@ -147,7 +149,7 @@ export default function WebDevelopment() {
             ].map((item, idx) => (
               <div key={idx} className="card">
                 <div className="flex gap-4">
-                  <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center shrink-0">
                     <span className="text-blue-400 font-bold">{String(idx + 1).padStart(2, '0')}</span>
                   </div>
                   <div>
@@ -167,9 +169,9 @@ export default function WebDevelopment() {
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
           Let's build something that scales with your ambitions.
         </p>
-        <a href="/contact" className="btn-primary inline-block">
+        <Link to="/contact" className="btn-primary inline-block">
           Start Your Project
-        </a>
+        </Link>
       </section>
     </div>
   );

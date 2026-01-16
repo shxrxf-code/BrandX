@@ -3,8 +3,21 @@ import { useEffect, useState } from 'react';
 export default function MouseFollowBackground() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 20;
       const y = (e.clientY / window.innerHeight - 0.5) * 20;
@@ -13,10 +26,12 @@ export default function MouseFollowBackground() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [isMobile]);
 
   // Smooth interpolation for parallax
   useEffect(() => {
+    if (isMobile) return;
+    
     const interval = setInterval(() => {
       setOffset((prev) => ({
         x: prev.x + (mousePos.x - prev.x) * 0.1,
@@ -25,7 +40,11 @@ export default function MouseFollowBackground() {
     }, 50);
 
     return () => clearInterval(interval);
-  }, [mousePos]);
+  }, [mousePos, isMobile]);
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">

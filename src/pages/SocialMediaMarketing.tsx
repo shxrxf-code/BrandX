@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function SocialMediaMarketing() {
   return (
     <div className="page-enter min-h-screen bg-gray-950 pt-32">
@@ -132,9 +134,9 @@ export default function SocialMediaMarketing() {
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
           Let's discuss your social media strategy and how we can accelerate your growth.
         </p>
-        <a href="/contact" className="btn-primary inline-block">
+        <Link to="/contact" className="btn-primary inline-block">
           Schedule a Consultation
-        </a>
+        </Link>
       </section>
     </div>
   );

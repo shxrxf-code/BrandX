@@ -18,8 +18,15 @@ export default function Navigation() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-gray-950/95 lg:bg-gray-950/95 lg:backdrop-blur border-b border-gray-800 z-50">
-      <div className="max-w-7xl mr-auto pr-6 lg:pr-12 py-3">
-        <div className="flex items-center justify-end">
+      <div className="max-w-7xl mx-auto px-6 lg:pr-12 py-2 lg:py-3">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center transition-smooth shrink-0 hover:opacity-90">
+            <span className="font-bold text-xl sm:text-2xl tracking-tight text-white">
+              Brandex Digital
+            </span>
+          </Link>
+
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-12">
             {navItems.map((item) => (
@@ -40,12 +47,12 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden flex items-center justify-center h-14 w-14 hover:bg-gray-900 rounded-lg transition-smooth hover:opacity-75 active:scale-95"
+            className="lg:hidden flex items-center justify-center h-12 w-12 hover:bg-gray-900 rounded-lg transition-smooth hover:opacity-75 active:scale-95"
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
           >
             {isOpen ? (
               <svg
-                className="w-6 h-6 text-white"
+                className="w-5 h-5 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -57,7 +64,7 @@ export default function Navigation() {
               </svg>
             ) : (
               <svg
-                className="w-6 h-6 text-white"
+                className="w-5 h-5 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -75,13 +82,13 @@ export default function Navigation() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="lg:hidden bg-gray-900 border-t border-gray-800">
-          <div className="px-6 py-4 flex flex-col gap-4">
+          <div className="px-6 py-3 flex flex-col gap-3">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 onClick={() => setIsOpen(false)}
-                className={`transition-smooth font-medium py-2 ${
+                className={`transition-smooth font-medium py-1.5 ${
                   isActive(item.path) ? 'text-blue-400' : 'text-gray-400 hover:text-white'
                 }`}
               >

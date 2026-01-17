@@ -166,40 +166,48 @@ export default function Contact() {
           <h2 className="heading-h2 mb-8 text-center">Prefer to Connect Differently?</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="card text-center">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <a 
+              href="mailto:brandexdigital.in@gmail.com"
+              className="card text-center block cursor-pointer hover:border-blue-500/50 transition-all duration-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 pointer-events-none">
                 <span className="text-xl">📧</span>
               </div>
-              <h3 className="text-lg font-bold mb-2">Email</h3>
-              <a href="mailto:brandexdigital.in@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
+              <h3 className="text-lg font-bold mb-2 pointer-events-none">Email</h3>
+              <span className="text-blue-400 hover:text-blue-300 transition-colors pointer-events-none">
                 brandexdigital.in@gmail.com
-              </a>
-            </div>
+              </span>
+            </a>
 
-            <div className="card text-center">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <a 
+              href="tel:7010096308"
+              className="card text-center block cursor-pointer hover:border-blue-500/50 transition-all duration-300"
+            >
+              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 pointer-events-none">
                 <span className="text-xl">📱</span>
               </div>
-              <h3 className="text-lg font-bold mb-2">Phone</h3>
-              <a href="tel:7010096308" className="text-blue-400 hover:text-blue-300 transition-colors">
+              <h3 className="text-lg font-bold mb-2 pointer-events-none">Phone</h3>
+              <span className="text-blue-400 hover:text-blue-300 transition-colors pointer-events-none">
                 7010096308
-              </a>
-            </div>
+              </span>
+            </a>
 
-            <div className="card text-center">
-              <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <a 
+              href="https://wa.me/7010096308?text=Hello%20Brandex%20Team,%20I%20would%20like%20to%20discuss%20a%20project." 
+              className="card text-center block cursor-pointer hover:border-green-500/50 transition-all duration-300"
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 pointer-events-none">
                 <span className="text-xl">💬</span>
               </div>
-              <h3 className="text-lg font-bold mb-2">WhatsApp</h3>
-              <a 
-                href="https://wa.me/7010096308?text=Hello%20Brandex%20Team,%20I%20would%20like%20to%20discuss%20a%20project." 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-green-400 hover:text-green-300 transition-colors"
-              >
+              <h3 className="text-lg font-bold mb-2 pointer-events-none">WhatsApp</h3>
+              <span className="text-green-400 hover:text-green-300 transition-colors pointer-events-none">
                 Start Chat
-              </a>
-            </div>
+              </span>
+            </a>
           </div>
         </div>
       </section>

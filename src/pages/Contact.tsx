@@ -187,13 +187,18 @@ export default function Contact() {
             </div>
 
             <div className="card text-center">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <span className="text-xl">💬</span>
               </div>
-              <h3 className="text-lg font-bold mb-2">Live Chat</h3>
-              <p className="text-gray-400">
-                Available Monday-Friday, 9AM-6PM EST
-              </p>
+              <h3 className="text-lg font-bold mb-2">WhatsApp</h3>
+              <a 
+                href="https://wa.me/7010096308?text=Hello%20Brandex%20Team,%20I%20would%20like%20to%20discuss%20a%20project." 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-green-400 hover:text-green-300 transition-colors"
+              >
+                Start Chat
+              </a>
             </div>
           </div>
         </div>

@@ -1,7 +1,54 @@
 import { useState } from 'react';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    service: '',
+    message: '',
+  });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', company: '', service: '', message: '' });
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 5000);
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (err) {
+      setError('Failed to send message. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="page-enter bg-gray-950 pt-4">
@@ -27,19 +74,7 @@ export default function Contact() {
               </p>
             </div>
           ) : (
-            <form 
-              action="https://formspree.io/f/mlgggpwq"
-              method="POST"
-              className="card"
-              onSubmit={() => setSubmitted(true)}
-            >
-              {/* Hidden redirect field */}
-              <input
-                type="hidden"
-                name="_redirect"
-                value="https://brandexdigital.in/contact"
-              />
-              
+            <form onSubmit={handleSubmit} className="card">
               <div className="space-y-6">
                 {/* Name Field */}
                 <div>
@@ -50,6 +85,8 @@ export default function Contact() {
                     type="text"
                     id="name"
                     name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="John Doe"
@@ -65,6 +102,8 @@ export default function Contact() {
                     type="email"
                     id="email"
                     name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="john@company.com"
@@ -80,6 +119,8 @@ export default function Contact() {
                     type="text"
                     id="company"
                     name="company"
+                    value={formData.company}
+                    onChange={handleChange}
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="Your Company"
                   />
@@ -93,6 +134,8 @@ export default function Contact() {
                   <select
                     id="service"
                     name="service"
+                    value={formData.service}
+                    onChange={handleChange}
                     required
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors appearance-none"
                   >
@@ -113,6 +156,8 @@ export default function Contact() {
                   <textarea
                     id="message"
                     name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     required
                     rows={5}
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none"
@@ -120,9 +165,20 @@ export default function Contact() {
                   ></textarea>
                 </div>
 
+                {/* Error Message */}
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-red-400 text-center">
+                    {error}
+                  </div>
+                )}
+
                 {/* Submit Button */}
-                <button type="submit" className="btn-primary w-full">
-                  Send Message
+                <button 
+                  type="submit" 
+                  className="btn-primary w-full"
+                  disabled={submitting}
+                >
+                  {submitting ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
 

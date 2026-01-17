@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
-
 export default function Navigation() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +19,10 @@ export default function Navigation() {
   return (
     <nav className="fixed top-0 left-0 right-0 bg-gray-950/95 lg:bg-gray-950/95 lg:backdrop-blur border-b border-gray-800 z-50">
       <div className="max-w-7xl mx-auto px-6 lg:pr-12 py-2 lg:py-3">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-0 ml-0 em transition-smooth shrink-0 hover:opacity-90">
+            
             <span className="font-bold text-xl sm:text-2xl text-white m-0 p-0 -mr-2.5">
               Brandex Digital
             </span>

@@ -31,12 +31,16 @@ export default function Home() {
 
           {/* Visual Element */}
           <div className="flex items-center justify-center">
-            <div className="w-full h-80 bg-linear-to-br from-blue-500/10 to-gray-900 border border-gray-800 rounded-2xl flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-blue-500/20 rounded-xl mx-auto mb-4 flex items-center justify-center">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-linear-to-br from-blue-500/10 to-gray-900 bg-cover bg-center w-full h-80">
+              {/* Dark Overlay for Readability */}
+              <div className="absolute inset-0 bg-linear-to-br from-black/20 via-black/10 to-black/20"></div>
+              
+              {/* Content Layer */}
+              <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-xl mx-auto mb-4 flex items-center justify-center">
                   <span className="text-3xl">✓</span>
                 </div>
-                <p className="text-gray-400 font-medium">Complete Solutions</p>
+                <p className="text-white font-medium">Complete Solutions</p>
               </div>
             </div>
           </div>

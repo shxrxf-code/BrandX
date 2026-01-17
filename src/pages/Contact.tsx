@@ -1,34 +1,7 @@
 import { useState } from 'react';
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    service: '',
-    message: '',
-  });
-
   const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real application, you would send this data to your backend
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', company: '', service: '', message: '' });
-    }, 3000);
-  };
 
   return (
     <div className="page-enter bg-gray-950 pt-4">
@@ -54,7 +27,19 @@ export default function Contact() {
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="card">
+            <form 
+              action="https://formspree.io/f/mlgggpwq"
+              method="POST"
+              className="card"
+              onSubmit={() => setSubmitted(true)}
+            >
+              {/* Hidden redirect field */}
+              <input
+                type="hidden"
+                name="_redirect"
+                value="https://brandexdigital.in/contact"
+              />
+              
               <div className="space-y-6">
                 {/* Name Field */}
                 <div>
@@ -65,8 +50,6 @@ export default function Contact() {
                     type="text"
                     id="name"
                     name="name"
-                    value={formData.name}
-                    onChange={handleChange}
                     required
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="John Doe"
@@ -82,8 +65,6 @@ export default function Contact() {
                     type="email"
                     id="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
                     required
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="john@company.com"
@@ -99,8 +80,6 @@ export default function Contact() {
                     type="text"
                     id="company"
                     name="company"
-                    value={formData.company}
-                    onChange={handleChange}
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                     placeholder="Your Company"
                   />
@@ -114,8 +93,6 @@ export default function Contact() {
                   <select
                     id="service"
                     name="service"
-                    value={formData.service}
-                    onChange={handleChange}
                     required
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors appearance-none"
                   >
@@ -136,8 +113,6 @@ export default function Contact() {
                   <textarea
                     id="message"
                     name="message"
-                    value={formData.message}
-                    onChange={handleChange}
                     required
                     rows={5}
                     className="w-full bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none"

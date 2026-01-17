@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   return (
-    <div className="page-enter min-h-screen bg-gray-950 pt-32">
+    <div className="page-enter bg-gray-950 pt-14 lg:pt-32">
       {/* Hero Section */}
-      <section className="section-container">
+      <section className="section-container pt-8 pb-6 lg:pt-16 lg:pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4 lg:gap-8">
             <h1 className="heading-h1 text-white leading-tight">
               Technical Execution <span className="text-blue-500">That Delivers</span>
             </h1>
@@ -19,11 +19,11 @@ export default function Home() {
               From strategic planning to full implementation—we handle it all, completely and professionally.
             </p>
 
-            <div className="flex gap-4 pt-4">
-              <Link to="/contact" className="btn-primary">
+            <div className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:items-start sm:gap-4 sm:mt-6 pt-2 lg:pt-4">
+              <Link to="/contact" className="btn-primary w-auto px-4 py-2 text-sm rounded-md sm:px-6 sm:py-3 sm:text-base sm:rounded-lg">
                 Start Your Project
               </Link>
-              <Link to="/work" className="btn-secondary">
+              <Link to="/work" className="btn-secondary w-auto px-4 py-2 text-sm rounded-md sm:px-6 sm:py-3 sm:text-base sm:rounded-lg">
                 View Our Work
               </Link>
             </div>
@@ -77,16 +77,16 @@ export default function Home() {
             to="/web-development"
             className="card group cursor-pointer"
           >
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:bg-blue-500/40 transition-colors">
                 <span className="text-xl">💻</span>
               </div>
             </div>
-            <h3 className="heading-h3 mb-3">Web Development</h3>
+            <h3 className="heading-h3 mb-2 sm:mb-3">Web Development</h3>
             <p className="text-gray-400 leading-relaxed">
               Production-ready websites built for performance, security, and scale. No shortcuts, full professionalism.
             </p>
-            <div className="mt-6 text-blue-400 font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
+            <div className="mt-4 sm:mt-6 text-blue-400 font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
               Learn more →
             </div>
           </Link>
@@ -96,16 +96,16 @@ export default function Home() {
             to="/seo"
             className="card group cursor-pointer"
           >
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:bg-blue-500/40 transition-colors">
                 <span className="text-xl">🎯</span>
               </div>
             </div>
-            <h3 className="heading-h3 mb-3">SEO Services</h3>
+            <h3 className="heading-h3 mb-2 sm:mb-3">SEO Services</h3>
             <p className="text-gray-400 leading-relaxed">
               Sustainable, data-driven SEO that builds long-term rankings. Measurable results, no black hat tactics.
             </p>
-            <div className="mt-6 text-blue-400 font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
+            <div className="mt-4 sm:mt-6 text-blue-400 font-medium flex items-center gap-2 group-hover:gap-3 transition-all">
               Learn more →
             </div>
           </Link>
@@ -113,29 +113,29 @@ export default function Home() {
       </section>
 
       {/* Trust Section */}
-      <section className="section-container border-t border-gray-800">
-        <div className="text-center mb-16">
+      <section className="section-container border-t border-gray-800 py-12 sm:py-16">
+        <div className="text-center mb-8 sm:mb-12">
           <h2 className="heading-h2">Why Choose Us</h2>
-          <p className="text-xl text-gray-400 mt-4">
+          <p className="text-xl text-gray-400 mt-2 sm:mt-4">
             Because your project demands excellence
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           <div className="card">
-            <h4 className="text-xl font-bold mb-3">Complete Delivery</h4>
+            <h4 className="text-xl font-bold mb-2 sm:mb-3">Complete Delivery</h4>
             <p className="text-gray-400">
               We take ownership of every aspect. No hand-offs to third parties, no incomplete work. You get the full package.
             </p>
           </div>
           <div className="card">
-            <h4 className="text-xl font-bold mb-3">Professional Excellence</h4>
+            <h4 className="text-xl font-bold mb-2 sm:mb-3">Professional Excellence</h4>
             <p className="text-gray-400">
               Enterprise-grade standards applied to every project. Meticulous attention to detail, every single time.
             </p>
           </div>
           <div className="card">
-            <h4 className="text-xl font-bold mb-3">On-Time, Always</h4>
+            <h4 className="text-xl font-bold mb-2 sm:mb-3">On-Time, Always</h4>
             <p className="text-gray-400">
               Deadlines are commitments we keep. Transparent timelines, realistic delivery, zero surprises.
             </p>

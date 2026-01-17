@@ -1,5 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import logo from "../assets/logo/Logo.png";
+
 
 export default function Navigation() {
   const location = useLocation();

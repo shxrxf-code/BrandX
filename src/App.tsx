@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import MouseFollowBackground from './components/MouseFollowBackground';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Work from './pages/Work';
 import SocialMediaMarketing from './pages/SocialMediaMarketing';
@@ -14,6 +15,7 @@ function App() {
     <Router>
       <MouseFollowBackground />
       <Navigation />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/work" element={<Work />} />

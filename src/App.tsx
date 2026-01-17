@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Navigation from './components/Navigation';
 import MouseFollowBackground from './components/MouseFollowBackground';
 import ScrollToTop from './components/ScrollToTop';
@@ -24,6 +25,7 @@ function App() {
         <Route path="/seo" element={<SEOServices />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <Analytics />
     </Router>
   );
 }

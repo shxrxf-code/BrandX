@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Analytics } from '@vercel/analytics/react';
 import Navigation from './components/Navigation';
 import MouseFollowBackground from './components/MouseFollowBackground';
 import ScrollToTop from './components/ScrollToTop';
@@ -10,6 +9,8 @@ import WebDevelopment from './pages/WebDevelopment';
 import SEOServices from './pages/SEO';
 import Contact from './pages/Contact';
 import './index.css';
+import { Analytics } from "@vercel/analytics/react";
+
 
 function App() {
   return (

@@ -165,14 +165,24 @@ export default function Contact() {
         <div className="max-w-5xl mx-auto">
           <h2 className="heading-h2 mb-8 text-center">Prefer to Connect Differently?</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="card text-center">
               <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <span className="text-xl">📧</span>
               </div>
               <h3 className="text-lg font-bold mb-2">Email</h3>
-              <a href="mailto:hello@brandx.com" className="text-blue-400 hover:text-blue-300 transition-colors">
-                hello@brandx.com
+              <a href="mailto:brandexdigital.in@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
+                brandexdigital.in@gmail.com
+              </a>
+            </div>
+
+            <div className="card text-center">
+              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <span className="text-xl">📱</span>
+              </div>
+              <h3 className="text-lg font-bold mb-2">Phone</h3>
+              <a href="tel:7010096308" className="text-blue-400 hover:text-blue-300 transition-colors">
+                7010096308
               </a>
             </div>
 
@@ -183,16 +193,6 @@ export default function Contact() {
               <h3 className="text-lg font-bold mb-2">Live Chat</h3>
               <p className="text-gray-400">
                 Available Monday-Friday, 9AM-6PM EST
-              </p>
-            </div>
-
-            <div className="card text-center">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <span className="text-xl">🔔</span>
-              </div>
-              <h3 className="text-lg font-bold mb-2">Schedule Call</h3>
-              <p className="text-gray-400">
-                Calendar available for immediate booking
               </p>
             </div>
           </div>
@@ -233,9 +233,18 @@ export default function Contact() {
       {/* Final CTA */}
       <section className="section-container py-12 border-t border-gray-800 text-center">
         <h2 className="heading-h3 mb-4">Ready to get started?</h2>
-        <p className="text-lg text-gray-400 mb-8">
+        <p className="text-lg text-gray-400 mb-6">
           Complete the form above and let's discuss your vision.
         </p>
+        <div className="flex justify-center gap-8 text-sm">
+          <a href="mailto:brandexdigital.in@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
+            brandexdigital.in@gmail.com
+          </a>
+          <span className="text-gray-600">|</span>
+          <a href="tel:7010096308" className="text-blue-400 hover:text-blue-300 transition-colors">
+            7010096308
+          </a>
+        </div>
       </section>
     </div>
   );

@@ -21,9 +21,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-6 lg:pr-12 py-2 lg:py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-0 ml-0 em transition-smooth shrink-0 hover:opacity-90">
-            
-            <span className="font-bold text-xl sm:text-2xl text-white m-0 p-0 -mr-2.5">
+          <Link to="/" className="flex items-center gap-2 ml-0 em transition-smooth shrink-0 hover:opacity-90">
+            <span className="font-bold text-xl sm:text-2xl text-white m-0 p-0">
               Brandex Digital
             </span>
           </Link>

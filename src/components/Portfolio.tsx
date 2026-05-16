@@ -8,15 +8,15 @@ const projects = [
   {
     title: 'Project One',
     category: 'Solar Energy',
-    image: 'https://images.unsplash.com/photo-1509391366360-fe5bb584850a?auto=format&fit=crop&q=80&w=2000',
+    image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=2000',
     color: '#3b82f6',
     gridSpan: 'md:col-span-8 md:row-span-2 h-[600px] md:h-auto',
     link: 'https://sun-solar-three.vercel.app/'
   },
   {
-    title: 'Project Two',
-    category: 'E-commerce',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=2000',
+    title: 'Drifto',
+    category: "Men's Clothing",
+    image: 'https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&q=80&w=2000',
     color: '#a855f7',
     gridSpan: 'md:col-span-4 md:row-span-1 h-[300px]',
     link: '#'

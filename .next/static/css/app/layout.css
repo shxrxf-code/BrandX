@@ -810,6 +810,9 @@ video {
 .top-\[20\%\] {
   top: 20%;
 }
+.-bottom-20 {
+  bottom: -5rem;
+}
 .-z-10 {
   z-index: -10;
 }
@@ -864,6 +867,12 @@ video {
 }
 .mt-4 {
   margin-top: 1rem;
+}
+.mb-16 {
+  margin-bottom: 4rem;
+}
+.mt-8 {
+  margin-top: 2rem;
 }
 .block {
   display: block;
@@ -1138,6 +1147,11 @@ video {
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
+.space-y-20 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(5rem * var(--tw-space-y-reverse));
+}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1355,6 +1369,14 @@ video {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.py-20 {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 .pb-12 {
   padding-bottom: 3rem;

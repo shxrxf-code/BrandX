@@ -20,9 +20,9 @@ const social = [
 
 export default function Footer() {
   return (
-    <footer className="pt-32 pb-12 bg-background border-t border-white/5 relative overflow-hidden">
+    <footer className="pt-20 pb-12 bg-background border-t border-white/5 relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="lg:col-span-2">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

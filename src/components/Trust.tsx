@@ -11,7 +11,7 @@ const stats = [
 
 export default function Trust() {
   return (
-    <section className="py-24 border-y border-white/5 bg-background-secondary overflow-hidden">
+    <section className="py-16 border-y border-white/5 bg-background-secondary overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {stats.map((stat, index) => (

@@ -37,7 +37,7 @@ const steps = [
 
 export default function Process() {
   return (
-    <section className="py-32 bg-background-secondary relative overflow-hidden">
+    <section className="py-20 bg-background-secondary relative overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row gap-20">
           <div className="md:w-1/3 sticky top-32 h-fit">
@@ -69,7 +69,7 @@ export default function Process() {
             </motion.p>
           </div>
 
-          <div className="md:w-2/3 space-y-32">
+          <div className="md:w-2/3 space-y-20">
             {steps.map((step, index) => (
               <motion.div
                 key={index}
@@ -99,7 +99,7 @@ export default function Process() {
 
                 {/* Vertical Line */}
                 {index !== steps.length - 1 && (
-                  <div className="absolute -bottom-32 left-[4.5rem] w-[1px] h-20 bg-gradient-to-b from-white/10 to-transparent hidden md:block" />
+                  <div className="absolute -bottom-20 left-[4.5rem] w-[1px] h-20 bg-gradient-to-b from-white/10 to-transparent hidden md:block" />
                 )}
               </motion.div>
             ))}

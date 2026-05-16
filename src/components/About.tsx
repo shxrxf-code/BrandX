@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function About() {
   return (
-    <section className="py-32 relative overflow-hidden bg-background">
+    <section className="py-20 relative overflow-hidden bg-background">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div className="relative">
@@ -44,7 +44,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-5xl md:text-7xl font-bold mb-10 leading-[0.9] tracking-tighter"
+              className="text-5xl md:text-7xl font-bold mb-8 leading-[0.9] tracking-tighter"
             >
               WE DON'T JUST <br />
               <span className="text-white/20">CREATE WEBSITES.</span> <br />
@@ -75,7 +75,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
-              className="mt-12 pt-12 border-t border-white/10 grid grid-cols-2 gap-8"
+              className="mt-8 pt-8 border-t border-white/10 grid grid-cols-2 gap-8"
             >
               <div>
                 <div className="text-3xl font-bold mb-1 text-white">Innovation</div>

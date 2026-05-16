@@ -44,9 +44,9 @@ const services = [
 
 export default function Services() {
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="max-w-3xl mb-24">
+        <div className="max-w-3xl mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

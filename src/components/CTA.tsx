@@ -5,7 +5,7 @@ import { ArrowUpRight } from 'lucide-react'
 
 export default function CTA() {
   return (
-    <section className="py-40 relative overflow-hidden bg-background">
+    <section className="py-24 relative overflow-hidden bg-background">
       {/* Background Animated Glows */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
@@ -25,7 +25,7 @@ export default function CTA() {
           viewport={{ once: true }}
           className="max-w-4xl mx-auto"
         >
-          <h2 className="text-6xl md:text-[10vw] font-bold leading-[0.85] mb-12 tracking-tighter uppercase">
+          <h2 className="text-6xl md:text-[10vw] font-bold leading-[0.85] mb-8 tracking-tighter uppercase">
             Ready to build <br />
             <span className="text-white/20">Something</span> <br />
             Iconic?

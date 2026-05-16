@@ -6,7 +6,7 @@ export default function About() {
   return (
     <section className="py-20 relative overflow-hidden bg-background">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="relative">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}

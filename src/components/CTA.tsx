@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import MagneticButton from '@/components/ui/MagneticButton'
 import ScrollReveal from '@/components/ui/ScrollReveal'
@@ -8,12 +8,21 @@ import Marquee from '@/components/ui/Marquee'
 
 export default function CTA() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start end', 'end start'],
   })
 
-  const scale = useTransform(scrollYProgress, [0, 0.5], [0.9, 1])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [isMobile ? 0.95 : 0.9, 1])
   const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1])
 
   const marqueeItems = [

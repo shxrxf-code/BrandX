@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
 interface GradientOrbsProps {
@@ -8,6 +9,17 @@ interface GradientOrbsProps {
 }
 
 export default function GradientOrbs({ count = 3, className = '' }: GradientOrbsProps) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  if (isMobile) return null
+
   const orbConfigs = [
     { color: 'bg-accent-blue/30', size: 'w-[600px] h-[600px]', baseX: '20%', baseY: '10%' },
     { color: 'bg-accent-purple/25', size: 'w-[500px] h-[500px]', baseX: '70%', baseY: '60%' },

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { ArrowDown, Sparkles, Zap, Globe } from 'lucide-react'
 import GradientOrbs from '@/components/effects/GradientOrbs'
@@ -16,26 +16,36 @@ const floatingCards = [
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end start'],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const y = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 80 : 200])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.98])
 
-  const springY = useSpring(y, { stiffness: 100, damping: 30 })
+  const springY = isMobile ? y : useSpring(y, { stiffness: 100, damping: 30 })
 
   const words = ['Designing', 'The', 'Future', 'Of', 'Digital', 'Brands']
+  const baseDelay = isMobile ? 0.3 : 2.2
 
   return (
     <section
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      <GradientOrbs count={3} />
-      <Particles count={30} speed={0.2} size={1.5} color="255,255,255" />
+      <GradientOrbs count={isMobile ? 1 : 3} />
+      <Particles count={isMobile ? 10 : 30} speed={0.2} size={1.5} color="255,255,255" />
 
       <div className="absolute inset-0 grid-lines opacity-50" />
 
@@ -47,7 +57,7 @@ export default function Hero() {
           className="flex items-center justify-center gap-2 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.2, duration: 0.6 }}
+          transition={{ delay: baseDelay, duration: 0.6 }}
         >
           <span className="h-px w-8 bg-accent-blue/50" />
           <span className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase">
@@ -62,11 +72,11 @@ export default function Hero() {
               <motion.span
                 key={i}
                 className="inline-block text-hero text-gradient"
-                initial={{ opacity: 0, y: 100, rotateX: -90 }}
+                initial={{ opacity: 0, y: isMobile ? 30 : 100, rotateX: isMobile ? 0 : -90 }}
                 animate={{ opacity: 1, y: 0, rotateX: 0 }}
                 transition={{
-                  delay: 2.3 + i * 0.1,
-                  duration: 0.8,
+                  delay: baseDelay + 0.1 + i * 0.05,
+                  duration: isMobile ? 0.4 : 0.8,
                   ease: [0.16, 1, 0.3, 1],
                 }}
               >
@@ -80,7 +90,7 @@ export default function Hero() {
           className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.9, duration: 0.6 }}
+          transition={{ delay: baseDelay + 0.7, duration: 0.6 }}
         >
           We craft premium digital experiences that elevate brands, drive growth,
           and leave lasting impressions in the minds of your audience.
@@ -90,7 +100,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 3.1, duration: 0.6 }}
+          transition={{ delay: baseDelay + 0.9, duration: 0.6 }}
         >
           <MagneticButton variant="primary" href="#work">
             View Our Work
@@ -104,7 +114,7 @@ export default function Hero() {
           className="mt-20 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 3.3, duration: 0.6 }}
+          transition={{ delay: baseDelay + 1.1, duration: 0.6 }}
         >
           {[
             { value: '150+', label: 'Projects Delivered' },
@@ -123,14 +133,14 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {floatingCards.map((card, i) => (
+      {!isMobile && floatingCards.map((card, i) => (
         <motion.div
           key={i}
           className="hidden lg:block absolute glass rounded-2xl px-4 py-3"
           style={{ left: card.x, top: card.y }}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 3.5 + card.delay, duration: 0.6 }}
+          transition={{ delay: baseDelay + 1.3 + card.delay, duration: 0.6 }}
         >
           <motion.div
             animate={{ y: [0, -10, 0] }}
@@ -149,7 +159,7 @@ export default function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 3.8 }}
+        transition={{ delay: baseDelay + 1.6 }}
       >
         <motion.div
           animate={{ y: [0, 8, 0] }}

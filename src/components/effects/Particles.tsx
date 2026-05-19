@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface ParticlesProps {
   count?: number
@@ -27,6 +27,15 @@ export default function Particles({
     opacity: number
     size: number
   }>>([])
+  const [isMobile, setIsMobile] = useState(false)
+  const frameCountRef = useRef(0)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -35,6 +44,9 @@ export default function Particles({
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    const effectiveCount = isMobile ? Math.floor(count * 0.3) : count
+    const effectiveSpeed = isMobile ? speed * 0.5 : speed
+
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -42,11 +54,11 @@ export default function Particles({
     }
 
     const initParticles = () => {
-      particlesRef.current = Array.from({ length: count }, () => ({
+      particlesRef.current = Array.from({ length: effectiveCount }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * speed,
-        vy: (Math.random() - 0.5) * speed - 0.1,
+        vx: (Math.random() - 0.5) * effectiveSpeed,
+        vy: (Math.random() - 0.5) * effectiveSpeed - 0.1,
         opacity: Math.random() * 0.5 + 0.1,
         size: Math.random() * size + 0.5,
       }))
@@ -56,6 +68,14 @@ export default function Particles({
     window.addEventListener('resize', resize)
 
     const animate = () => {
+      if (isMobile) {
+        frameCountRef.current++
+        if (frameCountRef.current % 3 !== 0) {
+          animationRef.current = requestAnimationFrame(animate)
+          return
+        }
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       particlesRef.current.forEach((p) => {
@@ -82,7 +102,7 @@ export default function Particles({
       window.removeEventListener('resize', resize)
       cancelAnimationFrame(animationRef.current)
     }
-  }, [count, speed, size, color])
+  }, [count, speed, size, color, isMobile])
 
   return (
     <canvas

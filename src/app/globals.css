@@ -62,7 +62,12 @@
     opacity: 0.03;
     z-index: 9999;
     pointer-events: none;
-    animation: noiseMove 0.5s steps(5) infinite;
+  }
+
+  @media (min-width: 768px) {
+    .noise {
+      animation: noiseMove 0.5s steps(5) infinite;
+    }
   }
 
   @keyframes noiseMove {

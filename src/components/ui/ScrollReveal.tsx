@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useAnimation } from 'framer-motion'
 
 interface ScrollRevealProps {
@@ -27,21 +27,31 @@ export default function ScrollReveal({
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once, amount: threshold })
   const controls = useAnimation()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   const getInitialTransform = () => {
+    const d = isMobile ? Math.min(distance, 30) : distance
+    const dur = isMobile ? Math.min(duration, 0.5) : duration
     switch (direction) {
       case 'up':
-        return { y: distance, opacity: 0 }
+        return { y: d, opacity: 0, transition: { duration: dur, delay } }
       case 'down':
-        return { y: -distance, opacity: 0 }
+        return { y: -d, opacity: 0, transition: { duration: dur, delay } }
       case 'left':
-        return { x: distance, opacity: 0 }
+        return { x: d, opacity: 0, transition: { duration: dur, delay } }
       case 'right':
-        return { x: -distance, opacity: 0 }
+        return { x: -d, opacity: 0, transition: { duration: dur, delay } }
       case 'none':
-        return { opacity: 0 }
+        return { opacity: 0, transition: { duration: dur, delay } }
       default:
-        return { y: distance, opacity: 0 }
+        return { y: d, opacity: 0, transition: { duration: dur, delay } }
     }
   }
 
@@ -52,13 +62,13 @@ export default function ScrollReveal({
         x: 0,
         opacity: 1,
         transition: {
-          duration,
-          delay,
+          duration: isMobile ? 0.4 : duration,
+          delay: isMobile ? 0 : delay,
           ease: [0.16, 1, 0.3, 1],
         },
       })
     }
-  }, [isInView, controls, delay, duration])
+  }, [isInView, controls, delay, duration, isMobile])
 
   return (
     <div ref={ref} className={className}>

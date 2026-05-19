@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import ScrollReveal from '@/components/ui/ScrollReveal'
 
@@ -45,6 +45,15 @@ const steps = [
 
 export default function Process() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -72,10 +81,12 @@ export default function Process() {
 
         <div className="relative">
           <div className="hidden lg:block absolute left-[50%] top-0 bottom-0 w-px bg-white/5" />
-          <motion.div
-            className="hidden lg:block absolute left-[50%] top-0 w-px bg-gradient-to-b from-accent-blue via-accent-purple to-accent-cyan"
-            style={{ height: progressWidth }}
-          />
+          {!isMobile && (
+            <motion.div
+              className="hidden lg:block absolute left-[50%] top-0 w-px bg-gradient-to-b from-accent-blue via-accent-purple to-accent-cyan"
+              style={{ height: progressWidth }}
+            />
+          )}
 
           <div className="space-y-16 lg:space-y-24">
             {steps.map((step, i) => (

@@ -41,17 +41,17 @@ export default function ScrollReveal({
     const dur = isMobile ? Math.min(duration, 0.5) : duration
     switch (direction) {
       case 'up':
-        return { y: d, opacity: 0, transition: { duration: dur, delay } }
+        return { y: d, opacity: 0, filter: 'blur(4px)' }
       case 'down':
-        return { y: -d, opacity: 0, transition: { duration: dur, delay } }
+        return { y: -d, opacity: 0, filter: 'blur(4px)' }
       case 'left':
-        return { x: d, opacity: 0, transition: { duration: dur, delay } }
+        return { x: d, opacity: 0, filter: 'blur(4px)' }
       case 'right':
-        return { x: -d, opacity: 0, transition: { duration: dur, delay } }
+        return { x: -d, opacity: 0, filter: 'blur(4px)' }
       case 'none':
-        return { opacity: 0, transition: { duration: dur, delay } }
+        return { opacity: 0, filter: 'blur(4px)' }
       default:
-        return { y: d, opacity: 0, transition: { duration: dur, delay } }
+        return { y: d, opacity: 0, filter: 'blur(4px)' }
     }
   }
 
@@ -61,6 +61,7 @@ export default function ScrollReveal({
         y: 0,
         x: 0,
         opacity: 1,
+        filter: 'blur(0px)',
         transition: {
           duration: isMobile ? 0.4 : duration,
           delay: isMobile ? 0 : delay,

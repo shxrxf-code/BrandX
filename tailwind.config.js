@@ -150,7 +150,6 @@ module.exports = {
         },
       },
       backgroundImage: {
-        'noise': "url('/noise.png')",
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'gradient-mesh': 'linear-gradient(135deg, #3B82F6 0%, #A855F7 25%, #22D3EE 50%, #8B5CF6 75%, #3B82F6 100%)',

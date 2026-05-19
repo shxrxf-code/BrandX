@@ -1,92 +1,72 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 export default function About() {
   return (
-    <section className="py-20 relative overflow-hidden bg-background">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="relative">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1 }}
-              className="aspect-square rounded-[3rem] overflow-hidden bg-white/5 border border-white/10 relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/20 via-transparent to-accent-purple/20" />
-              <div className="absolute inset-0 flex items-center justify-center p-12 text-center">
-                <p className="text-2xl md:text-3xl font-display font-medium leading-relaxed italic text-white/80">
-                  "We believe that in the digital age, status is built through exceptional experiences."
+    <section id="about" className="section-padding relative">
+      <div className="section-container">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <ScrollReveal direction="right" distance={60}>
+            <div>
+              <span className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block">
+                About Us
+              </span>
+              <h2 className="font-display text-section font-bold text-gradient mb-8">
+                We Don&apos;t Just Build. We Transform.
+              </h2>
+              <div className="space-y-6 text-text-secondary text-body-lg leading-relaxed">
+                <p>
+                  Brandex Digital is a premium digital agency obsessed with crafting
+                  experiences that matter. We combine strategic thinking with creative
+                  excellence to deliver results that exceed expectations.
+                </p>
+                <p>
+                  Our team of designers, developers, and strategists work in perfect
+                  harmony to transform brands into market leaders. Every pixel, every
+                  interaction, every line of code is crafted with intention.
                 </p>
               </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute top-10 left-10 w-20 h-20 border-t-2 border-l-2 border-white/20 rounded-tl-3xl" />
-              <div className="absolute bottom-10 right-10 w-20 h-20 border-b-2 border-r-2 border-white/20 rounded-br-3xl" />
-            </motion.div>
-            
-            <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-accent-cyan/10 blur-[100px] rounded-full -z-10" />
-          </div>
 
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-accent-cyan font-display font-bold uppercase tracking-widest text-sm mb-4"
-            >
-              Our Vision
-            </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-5xl md:text-7xl font-bold mb-8 leading-[0.9] tracking-tighter"
-            >
-              WE DON'T JUST <br />
-              <span className="text-white/20">CREATE WEBSITES.</span> <br />
-              WE CRAFT LEGACIES.
-            </motion.h2>
-            
-            <div className="space-y-6 text-lg text-white/50 leading-relaxed max-w-xl">
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-              >
-                We understand that your digital presence is your most valuable asset. We bridge the gap between technology and emotion to create experiences that don't just look good—they feel iconic.
-              </motion.p>
-              <motion.p
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                Our team of world-class designers and developers work at the intersection of art and innovation, delivering premium solutions for brands that demand excellence in every pixel.
-              </motion.p>
+              <div className="mt-10 grid grid-cols-2 gap-6">
+                {[
+                  { label: 'Innovation First', desc: 'Pushing boundaries with every project' },
+                  { label: 'Results Driven', desc: 'Measurable impact on your bottom line' },
+                  { label: 'Premium Quality', desc: 'No shortcuts, only excellence' },
+                  { label: 'Global Reach', desc: 'Serving clients across 15+ countries' },
+                ].map((value, i) => (
+                  <div key={i} className="border-l-2 border-accent-blue/30 pl-4">
+                    <h4 className="font-display text-white font-semibold mb-1">
+                      {value.label}
+                    </h4>
+                    <p className="text-sm text-text-muted">{value.desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+          </ScrollReveal>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              className="mt-8 pt-8 border-t border-white/10 grid grid-cols-2 gap-8"
-            >
-              <div>
-                <div className="text-3xl font-bold mb-1 text-white">Innovation</div>
-                <div className="text-sm text-white/30 uppercase tracking-widest">Driven by AI</div>
+          <ScrollReveal direction="left" distance={60}>
+            <div className="relative">
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden bg-background-secondary">
+                <img
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80"
+                  alt="Brandex Digital Team"
+                  className="w-full h-full object-cover opacity-80"
+                  loading="lazy"
+                />
               </div>
-              <div>
-                <div className="text-3xl font-bold mb-1 text-white">Excellence</div>
-                <div className="text-sm text-white/30 uppercase tracking-widest">Pixel Perfect</div>
+              <div className="absolute -bottom-6 -left-6 glass-strong rounded-2xl p-6 max-w-xs">
+                <p className="font-display text-lg font-bold text-white mb-1">
+                  &ldquo;Design is intelligence made visible.&rdquo;
+                </p>
+                <p className="text-xs text-text-muted">— Alina Wheeler</p>
               </div>
-            </motion.div>
-          </div>
+              <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-accent-blue/20 blur-3xl" />
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-full bg-accent-purple/20 blur-3xl" />
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

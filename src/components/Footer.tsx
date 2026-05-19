@@ -1,70 +1,90 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, MessageCircle, Share2, Globe } from 'lucide-react'
+import { ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react'
 
-const links = [
-  { label: 'Work', href: '#' },
-  { label: 'Services', href: '#' },
-  { label: 'About', href: '#' },
-  { label: 'Process', href: '#' },
-  { label: 'Contact', href: '#' },
+const socialLinks = [
+  { label: 'X / Twitter', href: '#' },
+  { label: 'LinkedIn', href: '#' },
+  { label: 'Instagram', href: '#' },
+  { label: 'Dribbble', href: '#' },
 ]
 
-const social = [
-  { icon: Globe, href: '#' },
-  { icon: Share2, href: '#' },
-  { icon: MessageCircle, href: '#' },
-  { icon: Mail, href: '#' },
-]
+const footerLinks = {
+  services: [
+    { label: 'Brand Identity', href: '#' },
+    { label: 'Web Development', href: '#' },
+    { label: 'Digital Marketing', href: '#' },
+    { label: 'UI/UX Design', href: '#' },
+    { label: 'Mobile Apps', href: '#' },
+  ],
+  company: [
+    { label: 'About Us', href: '#about' },
+    { label: 'Our Work', href: '#work' },
+    { label: 'Process', href: '#process' },
+    { label: 'Careers', href: '#' },
+    { label: 'Contact', href: '#contact' },
+  ],
+}
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear()
+
   return (
-    <footer className="pt-20 pb-12 bg-background border-t border-white/5 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+    <footer className="relative pt-24 pb-8 border-t border-white/5">
+      <div className="section-container">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20">
           <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-4xl font-display font-bold mb-8"
+            <motion.a
+              href="#"
+              className="font-display text-2xl font-bold text-white mb-6 block"
+              whileHover={{ opacity: 0.8 }}
             >
-              AGENCY<span className="text-accent-blue">.</span>
-            </motion.div>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-white/40 text-lg max-w-sm mb-12"
-            >
-              The new standard of digital excellence. We build premium digital experiences for brands that demand nothing but the absolute best.
-            </motion.p>
-            
-            <div className="flex gap-6">
-              {social.map((s, i) => (
-                <motion.a
-                  key={i}
-                  href={s.href}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + i * 0.1 }}
-                  className="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white hover:text-black transition-all duration-500"
-                >
-                  <s.icon className="w-5 h-5" />
-                </motion.a>
-              ))}
+              BRANDEX
+              <span className="ml-1 text-xs font-normal text-text-muted tracking-widest uppercase">
+                Digital
+              </span>
+            </motion.a>
+            <p className="text-text-secondary text-sm leading-relaxed max-w-sm mb-8">
+              Crafting premium digital experiences that elevate brands and drive
+              measurable growth for forward-thinking companies worldwide.
+            </p>
+            <div className="space-y-4">
+              <a
+                href="mailto:hello@brandexdigital.in"
+                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm"
+              >
+                <Mail size={16} />
+                hello@brandexdigital.in
+              </a>
+              <a
+                href="tel:+911234567890"
+                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm"
+              >
+                <Phone size={16} />
+                +91 123 456 7890
+              </a>
+              <div className="flex items-center gap-3 text-text-secondary text-sm">
+                <MapPin size={16} />
+                India &middot; Global Reach
+              </div>
             </div>
           </div>
 
           <div>
-            <h4 className="text-xs uppercase tracking-[0.3em] text-white/20 font-bold mb-8">Navigation</h4>
-            <ul className="space-y-4">
-              {links.map((link, i) => (
+            <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
+              Services
+            </h4>
+            <ul className="space-y-3">
+              {footerLinks.services.map((link, i) => (
                 <li key={i}>
-                  <a href={link.href} className="text-lg text-white/50 hover:text-white hover:translate-x-2 transition-all inline-block">
+                  <a
+                    href={link.href}
+                    className="text-text-secondary hover:text-white transition-colors text-sm flex items-center gap-2 group"
+                  >
+                    <span className="w-0 group-hover:w-3 transition-all duration-300">
+                      <ArrowUpRight size={12} className="text-accent-blue" />
+                    </span>
                     {link.label}
                   </a>
                 </li>
@@ -73,33 +93,59 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-xs uppercase tracking-[0.3em] text-white/20 font-bold mb-8">Get in Touch</h4>
-            <div className="space-y-6">
-              <a href="mailto:hello@agency.digital" className="text-2xl font-bold text-white hover:text-accent-blue transition-colors block">
-                hello@agency.digital
-              </a>
-              <p className="text-white/40 leading-relaxed">
-                123 Creative Studio <br />
-                Dubai Design District <br />
-                United Arab Emirates
-              </p>
+            <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
+              Company
+            </h4>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link, i) => (
+                <li key={i}>
+                  <a
+                    href={link.href}
+                    className="text-text-secondary hover:text-white transition-colors text-sm flex items-center gap-2 group"
+                  >
+                    <span className="w-0 group-hover:w-3 transition-all duration-300">
+                      <ArrowUpRight size={12} className="text-accent-blue" />
+                    </span>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
+              Follow Us
+            </h4>
+            <div className="space-y-3">
+              {socialLinks.map((social, i) => (
+                <motion.a
+                  key={i}
+                  href={social.href}
+                  className="flex items-center gap-2 text-text-secondary hover:text-white transition-colors text-sm"
+                  whileHover={{ x: 4 }}
+                >
+                  {social.label}
+                </motion.a>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="text-sm text-white/20 uppercase tracking-widest">
-            © 2024 Digital Agency. All Rights Reserved.
-          </div>
-          <div className="flex gap-8 text-sm text-white/20 uppercase tracking-widest">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+        <div className="section-divider mb-8" />
+
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-text-muted">
+          <p>&copy; {currentYear} Brandex Digital. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <a href="#" className="hover:text-white transition-colors">
+              Privacy Policy
+            </a>
+            <a href="#" className="hover:text-white transition-colors">
+              Terms of Service
+            </a>
           </div>
         </div>
       </div>
-      
-      {/* Background Decorative Grid */}
-      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
     </footer>
   )
 }

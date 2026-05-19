@@ -1,63 +1,112 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export default function Preloader() {
+interface PreloaderProps {
+  onComplete?: () => void
+}
+
+export default function Preloader({ onComplete }: PreloaderProps) {
   const [progress, setProgress] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isComplete, setIsComplete] = useState(false)
+  const [currentText, setCurrentText] = useState('')
+  const loadingTexts = ['INITIALIZING', 'LOADING ASSETS', 'PREPARING EXPERIENCE', 'ALMOST THERE']
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const textInterval = setInterval(() => {
+      setCurrentText((prev) => {
+        const currentIndex = loadingTexts.indexOf(prev)
+        return loadingTexts[(currentIndex + 1) % loadingTexts.length]
+      })
+    }, 600)
+
+    const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(timer)
-          setTimeout(() => setIsLoading(false), 500)
+          clearInterval(progressInterval)
+          clearInterval(textInterval)
+          setIsComplete(true)
+          setTimeout(() => onComplete?.(), 400)
           return 100
         }
-        return prev + Math.floor(Math.random() * 10) + 1
+        const increment = prev < 30 ? Math.random() * 8 : prev < 70 ? Math.random() * 5 : Math.random() * 3
+        return Math.min(prev + increment, 100)
       })
-    }, 100)
+    }, 50)
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => {
+      clearInterval(progressInterval)
+      clearInterval(textInterval)
+    }
+  }, [onComplete])
 
   return (
     <AnimatePresence>
-      {isLoading && (
+      {!isComplete && (
         <motion.div
-          initial={{ opacity: 1 }}
-          exit={{ 
+          className="fixed inset-0 z-[10000] bg-background flex flex-col items-center justify-center"
+          exit={{
             y: '-100%',
-            transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] }
+            transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
           }}
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-background"
         >
-          <div className="relative flex flex-col items-center">
+          <div className="relative w-full max-w-md px-8">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-6xl md:text-8xl font-display font-bold mb-8 text-white"
+              className="flex items-baseline justify-between mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
             >
-              AGENCY
+              <span className="text-xs font-mono tracking-[0.3em] text-text-muted uppercase">
+                {currentText}
+              </span>
+              <span className="text-xs font-mono tracking-[0.2em] text-text-secondary">
+                {Math.round(progress)}%
+              </span>
             </motion.div>
-            
-            <div className="w-64 h-[1px] bg-white/10 relative overflow-hidden">
+
+            <div className="h-[1px] bg-white/5 rounded-full overflow-hidden">
               <motion.div
-                className="absolute top-0 left-0 h-full bg-white"
-                initial={{ width: 0 }}
-                animate={{ width: `${Math.min(progress, 100)}%` }}
+                className="h-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan"
+                initial={{ width: '0%' }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.1 }}
               />
             </div>
-            
-            <div className="mt-4 font-mono text-sm text-white/50 tracking-widest">
-              {Math.min(progress, 100)}%
-            </div>
 
-            <div className="absolute -z-10 blur-3xl opacity-20 bg-accent-blue w-64 h-64 rounded-full" />
+            <motion.div
+              className="mt-8 flex items-center justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+            >
+              <span className="font-display text-2xl font-bold tracking-tight text-gradient">
+                BRANDEX
+              </span>
+              <span className="ml-2 text-xs text-text-muted tracking-widest uppercase">
+                Digital
+              </span>
+            </motion.div>
           </div>
-          
-          <div className="noise" />
+
+          <motion.div
+            className="absolute bottom-12 left-0 right-0 flex justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.3 }}
+            transition={{ delay: 0.8 }}
+          >
+            <div className="flex gap-1">
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-1 h-1 rounded-full bg-white"
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.3 }}
+                />
+              ))}
+            </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -1,0 +1,93 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+
+interface ParticlesProps {
+  count?: number
+  speed?: number
+  size?: number
+  color?: string
+  className?: string
+}
+
+export default function Particles({
+  count = 50,
+  speed = 0.3,
+  size = 2,
+  color = '255, 255, 255',
+  className = '',
+}: ParticlesProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const animationRef = useRef<number>(0)
+  const particlesRef = useRef<Array<{
+    x: number
+    y: number
+    vx: number
+    vy: number
+    opacity: number
+    size: number
+  }>>([])
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+      initParticles()
+    }
+
+    const initParticles = () => {
+      particlesRef.current = Array.from({ length: count }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * speed,
+        vy: (Math.random() - 0.5) * speed - 0.1,
+        opacity: Math.random() * 0.5 + 0.1,
+        size: Math.random() * size + 0.5,
+      }))
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      particlesRef.current.forEach((p) => {
+        p.x += p.vx
+        p.y += p.vy
+
+        if (p.x < 0) p.x = canvas.width
+        if (p.x > canvas.width) p.x = 0
+        if (p.y < 0) p.y = canvas.height
+        if (p.y > canvas.height) p.y = 0
+
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(${color}, ${p.opacity})`
+        ctx.fill()
+      })
+
+      animationRef.current = requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    return () => {
+      window.removeEventListener('resize', resize)
+      cancelAnimationFrame(animationRef.current)
+    }
+  }, [count, speed, size, color])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`absolute inset-0 pointer-events-none ${className}`}
+    />
+  )
+}

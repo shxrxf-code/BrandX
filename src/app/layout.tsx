@@ -1,8 +1,9 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
+import Cursor from '@/components/ui/Cursor'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -16,9 +17,35 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
 })
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#050505',
+}
+
 export const metadata: Metadata = {
-  title: 'Digital Agency | Ultra-Premium Creative Studio',
-  description: 'We build cinematic digital experiences and high-end digital status for world-class brands.',
+  title: 'Brandex Digital | Premium Digital Agency',
+  description: 'We craft cinematic digital experiences that elevate brands, drive growth, and leave lasting impressions. Award-winning web design, development, and digital marketing.',
+  keywords: ['digital agency', 'web design', 'brand identity', 'web development', 'digital marketing', 'UI/UX design'],
+  authors: [{ name: 'Brandex Digital' }],
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    url: 'https://brandexdigital.in',
+    title: 'Brandex Digital | Premium Digital Agency',
+    description: 'We craft cinematic digital experiences that elevate brands and drive measurable growth.',
+    siteName: 'Brandex Digital',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Brandex Digital | Premium Digital Agency',
+    description: 'We craft cinematic digital experiences that elevate brands and drive measurable growth.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({
@@ -27,13 +54,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} dark`}>
-      <body className="font-sans antialiased bg-background text-primary selection:bg-accent-blue/30 overflow-x-hidden">
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      <body className="font-sans antialiased bg-background text-white selection:bg-accent-blue/30 selection:text-white">
         <Preloader />
+        <Cursor />
         <SmoothScroll>
-          <div className="relative z-0">
+          <main className="relative">
             {children}
-          </div>
+          </main>
         </SmoothScroll>
         <div className="noise" />
       </body>

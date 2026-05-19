@@ -1,164 +1,111 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ExternalLink } from 'lucide-react'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 const projects = [
   {
-    title: 'Project One',
-    category: 'Solar Energy',
-    image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=2000',
-    color: '#3b82f6',
-    gridSpan: 'md:col-span-8 md:row-span-2 h-[600px] md:h-auto',
-    link: 'https://sun-solar-three.vercel.app/'
+    title: 'SolarTech Energy',
+    category: 'Brand & Web',
+    image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80',
+    size: 'col-span-12 md:col-span-8',
+    year: '2024',
   },
   {
-    title: 'Drifto',
-    category: "Men's Clothing",
-    image: 'https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&q=80&w=2000',
-    color: '#a855f7',
-    gridSpan: 'md:col-span-4 md:row-span-1 h-[300px]',
-    link: '#'
+    title: 'NOIR Fashion',
+    category: 'E-Commerce',
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
+    size: 'col-span-12 md:col-span-4',
+    year: '2024',
   },
   {
-    title: 'Project Three',
-    category: 'Fintech',
-    image: 'https://images.unsplash.com/photo-1551288049-bb1c00ad882c?auto=format&fit=crop&q=80&w=2000',
-    color: '#22d3ee',
-    gridSpan: 'md:col-span-4 md:row-span-1 h-[300px]',
-    link: '#'
+    title: 'FinFlow',
+    category: 'App Design',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+    size: 'col-span-12 md:col-span-4',
+    year: '2023',
   },
   {
-    title: 'Project Four',
-    category: 'Architecture',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000',
-    color: '#ffffff',
-    gridSpan: 'md:col-span-12 md:row-span-1 h-[400px]',
-    link: '#'
-  }
+    title: 'ArchViz Studio',
+    category: '3D & Web',
+    image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80',
+    size: 'col-span-12 md:col-span-8',
+    year: '2023',
+  },
 ]
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1]
-    }
-  }
-}
-
 export default function Portfolio() {
-  return (
-    <section className="py-20 bg-background relative overflow-hidden">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
-          <div className="max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="text-accent-blue font-display font-bold uppercase tracking-widest text-sm mb-4"
-            >
-              Selected Projects
-            </motion.div>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-5xl md:text-8xl font-bold tracking-tighter uppercase"
-            >
-              Our <span className="text-white/20">Work</span>
-            </motion.h2>
-          </div>
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
-            <button className="px-8 py-4 rounded-full border border-white/10 hover:bg-white hover:text-black transition-all duration-500 font-bold uppercase tracking-widest text-xs">
-              View All Projects
-            </button>
-          </motion.div>
-        </div>
+  const containerRef = useRef<HTMLDivElement>(null)
 
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-12 gap-6"
-        >
-          {projects.map((project, index) => (
-            <motion.a
-              key={index}
-              href={project.link}
-              target={project.link !== '#' ? "_blank" : undefined}
-              rel={project.link !== '#' ? "noopener noreferrer" : undefined}
-              variants={itemVariants}
-              className={`group relative overflow-hidden rounded-[2.5rem] bg-white/5 border border-white/10 ${project.gridSpan} block`}
+  return (
+    <section id="work" className="section-padding relative" ref={containerRef}>
+      <div className="section-container">
+        <ScrollReveal>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
+            <div>
+              <span className="text-xs font-mono tracking-[0.3em] text-accent-purple uppercase mb-4 block">
+                Selected Work
+              </span>
+              <h2 className="font-display text-section font-bold text-gradient">
+                Featured Projects
+              </h2>
+            </div>
+            <p className="text-text-secondary max-w-md text-body-lg">
+              A curated selection of our most impactful work, crafted for brands
+              that demand excellence.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid grid-cols-12 gap-6">
+          {projects.map((project, i) => (
+            <ScrollReveal
+              key={i}
+              delay={i * 0.15}
+              direction="up"
+              distance={60}
+              className={project.size}
             >
-              <div className="absolute inset-0 z-10 transition-transform duration-700 group-hover:scale-105">
-                <Image
+              <motion.a
+                href="#"
+                className="group relative block overflow-hidden rounded-3xl aspect-[4/3] md:aspect-[16/10]"
+                whileHover={{ scale: 0.98 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="absolute inset-0 bg-background-secondary" />
+                <img
                   src={project.image}
                   alt={project.title}
-                  fill
-                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 opacity-40 group-hover:opacity-100"
+                  className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                  loading="lazy"
                 />
-              </div>
-              
-              <div className="absolute inset-0 z-20 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
-              
-              <div className="absolute inset-0 z-30 p-10 flex flex-col justify-end">
-                <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/50 mb-4 font-bold">
-                    {project.category}
-                  </p>
-                  <h3 className="text-3xl md:text-4xl font-bold mb-6 flex items-center gap-4">
-                    {project.title}
-                    <ArrowUpRight className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </h3>
-                </div>
-              </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-80" />
 
-              {/* Accent Glow */}
-              <div 
-                className="absolute top-0 right-0 w-full h-full pointer-events-none z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                style={{ 
-                  background: `radial-gradient(circle at top right, ${project.color}22, transparent 70%)` 
-                }}
-              />
-            </motion.a>
+                <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-mono tracking-wider text-accent-blue mb-2 block">
+                        {project.category} — {project.year}
+                      </span>
+                      <h3 className="font-display text-2xl md:text-3xl font-bold text-white">
+                        {project.title}
+                      </h3>
+                    </div>
+                    <motion.div
+                      className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center"
+                      whileHover={{ scale: 1.1, rotate: -45 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ExternalLink size={18} className="text-white" />
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.a>
+            </ScrollReveal>
           ))}
-          
-          <motion.div
-            variants={itemVariants}
-            className="md:col-span-4 md:row-span-1 h-[300px] rounded-[2.5rem] border border-dashed border-white/20 flex items-center justify-center p-12 text-center group hover:border-white/40 transition-colors"
-          >
-            <div>
-              <h3 className="text-2xl font-bold mb-4 uppercase tracking-tighter text-white/40 group-hover:text-white transition-colors">Your Project Next?</h3>
-              <button className="text-xs font-bold uppercase tracking-widest text-accent-blue hover:text-white transition-colors">
-                Let's Talk
-              </button>
-            </div>
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

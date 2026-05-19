@@ -2,155 +2,163 @@
 
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowDown, Sparkles, Zap, Globe } from 'lucide-react'
+import GradientOrbs from '@/components/effects/GradientOrbs'
+import Particles from '@/components/effects/Particles'
+import MagneticButton from '@/components/ui/MagneticButton'
+import ScrollReveal from '@/components/ui/ScrollReveal'
+
+const floatingCards = [
+  { icon: Sparkles, label: 'Brand Strategy', x: '10%', y: '25%', delay: 0 },
+  { icon: Zap, label: 'Web Development', x: '75%', y: '20%', delay: 0.2 },
+  { icon: Globe, label: 'Digital Marketing', x: '80%', y: '65%', delay: 0.4 },
+]
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
-  
-  const { scrollY } = useScroll()
-  const y1 = useTransform(scrollY, [0, 500], [0, 200])
-  const opacity = useTransform(scrollY, [0, 400], [1, 0])
-  const scale = useTransform(scrollY, [0, 400], [1, 0.9])
-  
-  const springY = useSpring(y1, { damping: 30, stiffness: 100 })
-  const springScale = useSpring(scale, { damping: 30, stiffness: 100 })
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  })
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200])
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95])
+
+  const springY = useSpring(y, { stiffness: 100, damping: 30 })
+
+  const words = ['Designing', 'The', 'Future', 'Of', 'Digital', 'Brands']
 
   return (
-    <section 
+    <section
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background Elements */}
-      <div className="absolute inset-0 z-0">
-        <motion.div 
-          style={{ y: useTransform(scrollY, [0, 1000], [0, 200]) }}
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-blue/20 rounded-full blur-[120px] animate-pulse-slow" 
-        />
-        <motion.div 
-          style={{ y: useTransform(scrollY, [0, 1000], [0, -200]) }}
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent-purple/10 rounded-full blur-[150px] animate-float" 
-        />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,transparent_0%,#050505_100%)] z-10" />
-      </div>
+      <GradientOrbs count={3} />
+      <Particles count={30} speed={0.2} size={1.5} color="255,255,255" />
 
-      <motion.div 
-        style={{ y: springY, opacity, scale: springScale }}
-        className="container mx-auto px-6 relative z-20 text-center"
+      <div className="absolute inset-0 grid-lines opacity-50" />
+
+      <motion.div
+        className="relative z-10 section-container text-center"
+        style={{ y: springY, opacity, scale }}
       >
         <motion.div
+          className="flex items-center justify-center gap-2 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ 
-            type: "spring",
-            damping: 20,
-            stiffness: 100,
-            delay: 0.5 
-          }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 text-sm font-medium tracking-wider text-white/70 uppercase"
+          transition={{ delay: 2.2, duration: 0.6 }}
         >
-          <span className="w-2 h-2 rounded-full bg-accent-blue animate-pulse" />
-          The New Standard of Digital Excellence
+          <span className="h-px w-8 bg-accent-blue/50" />
+          <span className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase">
+            Award-Winning Digital Agency
+          </span>
+          <span className="h-px w-8 bg-accent-blue/50" />
         </motion.div>
 
-        <h1 className="text-[12vw] md:text-[8vw] leading-[0.9] font-bold mb-8 tracking-tighter uppercase">
-          <motion.span
-            initial={{ opacity: 0, y: 80, rotate: 2 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
-            transition={{ 
-              type: "spring",
-              damping: 30,
-              stiffness: 70,
-              delay: 0.7
-            }}
-            className="block overflow-hidden origin-left"
-          >
-            We Build
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0, y: 80, rotate: 2 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
-            transition={{ 
-              type: "spring",
-              damping: 30,
-              stiffness: 70,
-              delay: 0.8
-            }}
-            className="block overflow-hidden text-gradient origin-left"
-          >
-            Digital
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0, y: 80, rotate: 2 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
-            transition={{ 
-              type: "spring",
-              damping: 30,
-              stiffness: 70,
-              delay: 0.9
-            }}
-            className="block overflow-hidden origin-left"
-          >
-            Status
-          </motion.span>
+        <h1 className="font-display font-bold leading-[0.95] tracking-[-0.03em] mb-8">
+          <div className="flex flex-wrap justify-center gap-x-4 md:gap-x-6">
+            {words.map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block text-hero text-gradient"
+                initial={{ opacity: 0, y: 100, rotateX: -90 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                transition={{
+                  delay: 2.3 + i * 0.1,
+                  duration: 0.8,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </div>
         </h1>
 
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.2 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-white/50 mb-12 font-sans"
+          className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.9, duration: 0.6 }}
         >
-          We are a premium agency crafting ultra-high-end digital experiences 
-          for brands that demand nothing but the absolute best.
+          We craft premium digital experiences that elevate brands, drive growth,
+          and leave lasting impressions in the minds of your audience.
         </motion.p>
 
         <motion.div
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-6"
+          transition={{ delay: 3.1, duration: 0.6 }}
         >
-          <button className="group relative px-8 py-4 bg-white text-black rounded-full font-bold overflow-hidden transition-all hover:scale-105 active:scale-95">
-            <span className="relative z-10 flex items-center gap-2">
-              Start a Project <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </button>
-          
-          <button className="px-8 py-4 rounded-full font-bold border border-white/10 hover:bg-white/5 transition-colors">
+          <MagneticButton variant="primary" href="#work">
             View Our Work
-          </button>
+          </MagneticButton>
+          <MagneticButton variant="secondary" href="#contact">
+            Book a Strategy Call
+          </MagneticButton>
+        </motion.div>
+
+        <motion.div
+          className="mt-20 grid grid-cols-3 gap-8 max-w-lg mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 3.3, duration: 0.6 }}
+        >
+          {[
+            { value: '150+', label: 'Projects Delivered' },
+            { value: '50+', label: 'Global Clients' },
+            { value: '98%', label: 'Client Satisfaction' },
+          ].map((stat, i) => (
+            <div key={i} className="text-center">
+              <div className="font-display text-2xl md:text-3xl font-bold text-white">
+                {stat.value}
+              </div>
+              <div className="text-xs text-text-muted mt-1 tracking-wide">
+                {stat.label}
+              </div>
+            </div>
+          ))}
         </motion.div>
       </motion.div>
 
-      {/* Floating Elements */}
-      <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+      {floatingCards.map((card, i) => (
         <motion.div
-          animate={{ 
-            y: [0, -20, 0],
-            rotate: [0, 5, 0]
-          }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[20%] right-[10%] w-32 h-40 glass rounded-2xl border-white/20 hidden lg:block"
-        />
-        <motion.div
-          animate={{ 
-            y: [0, 20, 0],
-            rotate: [0, -5, 0]
-          }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[20%] left-[10%] w-40 h-32 glass rounded-2xl border-white/20 hidden lg:block"
-        />
-      </div>
+          key={i}
+          className="hidden lg:block absolute glass rounded-2xl px-4 py-3"
+          style={{ left: card.x, top: card.y }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 3.5 + card.delay, duration: 0.6 }}
+        >
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 3 + i, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex items-center gap-3"
+          >
+            <card.icon size={18} className="text-accent-blue" />
+            <span className="text-xs text-text-secondary whitespace-nowrap">
+              {card.label}
+            </span>
+          </motion.div>
+        </motion.div>
+      ))}
 
-      {/* Scroll Indicator */}
       <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        transition={{ delay: 3.8 }}
       >
-        <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
-        <span className="text-[10px] uppercase tracking-[0.3em] text-white/30">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className="flex flex-col items-center gap-2 text-text-muted"
+        >
+          <span className="text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+          <ArrowDown size={16} />
+        </motion.div>
       </motion.div>
     </section>
   )

@@ -1,105 +1,101 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Code, Palette, Share2, Search, Cpu, BarChart, Camera, Zap } from 'lucide-react'
+import { Palette, Code, Megaphone, TrendingUp, Smartphone, Layers } from 'lucide-react'
+import GlowCard from '@/components/ui/GlowCard'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 const services = [
   {
-    title: 'Web Development',
-    description: 'We build high-performance, cinematic web experiences that push the boundaries of modern technology.',
-    icon: Code,
-    color: 'accent-blue'
-  },
-  {
-    title: 'AI Solutions',
-    description: 'Integrating cutting-edge AI to automate workflows and create intelligent user interactions.',
-    icon: Cpu,
-    color: 'accent-purple'
-  },
-  {
-    title: 'UI/UX Design',
-    description: 'Award-winning design systems focused on user emotion, conversion, and premium aesthetics.',
     icon: Palette,
-    color: 'accent-cyan'
+    title: 'Brand Identity',
+    description: 'Crafting distinctive visual identities that resonate with your audience and stand the test of time.',
+    color: 'blue',
+    tags: ['Logo Design', 'Visual Systems', 'Brand Guidelines'],
   },
   {
-    title: 'SEO Strategy',
-    description: 'Dominating search results with advanced technical SEO and content-driven growth strategies.',
-    icon: Search,
-    color: 'accent-blue'
+    icon: Code,
+    title: 'Web Development',
+    description: 'Building performant, scalable web applications with cutting-edge technology and pixel-perfect precision.',
+    color: 'purple',
+    tags: ['Next.js', 'React', 'Full-Stack'],
   },
   {
-    title: 'Content Creation',
-    description: 'Cinematic video production and high-end digital assets that define your brand identity.',
-    icon: Camera,
-    color: 'accent-purple'
-  },
-  {
+    icon: Megaphone,
     title: 'Digital Marketing',
-    description: 'Data-driven performance marketing focused on high-ticket client acquisition.',
-    icon: BarChart,
-    color: 'accent-cyan'
-  }
+    description: 'Strategic campaigns that amplify your brand presence and drive measurable growth across channels.',
+    color: 'cyan',
+    tags: ['SEO', 'PPC', 'Content Strategy'],
+  },
+  {
+    icon: TrendingUp,
+    title: 'Growth Strategy',
+    description: 'Data-driven approaches to scale your business, optimize conversions, and maximize ROI.',
+    color: 'blue',
+    tags: ['Analytics', 'CRO', 'Funnel Design'],
+  },
+  {
+    icon: Smartphone,
+    title: 'Mobile Apps',
+    description: 'Native and cross-platform mobile experiences that delight users and drive engagement.',
+    color: 'purple',
+    tags: ['iOS', 'Android', 'React Native'],
+  },
+  {
+    icon: Layers,
+    title: 'UI/UX Design',
+    description: 'Human-centered design that balances aesthetics with functionality for exceptional user experiences.',
+    color: 'cyan',
+    tags: ['Research', 'Prototyping', 'Design Systems'],
+  },
 ]
 
 export default function Services() {
   return (
-    <section className="py-20 relative overflow-hidden">
-      <div className="container mx-auto px-6">
-        <div className="max-w-3xl mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-accent-blue font-display font-bold uppercase tracking-widest text-sm mb-4"
-          >
-            What we do
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl md:text-7xl font-bold mb-8"
-          >
-            Capabilities that <span className="text-white/30">define</span> the future.
-          </motion.h2>
-        </div>
+    <section id="services" className="section-padding relative">
+      <div className="section-container">
+        <ScrollReveal>
+          <div className="max-w-3xl mb-20">
+            <span className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block">
+              What We Do
+            </span>
+            <h2 className="font-display text-section font-bold text-gradient mb-6">
+              Services Built for Growth
+            </h2>
+            <p className="text-text-secondary text-body-lg leading-relaxed">
+              End-to-end digital solutions designed to transform your brand presence
+              and accelerate business outcomes.
+            </p>
+          </div>
+        </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="group relative p-10 rounded-3xl glass transition-all duration-500 overflow-hidden"
-            >
-              <div className={`absolute top-0 right-0 w-32 h-32 bg-${service.color}/10 blur-[60px] group-hover:bg-${service.color}/20 transition-colors`} />
-              
-              <div className="relative z-10">
-                <div className={`w-14 h-14 rounded-2xl bg-${service.color}/10 flex items-center justify-center mb-8 border border-${service.color}/20 group-hover:scale-110 transition-transform duration-500`}>
-                  <service.icon className={`w-6 h-6 text-${service.color}`} />
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, i) => (
+            <ScrollReveal key={i} delay={i * 0.1} direction="up" distance={40}>
+              <GlowCard glowColor={service.color as 'blue' | 'purple' | 'cyan'}>
+                <div className="p-8 h-full flex flex-col">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-accent-${service.color}/10`}>
+                    <service.icon size={24} className={`text-accent-${service.color}`} />
+                  </div>
+                  <h3 className="font-display text-xl font-bold text-white mb-3">
+                    {service.title}
+                  </h3>
+                  <p className="text-text-secondary text-sm leading-relaxed mb-6 flex-grow">
+                    {service.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {service.tags.map((tag, j) => (
+                      <span
+                        key={j}
+                        className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-3 py-1.5 rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-white transition-colors">
-                  {service.title}
-                </h3>
-                
-                <p className="text-white/50 leading-relaxed mb-8">
-                  {service.description}
-                </p>
-
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 text-white/70">
-                  Explore Service <Zap className="w-3 h-3 text-accent-cyan" />
-                </div>
-              </div>
-
-              {/* Animated border glow */}
-              <div className="absolute inset-0 border border-white/0 group-hover:border-white/10 rounded-3xl transition-colors duration-500" />
-            </motion.div>
+              </GlowCard>
+            </ScrollReveal>
           ))}
         </div>
       </div>

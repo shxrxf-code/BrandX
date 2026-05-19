@@ -1,13 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Mail, Phone, MapPin, Twitter, Linkedin, Instagram, Dribbble } from 'lucide-react'
+import { ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react'
+import { TwitterIcon, LinkedinIcon, InstagramIcon, DribbbleIcon } from '@/components/ui/SocialIcons'
 
 const socialLinks = [
-  { label: 'X / Twitter', href: '#', icon: Twitter },
-  { label: 'LinkedIn', href: '#', icon: Linkedin },
-  { label: 'Instagram', href: '#', icon: Instagram },
-  { label: 'Dribbble', href: '#', icon: Dribbble },
+  { label: 'X / Twitter', href: '#', icon: TwitterIcon },
+  { label: 'LinkedIn', href: '#', icon: LinkedinIcon },
+  { label: 'Instagram', href: '#', icon: InstagramIcon },
+  { label: 'Dribbble', href: '#', icon: DribbbleIcon },
 ]
 
 const footerLinks = {

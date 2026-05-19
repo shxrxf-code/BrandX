@@ -143,10 +143,10 @@ export default function Portfolio() {
                   {/* Content */}
                   <div className="absolute inset-0 p-8 flex flex-col justify-end">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-mono tracking-wider text-accent-blue">
+                      <span className="text-sm font-mono tracking-wider text-accent-blue">
                         {project.category}
                       </span>
-                      <span className="text-xs text-text-muted">
+                      <span className="text-sm text-text-muted">
                         {project.year}
                       </span>
                     </div>

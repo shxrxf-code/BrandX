@@ -21,7 +21,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       infinite: false,
       syncTouch: isMobile,
       syncTouchLerp: 0.075,
-      touchInertiaMultiplier: 35,
     })
 
     lenisRef.current = lenis

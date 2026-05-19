@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import ScrollReveal from '@/components/ui/ScrollReveal'
+import { useIsMobile } from '@/lib/hooks'
 
 const projects = [
   {
@@ -46,19 +47,20 @@ const projects = [
     description: 'Premium restaurant branding with menu design and online ordering platform',
     metrics: { conversion: '+190%', traffic: '+140%', engagement: '3.1x' },
   },
+  {
+    title: 'Aero Travels',
+    category: 'Personal Branding',
+    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=800&q=80',
+    year: '2026',
+    description: 'Premium travel brand identity and digital presence for a luxury travel agency',
+    metrics: { conversion: '+210%', traffic: '+130%', engagement: '3.3x' },
+  },
 ]
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useIsMobile()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -70,12 +72,10 @@ export default function Portfolio() {
 
   return (
     <section id="work" className="section-padding relative" ref={containerRef}>
-      {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-purple/5 to-transparent pointer-events-none" />
 
       <div className="section-container">
         <motion.div style={{ opacity, y }}>
-          {/* Section header */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-20 gap-6">
             <div>
               <motion.span
@@ -109,7 +109,6 @@ export default function Portfolio() {
             </motion.p>
           </div>
 
-          {/* Project grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {projects.map((project, i) => (
               <ScrollReveal
@@ -123,7 +122,6 @@ export default function Portfolio() {
                   onHoverStart={() => setHoveredIndex(i)}
                   onHoverEnd={() => setHoveredIndex(null)}
                 >
-                  {/* Project image with zoom reveal */}
                   <div className="aspect-[16/10] overflow-hidden">
                     <motion.img
                       src={project.image}
@@ -137,10 +135,8 @@ export default function Portfolio() {
                     />
                   </div>
 
-                  {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-                  {/* Content */}
                   <div className="absolute inset-0 p-8 flex flex-col justify-end">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-mono tracking-wider text-accent-blue">
@@ -157,7 +153,6 @@ export default function Portfolio() {
                       {project.description}
                     </p>
 
-                    {/* Metrics - revealed on hover */}
                     <motion.div
                       className="flex gap-6"
                       initial={{ opacity: 0, y: 10 }}
@@ -179,7 +174,6 @@ export default function Portfolio() {
                     </motion.div>
                   </div>
 
-                  {/* Arrow button */}
                   <motion.div
                     className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center"
                     initial={{ opacity: 0, scale: 0.8 }}

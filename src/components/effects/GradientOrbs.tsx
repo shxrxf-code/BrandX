@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useIsMobile } from '@/lib/hooks'
 
 interface GradientOrbsProps {
   count?: number
@@ -9,14 +9,7 @@ interface GradientOrbsProps {
 }
 
 export default function GradientOrbs({ count = 3, className = '' }: GradientOrbsProps) {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
+  const isMobile = useIsMobile()
 
   if (isMobile) return null
 

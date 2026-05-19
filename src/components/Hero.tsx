@@ -6,6 +6,7 @@ import { ArrowDown, Sparkles, Zap, Globe } from 'lucide-react'
 import GradientOrbs from '@/components/effects/GradientOrbs'
 import Particles from '@/components/effects/Particles'
 import MagneticButton from '@/components/ui/MagneticButton'
+import { useIsMobile } from '@/lib/hooks'
 
 const floatingCards = [
   { icon: Sparkles, label: 'Brand Strategy', x: '8%', y: '22%', delay: 0 },
@@ -17,16 +18,8 @@ const words = ['Designing', 'The', 'Future', 'Of', 'Digital', 'Brands']
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useIsMobile()
   const [isLoaded, setIsLoaded] = useState(false)
-  const [currentWordIndex, setCurrentWordIndex] = useState(0)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100)
@@ -54,17 +47,13 @@ export default function Hero() {
       <GradientOrbs count={isMobile ? 1 : 3} />
       <Particles count={isMobile ? 10 : 30} speed={0.2} size={1.5} color="255,255,255" />
 
-      {/* Animated grid background */}
       <div className="absolute inset-0 grid-lines opacity-30" />
-
-      {/* Radial gradient overlay */}
       <div className="absolute inset-0 bg-gradient-radial from-accent-blue/5 via-transparent to-transparent" />
 
       <motion.div
         className="relative z-10 section-container text-center"
         style={{ y: springY, opacity, scale }}
       >
-        {/* Top badge */}
         <motion.div
           className="flex items-center justify-center gap-2 mb-8"
           initial={{ opacity: 0, y: 20 }}
@@ -78,7 +67,6 @@ export default function Hero() {
           <span className="h-px w-8 bg-accent-blue/50" />
         </motion.div>
 
-        {/* Massive hero heading with staggered word animation */}
         <h1 className="font-display font-bold leading-[0.9] tracking-[-0.04em] mb-8">
           <div className="flex flex-wrap justify-center gap-x-3 md:gap-x-6">
             {words.map((word, i) => (
@@ -99,7 +87,6 @@ export default function Hero() {
           </div>
         </h1>
 
-        {/* Subtitle with blur-to-clear reveal */}
         <motion.p
           className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed"
           initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
@@ -110,7 +97,6 @@ export default function Hero() {
           and leave lasting impressions in the minds of your audience.
         </motion.p>
 
-        {/* CTA buttons with staggered fade-in */}
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
           initial={{ opacity: 0, y: 20 }}
@@ -125,7 +111,6 @@ export default function Hero() {
           </MagneticButton>
         </motion.div>
 
-        {/* Stats with staggered reveal */}
         <motion.div
           className="mt-20 grid grid-cols-3 gap-8 max-w-lg mx-auto"
           initial={{ opacity: 0, y: 30 }}
@@ -149,7 +134,6 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Floating cards - desktop only */}
       {!isMobile && floatingCards.map((card, i) => (
         <motion.div
           key={i}
@@ -172,7 +156,6 @@ export default function Hero() {
         </motion.div>
       ))}
 
-      {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}

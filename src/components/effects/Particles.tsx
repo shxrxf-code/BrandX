@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import { useIsMobile } from '@/lib/hooks'
 
 interface ParticlesProps {
   count?: number
@@ -27,15 +28,8 @@ export default function Particles({
     opacity: number
     size: number
   }>>([])
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useIsMobile()
   const frameCountRef = useRef(0)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current

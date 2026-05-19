@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useInView, useAnimation } from 'framer-motion'
+import { useIsMobile } from '@/lib/hooks'
 
 interface ScrollRevealProps {
   children: React.ReactNode
@@ -27,14 +28,7 @@ export default function ScrollReveal({
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once, amount: threshold })
   const controls = useAnimation()
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
+  const isMobile = useIsMobile()
 
   const getInitialTransform = () => {
     const d = isMobile ? Math.min(distance, 30) : distance

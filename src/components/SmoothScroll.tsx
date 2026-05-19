@@ -1,39 +1,33 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null)
-  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  useEffect(() => {
-    if (isMobile) return
+    const isMobile = window.innerWidth < 768
 
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: isMobile ? 1 : 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
-      lerp: 0.08,
+      wheelMultiplier: isMobile ? 0.8 : 1,
+      touchMultiplier: isMobile ? 1.5 : 2,
+      lerp: isMobile ? 0.12 : 0.08,
       infinite: false,
+      syncTouch: isMobile,
+      syncTouchLerp: 0.075,
+      touchInertiaMultiplier: 35,
     })
 
     lenisRef.current = lenis
 
-    lenis.on('scroll', () => {
-      requestAnimationFrame(() => {
-        lenis.raf(performance.now())
-      })
+    lenis.on('scroll', (e: { scroll: number; limit: number }) => {
+      window.scrollTo(0, e.scroll)
     })
 
     let rafId: number
@@ -49,7 +43,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       lenis.destroy()
       lenisRef.current = null
     }
-  }, [isMobile])
+  }, [])
 
   return <>{children}</>
 }

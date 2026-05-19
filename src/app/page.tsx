@@ -2,7 +2,6 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Trust from '@/components/Trust'
 import Services from '@/components/Services'
-import HorizontalScroll from '@/components/HorizontalScroll'
 import Portfolio from '@/components/Portfolio'
 import Process from '@/components/Process'
 import About from '@/components/About'
@@ -22,7 +21,6 @@ export default function Home() {
       <Hero />
       <Trust />
       <Services />
-      <HorizontalScroll />
       <Portfolio />
       <Process />
       <About />

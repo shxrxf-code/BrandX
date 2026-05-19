@@ -34,7 +34,7 @@ const projects = [
   {
     title: 'Nuts & Plants',
     category: 'Web Application',
-    image: 'https://images.unsplash.com/photo-1621939514649-280e2ee25f60?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=800&q=80',
     year: '2026',
     description: 'E-commerce website for premium nuts and chocolates with seamless checkout experience',
     metrics: { conversion: '+280%', traffic: '+160%', engagement: '3.5x' },

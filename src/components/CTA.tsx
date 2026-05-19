@@ -60,7 +60,7 @@ export default function CTA() {
 
         <ScrollReveal delay={0.3}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <MagneticButton variant="primary">
+            <MagneticButton variant="primary" href="tel:+9170100096308">
               Book a Strategy Call
             </MagneticButton>
             <MagneticButton variant="secondary">

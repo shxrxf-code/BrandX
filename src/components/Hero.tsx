@@ -95,7 +95,7 @@ export default function Hero() {
           <MagneticButton variant="primary" href="#work">
             View Our Work
           </MagneticButton>
-          <MagneticButton variant="secondary" href="#contact">
+          <MagneticButton variant="secondary" href="tel:+9170100096308">
             Book a Strategy Call
           </MagneticButton>
         </motion.div>

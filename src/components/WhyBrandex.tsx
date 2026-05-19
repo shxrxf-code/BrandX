@@ -67,7 +67,7 @@ export default function WhyBrandex() {
                   transition={{ duration: 0.3 }}
                 >
                   <div className="flex items-start gap-6">
-                    <span className="font-display text-5xl font-bold text-white/[0.05] group-hover:text-accent-blue/20 transition-colors">
+                    <span className="font-display text-5xl font-bold text-white/10 group-hover:text-accent-blue/20 transition-colors">
                       {reason.number}
                     </span>
                     <div>

@@ -87,7 +87,7 @@ export default function Process() {
                 >
                   <div className="flex-1">
                     <div className={`lg:text-${i % 2 === 0 ? 'right' : 'left'}`}>
-                      <span className="font-display text-6xl md:text-8xl font-bold text-white/[0.03] block mb-4">
+                      <span className="font-display text-6xl md:text-8xl font-bold text-white/10 block mb-4">
                         {step.number}
                       </span>
                       <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-4">

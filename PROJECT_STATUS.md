@@ -1,24 +1,26 @@
 # BrandX — Project Status & Reference Document
 
-> **Generated:** May 19, 2026
-> **Status:** Active Development — Major refactor from Vite/SPA to Next.js 15 App Router
+> **Last Updated:** May 19, 2026
+> **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
+> **Latest Commit:** `66fbdab`
 
 ---
 
 ## 1. Project Overview
 
-**BrandX** (branded as **Brandex Digital**) is a premium digital agency website designed to communicate trust, technical excellence, and creative sophistication. The site is a single-page cinematic experience with smooth scroll, custom cursor, preloader, parallax effects, and extensive Framer Motion animations.
+**BrandX** (branded as **Brandex Digital**) is a premium digital agency website — a single-page cinematic experience with smooth scroll, preloader, parallax effects, and extensive Framer Motion animations.
 
-The project underwent a **major architectural migration** from a Vite + React Router SPA (with multiple pages: Home, SocialMediaMarketing, WebDevelopment, SEO, Contact) to a **Next.js 15 App Router** single-page landing site. The current version is a polished, production-ready landing page with 14 distinct sections.
+Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 sections.
 
 ### Current State
-- Framework migrated from Vite → Next.js 15
-- React upgraded from v18 → v19
-- Routing changed from React Router → single-page layout with anchor navigation
-- Multiple page routes consolidated into one `page.tsx` with section-based navigation
-- New UI component library and effects system created
-- **15 modified files** and **7 untracked new files** awaiting commit
+- Framework: Next.js 15 (App Router)
+- React: v19
+- Deployed on Vercel: `https://brandexdigital.in`
+- Full-width layout (no max-width constraint)
+- Mobile-optimized (Lenis disabled on mobile, reduced animations)
+- Custom cursor removed
+- Contact info: `brandexdigital.in@gmail.com` / `+91 70100 096308`
 
 ---
 
@@ -28,53 +30,62 @@ The project underwent a **major architectural migration** from a Vite + React Ro
 
 ```
 BrandX/
-├── .next/                              # Next.js build output (deleted/stale)
-├── public/                             # Static assets (noise.png referenced)
+├── .next/                              # Next.js build output (gitignored)
+├── public/                             # Static assets (empty)
 ├── src/
 │   ├── app/
-│   │   ├── globals.css                 # Global styles, Tailwind layers, CSS utilities (502 lines)
-│   │   ├── layout.tsx                  # Root layout with fonts, Preloader, Cursor, SmoothScroll
-│   │   └── page.tsx                    # Main page — composes all 14 sections
+│   │   ├── globals.css                 # Global styles, Tailwind layers, CSS utilities
+│   │   ├── layout.tsx                  # Root layout with fonts, Preloader, SmoothScroll, Analytics
+│   │   ├── page.tsx                    # Main page — composes all 14 sections + ErrorBoundary
+│   │   ├── error.tsx                   # Error boundary UI
+│   │   ├── not-found.tsx               # 404 page
+│   │   ├── robots.ts                   # Dynamic robots.txt (Next.js metadata API)
+│   │   ├── sitemap.ts                  # Dynamic sitemap.xml
+│   │   └── api/
+│   │       └── contact/
+│   │           └── route.ts            # POST /api/contact — Nodemailer email handler
 │   ├── components/
 │   │   ├── effects/
-│   │   │   ├── AnimatedGrid.tsx        # Canvas-based animated dot grid background
-│   │   │   ├── GradientOrbs.tsx        # Mouse-reactive gradient blur orbs
-│   │   │   └── Particles.tsx           # Canvas-based floating particle system
+│   │   │   ├── AnimatedGrid.tsx        # Canvas-based animated dot grid
+│   │   │   ├── GradientOrbs.tsx        # Floating gradient orbs (hidden on mobile)
+│   │   │   └── Particles.tsx           # Canvas particles (reduced on mobile)
 │   │   ├── ui/
-│   │   │   ├── AnimatedCounter.tsx     # Scroll-triggered animated number counter
-│   │   │   ├── Cursor.tsx              # Custom spring-animated cursor with hover states
-│   │   │   ├── GlowCard.tsx            # 3D tilt card with radial gradient glow follow
-│   │   │   ├── MagneticButton.tsx      # Magnetic pull button (primary/secondary/ghost)
-│   │   │   ├── Marquee.tsx             # Infinite scrolling text marquee
-│   │   │   ├── ParallaxImage.tsx       # Scroll-linked parallax image component
-│   │   │   ├── ScrollReveal.tsx        # Directional scroll-triggered reveal wrapper
-│   │   │   └── TextReveal.tsx          # Word-by-word staggered text animation
-│   │   ├── About.tsx                   # Two-column about section with team image + values
-│   │   ├── CTA.tsx                     # Final call-to-action with marquee background
-│   │   ├── FAQ.tsx                     # [NEW] Accordion FAQ with animated expand/collapse
-│   │   ├── Footer.tsx                  # Multi-column footer with links, contact, socials
-│   │   ├── Hero.tsx                    # Full-screen hero with floating cards + stats
-│   │   ├── Metrics.tsx                 # [NEW] Animated counter metrics section
-│   │   ├── Navbar.tsx                  # [NEW] Fixed glass navbar with mobile menu
-│   │   ├── Portfolio.tsx               # Asymmetric bento-grid project showcase
-│   │   ├── Preloader.tsx               # Animated loading screen with progress bar
-│   │   ├── Process.tsx                 # 6-step alternating timeline with progress bar
-│   │   ├── Services.tsx                # 3-column service cards with glow effects
-│   │   ├── SmoothScroll.tsx            # Lenis smooth scroll wrapper
-│   │   ├── TechStack.tsx               # [NEW] Technology proficiency grid with bars
-│   │   ├── Testimonials.tsx            # 3-column client testimonial cards
-│   │   ├── Trust.tsx                   # Trust indicator stats bar
-│   │   └── WhyBrandex.tsx              # [NEW] Sticky sidebar + reason cards section
-│   ├── lib/
-│   │   └── utils.ts                    # cn() utility (clsx + tailwind-merge)
-├── next.config.js                      # Next.js config (strict mode, Unsplash images)
-├── tailwind.config.js                  # Extensive design system (194 lines)
-├── tsconfig.json                       # TypeScript config (ES2017, path aliases)
+│   │   │   ├── AnimatedCounter.tsx     # Scroll-triggered number counter
+│   │   │   ├── GlowCard.tsx            # Card with static hover glow (no tilt)
+│   │   │   ├── MagneticButton.tsx      # Standard button (no magnetic effect)
+│   │   │   ├── Marquee.tsx             # Infinite scrolling text
+│   │   │   ├── ParallaxImage.tsx       # Scroll-linked parallax image
+│   │   │   ├── ScrollReveal.tsx        # Scroll-triggered reveal (optimized mobile)
+│   │   │   └── TextReveal.tsx          # Word-by-word staggered text
+│   │   ├── About.tsx                   # Two-column about section
+│   │   ├── CTA.tsx                     # Final CTA with marquee
+│   │   ├── ErrorBoundary.tsx           # Class-based error boundary (catches runtime errors)
+│   │   ├── FAQ.tsx                     # Accordion FAQ
+│   │   ├── Footer.tsx                  # Multi-column footer
+│   │   ├── Hero.tsx                    # Full-viewport hero (simplified on mobile)
+│   │   ├── Metrics.tsx                 # Animated counter metrics
+│   │   ├── Navbar.tsx                  # Fixed glass nav + mobile menu
+│   │   ├── Portfolio.tsx               # 3-col grid project showcase (6 projects)
+│   │   ├── Preloader.tsx               # Loading screen (simplified on mobile)
+│   │   ├── Process.tsx                 # 6-step timeline (no progress line on mobile)
+│   │   ├── Services.tsx                # 6 service cards with static glow
+│   │   ├── SmoothScroll.tsx            # Lenis wrapper (disabled on mobile)
+│   │   ├── TechStack.tsx               # Tech proficiency grid
+│   │   ├── Testimonials.tsx            # Client testimonial cards
+│   │   ├── Trust.tsx                   # Trust indicator stats
+│   │   └── WhyBrandex.tsx              # Sticky sidebar + reason cards
+│   └── lib/
+│       ├── hooks.ts                    # useIsMobile, useReducedMotion hooks
+│       └── utils.ts                    # cn() utility
+├── next.config.js                      # Next.js config (security headers, Unsplash images)
+├── tailwind.config.js                  # Design system (colors, typography, animations)
+├── tsconfig.json                       # TypeScript config
 ├── postcss.config.js                   # Tailwind + Autoprefixer
-├── vercel.json                         # SPA rewrites + API routing
-├── package.json                        # Dependencies and scripts
-├── README.md                           # Outdated (references old Vite setup)
-├── CONTACT_FORM_SETUP.md               # Email API configuration guide
+├── vercel.json                         # Framework preset: nextjs
+├── package.json                        # Dependencies
+├── .env.example                        # Environment variables template
+├── README.md                           # Project documentation
+├── CONTACT_FORM_SETUP.md               # Email API configuration
 └── PROJECT_STATUS.md                   # This file
 ```
 
@@ -82,30 +93,30 @@ BrandX/
 
 ```
 RootLayout
-├── Preloader                           # Full-screen loading animation
-├── Cursor                              # Custom cursor (ring + dot)
-├── SmoothScroll (Lenis wrapper)
+├── Preloader                           # Full-screen loading (simplified mobile)
+├── SmoothScroll (Lenis — desktop only)
 │   └── <main>
-│       ├── Navbar                      # Fixed glass nav + mobile fullscreen menu
-│       ├── Hero                        # Full-viewport hero section
-│       │   ├── GradientOrbs            # Background effect
-│       │   └── Particles               # Background effect
-│       ├── Trust                       # Stats bar
-│       ├── Services                    # Service cards grid
-│       │   └── GlowCard (×6)           # Card wrapper per service
-│       ├── Portfolio                   # Project grid
-│       ├── Process                     # Timeline with animated progress
-│       ├── About                       # Two-column layout
-│       ├── Metrics                     # Counter metrics
-│       │   └── AnimatedCounter (×4)    # Per metric
-│       ├── TechStack                   # Tech proficiency grid
-│       ├── Testimonials                # Client quotes
-│       ├── WhyBrandex                  # Sticky sidebar + cards
-│       ├── FAQ                         # Accordion
-│       ├── CTA                         # Final CTA
-│       │   └── Marquee                 # Scrolling text
-│       └── Footer                      # Site footer
-└── .noise                              # SVG noise overlay (fixed)
+│       └── ErrorBoundary               # Catches runtime errors
+│           ├── Navbar                  # Fixed glass nav + mobile fullscreen menu
+│           ├── Hero                    # Hero with parallax, stats, CTAs
+│           │   ├── GradientOrbs        # Hidden on mobile
+│           │   └── Particles           # Reduced count on mobile
+│           ├── Trust                   # 4-column stats
+│           ├── Services                # 6 service cards
+│           │   └── GlowCard (×6)       # Static hover glow
+│           ├── Portfolio               # 3-col grid, 6 projects
+│           ├── Process                 # 6-step timeline
+│           ├── About                   # Two-column layout
+│           ├── Metrics                 # Animated counters
+│           │   └── AnimatedCounter (×4)
+│           ├── TechStack               # Tech proficiency grid
+│           ├── Testimonials            # Client quotes
+│           ├── WhyBrandex              # Sticky sidebar + cards
+│           ├── FAQ                     # Accordion
+│           ├── CTA                     # Final CTA + marquee
+│           └── Footer                  # Multi-column footer
+├── .noise                              # SVG noise overlay (static on mobile)
+└── Analytics                           # Vercel Analytics
 ```
 
 ---
@@ -114,20 +125,20 @@ RootLayout
 
 | # | Section | ID Anchor | Key Features |
 |---|---------|-----------|--------------|
-| 1 | **Navbar** | — | Fixed glass pill nav, scroll-aware state, mobile fullscreen overlay, staggered link animations, MagneticButton CTA |
-| 2 | **Hero** | — | Full-viewport, 3D word reveal animation, gradient text, floating glass cards with icons, scroll parallax (y/opacity/scale), dual CTAs, inline stats, scroll indicator |
-| 3 | **Trust** | — | 4-column stat counters with hover scale, scroll-reveal stagger, accent-colored suffixes |
-| 4 | **Services** | `#services` | 6 service cards in 3-col grid, GlowCard with mouse-tracking radial glow, icon badges, tag pills |
-| 5 | **Portfolio** | `#work` | Asymmetric 12-column bento grid, grayscale→color hover, image scale on hover, external link button with rotation |
-| 6 | **Process** | `#process` | 6-step alternating timeline, animated gradient progress line, large watermark numbers, detail tag pills |
-| 7 | **About** | `#about` | Two-column split, team image with glass quote overlay, 4 value props with accent border, decorative blur orbs |
-| 8 | **Metrics** | — | 4-column animated counters, gradient text, hover scale, background gradient band |
-| 9 | **TechStack** | — | 12 tech items in 4-col grid, glass cards, animated proficiency bars on scroll |
-| 10 | **Testimonials** | — | 3-column quote cards, glass-card styling, avatar initials with gradient backgrounds |
-| 11 | **WhyBrandex** | — | Sticky left sidebar, 4 numbered reason cards with hover scale, large watermark numbers |
-| 12 | **FAQ** | — | 6 accordion items, animated expand/collapse, rotating +/- icon, scroll-reveal |
-| 13 | **CTA** | `#contact` | Scroll-linked scale/opacity, gradient heading, dual MagneticButtons, background marquee text |
-| 14 | **Footer** | — | 5-column grid, animated link arrows, contact info with icons, social links, copyright bar |
+| 1 | **Navbar** | — | Fixed glass pill nav, scroll-aware, mobile fullscreen menu, MagneticButton CTA |
+| 2 | **Hero** | — | Full-viewport, word reveal, gradient text, scroll parallax, dual CTAs (tel/mailto), inline stats |
+| 3 | **Trust** | — | 4-column stat counters with hover scale, scroll-reveal stagger |
+| 4 | **Services** | `#services` | 6 service cards in 3-col grid, static hover glow, icon badges, tag pills |
+| 5 | **Portfolio** | `#work` | 3-col grid, 6 projects, grayscale→color hover, descriptions, year badges |
+| 6 | **Process** | `#process` | 6-step alternating timeline, watermark numbers (10% opacity), detail tags |
+| 7 | **About** | `#about` | Two-column split, team image with glass quote overlay, 4 value props |
+| 8 | **Metrics** | — | 4-column animated counters, gradient text, hover scale |
+| 9 | **TechStack** | — | 12 tech items in 4-col grid, glass cards, animated proficiency bars |
+| 10 | **Testimonials** | — | 3-column quote cards, glass styling, avatar initials |
+| 11 | **WhyBrandex** | — | Sticky sidebar, 4 numbered reason cards (10% opacity numbers) |
+| 12 | **FAQ** | — | 6 accordion items, animated expand/collapse, scroll-reveal |
+| 13 | **CTA** | `#contact` | Scroll-linked scale/opacity, gradient heading, tel/mailto buttons, marquee |
+| 14 | **Footer** | — | 5-column grid, animated link arrows, contact info, socials, copyright |
 
 ---
 
@@ -139,184 +150,62 @@ RootLayout
 |-------|-------|-------|
 | `background.DEFAULT` | `#050505` | Page background |
 | `background.secondary` | `#0A0A0A` | Card/image backgrounds |
-| `background.tertiary` | `#0F0F0F` | Deep surfaces |
-| `background.elevated` | `#141414` | Elevated surfaces |
 | `surface.DEFAULT` | `#1A1A1A` | Interactive surfaces |
-| `surface.hover` | `#222222` | Hover states |
-| `border.subtle` | `rgba(255,255,255,0.06)` | Subtle dividers |
-| `border.DEFAULT` | `rgba(255,255,255,0.1)` | Standard borders |
-| `border.bright` | `rgba(255,255,255,0.15)` | Prominent borders |
-| `text.primary` | `#FFFFFF` | Headings, primary text |
+| `text.primary` | `#FFFFFF` | Headings |
 | `text.secondary` | `rgba(255,255,255,0.60)` | Body text |
-| `text.muted` | `rgba(255,255,255,0.35)` | Labels, captions |
-| `text.faint` | `rgba(255,255,255,0.15)` | Watermarks |
+| `text.muted` | `rgba(255,255,255,0.35)` | Labels |
 | `accent.blue` | `#3B82F6` | Primary accent |
-| `accent.blue-dim` | `#2563EB` | Dimmed blue |
 | `accent.purple` | `#A855F7` | Secondary accent |
-| `accent.purple-dim` | `#7C3AED` | Dimmed purple |
 | `accent.cyan` | `#22D3EE` | Tertiary accent |
-| `accent.cyan-dim` | `#06B6D4` | Dimmed cyan |
-| `accent.violet` | `#8B5CF6` | Quaternary accent |
-| `glow.blue` | `rgba(59,130,246,0.15)` | Blue glow effects |
-| `glow.purple` | `rgba(168,85,247,0.15)` | Purple glow effects |
-| `glow.cyan` | `rgba(34,211,238,0.15)` | Cyan glow effects |
 
 ### Typography
 
-| Token | Size | Line Height | Letter Spacing | Usage |
-|-------|------|-------------|----------------|-------|
-| `display` | `clamp(3rem, 8vw, 8rem)` | 0.95 | -0.04em | Largest display text |
-| `hero` | `clamp(2.5rem, 7vw, 7rem)` | 1.0 | -0.03em | Hero headings |
-| `section` | `clamp(2rem, 5vw, 5rem)` | 1.05 | -0.03em | Section headings |
-| `heading` | `clamp(1.5rem, 3vw, 3rem)` | 1.1 | -0.02em | Sub-section headings |
-| `subheading` | `clamp(1.125rem, 2vw, 1.5rem)` | 1.3 | -0.01em | Subheadings |
-| `body-lg` | `1.25rem` | 1.6 | — | Large body text |
-| `body` | `1rem` | 1.6 | — | Standard body |
-| `body-sm` | `0.875rem` | 1.5 | — | Small body |
-| `caption` | `0.75rem` | 1.4 | 0.05em | Captions, labels |
+- `font-sans` → Inter
+- `font-display` → Space Grotesk
+- Fluid sizes via `clamp()`
 
-**Font Families:**
-- `font-sans` → Inter (`--font-inter`)
-- `font-display` → Space Grotesk (`--font-space-grotesk`)
-
-### CSS Utility Classes (defined in `globals.css`)
+### Key CSS Utilities
 
 | Class | Description |
 |-------|-------------|
-| `.noise` | Fixed SVG noise overlay (z-9999, pointer-events none) |
-| `.glass` | Frosted glass: `bg-white/[0.03]`, `backdrop-blur-2xl`, subtle border |
-| `.glass-strong` | Stronger glass: `bg-white/[0.06]`, `backdrop-blur-3xl` |
-| `.glass-card` | Card glass with hover state (bg brightens, blue glow appears) |
-| `.text-gradient` | White-to-transparent vertical gradient text |
-| `.text-gradient-blue` | Blue→Cyan→Purple animated gradient text |
-| `.text-gradient-purple` | Purple→Violet→Blue animated gradient text |
-| `.text-glow` / `.text-glow-blue` / `.text-glow-purple` | Colored text shadow glow |
-| `.glow-orb` / `.glow-orb-blue` / `.glow-orb-purple` / `.glow-orb-cyan` | Large blurred color orbs |
-| `.glow-border` | Gradient border that appears on hover |
-| `.magnetic-btn` | Button with mouse-tracking radial highlight |
-| `.btn-primary` | White bg button → blue on hover with glow |
-| `.btn-secondary` | Transparent bordered button |
-| `.section-container` | `max-w-7xl mx-auto px-6 md:px-8 lg:px-12` |
+| `.noise` | Fixed SVG noise overlay (animated desktop, static mobile) |
+| `.glass` / `.glass-strong` / `.glass-card` | Frosted glass effects |
+| `.text-gradient` / `.text-gradient-blue` | Gradient text |
+| `.section-container` | Full-width: `w-full px-6 md:px-12 lg:px-16` |
 | `.section-padding` | `py-24 md:py-32 lg:py-40` |
-| `.border-gradient` | Gradient border via pseudo-element |
-| `.animated-border` | Animated flowing gradient border |
-| `.hover-lift` | translateY(-8px) + shadow on hover |
-| `.image-reveal` | Clip-path reveal animation |
-| `.line-through-hover` | Animated underline on hover |
-| `.marquee-container` / `.marquee-content` | Infinite scroll marquee |
-| `.dot-grid` | Dot pattern background |
-| `.grid-lines` | Grid line background |
-| `.shimmer-text` | Shimmer animation on text |
-| `.perspective-container` / `.tilt-card` | 3D perspective transforms |
-| `.blend-difference` | `mix-blend-mode: difference` |
-
-### Utility Layer Classes
-
-| Class | Description |
-|-------|-------------|
-| `.mask-radial` | Radial gradient mask |
-| `.mask-linear` | Linear gradient mask (top fade) |
-| `.mask-linear-top` | Linear gradient mask (bottom fade) |
-| `.no-scrollbar` | Hide scrollbar |
-| `.will-change-transform` / `.will-change-opacity` | Performance hints |
-| `.gpu-accelerated` | `translateZ(0)` + `backface-visibility: hidden` |
-| `.text-stroke` / `.text-stroke-thick` | Outlined text |
-
-### Animations (Tailwind config)
-
-| Animation | Duration | Easing | Description |
-|-----------|----------|--------|-------------|
-| `fade-in` | 0.8s | ease-out | Opacity 0→1 |
-| `fade-in-slow` | 1.5s | ease-out | Slow opacity |
-| `slide-up` | 0.8s | out-expo | TranslateY 60px→0 |
-| `slide-down` | 0.8s | out-expo | TranslateY -40px→0 |
-| `slide-left` | 0.8s | out-expo | TranslateX 60px→0 |
-| `slide-right` | 0.8s | out-expo | TranslateX -60px→0 |
-| `scale-in` | 0.6s | out-expo | Scale 0.9→1 |
-| `float` | 6s | ease-in-out | Infinite float (loop) |
-| `float-slow` | 8s | ease-in-out | Slow float |
-| `float-fast` | 4s | ease-in-out | Fast float |
-| `pulse-slow` | 4s | cubic | Slow pulse |
-| `pulse-glow` | 3s | ease-in-out | Glow pulse with scale |
-| `marquee` | 30s | linear | Infinite scroll |
-| `marquee-fast` | 20s | linear | Fast marquee |
-| `spin-slow` | 20s | linear | Slow rotation |
-| `shimmer` | 2s | ease-in-out | Shimmer sweep |
-| `gradient` | 8s | ease | Gradient position shift |
-| `border-flow` | 3s | linear | Animated border gradient |
-| `text-reveal` | 1s | out-expo | Clip-path text reveal |
-| `blur-in` | 0.8s | ease-out | Blur 20px→0 |
-| `morph` | 8s | ease-in-out | Border-radius morphing |
-
-### Custom Easing Curves
-
-| Name | Value |
-|------|-------|
-| `out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` |
-| `in-expo` | `cubic-bezier(0.76, 0, 0.24, 1)` |
-| `in-out-expo` | `cubic-bezier(0.87, 0, 0.13, 1)` |
-| `spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
-
-### Box Shadows
-
-| Token | Value |
-|-------|-------|
-| `glow-blue` | `0 0 40px rgba(59,130,246,0.3), 0 0 80px rgba(59,130,246,0.1)` |
-| `glow-purple` | `0 0 40px rgba(168,85,247,0.3), 0 0 80px rgba(168,85,247,0.1)` |
-| `glow-cyan` | `0 0 40px rgba(34,211,238,0.3), 0 0 80px rgba(34,211,238,0.1)` |
-| `inner-glow` | `inset 0 0 40px rgba(255,255,255,0.05)` |
-| `card` | `0 4px 24px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2)` |
-| `card-hover` | `0 8px 40px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3)` |
-| `elevated` | `0 20px 60px rgba(0,0,0,0.5)` |
+| `.hover-lift` | translateY(-8px) on hover |
 
 ---
 
 ## 5. Tech Stack & Dependencies
 
-### Core Framework
 | Package | Version | Purpose |
 |---------|---------|---------|
 | `next` | ^15.1.3 | React framework (App Router) |
 | `react` | ^19.0.0 | UI library |
-| `react-dom` | ^19.0.0 | React DOM renderer |
+| `react-dom` | ^19.0.0 | DOM renderer |
 | `typescript` | ^5.3.3 | Type safety |
-
-### Styling
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `tailwindcss` | ^3.4.1 | Utility-first CSS |
-| `autoprefixer` | ^10.4.17 | CSS vendor prefixes |
-| `postcss` | ^8.4.35 | CSS transformation |
-| `clsx` | ^2.1.1 | Conditional class names |
-| `tailwind-merge` | ^3.6.0 | Tailwind class conflict resolution |
-
-### Animation & Interaction
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `framer-motion` | ^11.11.17 | React animation library |
-| `gsap` | ^3.12.5 | GreenSock animation (installed, not yet used) |
-| `lenis` | ^1.3.23 | Smooth scroll library |
-
-### Icons
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `lucide-react` | ^1.16.0 | Icon library |
-
-### Analytics
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `@vercel/analytics` | ^1.6.1 | Vercel analytics (installed, not yet integrated) |
+| `tailwindcss` | ^3.4.1 | Utility CSS |
+| `framer-motion` | ^11.11.17 | Animations |
+| `lenis` | ^1.3.23 | Smooth scroll (desktop only) |
+| `lucide-react` | ^1.16.0 | Icons |
+| `@vercel/analytics` | ^1.6.1 | Analytics |
+| `nodemailer` | latest | Email sending |
+| `clsx` | ^2.1.1 | Conditional classes |
+| `tailwind-merge` | ^3.6.0 | Class conflict resolution |
 
 ### Dev Dependencies
-| Package | Version | Purpose |
-|---------|---------|---------|
-| `eslint` | ^9.39.4 | Linting |
-| `eslint-config-next` | ^15.1.3 | Next.js ESLint rules |
-| `@eslint/js` | ^9.39.4 | ESLint core |
-| `@next/eslint-plugin-next` | ^15.5.18 | Next.js specific rules |
-| `@types/react` | ^19.0.0 | React types |
-| `@types/react-dom` | ^19.0.0 | ReactDOM types |
-| `@types/node` | ^20.11.5 | Node types |
+
+| Package | Version |
+|---------|---------|
+| `eslint` | ^9.39.4 |
+| `eslint-config-next` | ^15.1.3 |
+| `@types/node` | ^20.11.5 |
+| `@types/react` | ^19.0.0 |
+| `@types/react-dom` | ^19.0.0 |
+| `@types/nodemailer` | latest |
+| `autoprefixer` | ^10.4.17 |
+| `postcss` | ^8.4.35 |
 
 ### NPM Scripts
 
@@ -329,206 +218,175 @@ RootLayout
 
 ---
 
-## 6. Component Inventory
+## 6. API Routes
 
-### Section Components (`src/components/`)
+### POST `/api/contact`
 
-| Component | Lines | Type | Dependencies | Description |
-|-----------|-------|------|--------------|-------------|
-| `Navbar.tsx` | 146 | Client | framer-motion, lucide-react, MagneticButton | Fixed glass pill navigation with scroll detection, mobile fullscreen menu with staggered animations |
-| `Hero.tsx` | 165 | Client | framer-motion, lucide-react, GradientOrbs, Particles, MagneticButton, ScrollReveal | Full-viewport hero with 3D word reveal, floating glass cards, scroll parallax, inline stats |
-| `Trust.tsx` | 54 | Client | framer-motion, ScrollReveal | 4-column trust stats with hover scale and scroll-reveal |
-| `Services.tsx` | 104 | Client | framer-motion, lucide-react, GlowCard, ScrollReveal | 6 service cards in responsive grid with glow effects and tag pills |
-| `Portfolio.tsx` | 112 | Client | framer-motion, lucide-react, ScrollReveal | Asymmetric bento-grid project showcase with grayscale→color hover |
-| `Process.tsx` | 125 | Client | framer-motion, ScrollReveal | 6-step alternating timeline with animated gradient progress line |
-| `About.tsx` | 74 | Client | framer-motion, ScrollReveal | Two-column about with team image, glass quote overlay, 4 value props |
-| `Metrics.tsx` | 59 | Client | framer-motion, AnimatedCounter, ScrollReveal | 4-column animated counter metrics with gradient text |
-| `TechStack.tsx` | 70 | Client | framer-motion, ScrollReveal | 12-item tech proficiency grid with animated bars |
-| `Testimonials.tsx` | 73 | Client | framer-motion, lucide-react, ScrollReveal | 3-column client testimonial cards with quote icons |
-| `WhyBrandex.tsx` | 90 | Client | framer-motion, lucide-react, ScrollReveal | Sticky sidebar + 4 numbered reason cards |
-| `FAQ.tsx` | 96 | Client | framer-motion, lucide-react, ScrollReveal | 6-item accordion with animated expand/collapse |
-| `CTA.tsx` | 82 | Client | framer-motion, MagneticButton, ScrollReveal, Marquee | Final CTA with scroll-linked scale, marquee background |
-| `Footer.tsx` | 151 | Client | framer-motion, lucide-react | Multi-column footer with animated link arrows |
-| `Preloader.tsx` | 114 | Client | framer-motion | Full-screen loading screen with progress bar, cycling text, slide-up exit |
-| `SmoothScroll.tsx` | 33 | Client | lenis | Lenis smooth scroll wrapper with RAF loop |
+**File:** `src/app/api/contact/route.ts`
 
-### UI Components (`src/components/ui/`)
+**Purpose:** Sends contact form submissions via Nodemailer to `brandexdigital.in@gmail.com`
 
-| Component | Lines | Props | Description |
-|-----------|-------|-------|-------------|
-| `AnimatedCounter.tsx` | 63 | `value`, `suffix?`, `prefix?`, `className?`, `duration?` | Scroll-triggered counter with eased animation (cubic ease-out) |
-| `Cursor.tsx` | 97 | `enabled?` | Custom cursor with spring-physics ring + dot, hover detection, `data-cursor-label` support, auto-disabled on touch |
-| `GlowCard.tsx` | 81 | `children`, `className?`, `glowColor?`, `intensity?`, `tilt?` | 3D tilt card with mouse-following radial gradient glow (blue/purple/cyan/white) |
-| `MagneticButton.tsx` | 79 | `children`, `className?`, `variant?`, `onClick?`, `href?`, `strength?` | Magnetic pull button with primary/secondary/ghost variants |
-| `Marquee.tsx` | 40 | `items`, `speed?`, `direction?`, `className?`, `itemClassName?` | Infinite scrolling text marquee, configurable speed and direction |
-| `ParallaxImage.tsx` | 42 | `src`, `alt`, `className?`, `strength?`, `rounded?` | Scroll-linked parallax image with y-transform and scale |
-| `ScrollReveal.tsx` | 73 | `children`, `className?`, `delay?`, `duration?`, `direction?`, `distance?`, `once?`, `threshold?` | Wrapper for scroll-triggered directional reveal animations |
-| `TextReveal.tsx` | 84 | `text`, `className?`, `delay?`, `staggerDelay?`, `as?`, `wordByWord?`, `blurIn?` | Word-by-word staggered text reveal with optional blur effect |
+**Request Body:**
+```json
+{
+  "name": "string (min 2 chars)",
+  "email": "string (valid email)",
+  "subject": "string (min 3 chars)",
+  "message": "string (min 10 chars)"
+}
+```
 
-### Effects Components (`src/components/effects/`)
+**Response:**
+- `200` — `{ "success": true }`
+- `400` — `{ "error": "validation message" }`
+- `500` — `{ "error": "Failed to send email" }`
+- `503` — `{ "error": "Email service not configured" }`
 
-| Component | Lines | Props | Description |
-|-----------|-------|-------|-------------|
-| `AnimatedGrid.tsx` | 82 | `cellSize?`, `opacity?`, `color?`, `className?` | Canvas-based animated dot grid with distance-based wave opacity |
-| `GradientOrbs.tsx` | 68 | `count?`, `className?` | Mouse-reactive gradient blur orbs (blue/purple/cyan) with spring physics |
-| `Particles.tsx` | 93 | `count?`, `speed?`, `size?`, `color?`, `className?` | Canvas-based floating particle system with wrap-around |
-
-### Utility
-
-| File | Lines | Description |
-|------|-------|-------------|
-| `src/lib/utils.ts` | 6 | `cn()` — clsx + tailwind-merge utility for conditional class composition |
+**Required Environment Variables:**
+```
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=brandexdigital.in@gmail.com
+EMAIL_PASS=<gmail-app-password>
+```
 
 ---
 
-## 7. Known Issues
+## 7. SEO & Metadata
 
-### Critical
-1. **Dev server not responding** — `.next/` build artifacts have been deleted; `npm run dev` needs to be run to regenerate them
-2. **Missing `public/noise.png`** — `globals.css` references a noise overlay via SVG data URI (inline), but `tailwind.config.js` also references `url('/noise.png')` in `backgroundImage.noise`. The actual file may not exist in `/public/`
-
-### Warnings
-3. **Outdated README.md** — Still references old Vite + React Router setup with multi-page structure. Does not reflect current Next.js 15 architecture
-4. **Uncommitted changes** — 15 modified files + 7 new untracked files (FAQ, Metrics, Navbar, TechStack, WhyBrandex, effects/, ui/) need to be staged and committed
-5. **GSAP installed but unused** — `gsap` is in dependencies but no component currently imports it
-6. **@vercel/analytics installed but unused** — Package is in dependencies but not imported in `layout.tsx` or anywhere else
-7. **CONTACT_FORM_SETUP.md references old structure** — Mentions `src/pages/Contact.tsx` and `api/contact.ts` which don't exist in the current Next.js App Router structure
-8. **Portfolio images use external Unsplash URLs** — No local fallbacks; relies on external CDN availability
-9. **No API routes implemented** — `vercel.json` has API rewrites but no `/api/` route files exist in `src/app/`
-10. **No `next.config.js` TypeScript validation** — Uses `module.exports` instead of TypeScript config
-
-### Minor
-11. **Hardcoded email/phone in Footer** — `brandexdigital.in@gmail.com` and `+91 70100 096308` are real values
-12. **All social links point to `#`** — No actual social media URLs configured
-13. **No Open Graph image** — `metadata` in `layout.tsx` doesn't include an `openGraph.images` entry
-14. **No robots.txt or sitemap** — SEO basics not implemented
+| Feature | Status | File |
+|---------|--------|------|
+| robots.txt | ✅ Dynamic | `src/app/robots.ts` |
+| sitemap.xml | ✅ Dynamic | `src/app/sitemap.ts` |
+| Open Graph | ✅ Configured | `src/app/layout.tsx` |
+| Twitter Card | ✅ Configured | `src/app/layout.tsx` |
+| Vercel Analytics | ✅ Integrated | `src/app/layout.tsx` |
+| Error page | ✅ | `src/app/error.tsx` |
+| 404 page | ✅ | `src/app/not-found.tsx` |
 
 ---
 
-## 8. Pending Tasks
+## 8. Mobile Optimizations
 
-### From Project Analysis (no formal TODO file exists)
-
-#### High Priority
-- [ ] **Commit current changes** — 15 modified + 7 new files need to be staged and committed
-- [ ] **Regenerate `.next/` build** — Run `npm run dev` or `npm run build`
-- [ ] **Add `public/noise.png`** or remove the reference from `tailwind.config.js`
-- [ ] **Update README.md** to reflect Next.js 15 architecture
-
-#### Medium Priority
-- [ ] **Implement Vercel Analytics** — Import and use `@vercel/analytics` in `layout.tsx`
-- [ ] **Create API route for contact form** — Migrate from old `api/contact.ts` to `src/app/api/contact/route.ts`
-- [ ] **Add environment variables** — Set up `.env.local` for email configuration
-- [ ] **Add Open Graph image** — Generate and add `og:image` to metadata
-- [ ] **Create `robots.txt` and `sitemap.xml`** — Basic SEO setup
-- [ ] **Update hardcoded contact info** — Replace placeholder email/phone with real values
-- [ ] **Add real social media URLs** — Replace `#` placeholders
-
-#### Low Priority
-- [ ] **Remove or use GSAP** — Either integrate GSAP for additional animations or remove from dependencies
-- [ ] **Add error boundary** — Next.js `error.tsx` and `not-found.tsx` in `src/app/`
-- [ ] **Add loading states** — `loading.tsx` for route-level loading UI
-- [ ] **Performance audit** — Lighthouse testing, optimize bundle size
-- [ ] **Accessibility audit** — ARIA labels, keyboard navigation, focus states
-- [ ] **Add real portfolio images** — Replace Unsplash URLs with actual project screenshots
-- [ ] **Implement dark/light mode toggle** — Currently dark-only
-- [ ] **Add blog/careers pages** — If multi-page routing is needed in the future
+| Component | Desktop | Mobile |
+|-----------|---------|--------|
+| Preloader | 1.2s with progress bar | 300ms, logo only |
+| Lenis Scroll | Enabled (lerp 0.08) | Disabled (native scroll) |
+| Particles | 50 particles, 60fps | 10 particles, 20fps |
+| GradientOrbs | 3 floating orbs | Hidden |
+| ScrollReveal | 60px distance, 0.8s | 30px distance, 0.4s |
+| Hero 3D | Spring physics, floating cards | Direct transform, no cards |
+| Progress line | Animated | Hidden |
+| Noise overlay | Animated | Static |
+| Portfolio hover | Scale + rotate | Disabled |
+| Watermark numbers | 10% opacity | 10% opacity |
 
 ---
 
-## 9. Recent Changes (This Session)
+## 9. Known Issues
 
-### Git History (last 5 commits)
+### Resolved
+- ~~Custom cursor causing issues~~ — Removed
+- ~~GSAP unused dependency~~ — Removed
+- ~~Missing noise.png reference~~ — Removed from tailwind.config.js
+- ~~Dynamic Tailwind classes in Services~~ — Fixed with colorMap
+- ~~robots.ts syntax error~~ — Fixed with Next.js metadata API
+- ~~vercel.json conflicting with Next.js~~ — Fixed with framework preset
+- ~~Mobile crash (Lenis + useScroll conflict)~~ — Lenis disabled on mobile
+- ~~Preloader too slow on mobile~~ — Simplified to 300ms
+- ~~Watermark numbers invisible~~ — Increased opacity to 10%
+- ~~"Book a Strategy Call" not calling~~ — Added tel: link
+- ~~Email button not opening mail app~~ — Added mailto: link
+- ~~Site not full width~~ — Removed max-w-7xl constraint
+
+### Remaining
+- No OG image (`/og-image.png` referenced but not created)
+- Social links still point to `#`
+- Portfolio images use external Unsplash URLs
+- No dark/light mode toggle
+
+---
+
+## 10. Pending Tasks
+
+### Medium Priority
+- [ ] Create OG image (`/og-image.png`) for social sharing
+- [ ] Add real social media URLs
+- [ ] Add real portfolio images (replace Unsplash)
+- [ ] Add loading.tsx for route-level loading UI
+- [ ] Performance audit (Lighthouse testing)
+- [ ] Accessibility audit (ARIA labels, keyboard nav, focus states)
+
+### Low Priority
+- [ ] Implement dark/light mode toggle
+- [ ] Add blog/careers pages
+- [ ] Add real project screenshots
+- [ ] Add testimonials with real client data
+
+---
+
+## 11. Recent Changes (This Session)
+
+### Git History
 
 | Commit | Message |
 |--------|---------|
-| `b9c6841` | Fix ESLint and dependency setup |
-| `ec0bdb1` | chore: add ESLint configuration with Next.js plugin |
-| `e0cda63` | Add hot update files for webpack with new hash values |
-| `6a8cfd6` | Refactor code structure for improved readability and maintainability |
-| `35a3d6b` | feat: Update About and Process components with improved layout and animations |
-
-### Uncommitted Changes (Working Directory)
-
-**Modified files (15):**
-- `src/app/globals.css` — Extended with new CSS utilities, animations, and component styles
-- `src/app/layout.tsx` — Updated with Preloader, Cursor, SmoothScroll wrappers
-- `src/app/page.tsx` — Rebuilt with 14 section imports
-- `src/components/About.tsx` — Improved two-column layout with values grid
-- `src/components/CTA.tsx` — Added Marquee, scroll-linked transforms
-- `src/components/Footer.tsx` — Multi-column layout with animated link arrows
-- `src/components/Hero.tsx` — Added floating cards, scroll parallax, stats
-- `src/components/Portfolio.tsx` — Bento grid with hover effects
-- `src/components/Preloader.tsx` — Progress bar with cycling text
-- `src/components/Process.tsx` — Alternating timeline with progress line
-- `src/components/Services.tsx` — GlowCard integration
-- `src/components/SmoothScroll.tsx` — Lenis configuration
-- `src/components/Testimonials.tsx` — Glass card testimonials
-- `src/components/Trust.tsx` — Scroll-reveal stats
-- `tailwind.config.js` — Extended with full design system
-
-**New untracked files (7):**
-- `src/components/FAQ.tsx` — Accordion FAQ component
-- `src/components/Metrics.tsx` — Animated counter metrics
-- `src/components/Navbar.tsx` — Fixed glass navigation
-- `src/components/TechStack.tsx` — Tech proficiency grid
-- `src/components/WhyBrandex.tsx` — Sticky sidebar + cards
-- `src/components/effects/` — AnimatedGrid, GradientOrbs, Particles
-- `src/components/ui/` — AnimatedCounter, Cursor, GlowCard, MagneticButton, Marquee, ParallaxImage, ScrollReveal, TextReveal
+| `66fbdab` | redesign: Portfolio section with 6 projects, updated years and stats |
+| `60730b2` | style: make website full width |
+| `cd5ba43` | update: change client satisfaction stat to 100% |
+| `17eaa02` | fix: remove invalid Lenis autoResize option |
+| `5ca747b` | perf: optimize mobile performance and reduce lag |
+| `1a9be47` | fix: make email button open mail app |
+| `d4bb7eb` | fix: make Book a Strategy Call buttons open phone dialer |
+| `110323e` | fix: increase watermark number opacity in Process and WhyBrandex |
+| `db850c0` | remove: custom cursor and mouse-tracking animations |
+| `8f221c0` | update: replace placeholder contact info with real email and phone |
+| `dc019a0` | fix: correct robots.ts to use Next.js metadata API |
+| `16984d3` | fix: explicitly set Next.js framework in vercel.json |
+| `0f168d2` | chore: add .env.example for contact form configuration |
+| `3ac4575` | feat: add contact form API route with Nodemailer |
+| `ae7eac7` | feat: add analytics, SEO, error handling, and remove unused GSAP |
+| `867d57a` | docs: rewrite README.md for Next.js 15 architecture |
+| `e48e2ec` | fix: remove broken noise.png reference and legacy vite.svg |
+| `8334644` | feat: complete Next.js 15 migration with 14-section landing page |
 
 ---
 
-## 10. How to Run the Project
+## 12. How to Run
 
 ### Prerequisites
-- Node.js 18+ (recommended: 20+)
-- npm, yarn, or pnpm
-
-### Installation
-
-```bash
-cd /home/gojo/Projects/BrandX
-npm install
-```
+- Node.js 20+
+- npm
 
 ### Development
-
 ```bash
+npm install
 npm run dev
 ```
+Available at `http://localhost:3000`
 
-The site will be available at `http://localhost:3000` (or the next available port).
-
-### Production Build
-
+### Production
 ```bash
 npm run build
 npm run start
 ```
 
 ### Linting
-
 ```bash
 npm run lint
 ```
 
-### Deployment (Vercel)
+### Deployment
+Push to `main` — Vercel auto-deploys.
 
-The project is configured for Vercel deployment with:
-- `vercel.json` for SPA rewrites
-- `next.config.js` with Unsplash image remote patterns
-- Required environment variables for contact form:
-  ```
-  EMAIL_HOST=smtp.gmail.com
-  EMAIL_PORT=587
-  EMAIL_USER=brandexdigital.in@gmail.com
-  EMAIL_PASS=<app-password>
-  ```
-
-### Project URLs
-- **Live site:** `https://brandexdigital.in` (configured in metadata)
-- **Locale:** `en_IN`
+### Environment Variables (Vercel)
+```
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=brandexdigital.in@gmail.com
+EMAIL_PASS=<app-password>
+```
 
 ---
 
-*This document is auto-generated and should be updated after significant project changes.*
+*Updated after every significant change.*

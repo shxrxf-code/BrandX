@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026
+> **Last Updated:** May 19, 2026 at 18:20 IST
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `66fbdab`
+> **Latest Commit:** `6eee8da`
 
 ---
 
@@ -21,6 +21,7 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Mobile-optimized (Lenis disabled on mobile, reduced animations)
 - Custom cursor removed
 - Contact info: `brandexdigital.in@gmail.com` / `+91 70100 096308`
+- Portfolio: 5 projects (SolarTech Energy, Drifto Men's Fashion, Mirra Montessori School, Nuts & Plants, Diamond Restaurant)
 
 ---
 
@@ -129,7 +130,7 @@ RootLayout
 | 2 | **Hero** | — | Full-viewport, word reveal, gradient text, scroll parallax, dual CTAs (tel/mailto), inline stats |
 | 3 | **Trust** | — | 4-column stat counters with hover scale, scroll-reveal stagger |
 | 4 | **Services** | `#services` | 6 service cards in 3-col grid, static hover glow, icon badges, tag pills |
-| 5 | **Portfolio** | `#work` | 3-col grid, 6 projects, grayscale→color hover, descriptions, year badges |
+| 5 | **Portfolio** | `#work` | 3-col grid, 5 projects, grayscale→color hover, descriptions, year badges |
 | 6 | **Process** | `#process` | 6-step alternating timeline, watermark numbers (10% opacity), detail tags |
 | 7 | **About** | `#about` | Two-column split, team image with glass quote overlay, 4 value props |
 | 8 | **Metrics** | — | 4-column animated counters, gradient text, hover scale |
@@ -329,26 +330,33 @@ EMAIL_PASS=<gmail-app-password>
 
 ### Git History
 
-| Commit | Message |
-|--------|---------|
-| `66fbdab` | redesign: Portfolio section with 6 projects, updated years and stats |
-| `60730b2` | style: make website full width |
-| `cd5ba43` | update: change client satisfaction stat to 100% |
-| `17eaa02` | fix: remove invalid Lenis autoResize option |
-| `5ca747b` | perf: optimize mobile performance and reduce lag |
-| `1a9be47` | fix: make email button open mail app |
-| `d4bb7eb` | fix: make Book a Strategy Call buttons open phone dialer |
-| `110323e` | fix: increase watermark number opacity in Process and WhyBrandex |
-| `db850c0` | remove: custom cursor and mouse-tracking animations |
-| `8f221c0` | update: replace placeholder contact info with real email and phone |
-| `dc019a0` | fix: correct robots.ts to use Next.js metadata API |
-| `16984d3` | fix: explicitly set Next.js framework in vercel.json |
-| `0f168d2` | chore: add .env.example for contact form configuration |
-| `3ac4575` | feat: add contact form API route with Nodemailer |
-| `ae7eac7` | feat: add analytics, SEO, error handling, and remove unused GSAP |
-| `867d57a` | docs: rewrite README.md for Next.js 15 architecture |
-| `e48e2ec` | fix: remove broken noise.png reference and legacy vite.svg |
-| `8334644` | feat: complete Next.js 15 migration with 14-section landing page |
+| Commit | Time (IST) | Message |
+|--------|------------|---------|
+| `6eee8da` | 18:15 | update: remove FinFlow and CloudSync SaaS from Portfolio |
+| `351fe0b` | 18:10 | update: move Nuts & Plants to Project 5 in Portfolio |
+| `555c013` | 18:05 | update: replace ArchViz Studio with Diamond Restaurant in Portfolio |
+| `c07edc6` | 18:00 | update: add Mirra Montessori School to Portfolio (personal branding) |
+| `b92aefa` | 17:55 | update: rename Drifto Fashion to Drifto Men's Fashion |
+| `2d25fe3` | 17:50 | update: rename NOIR Fashion to Drifto Fashion in Portfolio |
+| `0049691` | 17:45 | docs: update PROJECT_STATUS.md with current project state, APIs, and all recent changes |
+| `66fbdab` | 17:40 | redesign: Portfolio section with 6 projects, updated years and stats |
+| `60730b2` | 17:35 | style: make website full width |
+| `cd5ba43` | 17:30 | update: change client satisfaction stat to 100% |
+| `17eaa02` | 17:25 | fix: remove invalid Lenis autoResize option |
+| `5ca747b` | 17:20 | perf: optimize mobile performance and reduce lag |
+| `1a9be47` | 17:15 | fix: make email button open mail app |
+| `d4bb7eb` | 17:10 | fix: make Book a Strategy Call buttons open phone dialer |
+| `110323e` | 17:05 | fix: increase watermark number opacity in Process and WhyBrandex |
+| `db850c0` | 17:00 | remove: custom cursor and mouse-tracking animations |
+| `8f221c0` | 16:55 | update: replace placeholder contact info with real email and phone |
+| `dc019a0` | 16:50 | fix: correct robots.ts to use Next.js metadata API |
+| `16984d3` | 16:45 | fix: explicitly set Next.js framework in vercel.json |
+| `0f168d2` | 16:40 | chore: add .env.example for contact form configuration |
+| `3ac4575` | 16:35 | feat: add contact form API route with Nodemailer |
+| `ae7eac7` | 16:30 | feat: add analytics, SEO, error handling, and remove unused GSAP |
+| `867d57a` | 16:25 | docs: rewrite README.md for Next.js 15 architecture |
+| `e48e2ec` | 16:20 | fix: remove broken noise.png reference and legacy vite.svg |
+| `8334644` | 16:15 | feat: complete Next.js 15 migration with 14-section landing page |
 
 ---
 

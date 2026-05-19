@@ -1,108 +1,33 @@
-# BrandX - Premium Technical Consultancy Website
+# Brandex Digital — Premium Digital Agency Website
 
-A luxury, enterprise-grade consultancy website built with modern web technologies. Designed to communicate trust, professionalism, and complete project delivery.
+A cinematic, single-page landing website for a premium digital agency. Built with Next.js 15, featuring smooth scroll, custom cursor, parallax effects, and extensive Framer Motion animations.
 
-## Overview
-
-This is a premium technical consultancy website featuring:
-- **Professional Design**: Dark luxury theme with high-contrast typography
-- **Enterprise Appearance**: Minimal but stunning visuals communicating trust and authority
-- **Smooth Animations**: Confident transitions without flashiness
-- **Responsive Design**: Perfect across all devices
-- **Multiple Service Pages**: Detailed offerings for social media, web development, and SEO
+**Live site:** [brandexdigital.in](https://brandexdigital.in)
 
 ## Tech Stack
 
-- **Vite** - Lightning-fast build tool and dev server
-- **React 18** - Modern UI library with hooks
-- **TypeScript** - Type-safe development
-- **React Router v6** - Client-side routing for multiple pages
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **PostCSS** - CSS transformation
-
-## Project Structure
-
-```
-src/
-├── components/
-│   └── Navigation.tsx        # Fixed navigation with mobile support
-├── pages/
-│   ├── Home.tsx              # Homepage with hero and service overview
-│   ├── SocialMediaMarketing.tsx  # Social media strategy details
-│   ├── WebDevelopment.tsx    # Web development services
-│   ├── SEO.tsx               # SEO services explanation
-│   └── Contact.tsx           # Contact form and FAQ
-├── App.tsx                   # Router setup
-├── main.tsx                  # Entry point
-└── index.css                 # Tailwind + custom styles
-```
-
-## Pages
-
-### 1. Home (/)
-- Powerful headline establishing authority
-- Value proposition highlighting complete execution
-- Primary CTA to start a project
-- Service overview cards
-- Trust indicators section
-
-### 2. Social Media Marketing (/social-media)
-- Strategic approach (4-step process)
-- Platform mastery coverage
-- Results and ROI focus
-- Call to consultation
-
-### 3. Web Development (/web-development)
-- Production-ready standards
-- Performance, security, scalability emphasis
-- Modern tech stack showcase
-- Development process breakdown
-- Ongoing support commitment
-
-### 4. SEO Services (/seo)
-- Sustainable ranking strategy
-- Technical SEO details
-- On-page optimization
-- Authority building approach
-- Transparent reporting metrics
-- Realistic timeline expectations
-
-### 5. Contact (/contact)
-- Clean contact form
-- Success confirmation message
-- Alternative contact methods
-- FAQ section
-- Professional tone throughout
-
-## Design System
-
-### Colors
-- **Background**: Gray-950 (#0f172a) - Deep luxury black
-- **Secondary**: Gray-900 (#111827) - Card backgrounds
-- **Borders**: Gray-800 (#1f2937) - Subtle divisions
-- **Text**: White, Gray-300, Gray-400 - High contrast
-- **Accent**: Blue-500, Blue-400 - Subtle, professional highlights
-
-### Typography
-- **Font**: Inter system font stack
-- **H1**: 3rem-4rem, bold, tracking-tight
-- **H2**: 2.25rem-3rem, bold, tracking-tight
-- **H3**: 1.5rem-2rem, bold, tracking-tight
-- **Body**: 1rem, line-height 1.5
-
-### Components
-- `.btn-primary` - White background, dark text
-- `.btn-secondary` - Bordered, white text with blue hover
-- `.card` - Gray-900 background with gray-800 border
-- `.section-container` - Max-width container with padding
-- `.heading-*` - Typography hierarchy classes
+| Category | Technology |
+|----------|------------|
+| Framework | Next.js 15 (App Router) |
+| UI Library | React 19 |
+| Language | TypeScript |
+| Styling | Tailwind CSS 3 + PostCSS |
+| Animation | Framer Motion 11, GSAP 3 |
+| Smooth Scroll | Lenis |
+| Icons | Lucide React |
+| Analytics | Vercel Analytics |
+| Deployment | Vercel |
 
 ## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- npm, yarn, or pnpm
 
 ### Installation
 
 ```bash
-cd /home/null/BrandX
 npm install
 ```
 
@@ -112,120 +37,142 @@ npm install
 npm run dev
 ```
 
-The site will open at `http://localhost:5180/` (or the next available port).
+The site will be available at `http://localhost:3000`.
 
-### Build
+### Production Build
+
+```bash
+npm run build
+npm run start
+```
+
+### Linting
+
+```bash
+npm run lint
+```
+
+## Architecture
+
+### Project Structure
+
+```
+src/
+├── app/
+│   ├── globals.css          # Global styles, Tailwind layers, CSS utilities
+│   ├── layout.tsx           # Root layout with fonts, Preloader, Cursor, SmoothScroll
+│   └── page.tsx             # Main page — composes all 14 sections
+├── components/
+│   ├── effects/             # Background effects (AnimatedGrid, GradientOrbs, Particles)
+│   ├── ui/                  # Reusable UI primitives (Cursor, GlowCard, MagneticButton, etc.)
+│   ├── Navbar.tsx           # Fixed glass navigation with mobile menu
+│   ├── Hero.tsx             # Full-viewport hero with floating cards
+│   ├── Trust.tsx            # Trust indicator stats bar
+│   ├── Services.tsx         # 6-column service cards with glow effects
+│   ├── Portfolio.tsx        # Asymmetric bento-grid project showcase
+│   ├── Process.tsx          # 6-step alternating timeline
+│   ├── About.tsx            # Two-column about section
+│   ├── Metrics.tsx          # Animated counter metrics
+│   ├── TechStack.tsx        # Technology proficiency grid
+│   ├── Testimonials.tsx     # Client testimonial cards
+│   ├── WhyBrandex.tsx       # Sticky sidebar + reason cards
+│   ├── FAQ.tsx              # Accordion FAQ
+│   ├── CTA.tsx              # Final call-to-action with marquee
+│   ├── Footer.tsx           # Multi-column footer
+│   ├── Preloader.tsx        # Animated loading screen
+│   └── SmoothScroll.tsx     # Lenis smooth scroll wrapper
+└── lib/
+    └── utils.ts             # cn() utility (clsx + tailwind-merge)
+```
+
+### Sections
+
+The site is a single-page experience with 14 sections:
+
+1. **Navbar** — Fixed glass pill navigation, scroll-aware, mobile fullscreen menu
+2. **Hero** — Full-viewport with 3D word reveal, floating glass cards, scroll parallax
+3. **Trust** — 4-column stat counters with hover scale
+4. **Services** — 6 service cards with mouse-tracking radial glow (GlowCard)
+5. **Portfolio** — Asymmetric bento grid, grayscale-to-color hover
+6. **Process** — 6-step alternating timeline with animated progress line
+7. **About** — Two-column split with team image and value props
+8. **Metrics** — Animated counter metrics with gradient text
+9. **TechStack** — 12-item tech proficiency grid with animated bars
+10. **Testimonials** — 3-column client quote cards
+11. **WhyBrandex** — Sticky sidebar with numbered reason cards
+12. **FAQ** — 6-item accordion with animated expand/collapse
+13. **CTA** — Scroll-linked scale/opacity, marquee background
+14. **Footer** — 5-column grid with animated link arrows
+
+## Design System
+
+### Colors
+
+| Token | Value |
+|-------|-------|
+| Background | `#050505` |
+| Surface | `#1A1A1A` |
+| Text Primary | `#FFFFFF` |
+| Text Secondary | `rgba(255,255,255,0.60)` |
+| Accent Blue | `#3B82F6` |
+| Accent Purple | `#A855F7` |
+| Accent Cyan | `#22D3EE` |
+
+### Typography
+
+- **Display/Headings:** Space Grotesk
+- **Body:** Inter
+- Sizes use `clamp()` for fluid responsive scaling
+
+### CSS Utilities
+
+Key utility classes defined in `globals.css`:
+
+- `.glass` / `.glass-strong` / `.glass-card` — Frosted glass effects
+- `.text-gradient` / `.text-gradient-blue` / `.text-gradient-purple` — Gradient text
+- `.text-glow` / `.text-glow-blue` / `.text-glow-purple` — Text shadow glow
+- `.glow-orb` / `.glow-orb-blue` / `.glow-orb-purple` — Blurred color orbs
+- `.section-container` / `.section-padding` — Layout utilities
+- `.hover-lift` / `.shimmer-text` / `.animated-border` — Interactive effects
+
+## Environment Variables
+
+For contact form email functionality, create a `.env.local` file:
+
+```env
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=brandexdigital.in@gmail.com
+EMAIL_PASS=<app-password>
+```
+
+## Deployment
+
+### Vercel
+
+The project is configured for Vercel deployment with `vercel.json` for SPA rewrites and `next.config.js` with Unsplash image remote patterns.
+
+1. Push to your Git repository
+2. Connect to Vercel
+3. Add environment variables in Vercel dashboard
+4. Deploy
+
+### Manual
 
 ```bash
 npm run build
 ```
 
-Production-optimized build output goes to `dist/`.
-
-### Preview Build
-
-```bash
-npm run preview
-```
-
-## Features
-
-### Navigation
-- Fixed header with logo
-- Desktop menu with active state indicators
-- Mobile hamburger menu (responsive)
-- Smooth transitions between pages
-
-### Interactions
-- Smooth page transitions (fade-in animation)
-- Hover effects on cards and buttons
-- Form validation and success feedback
-- Active route highlighting
-
-### Performance
-- Optimized CSS (25.57 kB gzip)
-- Efficient JavaScript bundling (266 kB uncompressed)
-- Fast load times with Vite
-- Production-ready optimization
-
-## Customization
-
-### Colors
-Edit `tailwind.config.js` to customize the color palette. The design uses Tailwind's built-in gray scales for luxury appearance.
-
-### Content
-Update page content in `src/pages/` files. Each page is self-contained and easy to modify.
-
-### Form Handling
-The contact form in `src/pages/Contact.tsx` currently logs submissions to console. Integrate with your backend service by updating the `handleSubmit` function.
-
-### Email Links
-Update placeholder email addresses:
-- `hello@brandx.com` in Contact.tsx
-
-## Deployment
-
-### Vite Build Output
-The `npm run build` command creates a `dist/` folder ready for deployment.
-
-### Recommended Hosts
-- Vercel (optimal for Vite projects)
-- Netlify
-- AWS S3 + CloudFront
-- Any static hosting with SPA routing support
-
-### Environment Setup
-No environment variables required for the default setup.
+The production build output is in `.next/`.
 
 ## Browser Support
 
 - Modern browsers (Chrome, Firefox, Safari, Edge)
-- ES2020+ support
 - Mobile browsers fully supported
-
-## Performance Metrics
-
-- **Bundle Size**: 266.11 kB (80.34 kB gzip)
-- **CSS Size**: 25.57 kB (4.88 kB gzip)
-- **Build Time**: ~1.19s
-- **Page Load**: Sub-second on modern connections
-
-## Best Practices Implemented
-
-✓ TypeScript for type safety
-✓ Responsive design across all breakpoints
-✓ Semantic HTML structure
-✓ Smooth animations with proper performance
-✓ Accessible form inputs and navigation
-✓ Mobile-first design approach
-✓ Production-optimized build
-✓ Clean, maintainable code structure
-✓ Professional naming conventions
+- Requires JavaScript enabled
 
 ---
 
-**Created**: January 2026
-**Status**: Production Ready
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**Created:** January 2026
+**Last Updated:** May 2026
+**Status:** Production Ready

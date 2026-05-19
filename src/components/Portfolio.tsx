@@ -35,11 +35,11 @@ const projects = [
     description: 'Fintech dashboard and mobile app for seamless money management',
   },
   {
-    title: 'ArchViz Studio',
-    category: '3D & Web',
-    image: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80',
+    title: 'Diamond Restaurant',
+    category: 'Brand & Web',
+    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
     year: '2025',
-    description: 'Architectural visualization portfolio with interactive 3D tours',
+    description: 'Premium restaurant branding with menu design and online ordering platform',
   },
   {
     title: 'Veloce Motors',

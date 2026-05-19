@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026 at 18:20 IST
+> **Last Updated:** May 19, 2026 at 18:45 IST
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `6eee8da`
+> **Latest Commit:** `e701d0e`
 
 ---
 
@@ -21,7 +21,10 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Mobile-optimized (Lenis disabled on mobile, reduced animations)
 - Custom cursor removed
 - Contact info: `brandexdigital.in@gmail.com` / `+91 70100 096308`
-- Portfolio: 5 projects (SolarTech Energy, Drifto Men's Fashion, Mirra Montessori School, Nuts & Plants, Diamond Restaurant)
+- Portfolio: 5 projects with hover metrics reveal
+- Premium motion system: GSAP + Framer Motion + blur-to-clear reveals
+- Cinematic Hero: Massive typography, staggered animations, floating cards
+- Enhanced microinteractions: Magnetic buttons, 3D tilt cards, cursor-following glow
 
 ---
 
@@ -332,7 +335,9 @@ EMAIL_PASS=<gmail-app-password>
 
 | Commit | Time (IST) | Message |
 |--------|------------|---------|
-| `6eee8da` | 18:15 | update: remove FinFlow and CloudSync SaaS from Portfolio |
+| `e701d0e` | 18:45 | feat: premium redesign - cinematic hero, enhanced portfolio, microinteractions |
+| `505d883` | 18:25 | update: change Nuts & Plants image to nuts and chocolates |
+| `8f28239` | 18:20 | docs: save current project status with timestamps |
 | `351fe0b` | 18:10 | update: move Nuts & Plants to Project 5 in Portfolio |
 | `555c013` | 18:05 | update: replace ArchViz Studio with Diamond Restaurant in Portfolio |
 | `c07edc6` | 18:00 | update: add Mirra Montessori School to Portfolio (personal branding) |

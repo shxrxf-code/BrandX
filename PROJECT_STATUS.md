@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026 at 20:50 IST
+> **Last Updated:** May 19, 2026 at 21:00 IST
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `b0abe1f`
+> **Latest Commit:** `4cf7c14`
 
 ---
 
@@ -27,6 +27,8 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Enhanced microinteractions: Magnetic buttons, 3D tilt cards, cursor-following glow
 - Error boundary: Catches runtime errors gracefully with reload option
 - All sections redesigned: Services, About, Metrics, Testimonials, FAQ, Footer, WhyBrandex
+- GSAP ScrollTrigger: Pinned horizontal scroll section for capabilities showcase
+- Ambient motion system: Global floating orbs, subtle grid lines, parallax layers
 
 ---
 
@@ -337,6 +339,8 @@ EMAIL_PASS=<gmail-app-password>
 
 | Commit | Time (IST) | Message |
 |--------|------------|---------|
+| `4cf7c14` | 21:00 | feat: add GSAP ScrollTrigger horizontal scroll section and ambient motion system |
+| `d34e642` | 20:50 | docs: update PROJECT_STATUS.md at 20:50 IST - WhyBrandex redesigned |
 | `b0abe1f` | 20:50 | feat: redesign WhyBrandex section - sticky sidebar, enhanced cards with icons, glow effects |
 | `2fcda14` | 20:45 | feat: complete section redesigns - Services, About, Metrics, Testimonials, FAQ, Footer |
 | `f1904c9` | 20:30 | fix: simplify useIsMobile hook to prevent hydration errors |

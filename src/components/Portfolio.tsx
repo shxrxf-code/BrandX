@@ -21,6 +21,13 @@ const projects = [
     description: 'Luxury fashion e-commerce with immersive product experience',
   },
   {
+    title: 'Mirra Montessori School',
+    category: 'Personal Branding',
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80',
+    year: '2026',
+    description: 'Complete personal branding strategy and digital identity for a Montessori school',
+  },
+  {
     title: 'FinFlow',
     category: 'App Design',
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',

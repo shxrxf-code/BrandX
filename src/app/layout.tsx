@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
@@ -36,11 +37,20 @@ export const metadata: Metadata = {
     title: 'Brandex Digital | Premium Digital Agency',
     description: 'We craft cinematic digital experiences that elevate brands and drive measurable growth.',
     siteName: 'Brandex Digital',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Brandex Digital — Premium Digital Agency',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Brandex Digital | Premium Digital Agency',
     description: 'We craft cinematic digital experiences that elevate brands and drive measurable growth.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -64,6 +74,7 @@ export default function RootLayout({
           </main>
         </SmoothScroll>
         <div className="noise" />
+        <Analytics />
       </body>
     </html>
   )

@@ -119,7 +119,7 @@ export default function Hero() {
           {[
             { value: '150+', label: 'Projects Delivered' },
             { value: '50+', label: 'Global Clients' },
-            { value: '98%', label: 'Client Satisfaction' },
+            { value: '100%', label: 'Client Satisfaction' },
           ].map((stat, i) => (
             <div key={i} className="text-center">
               <div className="font-display text-2xl md:text-3xl font-bold text-white">

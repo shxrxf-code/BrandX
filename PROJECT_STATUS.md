@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026 at 21:00 IST
+> **Last Updated:** May 19, 2026 at 21:10 IST
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `4cf7c14`
+> **Latest Commit:** `cfb17c0`
 
 ---
 
@@ -308,8 +308,7 @@ EMAIL_PASS=<gmail-app-password>
 - ~~Site not full width~~ — Removed max-w-7xl constraint
 
 ### Remaining
-- No OG image (`/og-image.png` referenced but not created)
-- Social links still point to `#`
+- Social links still point to `#` (awaiting URLs)
 - Portfolio images use external Unsplash URLs
 - No dark/light mode toggle
 
@@ -318,12 +317,10 @@ EMAIL_PASS=<gmail-app-password>
 ## 10. Pending Tasks
 
 ### Medium Priority
-- [ ] Create OG image (`/og-image.png`) for social sharing
 - [ ] Add real social media URLs
 - [ ] Add real portfolio images (replace Unsplash)
 - [ ] Add loading.tsx for route-level loading UI
 - [ ] Performance audit (Lighthouse testing)
-- [ ] Accessibility audit (ARIA labels, keyboard nav, focus states)
 
 ### Low Priority
 - [ ] Implement dark/light mode toggle
@@ -339,6 +336,7 @@ EMAIL_PASS=<gmail-app-password>
 
 | Commit | Time (IST) | Message |
 |--------|------------|---------|
+| `cfb17c0` | 21:10 | a11y: improve accessibility with focus styles, ARIA labels, and skip link |
 | `4cf7c14` | 21:00 | feat: add GSAP ScrollTrigger horizontal scroll section and ambient motion system |
 | `d34e642` | 20:50 | docs: update PROJECT_STATUS.md at 20:50 IST - WhyBrandex redesigned |
 | `b0abe1f` | 20:50 | feat: redesign WhyBrandex section - sticky sidebar, enhanced cards with icons, glow effects |

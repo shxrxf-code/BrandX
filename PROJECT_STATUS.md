@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026 at 20:45 IST
+> **Last Updated:** May 19, 2026 at 20:50 IST
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `2fcda14`
+> **Latest Commit:** `b0abe1f`
 
 ---
 
@@ -26,7 +26,7 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Cinematic Hero: Massive typography, staggered animations, floating cards
 - Enhanced microinteractions: Magnetic buttons, 3D tilt cards, cursor-following glow
 - Error boundary: Catches runtime errors gracefully with reload option
-- All sections redesigned: Services, About, Metrics, Testimonials, FAQ, Footer
+- All sections redesigned: Services, About, Metrics, Testimonials, FAQ, Footer, WhyBrandex
 
 ---
 
@@ -337,6 +337,7 @@ EMAIL_PASS=<gmail-app-password>
 
 | Commit | Time (IST) | Message |
 |--------|------------|---------|
+| `b0abe1f` | 20:50 | feat: redesign WhyBrandex section - sticky sidebar, enhanced cards with icons, glow effects |
 | `2fcda14` | 20:45 | feat: complete section redesigns - Services, About, Metrics, Testimonials, FAQ, Footer |
 | `f1904c9` | 20:30 | fix: simplify useIsMobile hook to prevent hydration errors |
 | `a2a295c` | 20:26 | fix: remove invalid Lenis touchInertiaMultiplier option |

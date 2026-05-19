@@ -14,7 +14,7 @@ const projects = [
     description: 'Complete rebrand and web platform for a renewable energy startup',
   },
   {
-    title: 'NOIR Fashion',
+    title: 'Drifto Fashion',
     category: 'E-Commerce',
     image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
     year: '2026',

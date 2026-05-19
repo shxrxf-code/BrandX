@@ -1,52 +1,52 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Component, ErrorInfo, ReactNode } from 'react'
 
-export default function ErrorBoundary({
-  children,
-  fallback,
-}: {
-  children: React.ReactNode
-  fallback?: React.ReactNode
-}) {
-  const [hasError, setHasError] = useState(false)
+interface Props {
+  children: ReactNode
+  fallback?: ReactNode
+}
 
-  useEffect(() => {
-    const errorHandler = (event: ErrorEvent) => {
-      console.error('Caught error:', event.error)
-      setHasError(true)
-    }
-    const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
-      console.error('Caught rejection:', event.reason)
-      setHasError(true)
-    }
+interface State {
+  hasError: boolean
+  error: Error | null
+}
 
-    window.addEventListener('error', errorHandler)
-    window.addEventListener('unhandledrejection', unhandledRejectionHandler)
-
-    return () => {
-      window.removeEventListener('error', errorHandler)
-      window.removeEventListener('unhandledrejection', unhandledRejectionHandler)
-    }
-  }, [])
-
-  if (hasError) {
-    return fallback || (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center px-6">
-          <h2 className="font-display text-4xl font-bold text-white mb-4">
-            Something went wrong
-          </h2>
-          <button
-            onClick={() => window.location.reload()}
-            className="btn-primary px-8 py-3 text-sm font-medium tracking-wide"
-          >
-            Reload Page
-          </button>
-        </div>
-      </div>
-    )
+export default class ErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    this.state = { hasError: false, error: null }
   }
 
-  return <>{children}</>
+  static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error }
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('ErrorBoundary caught:', error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        this.props.fallback || (
+          <div className="min-h-screen flex items-center justify-center bg-[#050505]">
+            <div className="text-center px-6">
+              <h2 className="text-4xl font-bold text-white mb-4">
+                Something went wrong
+              </h2>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-8 py-3 bg-white text-black rounded-full font-medium text-sm uppercase tracking-wide hover:bg-blue-500 hover:text-white transition-colors"
+              >
+                Reload Page
+              </button>
+            </div>
+          </div>
+        )
+      )
+    }
+
+    return this.props.children
+  }
 }

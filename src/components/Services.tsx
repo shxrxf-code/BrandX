@@ -50,6 +50,12 @@ const services = [
   },
 ]
 
+const colorMap: Record<string, { bg: string; text: string }> = {
+  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue' },
+  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple' },
+  cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan' },
+}
+
 export default function Services() {
   return (
     <section id="services" className="section-padding relative">
@@ -70,33 +76,36 @@ export default function Services() {
         </ScrollReveal>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service, i) => (
-            <ScrollReveal key={i} delay={i * 0.1} direction="up" distance={40}>
-              <GlowCard glowColor={service.color as 'blue' | 'purple' | 'cyan'}>
-                <div className="p-8 h-full flex flex-col">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 bg-accent-${service.color}/10`}>
-                    <service.icon size={24} className={`text-accent-${service.color}`} />
+          {services.map((service, i) => {
+            const colors = colorMap[service.color] || colorMap.blue
+            return (
+              <ScrollReveal key={i} delay={i * 0.1} direction="up" distance={40}>
+                <GlowCard glowColor={service.color as 'blue' | 'purple' | 'cyan'}>
+                  <div className="p-8 h-full flex flex-col">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${colors.bg}`}>
+                      <service.icon size={24} className={colors.text} />
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-white mb-3">
+                      {service.title}
+                    </h3>
+                    <p className="text-text-secondary text-sm leading-relaxed mb-6 flex-grow">
+                      {service.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {service.tags.map((tag, j) => (
+                        <span
+                          key={j}
+                          className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-3 py-1.5 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <h3 className="font-display text-xl font-bold text-white mb-3">
-                    {service.title}
-                  </h3>
-                  <p className="text-text-secondary text-sm leading-relaxed mb-6 flex-grow">
-                    {service.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {service.tags.map((tag, j) => (
-                      <span
-                        key={j}
-                        className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-3 py-1.5 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </GlowCard>
-            </ScrollReveal>
-          ))}
+                </GlowCard>
+              </ScrollReveal>
+            )
+          })}
         </div>
       </div>
     </section>

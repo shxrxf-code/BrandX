@@ -1,7 +1,5 @@
 'use client'
 
-import { useRef, useState, useCallback } from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface MagneticButtonProps {
@@ -19,29 +17,7 @@ export default function MagneticButton({
   variant = 'primary',
   onClick,
   href,
-  strength = 0.3,
 }: MagneticButtonProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!ref.current) return
-      const { clientX, clientY } = e
-      const { left, top, width, height } = ref.current.getBoundingClientRect()
-      const x = (clientX - left - width / 2) * strength
-      const y = (clientY - top - height / 2) * strength
-      ref.current.style.transform = `translate(${x}px, ${y}px)`
-    },
-    [strength]
-  )
-
-  const handleMouseLeave = useCallback(() => {
-    if (!ref.current) return
-    ref.current.style.transform = 'translate(0px, 0px)'
-    setIsHovered(false)
-  }, [])
-
   const baseStyles = cn(
     'relative inline-flex items-center justify-center rounded-full font-medium tracking-wide uppercase text-sm transition-colors duration-400',
     variant === 'primary' && 'bg-white text-background hover:bg-accent-blue hover:text-white hover:shadow-glow-blue',
@@ -51,17 +27,7 @@ export default function MagneticButton({
     className
   )
 
-  const content = (
-    <div
-      ref={ref}
-      className="transition-transform duration-300 ease-out"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-    >
-      <span className={baseStyles}>{children}</span>
-    </div>
-  )
+  const content = <span className={baseStyles}>{children}</span>
 
   if (href) {
     return (
@@ -72,7 +38,7 @@ export default function MagneticButton({
   }
 
   return (
-    <button onClick={onClick} className="cursor-none">
+    <button onClick={onClick}>
       {content}
     </button>
   )

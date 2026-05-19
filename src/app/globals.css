@@ -22,13 +22,6 @@
   body {
     @apply bg-background text-white antialiased overflow-x-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-    cursor: none;
-  }
-
-  @media (pointer: coarse) {
-    body {
-      cursor: auto;
-    }
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -409,53 +402,6 @@ html.lenis {
 
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
-}
-
-/* Custom cursor */
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: var(--cursor-size);
-  height: var(--cursor-size);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  mix-blend-mode: difference;
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.3s ease,
-              border-color 0.3s ease;
-  transform: translate(-50%, -50%);
-}
-
-.custom-cursor.hovering {
-  width: var(--cursor-hover-size);
-  height: var(--cursor-hover-size);
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.8);
-}
-
-.cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 6px;
-  height: 6px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 100000;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
-}
-
-@media (pointer: coarse) {
-  .custom-cursor,
-  .cursor-dot {
-    display: none;
-  }
 }
 
 /* Preloader */

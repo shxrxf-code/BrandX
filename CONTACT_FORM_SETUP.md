@@ -1,11 +1,12 @@
-# Contact Form Setup Instructions
+# Contact Form Setup
 
 ## Overview
-The contact form now uses a custom backend API with Nodemailer instead of Formspree.
 
-## Required Environment Variables
+The contact form API uses Nodemailer to deliver form submissions directly to email.
 
-Add these to your Vercel Environment Variables:
+## Environment Variables
+
+Create a `.env.local` file with the following:
 
 ```bash
 EMAIL_HOST=smtp.gmail.com
@@ -14,37 +15,57 @@ EMAIL_USER=brandexdigital.in@gmail.com
 EMAIL_PASS=your-app-password
 ```
 
-## Gmail Setup
+## Gmail App Password Setup
 
 1. Enable 2FA on your Gmail account
-2. Generate an App Password:
-   - Go to Google Account settings
-   - Security → 2-Step Verification → App passwords
-   - Generate new app password
-   - Use this password for EMAIL_PASS
+2. Go to Google Account → Security → 2-Step Verification → App passwords
+3. Generate a new app password for "Mail"
+4. Use this password as `EMAIL_PASS`
 
 ## API Endpoint
 
-The contact form now submits to: `/api/contact`
+- **Route:** `POST /api/contact`
+- **File:** `src/app/api/contact/route.ts`
 
-## Features
+### Request Body
 
-- ✅ Direct email delivery to brandexdigital.in@gmail.com
-- ✅ No external dependencies (Formspree removed)
-- ✅ Secure environment variable usage
-- ✅ Error handling and user feedback
-- ✅ Form validation
-- ✅ Mobile-friendly
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "subject": "Project Inquiry",
+  "message": "I'd like to discuss a website redesign..."
+}
+```
 
-## Testing
+### Response
 
-1. Deploy to Vercel with environment variables
-2. Test contact form submission
-3. Verify email delivery
+**Success (200):**
+```json
+{ "success": true, "message": "Email sent successfully" }
+```
 
-## Files Modified
+**Validation Error (400):**
+```json
+{ "error": "Valid email is required" }
+```
 
-- `src/pages/Contact.tsx` - Updated to use fetch API
-- `api/contact.ts` - New backend email handler
-- `vercel.json` - API routing configuration
-- `.env.example` - Environment variables template
+**Service Unavailable (503):**
+```json
+{ "error": "Email service not configured" }
+```
+
+## Validation Rules
+
+| Field | Requirement |
+|-------|-------------|
+| `name` | Minimum 2 characters |
+| `email` | Valid email format |
+| `subject` | Minimum 3 characters |
+| `message` | Minimum 10 characters |
+
+## Vercel Deployment
+
+Add the environment variables in your Vercel project settings:
+- Settings → Environment Variables → Add each variable
+- Redeploy after adding variables

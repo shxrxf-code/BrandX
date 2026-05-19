@@ -50,7 +50,7 @@ const projects = [
   {
     title: 'Aero Travels',
     category: 'Personal Branding',
-    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80',
     year: '2026',
     description: 'Premium travel brand identity and digital presence for a luxury travel agency',
     metrics: { conversion: '+210%', traffic: '+130%', engagement: '3.3x' },

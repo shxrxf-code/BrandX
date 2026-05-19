@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026 at 20:26 IST
+> **Last Updated:** May 19, 2026 at 20:45 IST
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `a2a295c`
+> **Latest Commit:** `2fcda14`
 
 ---
 
@@ -21,11 +21,12 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Mobile-optimized (Lenis disabled on mobile, reduced animations)
 - Custom cursor removed
 - Contact info: `brandexdigital.in@gmail.com` / `+91 70100 096308`
-- Portfolio: 6 projects with hover metrics reveal (SolarTech Energy, Drifto Men's Fashion, Mirra Montessori School, Nuts & Plants, Diamond Restaurant, Aero Travels)
+- Portfolio: 6 projects with hover metrics reveal
 - Premium motion system: GSAP + Framer Motion + blur-to-clear reveals
 - Cinematic Hero: Massive typography, staggered animations, floating cards
 - Enhanced microinteractions: Magnetic buttons, 3D tilt cards, cursor-following glow
 - Error boundary: Catches runtime errors gracefully with reload option
+- All sections redesigned: Services, About, Metrics, Testimonials, FAQ, Footer
 
 ---
 
@@ -336,6 +337,8 @@ EMAIL_PASS=<gmail-app-password>
 
 | Commit | Time (IST) | Message |
 |--------|------------|---------|
+| `2fcda14` | 20:45 | feat: complete section redesigns - Services, About, Metrics, Testimonials, FAQ, Footer |
+| `f1904c9` | 20:30 | fix: simplify useIsMobile hook to prevent hydration errors |
 | `a2a295c` | 20:26 | fix: remove invalid Lenis touchInertiaMultiplier option |
 | `6abcecd` | 20:22 | update: add Aero Travels to Portfolio (Personal Branding) |
 | `4083f18` | 20:15 | style: increase portfolio category and year label size |

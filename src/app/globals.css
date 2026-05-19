@@ -32,6 +32,20 @@
     @apply bg-accent-blue/30 text-white;
   }
 
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-2 outline-accent-blue outline-offset-2;
+  }
+
+  a:focus-visible, button:focus-visible {
+    @apply outline-2 outline-accent-blue outline-offset-2 rounded-sm;
+  }
+
+  /* Skip to main content link */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[10001] focus:px-4 focus:py-2 focus:bg-accent-blue focus:text-white focus:rounded focus:text-sm focus:font-medium;
+  }
+
   ::-webkit-scrollbar {
     width: 6px;
   }

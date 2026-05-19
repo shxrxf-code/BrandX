@@ -45,6 +45,8 @@ export default function Navbar() {
       >
         <div className="section-container">
           <nav
+            role="navigation"
+            aria-label="Main navigation"
             className={`flex items-center justify-between rounded-full px-6 py-4 transition-all duration-500 ${
               isScrolled
                 ? 'glass-strong backdrop-blur-3xl'
@@ -85,7 +87,9 @@ export default function Navbar() {
             <button
               className="md:hidden text-white p-2"
               onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -96,6 +100,10 @@ export default function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
             className="fixed inset-0 z-40 bg-background/98 backdrop-blur-3xl flex flex-col items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

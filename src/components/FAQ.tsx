@@ -66,9 +66,11 @@ export default function FAQ() {
         </ScrollReveal>
 
         {/* FAQ list */}
-        <div className="max-w-3xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-4" role="region" aria-label="Frequently asked questions">
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i
+            const buttonId = `faq-button-${i}`
+            const panelId = `faq-panel-${i}`
             return (
               <ScrollReveal key={i} delay={i * 0.05} direction="up" distance={20}>
                 <motion.div
@@ -79,8 +81,11 @@ export default function FAQ() {
                   }`}
                 >
                   <button
+                    id={buttonId}
                     className="w-full flex items-center justify-between text-left p-6 group"
                     onClick={() => setOpenIndex(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
                   >
                     <span className={`font-display text-lg md:text-xl font-semibold pr-8 transition-colors duration-300 ${
                       isOpen ? 'text-accent-blue' : 'text-white group-hover:text-accent-blue'
@@ -93,6 +98,7 @@ export default function FAQ() {
                       }`}
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.3 }}
+                      aria-hidden="true"
                     >
                       {isOpen ? (
                         <Minus size={18} className="text-accent-blue" />
@@ -104,6 +110,9 @@ export default function FAQ() {
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={buttonId}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}

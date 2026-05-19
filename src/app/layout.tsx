@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: 'Brandex Digital',
     images: [
       {
-        url: '/og-image.png',
+        url: '/opengraph-image.png',
         width: 1200,
         height: 630,
         alt: 'Brandex Digital — Premium Digital Agency',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Brandex Digital | Premium Digital Agency',
     description: 'We craft cinematic digital experiences that elevate brands and drive measurable growth.',
-    images: ['/og-image.png'],
+    images: ['/opengraph-image.png'],
   },
   robots: {
     index: true,
@@ -66,10 +66,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased bg-background text-white selection:bg-accent-blue/30 selection:text-white">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <Preloader />
         <AmbientMotion />
         <SmoothScroll>
-          <main className="relative z-10">
+          <main id="main-content" className="relative z-10">
             {children}
           </main>
         </SmoothScroll>

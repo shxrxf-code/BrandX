@@ -51,18 +51,18 @@ export default function Footer() {
             </p>
             <div className="space-y-4">
               <a
-                href="mailto:hello@brandexdigital.in"
+                href="mailto:brandexdigital.in@gmail.com"
                 className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm"
               >
                 <Mail size={16} />
-                hello@brandexdigital.in
+                brandexdigital.in@gmail.com
               </a>
               <a
-                href="tel:+911234567890"
+                href="tel:+9170100096308"
                 className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm"
               >
                 <Phone size={16} />
-                +91 123 456 7890
+                +91 70100 096308
               </a>
               <div className="flex items-center gap-3 text-text-secondary text-sm">
                 <MapPin size={16} />

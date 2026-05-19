@@ -134,8 +134,8 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <a href="mailto:hello@brandexdigital.in" className="hover:text-white transition-colors">
-                hello@brandexdigital.in
+              <a href="mailto:brandexdigital.in@gmail.com" className="hover:text-white transition-colors">
+                brandexdigital.in@gmail.com
               </a>
             </motion.div>
           </motion.div>

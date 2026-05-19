@@ -398,7 +398,7 @@ RootLayout
 10. **No `next.config.js` TypeScript validation** — Uses `module.exports` instead of TypeScript config
 
 ### Minor
-11. **Hardcoded email/phone in Footer** — `hello@brandexdigital.in` and `+91 123 456 7890` are placeholder values
+11. **Hardcoded email/phone in Footer** — `brandexdigital.in@gmail.com` and `+91 70100 096308` are real values
 12. **All social links point to `#`** — No actual social media URLs configured
 13. **No Open Graph image** — `metadata` in `layout.tsx` doesn't include an `openGraph.images` entry
 14. **No robots.txt or sitemap** — SEO basics not implemented

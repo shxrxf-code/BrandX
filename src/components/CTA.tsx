@@ -64,7 +64,7 @@ export default function CTA() {
               Book a Strategy Call
             </MagneticButton>
             <MagneticButton variant="secondary">
-              hello@brandexdigital.in
+              brandexdigital.in@gmail.com
             </MagneticButton>
           </div>
         </ScrollReveal>

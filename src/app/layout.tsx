@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
+import AmbientMotion from '@/components/AmbientMotion'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -66,8 +67,9 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased bg-background text-white selection:bg-accent-blue/30 selection:text-white">
         <Preloader />
+        <AmbientMotion />
         <SmoothScroll>
-          <main className="relative">
+          <main className="relative z-10">
             {children}
           </main>
         </SmoothScroll>

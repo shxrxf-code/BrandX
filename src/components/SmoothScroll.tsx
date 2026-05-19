@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Lenis from 'lenis'
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const lenisRef = useRef<Lenis | null>(null)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -14,16 +15,25 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   }, [])
 
   useEffect(() => {
+    if (isMobile) return
+
     const lenis = new Lenis({
-      duration: isMobile ? 1 : 1.2,
+      duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: isMobile ? 0.8 : 1,
-      touchMultiplier: isMobile ? 1.5 : 2,
-      lerp: isMobile ? 0.12 : 0.08,
+      wheelMultiplier: 1,
+      lerp: 0.08,
       infinite: false,
+    })
+
+    lenisRef.current = lenis
+
+    lenis.on('scroll', () => {
+      requestAnimationFrame(() => {
+        lenis.raf(performance.now())
+      })
     })
 
     let rafId: number
@@ -32,17 +42,12 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       rafId = requestAnimationFrame(raf)
     }
 
-    if (!isMobile) {
-      rafId = requestAnimationFrame(raf)
-    } else {
-      lenis.on('scroll', () => {
-        lenis.raf(performance.now())
-      })
-    }
+    rafId = requestAnimationFrame(raf)
 
     return () => {
       cancelAnimationFrame(rafId)
       lenis.destroy()
+      lenisRef.current = null
     }
   }, [isMobile])
 

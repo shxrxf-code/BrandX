@@ -12,10 +12,11 @@ import WhyBrandex from '@/components/WhyBrandex'
 import FAQ from '@/components/FAQ'
 import CTA from '@/components/CTA'
 import Footer from '@/components/Footer'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 export default function Home() {
   return (
-    <>
+    <ErrorBoundary>
       <Navbar />
       <Hero />
       <Trust />
@@ -30,6 +31,6 @@ export default function Home() {
       <FAQ />
       <CTA />
       <Footer />
-    </>
+    </ErrorBoundary>
   )
 }

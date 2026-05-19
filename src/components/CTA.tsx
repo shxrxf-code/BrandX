@@ -63,7 +63,7 @@ export default function CTA() {
             <MagneticButton variant="primary" href="tel:+9170100096308">
               Book a Strategy Call
             </MagneticButton>
-            <MagneticButton variant="secondary">
+            <MagneticButton variant="secondary" href="mailto:brandexdigital.in@gmail.com">
               brandexdigital.in@gmail.com
             </MagneticButton>
           </div>

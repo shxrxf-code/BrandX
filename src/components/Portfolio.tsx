@@ -28,13 +28,6 @@ const projects = [
     description: 'Complete personal branding strategy and digital identity for a Montessori school',
   },
   {
-    title: 'FinFlow',
-    category: 'App Design',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-    year: '2025',
-    description: 'Fintech dashboard and mobile app for seamless money management',
-  },
-  {
     title: 'Nuts & Plants',
     category: 'Web Application',
     image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
@@ -47,13 +40,6 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
     year: '2025',
     description: 'Premium restaurant branding with menu design and online ordering platform',
-  },
-  {
-    title: 'CloudSync SaaS',
-    category: 'Web Application',
-    image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80',
-    year: '2025',
-    description: 'Enterprise cloud platform with real-time collaboration tools',
   },
 ]
 

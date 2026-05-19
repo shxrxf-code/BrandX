@@ -36,59 +36,89 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="section-padding relative">
-      <div className="section-container">
+    <section className="section-padding relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-blue/5 to-transparent pointer-events-none" />
+
+      <div className="section-container relative z-10">
+        {/* Section header */}
         <ScrollReveal>
           <div className="text-center mb-16">
-            <span className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block">
+            <motion.span
+              className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
               FAQ
-            </span>
-            <h2 className="font-display text-section font-bold text-gradient">
+            </motion.span>
+            <motion.h2
+              className="font-display text-section font-bold text-gradient"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+            >
               Common Questions
-            </h2>
+            </motion.h2>
           </div>
         </ScrollReveal>
 
-        <div className="space-y-0">
-          {faqs.map((faq, i) => (
-            <ScrollReveal key={i} delay={i * 0.05} direction="up" distance={20}>
-              <div className="faq-item py-6 cursor-none">
-                <button
-                  className="w-full flex items-center justify-between text-left group"
-                  onClick={() => setOpenIndex(openIndex === i ? null : i)}
+        {/* FAQ list */}
+        <div className="max-w-3xl mx-auto space-y-4">
+          {faqs.map((faq, i) => {
+            const isOpen = openIndex === i
+            return (
+              <ScrollReveal key={i} delay={i * 0.05} direction="up" distance={20}>
+                <motion.div
+                  className={`rounded-2xl border transition-all duration-500 ${
+                    isOpen
+                      ? 'bg-white/[0.04] border-accent-blue/20'
+                      : 'bg-white/[0.02] border-white/[0.06] hover:border-white/[0.1]'
+                  }`}
                 >
-                  <span className="font-display text-lg md:text-xl font-semibold text-white pr-8 group-hover:text-accent-blue transition-colors">
-                    {faq.question}
-                  </span>
-                  <motion.div
-                    className="flex-shrink-0 w-10 h-10 rounded-full bg-white/5 flex items-center justify-center"
-                    animate={{ rotate: openIndex === i ? 45 : 0 }}
-                    transition={{ duration: 0.3 }}
+                  <button
+                    className="w-full flex items-center justify-between text-left p-6 group"
+                    onClick={() => setOpenIndex(isOpen ? null : i)}
                   >
-                    {openIndex === i ? (
-                      <Minus size={18} className="text-white" />
-                    ) : (
-                      <Plus size={18} className="text-white" />
-                    )}
-                  </motion.div>
-                </button>
-                <AnimatePresence>
-                  {openIndex === i && (
+                    <span className={`font-display text-lg md:text-xl font-semibold pr-8 transition-colors duration-300 ${
+                      isOpen ? 'text-accent-blue' : 'text-white group-hover:text-accent-blue'
+                    }`}>
+                      {faq.question}
+                    </span>
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                        isOpen ? 'bg-accent-blue/20' : 'bg-white/5 group-hover:bg-white/10'
+                      }`}
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <p className="pt-4 text-text-secondary leading-relaxed pr-16">
-                        {faq.answer}
-                      </p>
+                      {isOpen ? (
+                        <Minus size={18} className="text-accent-blue" />
+                      ) : (
+                        <Plus size={18} className="text-white" />
+                      )}
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </ScrollReveal>
-          ))}
+                  </button>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <p className="px-6 pb-6 text-text-secondary leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              </ScrollReveal>
+            )
+          })}
         </div>
       </div>
     </section>

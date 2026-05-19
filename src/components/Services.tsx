@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Palette, Code, Megaphone, TrendingUp, Smartphone, Layers } from 'lucide-react'
+import { Palette, Code, Megaphone, TrendingUp, Smartphone, Layers, ArrowRight } from 'lucide-react'
 import GlowCard from '@/components/ui/GlowCard'
 import ScrollReveal from '@/components/ui/ScrollReveal'
 
@@ -50,48 +50,79 @@ const services = [
   },
 ]
 
-const colorMap: Record<string, { bg: string; text: string }> = {
-  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue' },
-  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple' },
-  cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan' },
+const colorMap: Record<string, { bg: string; text: string; glow: string }> = {
+  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue', glow: 'shadow-glow-blue' },
+  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple', glow: 'shadow-glow-purple' },
+  cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan', glow: 'shadow-glow-cyan' },
 }
 
 export default function Services() {
   return (
     <section id="services" className="section-padding relative">
-      <div className="section-container">
-        <ScrollReveal>
-          <div className="max-w-3xl mb-20">
-            <span className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block">
-              What We Do
-            </span>
-            <h2 className="font-display text-section font-bold text-gradient mb-6">
-              Services Built for Growth
-            </h2>
-            <p className="text-text-secondary text-body-lg leading-relaxed">
-              End-to-end digital solutions designed to transform your brand presence
-              and accelerate business outcomes.
-            </p>
-          </div>
-        </ScrollReveal>
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-blue/5 to-transparent pointer-events-none" />
 
+      <div className="section-container relative z-10">
+        {/* Section header */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-20 gap-6">
+          <div>
+            <motion.span
+              className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              What We Do
+            </motion.span>
+            <motion.h2
+              className="font-display text-section font-bold text-gradient mb-6"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+            >
+              Services Built for Growth
+            </motion.h2>
+          </div>
+          <motion.p
+            className="text-text-secondary max-w-md text-body-lg"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            End-to-end digital solutions designed to transform your brand presence
+            and accelerate business outcomes.
+          </motion.p>
+        </div>
+
+        {/* Services grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => {
             const colors = colorMap[service.color] || colorMap.blue
+            const Icon = service.icon
             return (
-              <ScrollReveal key={i} delay={i * 0.1} direction="up" distance={40}>
+              <ScrollReveal key={i} delay={i * 0.08} direction="up" distance={40}>
                 <GlowCard glowColor={service.color as 'blue' | 'purple' | 'cyan'}>
-                  <div className="p-8 h-full flex flex-col">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 ${colors.bg}`}>
-                      <service.icon size={24} className={colors.text} />
+                  <div className="p-8 h-full flex flex-col group">
+                    {/* Icon with animated background */}
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${colors.bg} group-hover:scale-110 transition-transform duration-500`}>
+                      <Icon size={26} className={`${colors.text} group-hover:scale-110 transition-transform duration-300`} />
                     </div>
-                    <h3 className="font-display text-xl font-bold text-white mb-3">
+
+                    {/* Title */}
+                    <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-accent-blue transition-colors duration-300">
                       {service.title}
                     </h3>
+
+                    {/* Description */}
                     <p className="text-text-secondary text-sm leading-relaxed mb-6 flex-grow">
                       {service.description}
                     </p>
-                    <div className="flex flex-wrap gap-2">
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mb-6">
                       {service.tags.map((tag, j) => (
                         <span
                           key={j}
@@ -100,6 +131,12 @@ export default function Services() {
                           {tag}
                         </span>
                       ))}
+                    </div>
+
+                    {/* Learn more link */}
+                    <div className="flex items-center gap-2 text-sm font-medium text-accent-blue opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                      <span>Learn more</span>
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
                     </div>
                   </div>
                 </GlowCard>

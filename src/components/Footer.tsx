@@ -1,13 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react'
+import { ArrowUpRight, Mail, Phone, MapPin, Twitter, Linkedin, Instagram, Dribbble } from 'lucide-react'
 
 const socialLinks = [
-  { label: 'X / Twitter', href: '#' },
-  { label: 'LinkedIn', href: '#' },
-  { label: 'Instagram', href: '#' },
-  { label: 'Dribbble', href: '#' },
+  { label: 'X / Twitter', href: '#', icon: Twitter },
+  { label: 'LinkedIn', href: '#', icon: Linkedin },
+  { label: 'Instagram', href: '#', icon: Instagram },
+  { label: 'Dribbble', href: '#', icon: Dribbble },
 ]
 
 const footerLinks = {
@@ -32,8 +32,13 @@ export default function Footer() {
 
   return (
     <footer className="relative pt-24 pb-8 border-t border-white/5">
-      <div className="section-container">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-accent-blue/5 to-transparent pointer-events-none" />
+
+      <div className="section-container relative z-10">
+        {/* Main footer grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20">
+          {/* Brand column */}
           <div className="lg:col-span-2">
             <motion.a
               href="#"
@@ -49,19 +54,21 @@ export default function Footer() {
               Crafting premium digital experiences that elevate brands and drive
               measurable growth for forward-thinking companies worldwide.
             </p>
+
+            {/* Contact info */}
             <div className="space-y-4">
               <a
                 href="mailto:brandexdigital.in@gmail.com"
-                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm"
+                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
               >
-                <Mail size={16} />
+                <Mail size={16} className="group-hover:text-accent-blue transition-colors" />
                 brandexdigital.in@gmail.com
               </a>
               <a
                 href="tel:+9170100096308"
-                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm"
+                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
               >
-                <Phone size={16} />
+                <Phone size={16} className="group-hover:text-accent-blue transition-colors" />
                 +91 70100 096308
               </a>
               <div className="flex items-center gap-3 text-text-secondary text-sm">
@@ -71,6 +78,7 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Services column */}
           <div>
             <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
               Services
@@ -82,7 +90,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-text-secondary hover:text-white transition-colors text-sm flex items-center gap-2 group"
                   >
-                    <span className="w-0 group-hover:w-3 transition-all duration-300">
+                    <span className="w-0 group-hover:w-3 transition-all duration-300 overflow-hidden">
                       <ArrowUpRight size={12} className="text-accent-blue" />
                     </span>
                     {link.label}
@@ -92,6 +100,7 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Company column */}
           <div>
             <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
               Company
@@ -103,7 +112,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-text-secondary hover:text-white transition-colors text-sm flex items-center gap-2 group"
                   >
-                    <span className="w-0 group-hover:w-3 transition-all duration-300">
+                    <span className="w-0 group-hover:w-3 transition-all duration-300 overflow-hidden">
                       <ArrowUpRight size={12} className="text-accent-blue" />
                     </span>
                     {link.label}
@@ -113,27 +122,34 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Social column */}
           <div>
             <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
               Follow Us
             </h4>
             <div className="space-y-3">
-              {socialLinks.map((social, i) => (
-                <motion.a
-                  key={i}
-                  href={social.href}
-                  className="flex items-center gap-2 text-text-secondary hover:text-white transition-colors text-sm"
-                  whileHover={{ x: 4 }}
-                >
-                  {social.label}
-                </motion.a>
-              ))}
+              {socialLinks.map((social, i) => {
+                const Icon = social.icon
+                return (
+                  <motion.a
+                    key={i}
+                    href={social.href}
+                    className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
+                    whileHover={{ x: 4 }}
+                  >
+                    <Icon size={16} className="group-hover:text-accent-blue transition-colors" />
+                    {social.label}
+                  </motion.a>
+                )
+              })}
             </div>
           </div>
         </div>
 
+        {/* Divider */}
         <div className="section-divider mb-8" />
 
+        {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-text-muted">
           <p>&copy; {currentYear} Brandex Digital. All rights reserved.</p>
           <div className="flex items-center gap-6">

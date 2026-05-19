@@ -138,7 +138,7 @@ export default function Footer() {
                     className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
                     whileHover={{ x: 4 }}
                   >
-                    <Icon size={16} className="group-hover:text-accent-blue transition-colors" />
+                    <Icon width={16} height={16} className="group-hover:text-accent-blue transition-colors" />
                     {social.label}
                   </motion.a>
                 )

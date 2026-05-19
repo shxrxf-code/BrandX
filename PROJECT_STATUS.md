@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026 at 20:10 IST
+> **Last Updated:** May 19, 2026 at 20:26 IST
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `66808c2`
+> **Latest Commit:** `a2a295c`
 
 ---
 
@@ -21,10 +21,11 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Mobile-optimized (Lenis disabled on mobile, reduced animations)
 - Custom cursor removed
 - Contact info: `brandexdigital.in@gmail.com` / `+91 70100 096308`
-- Portfolio: 5 projects with hover metrics reveal
+- Portfolio: 6 projects with hover metrics reveal (SolarTech Energy, Drifto Men's Fashion, Mirra Montessori School, Nuts & Plants, Diamond Restaurant, Aero Travels)
 - Premium motion system: GSAP + Framer Motion + blur-to-clear reveals
 - Cinematic Hero: Massive typography, staggered animations, floating cards
 - Enhanced microinteractions: Magnetic buttons, 3D tilt cards, cursor-following glow
+- Error boundary: Catches runtime errors gracefully with reload option
 
 ---
 
@@ -133,7 +134,7 @@ RootLayout
 | 2 | **Hero** | — | Full-viewport, word reveal, gradient text, scroll parallax, dual CTAs (tel/mailto), inline stats |
 | 3 | **Trust** | — | 4-column stat counters with hover scale, scroll-reveal stagger |
 | 4 | **Services** | `#services` | 6 service cards in 3-col grid, static hover glow, icon badges, tag pills |
-| 5 | **Portfolio** | `#work` | 3-col grid, 5 projects, grayscale→color hover, descriptions, year badges |
+| 5 | **Portfolio** | `#work` | 2-col grid, 6 projects, hover metrics reveal, grayscale→color, zoom effect |
 | 6 | **Process** | `#process` | 6-step alternating timeline, watermark numbers (10% opacity), detail tags |
 | 7 | **About** | `#about` | Two-column split, team image with glass quote overlay, 4 value props |
 | 8 | **Metrics** | — | 4-column animated counters, gradient text, hover scale |
@@ -335,6 +336,10 @@ EMAIL_PASS=<gmail-app-password>
 
 | Commit | Time (IST) | Message |
 |--------|------------|---------|
+| `a2a295c` | 20:26 | fix: remove invalid Lenis touchInertiaMultiplier option |
+| `6abcecd` | 20:22 | update: add Aero Travels to Portfolio (Personal Branding) |
+| `4083f18` | 20:15 | style: increase portfolio category and year label size |
+| `fee4930` | 20:10 | docs: update timestamp to 20:10 IST |
 | `e701d0e` | 18:45 | feat: premium redesign - cinematic hero, enhanced portfolio, microinteractions |
 | `505d883` | 18:25 | update: change Nuts & Plants image to nuts and chocolates |
 | `8f28239` | 18:20 | docs: save current project status with timestamps |

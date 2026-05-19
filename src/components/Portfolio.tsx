@@ -35,18 +35,18 @@ const projects = [
     description: 'Fintech dashboard and mobile app for seamless money management',
   },
   {
+    title: 'Nuts & Plants',
+    category: 'Web Application',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80',
+    year: '2026',
+    description: 'E-commerce website for premium nuts and plants with seamless checkout experience',
+  },
+  {
     title: 'Diamond Restaurant',
     category: 'Brand & Web',
     image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
     year: '2025',
     description: 'Premium restaurant branding with menu design and online ordering platform',
-  },
-  {
-    title: 'Veloce Motors',
-    category: 'Brand Identity',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80',
-    year: '2026',
-    description: 'Premium automotive brand identity and digital presence',
   },
   {
     title: 'CloudSync SaaS',

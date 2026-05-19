@@ -24,7 +24,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       touchMultiplier: isMobile ? 1.5 : 2,
       lerp: isMobile ? 0.12 : 0.08,
       infinite: false,
-      __autoResize: false,
     })
 
     let rafId: number

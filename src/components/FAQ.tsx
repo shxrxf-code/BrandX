@@ -37,7 +37,7 @@ export default function FAQ() {
 
   return (
     <section className="section-padding relative">
-      <div className="section-container max-w-4xl">
+      <div className="section-container">
         <ScrollReveal>
           <div className="text-center mb-16">
             <span className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block">

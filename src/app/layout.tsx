@@ -1,6 +1,3 @@
-'use client'
-
-import { useState } from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
@@ -8,6 +5,7 @@ import './globals.css'
 import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
 import AmbientMotion from '@/components/AmbientMotion'
+import BodyContent from './body-content'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -66,24 +64,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [isLoaded, setIsLoaded] = useState(false)
-
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased bg-background text-white selection:bg-accent-blue/30 selection:text-white">
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <Preloader onComplete={() => setIsLoaded(true)} />
+        <Preloader />
         <AmbientMotion />
         <SmoothScroll>
-          <main
-            id="main-content"
-            className="relative z-10"
-            style={{ opacity: isLoaded ? 1 : 0, transition: 'opacity 0.6s ease-in-out' }}
-          >
-            {children}
-          </main>
+          <BodyContent>{children}</BodyContent>
         </SmoothScroll>
         <div className="noise" />
         <Analytics />

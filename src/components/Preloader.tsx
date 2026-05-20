@@ -4,11 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useIsMobile } from '@/lib/hooks'
 
-interface PreloaderProps {
-  onComplete?: () => void
-}
-
-export default function Preloader({ onComplete }: PreloaderProps) {
+export default function Preloader() {
   const isMobile = useIsMobile()
   const [isComplete, setIsComplete] = useState(false)
   const [isAnimating, setIsAnimating] = useState(true)
@@ -25,11 +21,11 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     if (isComplete) {
       const timer = setTimeout(() => {
         setIsAnimating(false)
-        setTimeout(() => onComplete?.(), 100)
+        window.dispatchEvent(new CustomEvent('preloader-complete'))
       }, 1200)
       return () => clearTimeout(timer)
     }
-  }, [isComplete, onComplete])
+  }, [isComplete])
 
   if (!isAnimating) return null
 

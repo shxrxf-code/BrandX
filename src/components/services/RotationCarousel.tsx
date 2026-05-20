@@ -43,26 +43,51 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
 
   const tiltX = rotateX * 0.3
 
-  if (isMobile) {
-    return (
-      <motion.div
-        className={`rounded-2xl border ${colors.border} bg-background-secondary/80 backdrop-blur-xl p-6 mb-6`}
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1, duration: 0.5 }}
-      >
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg} border ${colors.border}`}>
+  const cardContent = (
+    <div
+      className={`rounded-2xl border ${isHovered ? colors.border : 'border-white/10'} bg-background-secondary/90 backdrop-blur-xl p-6 overflow-hidden relative`}
+      style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+    >
+      <div className={`absolute inset-0 bg-gradient-to-br ${colors.bg} to-transparent transition-opacity duration-500`} style={{ opacity: isHovered ? 0.12 : 0 }} />
+
+      <div className="relative z-10">
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg} border ${colors.border}`} style={{ transform: 'translateZ(30px)' }}>
           <Icon size={22} className={colors.text} />
         </div>
-        <h3 className={`font-display text-lg font-bold mb-2 ${colors.text}`}>{title}</h3>
-        <p className="text-text-secondary text-sm leading-relaxed mb-4">{description}</p>
-        <div className="flex flex-wrap gap-1.5">
+
+        <h3 className={`font-display text-lg font-bold mb-2 ${isHovered ? colors.text : 'text-white'}`} style={{ transform: 'translateZ(25px)' }}>
+          {title}
+        </h3>
+
+        <p className="text-text-secondary text-sm leading-relaxed mb-4" style={{ transform: 'translateZ(15px)' }}>
+          {description}
+        </p>
+
+        <div className="flex flex-wrap gap-1.5" style={{ transform: 'translateZ(10px)' }}>
           {tags.map((tag, j) => (
             <span key={j} className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-2 py-1 rounded-full">
               {tag}
             </span>
           ))}
         </div>
+      </div>
+
+      {isHovered && (
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${colors.accent}80, transparent)` }} />
+      )}
+    </div>
+  )
+
+  if (isMobile) {
+    return (
+      <motion.div
+        ref={cardRef}
+        className={`rounded-2xl border ${colors.border} bg-background-secondary/80 backdrop-blur-xl p-6 mb-6`}
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.1, duration: 0.5 }}
+      >
+        {cardContent}
       </motion.div>
     )
   }
@@ -87,38 +112,7 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(null)}
     >
-      <div
-        className={`rounded-2xl border ${isHovered ? colors.border : 'border-white/10'} bg-background-secondary/90 backdrop-blur-xl p-6 overflow-hidden relative`}
-        style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
-      >
-        <div className={`absolute inset-0 bg-gradient-to-br ${colors.bg} to-transparent transition-opacity duration-500`} style={{ opacity: isHovered ? 0.12 : 0 }} />
-
-        <div className="relative z-10">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg} border ${colors.border}`} style={{ transform: 'translateZ(30px)' }}>
-            <Icon size={22} className={colors.text} />
-          </div>
-
-          <h3 className={`font-display text-lg font-bold mb-2 ${isHovered ? colors.text : 'text-white'}`} style={{ transform: 'translateZ(25px)' }}>
-            {title}
-          </h3>
-
-          <p className="text-text-secondary text-sm leading-relaxed mb-4" style={{ transform: 'translateZ(15px)' }}>
-            {description}
-          </p>
-
-          <div className="flex flex-wrap gap-1.5" style={{ transform: 'translateZ(10px)' }}>
-            {tags.map((tag, j) => (
-              <span key={j} className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-2 py-1 rounded-full">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {isHovered && (
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${colors.accent}80, transparent)` }} />
-        )}
-      </div>
+      {cardContent}
     </motion.div>
   )
 }
@@ -132,8 +126,13 @@ interface RotationCarouselProps {
 export default function RotationCarousel({ services, isLoaded, baseDelay }: RotationCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+  const [mounted, setMounted] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const rotX = useMotionValue(-10)
   const rotY = useMotionValue(0)
@@ -163,13 +162,13 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   }, [rotX, rotY, isDragging])
 
   useEffect(() => {
-    if (!isMobile) {
+    if (!isMobile && mounted) {
       autoRotateRef.current = requestAnimationFrame(autoRotate)
       return () => {
         if (autoRotateRef.current) cancelAnimationFrame(autoRotateRef.current)
       }
     }
-  }, [autoRotate, isMobile])
+  }, [autoRotate, isMobile, mounted])
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     setIsDragging(true)
@@ -205,6 +204,14 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
     velX.set(0)
     velY.set(0)
   }, [rotX, rotY, velX, velY])
+
+  if (!mounted) {
+    return (
+      <div className="relative h-[650px] flex items-center justify-center">
+        <div className="text-text-muted text-sm">Loading...</div>
+      </div>
+    )
+  }
 
   if (isMobile) {
     return (

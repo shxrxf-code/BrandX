@@ -31,14 +31,6 @@ const projects = [
     metrics: { conversion: '+150%', traffic: '+120%', engagement: '2.9x' },
   },
   {
-    title: 'Nuts & Plants',
-    category: 'Web Application',
-    image: 'https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=800&q=80',
-    year: '2026',
-    description: 'E-commerce website for premium nuts and chocolates with seamless checkout experience',
-    metrics: { conversion: '+280%', traffic: '+160%', engagement: '3.5x' },
-  },
-  {
     title: 'Diamond Restaurant',
     category: 'Brand & Web',
     image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',

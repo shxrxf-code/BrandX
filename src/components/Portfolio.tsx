@@ -59,12 +59,15 @@ export default function Portfolio() {
   })
 
   const cardWidth = isMobile ? 85 : 35
-  const totalWidth = projects.length * cardWidth
-  const scrollDistance = (projects.length - 1) * cardWidth
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', `-${scrollDistance}%`])
+  const gap = isMobile ? 1.5 : 2
+  const totalCardsWidth = projects.length * cardWidth + (projects.length - 1) * gap
+  const visibleWidth = isMobile ? 80 : 35
+  const scrollDistance = totalCardsWidth - visibleWidth
+  const xProgress = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance])
+  const x = useTransform(xProgress, (v) => `${v}vw`)
 
   return (
-    <section id="work" ref={containerRef} className="relative" style={{ height: `${projects.length * 60}vh` }}>
+    <section id="work" ref={containerRef} className="relative" style={{ height: `${projects.length * 55}vh` }}>
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
         <div className="section-container mb-8 md:mb-12">
           <motion.span
@@ -89,7 +92,7 @@ export default function Portfolio() {
 
         <motion.div
           className="flex gap-6 md:gap-8 px-6 md:px-12 lg:px-16"
-          style={{ x, width: `${totalWidth + 20}%` }}
+          style={{ x, width: `${totalCardsWidth}vw` }}
         >
           {projects.map((project, i) => (
             <motion.div

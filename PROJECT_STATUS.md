@@ -1,15 +1,15 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 19, 2026 at 21:10 IST
+> **Last Updated:** May 20, 2026
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `cfb17c0`
+> **Latest Commit:** `445f2eb`
 
 ---
 
 ## 1. Project Overview
 
-**BrandX** (branded as **Brandex Digital**) is a premium digital agency website — a single-page cinematic experience with smooth scroll, preloader, parallax effects, and extensive Framer Motion animations.
+**BrandX** (branded as **Brandex Digital**) is a premium digital agency website — a single-page cinematic experience with smooth scroll, camera-lens preloader, 3D interactive sections, parallax effects, and extensive Framer Motion animations.
 
 Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 sections.
 
@@ -18,17 +18,15 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - React: v19
 - Deployed on Vercel: `https://brandexdigital.in`
 - Full-width layout (no max-width constraint)
-- Mobile-optimized (Lenis disabled on mobile, reduced animations)
+- Mobile-optimized (Lenis disabled on mobile, reduced animations, capped FPS)
 - Custom cursor removed
 - Contact info: `brandexdigital.in@gmail.com` / `+91 70100 096308`
-- Portfolio: 6 projects with hover metrics reveal
-- Premium motion system: GSAP + Framer Motion + blur-to-clear reveals
-- Cinematic Hero: Massive typography, staggered animations, floating cards
-- Enhanced microinteractions: Magnetic buttons, 3D tilt cards, cursor-following glow
+- Portfolio: 5 projects with horizontal scroll, hover metrics reveal
+- 3D interactive sections: Services (rotating carousel), Process (3D tilt cards), TechStack (floating 3D cards), Metrics (3D rotating counters)
+- Cinematic Hero: Spotlight effect, floating shapes, gradient orbs, particles (capped FPS)
+- Camera-lens opening animation (replaces loading bar)
+- Performance optimized: Next.js Image, AVIF/WebP, font preload, IntersectionObserver on particles
 - Error boundary: Catches runtime errors gracefully with reload option
-- All sections redesigned: Services, About, Metrics, Testimonials, FAQ, Footer, WhyBrandex
-- GSAP ScrollTrigger: Pinned horizontal scroll section for capabilities showcase
-- Ambient motion system: Global floating orbs, subtle grid lines, parallax layers
 
 ---
 
@@ -43,7 +41,8 @@ BrandX/
 ├── src/
 │   ├── app/
 │   │   ├── globals.css                 # Global styles, Tailwind layers, CSS utilities
-│   │   ├── layout.tsx                  # Root layout with fonts, Preloader, SmoothScroll, Analytics
+│   │   ├── layout.tsx                  # Root layout (server component) with fonts, metadata
+│   │   ├── body-content.tsx            # Client wrapper for main content with preloader sync
 │   │   ├── page.tsx                    # Main page — composes all 14 sections + ErrorBoundary
 │   │   ├── error.tsx                   # Error boundary UI
 │   │   ├── not-found.tsx               # 404 page
@@ -55,37 +54,45 @@ BrandX/
 │   ├── components/
 │   │   ├── effects/
 │   │   │   ├── AnimatedGrid.tsx        # Canvas-based animated dot grid
-│   │   │   ├── GradientOrbs.tsx        # Floating gradient orbs (hidden on mobile)
-│   │   │   └── Particles.tsx           # Canvas particles (reduced on mobile)
+│   │   │   ├── FloatingShapes.tsx      # Geometric floating shapes (Hero)
+│   │   │   ├── GradientOrbs.tsx        # Floating gradient orbs (memo, hidden mobile)
+│   │   │   ├── HeroSpotlight.tsx       # Mouse-following radial light (Hero)
+│   │   │   └── Particles.tsx           # Canvas particles (capped FPS, IntersectionObserver)
+│   │   ├── services/
+│   │   │   ├── NetworkBackground.tsx   # Ambient background for services
+│   │   │   ├── NetworkConnections.tsx  # SVG animated connection lines
+│   │   │   ├── NetworkNode.tsx         # 3D tilt service card
+│   │   │   └── RotationCarousel.tsx    # 3D rotating carousel with drag-to-spin
 │   │   ├── ui/
 │   │   │   ├── AnimatedCounter.tsx     # Scroll-triggered number counter
-│   │   │   ├── GlowCard.tsx            # Card with static hover glow (no tilt)
-│   │   │   ├── MagneticButton.tsx      # Standard button (no magnetic effect)
+│   │   │   ├── GlowCard.tsx            # Card with static hover glow
+│   │   │   ├── MagneticButton.tsx      # Magnetic button effect
 │   │   │   ├── Marquee.tsx             # Infinite scrolling text
 │   │   │   ├── ParallaxImage.tsx       # Scroll-linked parallax image
 │   │   │   ├── ScrollReveal.tsx        # Scroll-triggered reveal (optimized mobile)
 │   │   │   └── TextReveal.tsx          # Word-by-word staggered text
-│   │   ├── About.tsx                   # Two-column about section
+│   │   ├── About.tsx                   # Two-column about section (Next.js Image)
+│   │   ├── AmbientMotion.tsx           # Global ambient motion effects
 │   │   ├── CTA.tsx                     # Final CTA with marquee
-│   │   ├── ErrorBoundary.tsx           # Class-based error boundary (catches runtime errors)
+│   │   ├── ErrorBoundary.tsx           # Class-based error boundary
 │   │   ├── FAQ.tsx                     # Accordion FAQ
 │   │   ├── Footer.tsx                  # Multi-column footer
-│   │   ├── Hero.tsx                    # Full-viewport hero (simplified on mobile)
-│   │   ├── Metrics.tsx                 # Animated counter metrics
-│   │   ├── Navbar.tsx                  # Fixed glass nav + mobile menu
-│   │   ├── Portfolio.tsx               # 3-col grid project showcase (6 projects)
-│   │   ├── Preloader.tsx               # Loading screen (simplified on mobile)
-│   │   ├── Process.tsx                 # 6-step timeline (no progress line on mobile)
-│   │   ├── Services.tsx                # 6 service cards with static glow
+│   │   ├── Hero.tsx                    # Cinematic hero with spotlight, shapes, particles
+│   │   ├── Metrics.tsx                 # 3D rotating counter cards
+│   │   ├── Navbar.tsx                  # Fixed glass nav + mobile fullscreen menu
+│   │   ├── Portfolio.tsx               # Horizontal scroll, 5 projects (sticky pinned)
+│   │   ├── Preloader.tsx               # Camera-lens opening animation
+│   │   ├── Process.tsx                 # 3D tilt timeline cards
+│   │   ├── Services.tsx                # 3D rotating carousel with drag-to-spin
 │   │   ├── SmoothScroll.tsx            # Lenis wrapper (disabled on mobile)
-│   │   ├── TechStack.tsx               # Tech proficiency grid
+│   │   ├── TechStack.tsx               # 3D floating tech cards
 │   │   ├── Testimonials.tsx            # Client testimonial cards
 │   │   ├── Trust.tsx                   # Trust indicator stats
 │   │   └── WhyBrandex.tsx              # Sticky sidebar + reason cards
 │   └── lib/
 │       ├── hooks.ts                    # useIsMobile, useReducedMotion hooks
 │       └── utils.ts                    # cn() utility
-├── next.config.js                      # Next.js config (security headers, Unsplash images)
+├── next.config.js                      # Next.js config (security headers, AVIF/WebP, caching)
 ├── tailwind.config.js                  # Design system (colors, typography, animations)
 ├── tsconfig.json                       # TypeScript config
 ├── postcss.config.js                   # Tailwind + Autoprefixer
@@ -100,29 +107,35 @@ BrandX/
 ### Component Hierarchy
 
 ```
-RootLayout
-├── Preloader                           # Full-screen loading (simplified mobile)
+RootLayout (server)
+├── Preloader                           # Camera-lens opening animation
+├── AmbientMotion                       # Global ambient motion effects
 ├── SmoothScroll (Lenis — desktop only)
-│   └── <main>
-│       └── ErrorBoundary               # Catches runtime errors
-│           ├── Navbar                  # Fixed glass nav + mobile fullscreen menu
-│           ├── Hero                    # Hero with parallax, stats, CTAs
-│           │   ├── GradientOrbs        # Hidden on mobile
-│           │   └── Particles           # Reduced count on mobile
-│           ├── Trust                   # 4-column stats
-│           ├── Services                # 6 service cards
-│           │   └── GlowCard (×6)       # Static hover glow
-│           ├── Portfolio               # 3-col grid, 6 projects
-│           ├── Process                 # 6-step timeline
-│           ├── About                   # Two-column layout
-│           ├── Metrics                 # Animated counters
-│           │   └── AnimatedCounter (×4)
-│           ├── TechStack               # Tech proficiency grid
-│           ├── Testimonials            # Client quotes
-│           ├── WhyBrandex              # Sticky sidebar + cards
-│           ├── FAQ                     # Accordion
-│           ├── CTA                     # Final CTA + marquee
-│           └── Footer                  # Multi-column footer
+│   └── BodyContent (client)            # Main content wrapper with preloader sync
+│       └── <main>
+│           └── ErrorBoundary           # Catches runtime errors
+│               ├── Navbar              # Fixed glass nav + mobile fullscreen menu
+│               ├── Hero                # Cinematic hero
+│               │   ├── GradientOrbs    # Hidden on mobile
+│               │   ├── Particles       # Capped FPS, IntersectionObserver
+│               │   ├── HeroSpotlight   # Mouse-following radial light
+│               │   └── FloatingShapes  # Geometric floating shapes
+│               ├── Trust               # 4-column stats
+│               ├── Services            # 3D rotating carousel (drag-to-spin)
+│               │   ├── RotationCarousel
+│               │   ├── NetworkBackground
+│               │   ├── NetworkConnections
+│               │   └── NetworkNode
+│               ├── Portfolio           # Horizontal scroll, 5 projects (sticky pinned)
+│               ├── Process             # 3D tilt timeline cards
+│               ├── About               # Two-column layout (Next.js Image)
+│               ├── Metrics             # 3D rotating counter cards
+│               ├── TechStack           # 3D floating tech cards
+│               ├── Testimonials        # Client quotes
+│               ├── WhyBrandex          # Sticky sidebar + cards
+│               ├── FAQ                 # Accordion
+│               ├── CTA                 # Final CTA + marquee
+│               └── Footer              # Multi-column footer
 ├── .noise                              # SVG noise overlay (static on mobile)
 └── Analytics                           # Vercel Analytics
 ```
@@ -134,14 +147,14 @@ RootLayout
 | # | Section | ID Anchor | Key Features |
 |---|---------|-----------|--------------|
 | 1 | **Navbar** | — | Fixed glass pill nav, scroll-aware, mobile fullscreen menu, MagneticButton CTA |
-| 2 | **Hero** | — | Full-viewport, word reveal, gradient text, scroll parallax, dual CTAs (tel/mailto), inline stats |
+| 2 | **Hero** | — | Spotlight effect, floating shapes, particles, word reveal, gradient text, scroll parallax, dual CTAs (tel/mailto), inline stats |
 | 3 | **Trust** | — | 4-column stat counters with hover scale, scroll-reveal stagger |
-| 4 | **Services** | `#services` | 6 service cards in 3-col grid, static hover glow, icon badges, tag pills |
-| 5 | **Portfolio** | `#work` | 2-col grid, 6 projects, hover metrics reveal, grayscale→color, zoom effect |
-| 6 | **Process** | `#process` | 6-step alternating timeline, watermark numbers (10% opacity), detail tags |
-| 7 | **About** | `#about` | Two-column split, team image with glass quote overlay, 4 value props |
-| 8 | **Metrics** | — | 4-column animated counters, gradient text, hover scale |
-| 9 | **TechStack** | — | 12 tech items in 4-col grid, glass cards, animated proficiency bars |
+| 4 | **Services** | `#services` | 3D rotating carousel, drag-to-spin, momentum physics, omnidirectional rotation, network connections |
+| 5 | **Portfolio** | `#work` | Horizontal scroll (sticky pinned), 5 projects, hover metrics reveal, Next.js Image |
+| 6 | **Process** | `#process` | 3D tilt cards, alternating layout, animated progress line, detail tags |
+| 7 | **About** | `#about` | Two-column split, team image (Next.js Image) with glass quote overlay, 4 value props |
+| 8 | **Metrics** | — | 3D rotating counter cards, gradient text, hover glow orbs |
+| 9 | **TechStack** | — | 3D floating tech cards, mouse-tracking tilt, animated proficiency bars |
 | 10 | **Testimonials** | — | 3-column quote cards, glass styling, avatar initials |
 | 11 | **WhyBrandex** | — | Sticky sidebar, 4 numbered reason cards (10% opacity numbers) |
 | 12 | **FAQ** | — | 6 accordion items, animated expand/collapse, scroll-reveal |
@@ -278,20 +291,37 @@ EMAIL_PASS=<gmail-app-password>
 
 | Component | Desktop | Mobile |
 |-----------|---------|--------|
-| Preloader | 1.2s with progress bar | 300ms, logo only |
+| Preloader | Camera-lens animation (2.2s) | Camera-lens animation (1.8s) |
 | Lenis Scroll | Enabled (lerp 0.08) | Disabled (native scroll) |
-| Particles | 50 particles, 60fps | 10 particles, 20fps |
-| GradientOrbs | 3 floating orbs | Hidden |
+| Particles | 20 particles, 30fps | 5 particles, 20fps |
+| GradientOrbs | 2 floating orbs | Hidden |
 | ScrollReveal | 60px distance, 0.8s | 30px distance, 0.4s |
 | Hero 3D | Spring physics, floating cards | Direct transform, no cards |
 | Progress line | Animated | Hidden |
 | Noise overlay | Animated | Static |
 | Portfolio hover | Scale + rotate | Disabled |
-| Watermark numbers | 10% opacity | 10% opacity |
+| Services 3D | Rotating carousel + drag | Stacked cards |
 
 ---
 
-## 9. Known Issues
+## 9. Performance Optimizations
+
+| Optimization | Impact |
+|---|---|
+| Removed GSAP (~90KB) | Smaller bundle |
+| Next.js Image (Portfolio + About) | Auto WebP/AVIF, lazy loading, responsive sizes |
+| Particles capped (30→20 desktop, 10→5 mobile) | Less CPU/GPU usage |
+| FPS limiter (30fps desktop, 20fps mobile) | Reduced animation overhead |
+| IntersectionObserver on particles | Pauses when off-screen |
+| GradientOrbs reduced (3→2, memo) | Fewer blur layers |
+| Font preload + fallbacks | Faster text rendering |
+| Image formats (AVIF + WebP) | ~30% smaller images |
+| Static asset caching (1 year immutable) | Better repeat visits |
+| Referrer-Policy header | Security improvement |
+
+---
+
+## 10. Known Issues
 
 ### Resolved
 - ~~Custom cursor causing issues~~ — Removed
@@ -301,11 +331,15 @@ EMAIL_PASS=<gmail-app-password>
 - ~~robots.ts syntax error~~ — Fixed with Next.js metadata API
 - ~~vercel.json conflicting with Next.js~~ — Fixed with framework preset
 - ~~Mobile crash (Lenis + useScroll conflict)~~ — Lenis disabled on mobile
-- ~~Preloader too slow on mobile~~ — Simplified to 300ms
+- ~~Preloader too slow on mobile~~ — Simplified to camera-lens animation
 - ~~Watermark numbers invisible~~ — Increased opacity to 10%
 - ~~"Book a Strategy Call" not calling~~ — Added tel: link
 - ~~Email button not opening mail app~~ — Added mailto: link
 - ~~Site not full width~~ — Removed max-w-7xl constraint
+- ~~Metadata export error~~ — Split layout into server/client components
+- ~~Hydration mismatch~~ — Added mounted guard to client components
+- ~~Horizontal scroll not working~~ — Fixed with ref-based transform
+- ~~Empty space after last project~~ — Calculated exact scroll distance
 
 ### Remaining
 - Social links still point to `#` (awaiting URLs)
@@ -314,13 +348,12 @@ EMAIL_PASS=<gmail-app-password>
 
 ---
 
-## 10. Pending Tasks
+## 11. Pending Tasks
 
 ### Medium Priority
 - [ ] Add real social media URLs
 - [ ] Add real portfolio images (replace Unsplash)
 - [ ] Add loading.tsx for route-level loading UI
-- [ ] Performance audit (Lighthouse testing)
 
 ### Low Priority
 - [ ] Implement dark/light mode toggle
@@ -330,53 +363,36 @@ EMAIL_PASS=<gmail-app-password>
 
 ---
 
-## 11. Recent Changes (This Session)
+## 12. Recent Changes (This Session)
 
 ### Git History
 
-| Commit | Time (IST) | Message |
-|--------|------------|---------|
-| `cfb17c0` | 21:10 | a11y: improve accessibility with focus styles, ARIA labels, and skip link |
-| `4cf7c14` | 21:00 | feat: add GSAP ScrollTrigger horizontal scroll section and ambient motion system |
-| `d34e642` | 20:50 | docs: update PROJECT_STATUS.md at 20:50 IST - WhyBrandex redesigned |
-| `b0abe1f` | 20:50 | feat: redesign WhyBrandex section - sticky sidebar, enhanced cards with icons, glow effects |
-| `2fcda14` | 20:45 | feat: complete section redesigns - Services, About, Metrics, Testimonials, FAQ, Footer |
-| `f1904c9` | 20:30 | fix: simplify useIsMobile hook to prevent hydration errors |
-| `a2a295c` | 20:26 | fix: remove invalid Lenis touchInertiaMultiplier option |
-| `6abcecd` | 20:22 | update: add Aero Travels to Portfolio (Personal Branding) |
-| `4083f18` | 20:15 | style: increase portfolio category and year label size |
-| `fee4930` | 20:10 | docs: update timestamp to 20:10 IST |
-| `e701d0e` | 18:45 | feat: premium redesign - cinematic hero, enhanced portfolio, microinteractions |
-| `505d883` | 18:25 | update: change Nuts & Plants image to nuts and chocolates |
-| `8f28239` | 18:20 | docs: save current project status with timestamps |
-| `351fe0b` | 18:10 | update: move Nuts & Plants to Project 5 in Portfolio |
-| `555c013` | 18:05 | update: replace ArchViz Studio with Diamond Restaurant in Portfolio |
-| `c07edc6` | 18:00 | update: add Mirra Montessori School to Portfolio (personal branding) |
-| `b92aefa` | 17:55 | update: rename Drifto Fashion to Drifto Men's Fashion |
-| `2d25fe3` | 17:50 | update: rename NOIR Fashion to Drifto Fashion in Portfolio |
-| `0049691` | 17:45 | docs: update PROJECT_STATUS.md with current project state, APIs, and all recent changes |
-| `66fbdab` | 17:40 | redesign: Portfolio section with 6 projects, updated years and stats |
-| `60730b2` | 17:35 | style: make website full width |
-| `cd5ba43` | 17:30 | update: change client satisfaction stat to 100% |
-| `17eaa02` | 17:25 | fix: remove invalid Lenis autoResize option |
-| `5ca747b` | 17:20 | perf: optimize mobile performance and reduce lag |
-| `1a9be47` | 17:15 | fix: make email button open mail app |
-| `d4bb7eb` | 17:10 | fix: make Book a Strategy Call buttons open phone dialer |
-| `110323e` | 17:05 | fix: increase watermark number opacity in Process and WhyBrandex |
-| `db850c0` | 17:00 | remove: custom cursor and mouse-tracking animations |
-| `8f221c0` | 16:55 | update: replace placeholder contact info with real email and phone |
-| `dc019a0` | 16:50 | fix: correct robots.ts to use Next.js metadata API |
-| `16984d3` | 16:45 | fix: explicitly set Next.js framework in vercel.json |
-| `0f168d2` | 16:40 | chore: add .env.example for contact form configuration |
-| `3ac4575` | 16:35 | feat: add contact form API route with Nodemailer |
-| `ae7eac7` | 16:30 | feat: add analytics, SEO, error handling, and remove unused GSAP |
-| `867d57a` | 16:25 | docs: rewrite README.md for Next.js 15 architecture |
-| `e48e2ec` | 16:20 | fix: remove broken noise.png reference and legacy vite.svg |
-| `8334644` | 16:15 | feat: complete Next.js 15 migration with 14-section landing page |
+| Commit | Message |
+|--------|---------|
+| `445f2eb` | remove: navigation buttons and dot indicators from portfolio |
+| `9d19a52` | feat: add left/right navigation buttons and dot indicators for project scroll |
+| `c5ed60c` | fix: horizontal scroll using ref-based transform for live maxScroll updates |
+| `014d142` | perf: optimize performance - remove GSAP, Next.js Image, reduce particles, cap FPS, font preload |
+| `e79238a` | fix: calculate exact pixel scroll distance with correct gap sizes |
+| `7136f4b` | fix: use DOM measurements for exact horizontal scroll distance |
+| `7876041` | fix: calculate exact scroll distance to eliminate empty space after last project |
+| `dd64dc5` | fix: remove empty space after last project by calculating exact scroll height |
+| `40b55e7` | fix: add mounted guard to prevent hydration mismatch in 3D carousel |
+| `59ef600` | remove: Nuts & Plants project from portfolio |
+| `82fe2d0` | feat: enable free 3D rotation in all directions with drag and momentum |
+| `c2259ae` | feat: add 3D rotating carousel with drag-to-spin and momentum for Services |
+| `4c62073` | fix: repair 3D tilt interactions in Services with reactive motion templates |
+| `d46710a` | fix: use useEffect instead of useState initializer to prevent window SSR error |
+| `366f493` | fix: split layout into server component and client wrapper to fix metadata export error |
+| `b72679f` | feat: replace loading screen with camera lens opening animation |
+| `48f687e` | fix: enable horizontal scroll for projects with sticky pinned section |
+| `1e7b885` | style: remove award-winning digital agency badge from hero |
+| `a8e3f3d` | feat: add 3D interactions to Process, TechStack, and Metrics sections |
+| `2989104` | feat: redesign Hero with cinematic effects, 3D Services network, and horizontal Portfolio scroll |
 
 ---
 
-## 12. How to Run
+## 13. How to Run
 
 ### Prerequisites
 - Node.js 20+

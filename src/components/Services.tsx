@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Palette, Code, Megaphone, TrendingUp, Smartphone, Layers } from 'lucide-react'
-import NetworkNode from '@/components/services/NetworkNode'
-import NetworkConnections from '@/components/services/NetworkConnections'
+import RotationCarousel from '@/components/services/RotationCarousel'
 import NetworkBackground from '@/components/services/NetworkBackground'
 import { useIsMobile } from '@/lib/hooks'
 
@@ -69,7 +68,7 @@ export default function Services() {
       <NetworkBackground isLoaded={isLoaded} baseDelay={baseDelay} />
 
       <div className="section-container relative z-10">
-        <div className="text-center mb-16 md:mb-24">
+        <div className="text-center mb-12 md:mb-16">
           <motion.span
             className="text-xs font-mono tracking-[0.3em] text-accent-blue uppercase mb-4 block"
             initial={{ opacity: 0, y: -20 }}
@@ -97,41 +96,7 @@ export default function Services() {
           </motion.p>
         </div>
 
-        <div className="relative" style={{ minHeight: isMobile ? 'auto' : '900px' }}>
-          <NetworkConnections isLoaded={isLoaded} baseDelay={baseDelay} />
-
-          {isMobile ? (
-            <div className="space-y-6">
-              {services.map((service, i) => (
-                <NetworkNode
-                  key={i}
-                  icon={service.icon}
-                  title={service.title}
-                  description={service.description}
-                  tags={service.tags}
-                  color={service.color}
-                  index={i}
-                  isLoaded={isLoaded}
-                  baseDelay={baseDelay}
-                />
-              ))}
-            </div>
-          ) : (
-            services.map((service, i) => (
-              <NetworkNode
-                key={i}
-                icon={service.icon}
-                title={service.title}
-                description={service.description}
-                tags={service.tags}
-                color={service.color}
-                index={i}
-                isLoaded={isLoaded}
-                baseDelay={baseDelay}
-              />
-            ))
-          )}
-        </div>
+        <RotationCarousel services={services} isLoaded={isLoaded} baseDelay={baseDelay} />
       </div>
     </section>
   )

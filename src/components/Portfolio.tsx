@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
@@ -50,44 +50,44 @@ const projects = [
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [maxScroll, setMaxScroll] = useState(0)
-
-  const scrollX = useMotionValue(0)
+  const [mounted, setMounted] = useState(false)
+  const [scrollDistance, setScrollDistance] = useState(0)
 
   useEffect(() => {
-    const updateMaxScroll = () => {
-      if (!trackRef.current) return
-      const trackWidth = trackRef.current.scrollWidth
-      const viewportWidth = window.innerWidth
-      setMaxScroll(Math.max(0, trackWidth - viewportWidth))
-    }
-
-    updateMaxScroll()
-    window.addEventListener('resize', updateMaxScroll)
-    return () => window.removeEventListener('resize', updateMaxScroll)
+    setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    const calc = () => {
+      const vw = window.innerWidth
+      const cardWidth = isMobile ? vw * 0.8 : vw * 0.35
+      const gap = isMobile ? 24 : 32
+      const padding = isMobile ? 24 : vw >= 1024 ? 64 : 48
+      const totalWidth = projects.length * cardWidth + (projects.length - 1) * gap + padding * 2
+      const visibleWidth = vw
+      setScrollDistance(Math.max(0, totalWidth - visibleWidth))
+    }
+    calc()
+    window.addEventListener('resize', calc)
+    return () => window.removeEventListener('resize', calc)
+  }, [mounted, isMobile])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  useEffect(() => {
-    const unsub = scrollYProgress.on('change', (v) => {
-      scrollX.set(-v * maxScroll)
-    })
-    return unsub
-  }, [scrollYProgress, maxScroll, scrollX])
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance])
 
-  const x = useTransform(scrollX, (v) => v)
+  if (!mounted) return null
 
   return (
     <section id="work" ref={containerRef} className="relative" style={{ height: `${projects.length * 50}vh` }}>
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-        <div className="section-container mb-8 md:mb-12">
+        <div className="px-6 md:px-12 lg:px-16 mb-8 md:mb-12">
           <motion.span
             className="text-xs font-mono tracking-[0.3em] text-accent-purple uppercase mb-4 block"
             initial={{ opacity: 0, x: -20 }}
@@ -109,7 +109,6 @@ export default function Portfolio() {
         </div>
 
         <motion.div
-          ref={trackRef}
           className="flex gap-6 md:gap-8 px-6 md:px-12 lg:px-16"
           style={{ x }}
         >

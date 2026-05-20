@@ -56,7 +56,6 @@ const services = [
 export default function Services() {
   const isMobile = useIsMobile()
   const [isLoaded, setIsLoaded] = useState(false)
-  const [activeCard, setActiveCard] = useState<number | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 200)
@@ -98,7 +97,7 @@ export default function Services() {
           </motion.p>
         </div>
 
-        <div className="relative" style={{ minHeight: isMobile ? 'auto' : '700px' }}>
+        <div className="relative" style={{ minHeight: isMobile ? 'auto' : '900px' }}>
           <NetworkConnections isLoaded={isLoaded} baseDelay={baseDelay} />
 
           {isMobile ? (
@@ -119,22 +118,17 @@ export default function Services() {
             </div>
           ) : (
             services.map((service, i) => (
-              <div
+              <NetworkNode
                 key={i}
-                onMouseEnter={() => setActiveCard(i)}
-                onMouseLeave={() => setActiveCard(null)}
-              >
-                <NetworkNode
-                  icon={service.icon}
-                  title={service.title}
-                  description={service.description}
-                  tags={service.tags}
-                  color={service.color}
-                  index={i}
-                  isLoaded={isLoaded}
-                  baseDelay={baseDelay}
-                />
-              </div>
+                icon={service.icon}
+                title={service.title}
+                description={service.description}
+                tags={service.tags}
+                color={service.color}
+                index={i}
+                isLoaded={isLoaded}
+                baseDelay={baseDelay}
+              />
             ))
           )}
         </div>

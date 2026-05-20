@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useCallback } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion'
 import { LucideIcon } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
 
@@ -16,19 +16,19 @@ interface NetworkNodeProps {
   baseDelay: number
 }
 
-const colorMap: Record<string, { bg: string; text: string; border: string; glow: string; accent: string }> = {
-  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue', border: 'border-accent-blue/20', glow: 'shadow-glow-blue', accent: 'accent-blue' },
-  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple', border: 'border-accent-purple/20', glow: 'shadow-glow-purple', accent: 'accent-purple' },
-  cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan', border: 'border-accent-cyan/20', glow: 'shadow-glow-cyan', accent: 'accent-cyan' },
+const colorMap: Record<string, { bg: string; text: string; border: string; glow: string }> = {
+  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue', border: 'border-accent-blue/20', glow: 'shadow-glow-blue' },
+  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple', border: 'border-accent-purple/20', glow: 'shadow-glow-purple' },
+  cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan', border: 'border-accent-cyan/20', glow: 'shadow-glow-cyan' },
 }
 
 const positions = [
-  { top: '2%', left: '50%', translateX: '-50%' },
-  { top: '28%', left: '5%', translateX: '0' },
-  { top: '28%', right: '5%', left: 'auto', translateX: '0' },
-  { top: '62%', left: '5%', translateX: '0' },
-  { top: '62%', right: '5%', left: 'auto', translateX: '0' },
-  { top: '90%', left: '50%', translateX: '-50%' },
+  { top: '2%', left: '50%', tx: '-50%' },
+  { top: '28%', left: '5%', tx: '0' },
+  { top: '28%', right: '5%', left: 'auto', tx: '0' },
+  { top: '62%', left: '5%', tx: '0' },
+  { top: '62%', right: '5%', left: 'auto', tx: '0' },
+  { top: '90%', left: '50%', tx: '-50%' },
 ]
 
 export default function NetworkNode({ icon: Icon, title, description, tags, color, index, isLoaded, baseDelay }: NetworkNodeProps) {
@@ -36,14 +36,16 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
   const isMobile = useIsMobile()
   const [isHovered, setIsHovered] = useState(false)
 
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
 
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), { stiffness: 150, damping: 20 })
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 20 })
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 150, damping: 20 })
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 150, damping: 20 })
   const scale = useSpring(1, { stiffness: 300, damping: 20 })
+
   const glareX = useSpring(50, { stiffness: 150, damping: 20 })
   const glareY = useSpring(50, { stiffness: 150, damping: 20 })
+  const glareBackground = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(59, 130, 246, 0.2), transparent 60%)`
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || isMobile) return
@@ -52,11 +54,11 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
     const centerY = rect.top + rect.height / 2
     const normalizedX = (e.clientX - centerX) / rect.width
     const normalizedY = (e.clientY - centerY) / rect.height
-    x.set(normalizedX)
-    y.set(normalizedY)
+    mouseX.set(normalizedX)
+    mouseY.set(normalizedY)
     glareX.set(((e.clientX - rect.left) / rect.width) * 100)
     glareY.set(((e.clientY - rect.top) / rect.height) * 100)
-  }, [x, y, glareX, glareY, isMobile])
+  }, [mouseX, mouseY, glareX, glareY, isMobile])
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true)
@@ -66,26 +68,21 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false)
     scale.set(1)
-    x.set(0)
-    y.set(0)
+    mouseX.set(0)
+    mouseY.set(0)
     glareX.set(50)
     glareY.set(50)
-  }, [x, y, scale, glareX, glareY])
+  }, [mouseX, mouseY, scale, glareX, glareY])
 
   const colors = colorMap[color] || colorMap.blue
   const pos = positions[index]
 
-  const accentGradient = color === 'blue'
-    ? 'from-transparent via-accent-blue/50 to-transparent'
-    : color === 'purple'
-      ? 'from-transparent via-accent-purple/50 to-transparent'
-      : 'from-transparent via-accent-cyan/50 to-transparent'
+  const accentColor = color === 'blue' ? 'accent-blue' : color === 'purple' ? 'accent-purple' : 'accent-cyan'
 
   if (isMobile) {
     return (
       <motion.div
-        ref={cardRef}
-        className="relative w-full"
+        className="relative w-full mb-6"
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={isLoaded ? { opacity: 1, y: 0, scale: 1 } : {}}
         transition={{ delay: baseDelay + index * 0.1, duration: 0.6, ease: 'easeOut' }}
@@ -132,10 +129,10 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
         top: pos.top,
         left: pos.left,
         right: pos.right,
-        transform: `translateX(${pos.translateX || '0'})`,
+        transform: `translateX(${pos.tx})`,
       }}
       initial={{ opacity: 0, scale: 0.8, y: 50 }}
-      animate={isLoaded ? { opacity: 1, scale: 1, y: 0 } : {}}
+      animate={{ opacity: isLoaded ? 1 : 0, scale: isLoaded ? 1 : 0.8, y: isLoaded ? 0 : 50 }}
       transition={{ delay: baseDelay + index * 0.12, duration: 0.7, ease: 'easeOut' }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
@@ -153,11 +150,10 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
         whileTap={{ scale: 0.98 }}
       >
         <motion.div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none rounded-2xl"
           style={{
-            background: isHovered
-              ? `radial-gradient(circle at ${glareX.get()}% ${glareY.get()}%, rgba(59, 130, 246, 0.15), transparent 60%)`
-              : 'none',
+            background: glareBackground,
+            opacity: isHovered ? 1 : 0,
           }}
         />
 
@@ -201,7 +197,7 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
         </div>
 
         <motion.div
-          className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r ${accentGradient}`}
+          className={`absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-${accentColor}/50 to-transparent`}
           style={{ opacity: isHovered ? 1 : 0 }}
         />
       </motion.div>

@@ -65,30 +65,11 @@ export default function Hero() {
         style={{ y: springY, opacity, scale }}
       >
         <motion.div
-          className="flex items-center justify-center gap-3 mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: baseDelay, duration: 0.6 }}
-        >
-          <span className="h-px w-10 bg-gradient-to-r from-transparent to-accent-blue/50" />
-          <span className="relative flex items-center gap-2 text-xs font-mono tracking-[0.3em] text-accent-blue uppercase">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-blue opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-blue" />
-            </span>
-            Award-Winning Digital Agency
-          </span>
-          <span className="h-px w-10 bg-gradient-to-l from-transparent to-accent-blue/50" />
-        </motion.div>
-
-        <div className="mb-10">
-          <motion.div
-            className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-accent-blue/60 to-transparent"
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={isLoaded ? { scaleX: 1, opacity: 1 } : {}}
-            transition={{ delay: baseDelay + 0.1, duration: 0.8, ease: 'easeOut' }}
-          />
-        </div>
+          className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-accent-blue/60 to-transparent mb-10"
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={isLoaded ? { scaleX: 1, opacity: 1 } : {}}
+          transition={{ delay: baseDelay + 0.1, duration: 0.8, ease: 'easeOut' }}
+        />
 
         <h1 className="font-display font-bold leading-[0.9] tracking-[-0.04em] mb-10">
           <div className="flex flex-wrap justify-center gap-x-3 md:gap-x-5 mb-1">

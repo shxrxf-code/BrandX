@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 import { useIsMobile } from '@/lib/hooks'
 
@@ -8,15 +9,15 @@ interface GradientOrbsProps {
   className?: string
 }
 
-export default function GradientOrbs({ count = 3, className = '' }: GradientOrbsProps) {
+function GradientOrbs({ count = 3, className = '' }: GradientOrbsProps) {
   const isMobile = useIsMobile()
 
-  if (isMobile) return null
+  if (isMobile || count === 0) return null
 
   const orbConfigs = [
-    { color: 'bg-accent-blue/30', size: 'w-[600px] h-[600px]', baseX: '20%', baseY: '10%' },
-    { color: 'bg-accent-purple/25', size: 'w-[500px] h-[500px]', baseX: '70%', baseY: '60%' },
-    { color: 'bg-accent-cyan/20', size: 'w-[400px] h-[400px]', baseX: '40%', baseY: '80%' },
+    { color: 'bg-accent-blue/20', size: 'w-[500px] h-[500px]', baseX: '20%', baseY: '10%' },
+    { color: 'bg-accent-purple/15', size: 'w-[400px] h-[400px]', baseX: '70%', baseY: '60%' },
+    { color: 'bg-accent-cyan/15', size: 'w-[350px] h-[350px]', baseX: '40%', baseY: '80%' },
   ]
 
   return (
@@ -27,11 +28,11 @@ export default function GradientOrbs({ count = 3, className = '' }: GradientOrbs
           className={`absolute ${orb.color} ${orb.size} rounded-full blur-[120px]`}
           style={{ left: orb.baseX, top: orb.baseY }}
           animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.3, 0.5, 0.3],
+            scale: [1, 1.05, 1],
+            opacity: [0.2, 0.35, 0.2],
           }}
           transition={{
-            duration: 4 + i * 2,
+            duration: 6 + i * 2,
             repeat: Infinity,
             ease: 'easeInOut',
           }}
@@ -40,3 +41,5 @@ export default function GradientOrbs({ count = 3, className = '' }: GradientOrbs
     </div>
   )
 }
+
+export default memo(GradientOrbs)

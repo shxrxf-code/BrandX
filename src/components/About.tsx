@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { CheckCircle2 } from 'lucide-react'
 import ScrollReveal from '@/components/ui/ScrollReveal'
 
@@ -99,11 +100,14 @@ export default function About() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80"
                   alt="Brandex Digital Team"
-                  className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-700"
+                  fill
+                  className="object-cover opacity-80 hover:opacity-100 transition-opacity duration-700"
                   loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  quality={80}
                 />
               </motion.div>
 

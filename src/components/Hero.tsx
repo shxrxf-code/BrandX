@@ -49,8 +49,8 @@ export default function Hero() {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      <GradientOrbs count={isMobile ? 1 : 3} />
-      <Particles count={isMobile ? 10 : 30} speed={0.2} size={1.5} color="255,255,255" />
+      <GradientOrbs count={isMobile ? 0 : 2} />
+      <Particles count={isMobile ? 5 : 20} speed={0.15} size={1} color="255,255,255" />
       <HeroSpotlight />
       <FloatingShapes />
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
+import Image from 'next/image'
 import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
@@ -120,15 +121,18 @@ export default function Portfolio() {
               onHoverEnd={() => setHoveredIndex(null)}
             >
               <div className="absolute inset-0 overflow-hidden rounded-3xl bg-background-secondary">
-                <motion.img
+                <Image
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700"
+                  fill
+                  className="object-cover transition-transform duration-700"
                   style={{
-                    scale: hoveredIndex === i ? 1.05 : 1,
+                    transform: hoveredIndex === i ? 'scale(1.05)' : 'scale(1)',
                     transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                   loading="lazy"
+                  sizes="(max-width: 768px) 80vw, 35vw"
+                  quality={80}
                 />
               </div>
 

@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useState, useEffect, useCallback } from 'react'
+import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
 
@@ -50,24 +50,42 @@ const projects = [
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [maxScroll, setMaxScroll] = useState(0)
+
+  const scrollX = useMotionValue(0)
+
+  useEffect(() => {
+    const updateMaxScroll = () => {
+      if (!trackRef.current) return
+      const trackWidth = trackRef.current.scrollWidth
+      const viewportWidth = window.innerWidth
+      setMaxScroll(Math.max(0, trackWidth - viewportWidth))
+    }
+
+    updateMaxScroll()
+    window.addEventListener('resize', updateMaxScroll)
+    return () => window.removeEventListener('resize', updateMaxScroll)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  const cardWidth = isMobile ? 85 : 35
-  const gap = isMobile ? 1.5 : 2
-  const totalCardsWidth = projects.length * cardWidth + (projects.length - 1) * gap
-  const visibleWidth = isMobile ? 80 : 35
-  const scrollDistance = totalCardsWidth - visibleWidth
-  const xProgress = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance])
-  const x = useTransform(xProgress, (v) => `${v}vw`)
+  useEffect(() => {
+    const unsub = scrollYProgress.on('change', (v) => {
+      scrollX.set(-v * maxScroll)
+    })
+    return unsub
+  }, [scrollYProgress, maxScroll, scrollX])
+
+  const x = useTransform(scrollX, (v) => v)
 
   return (
-    <section id="work" ref={containerRef} className="relative" style={{ height: `${projects.length * 55}vh` }}>
+    <section id="work" ref={containerRef} className="relative" style={{ height: `${projects.length * 50}vh` }}>
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
         <div className="section-container mb-8 md:mb-12">
           <motion.span
@@ -91,8 +109,9 @@ export default function Portfolio() {
         </div>
 
         <motion.div
+          ref={trackRef}
           className="flex gap-6 md:gap-8 px-6 md:px-12 lg:px-16"
-          style={{ x, width: `${totalCardsWidth}vw` }}
+          style={{ x }}
         >
           {projects.map((project, i) => (
             <motion.div

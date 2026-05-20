@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
 
@@ -54,34 +54,33 @@ export default function Portfolio() {
   const isMobile = useIsMobile()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
-  const [scrollDistance, setScrollDistance] = useState(0)
+  const maxScrollRef = useRef(0)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  const calcMaxScroll = () => {
+    const vw = window.innerWidth
+    const cardW = isMobile ? vw * 0.8 : vw * 0.35
+    const gap = isMobile ? 24 : 32
+    const pad = isMobile ? 24 : vw >= 1024 ? 64 : 48
+    const total = projects.length * cardW + (projects.length - 1) * gap + pad * 2
+    maxScrollRef.current = Math.max(0, total - vw)
+  }
+
   useEffect(() => {
-    if (!mounted) return
-    const calc = () => {
-      const vw = window.innerWidth
-      const cardWidth = isMobile ? vw * 0.8 : vw * 0.35
-      const gap = isMobile ? 24 : 32
-      const padding = isMobile ? 24 : vw >= 1024 ? 64 : 48
-      const totalWidth = projects.length * cardWidth + (projects.length - 1) * gap + padding * 2
-      const visibleWidth = vw
-      setScrollDistance(Math.max(0, totalWidth - visibleWidth))
-    }
-    calc()
-    window.addEventListener('resize', calc)
-    return () => window.removeEventListener('resize', calc)
-  }, [mounted, isMobile])
+    calcMaxScroll()
+    window.addEventListener('resize', calcMaxScroll)
+    return () => window.removeEventListener('resize', calcMaxScroll)
+  }, [isMobile])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollDistance])
+  const x = useTransform(scrollYProgress, (v) => -v * maxScrollRef.current)
 
   if (!mounted) return null
 

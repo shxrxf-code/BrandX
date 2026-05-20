@@ -1,15 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function BodyContent({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false)
 
-  useState(() => {
+  useEffect(() => {
     const handler = () => setIsLoaded(true)
     window.addEventListener('preloader-complete', handler)
     return () => window.removeEventListener('preloader-complete', handler)
-  })
+  }, [])
 
   return (
     <main

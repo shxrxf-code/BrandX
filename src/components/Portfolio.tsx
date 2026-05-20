@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
 
@@ -58,7 +58,6 @@ const projects = [
 
 export default function Portfolio() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
@@ -67,13 +66,13 @@ export default function Portfolio() {
     offset: ['start start', 'end end'],
   })
 
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', `-${projects.length * 35 - 100}%`])
-  const springX = isMobile ? x : useSpring(x, { stiffness: 100, damping: 30 })
+  const totalWidth = projects.length * (isMobile ? 85 : 40)
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', `-${totalWidth - 100}%`])
 
   return (
-    <section id="work" className="relative" ref={containerRef}>
-      <div className="section-container py-24 md:py-32 lg:py-40">
-        <div className="mb-16">
+    <section id="work" ref={containerRef} className="relative" style={{ height: isMobile ? '400vh' : '300vh' }}>
+      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+        <div className="section-container mb-8 md:mb-12">
           <motion.span
             className="text-xs font-mono tracking-[0.3em] text-accent-purple uppercase mb-4 block"
             initial={{ opacity: 0, x: -20 }}
@@ -84,7 +83,7 @@ export default function Portfolio() {
             Selected Work
           </motion.span>
           <motion.h2
-            className="font-display text-section font-bold text-gradient"
+            className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-gradient"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -94,31 +93,14 @@ export default function Portfolio() {
           </motion.h2>
         </div>
 
-        <motion.p
-          className="text-text-secondary max-w-md text-body-lg mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          A curated selection of our most impactful work, crafted for brands
-          that demand excellence.
-        </motion.p>
-      </div>
-
-      <div
-        ref={scrollRef}
-        className="overflow-hidden"
-        style={{ height: isMobile ? '70vh' : '80vh' }}
-      >
         <motion.div
-          className="flex gap-8 px-6 md:px-12 lg:px-16 h-full items-center"
-          style={{ x: springX, width: `${projects.length * 35}%` }}
+          className="flex gap-6 md:gap-8 px-6 md:px-12 lg:px-16"
+          style={{ x, width: `${totalWidth}%` }}
         >
           {projects.map((project, i) => (
             <motion.div
               key={i}
-              className="relative flex-shrink-0 h-[60vh] md:h-[70vh] w-[80vw] md:w-[35vw] group cursor-pointer"
+              className="relative flex-shrink-0 h-[55vh] md:h-[65vh] w-[80vw] md:w-[35vw] group cursor-pointer"
               onHoverStart={() => setHoveredIndex(i)}
               onHoverEnd={() => setHoveredIndex(null)}
             >
@@ -137,7 +119,7 @@ export default function Portfolio() {
 
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+              <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm font-mono tracking-wider text-accent-blue">
                     {project.category}
@@ -146,7 +128,7 @@ export default function Portfolio() {
                     {project.year}
                   </span>
                 </div>
-                <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-2 group-hover:text-accent-blue transition-colors duration-300">
+                <h3 className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 group-hover:text-accent-blue transition-colors duration-300">
                   {project.title}
                 </h3>
                 <p className="text-sm text-text-secondary leading-relaxed mb-4 max-w-md">

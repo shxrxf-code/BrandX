@@ -13,7 +13,8 @@ interface ServiceCard3DProps {
   color: string
   index: number
   total: number
-  rotation: number
+  rotateX: number
+  rotateY: number
   isHovered: boolean
   onHover: (index: number | null) => void
 }
@@ -24,21 +25,23 @@ const colorMap: Record<string, { bg: string; text: string; border: string; glow:
   cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan', border: 'border-accent-cyan/30', glow: 'shadow-glow-cyan', accent: '#22D3EE' },
 }
 
-function ServiceCard3D({ icon: Icon, title, description, tags, color, index, total, rotation, isHovered, onHover }: ServiceCard3DProps) {
+function ServiceCard3D({ icon: Icon, title, description, tags, color, index, total, rotateX, rotateY, isHovered, onHover }: ServiceCard3DProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const colors = colorMap[color] || colorMap.blue
 
   const angleStep = 360 / total
-  const angle = rotation + index * angleStep
-  const radius = isMobile ? 0 : 450
+  const baseAngle = index * angleStep
 
-  const radian = (angle * Math.PI) / 180
-  const x = Math.sin(radian) * radius
-  const z = Math.cos(radian) * radius - radius
-  const rotateY = angle
-  const scale = isMobile ? 1 : 0.6 + (z + radius) / (2 * radius) * 0.4
-  const opacity = isMobile ? 1 : 0.4 + (z + radius) / (2 * radius) * 0.6
+  const radianY = ((baseAngle + rotateY) * Math.PI) / 180
+  const radius = 420
+
+  const x = Math.sin(radianY) * radius
+  const z = Math.cos(radianY) * radius
+  const scale = 0.5 + ((z + radius) / (2 * radius)) * 0.5
+  const opacity = 0.3 + ((z + radius) / (2 * radius)) * 0.7
+
+  const tiltX = rotateX * 0.3
 
   if (isMobile) {
     return (
@@ -67,19 +70,20 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
   return (
     <motion.div
       ref={cardRef}
-      className="absolute left-1/2 top-1/2 w-[320px] cursor-pointer"
+      className="absolute left-1/2 top-1/2 w-[300px] cursor-grab active:cursor-grabbing"
       style={{
-        x,
+        x: x - 150,
+        y: -100 + Math.sin((tiltX * Math.PI) / 180) * 80 * Math.cos(radianY),
         z,
-        rotateY: rotateY,
+        rotateY: baseAngle + rotateY,
+        rotateX: tiltX,
         scale,
         opacity,
         transformStyle: 'preserve-3d',
-        perspective: '1200px',
       }}
       initial={false}
-      animate={{ x, z, rotateY, scale, opacity }}
-      transition={{ type: 'spring', stiffness: 80, damping: 20, mass: 0.8 }}
+      animate={{ x: x - 150, y: -100 + Math.sin((tiltX * Math.PI) / 180) * 80 * Math.cos(radianY), z, rotateY: baseAngle + rotateY, rotateX: tiltX, scale, opacity }}
+      transition={{ type: 'spring', stiffness: 70, damping: 18, mass: 0.8 }}
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(null)}
     >
@@ -130,29 +134,33 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   const isMobile = useIsMobile()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
-  const [currentRotation, setCurrentRotation] = useState(0)
 
-  const rotation = useMotionValue(0)
-  const velocity = useMotionValue(0)
+  const rotX = useMotionValue(-10)
+  const rotY = useMotionValue(0)
+  const velX = useMotionValue(0)
+  const velY = useMotionValue(0)
+
+  const [currentRotX, setCurrentRotX] = useState(-10)
+  const [currentRotY, setCurrentRotY] = useState(0)
 
   useEffect(() => {
-    const unsub = rotation.on('change', (v) => setCurrentRotation(v))
-    return unsub
-  }, [rotation])
+    const unsubX = rotX.on('change', (v) => setCurrentRotX(v))
+    const unsubY = rotY.on('change', (v) => setCurrentRotY(v))
+    return () => { unsubX(); unsubY() }
+  }, [rotX, rotY])
 
-  const lastX = useRef(0)
-  const dragStartX = useRef(0)
-  const dragStartRotation = useRef(0)
+  const lastPos = useRef({ x: 0, y: 0 })
   const autoRotateRef = useRef<number | null>(null)
   const lastMoveTime = useRef(0)
 
   const autoRotate = useCallback(() => {
     const now = Date.now()
-    if (!isDragging && now - lastMoveTime.current > 2000) {
-      rotation.set(rotation.get() + 0.15)
+    if (!isDragging && now - lastMoveTime.current > 3000) {
+      rotY.set(rotY.get() + 0.12)
+      rotX.set(rotX.get() + Math.sin(now / 3000) * 0.05)
     }
     autoRotateRef.current = requestAnimationFrame(autoRotate)
-  }, [rotation, isDragging])
+  }, [rotX, rotY, isDragging])
 
   useEffect(() => {
     if (!isMobile) {
@@ -165,31 +173,38 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     setIsDragging(true)
-    lastX.current = e.clientX
-    dragStartX.current = e.clientX
-    dragStartRotation.current = rotation.get()
+    lastPos.current = { x: e.clientX, y: e.clientY }
     lastMoveTime.current = Date.now()
     ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
-  }, [rotation])
+  }, [])
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (!isDragging) return
-    const deltaX = e.clientX - lastX.current
-    rotation.set(rotation.get() + deltaX * 0.4)
-    velocity.set(deltaX)
-    lastX.current = e.clientX
+    const deltaX = e.clientX - lastPos.current.x
+    const deltaY = e.clientY - lastPos.current.y
+    rotY.set(rotY.get() + deltaX * 0.35)
+    rotX.set(rotX.get() - deltaY * 0.25)
+    rotX.set(Math.max(-45, Math.min(45, rotX.get())))
+    velX.set(deltaY)
+    velY.set(deltaX)
+    lastPos.current = { x: e.clientX, y: e.clientY }
     lastMoveTime.current = Date.now()
-  }, [isDragging, rotation, velocity])
+  }, [isDragging, rotX, rotY, velX, velY])
 
   const handlePointerUp = useCallback(() => {
     setIsDragging(false)
-    const vel = velocity.get()
-    if (Math.abs(vel) > 2) {
-      const momentum = vel * 8
-      rotation.set(rotation.get() + momentum)
+    const vx = velX.get()
+    const vy = velY.get()
+    if (Math.abs(vy) > 2) {
+      rotY.set(rotY.get() + vy * 6)
     }
-    velocity.set(0)
-  }, [rotation, velocity])
+    if (Math.abs(vx) > 2) {
+      const newX = rotX.get() - vx * 4
+      rotX.set(Math.max(-45, Math.min(45, newX)))
+    }
+    velX.set(0)
+    velY.set(0)
+  }, [rotX, rotY, velX, velY])
 
   if (isMobile) {
     return (
@@ -204,7 +219,8 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
             color={service.color}
             index={i}
             total={services.length}
-            rotation={0}
+            rotateX={0}
+            rotateY={0}
             isHovered={hoveredIndex === i}
             onHover={setHoveredIndex}
           />
@@ -216,29 +232,29 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   return (
     <div
       ref={containerRef}
-      className="relative h-[600px] flex items-center justify-center"
-      style={{ perspective: '1200px' }}
+      className="relative h-[650px] flex items-center justify-center"
+      style={{ perspective: '1400px' }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div
-          className="w-[500px] h-[500px] rounded-full border border-white/5"
+          className="w-[550px] h-[550px] rounded-full border border-white/5"
           style={{ transform: 'rotateX(60deg)' }}
           initial={{ scale: 0, opacity: 0 }}
           animate={isLoaded ? { scale: 1, opacity: 1 } : {}}
           transition={{ delay: baseDelay + 0.5, duration: 1 }}
         />
         <motion.div
-          className="absolute w-[350px] h-[350px] rounded-full border border-accent-blue/10"
+          className="absolute w-[380px] h-[380px] rounded-full border border-accent-blue/10"
           style={{ transform: 'rotateX(60deg)' }}
           initial={{ scale: 0, opacity: 0 }}
           animate={isLoaded ? { scale: 1, opacity: 1 } : {}}
           transition={{ delay: baseDelay + 0.7, duration: 1 }}
         />
         <motion.div
-          className="absolute w-[150px] h-[150px] rounded-full bg-accent-blue/5 blur-2xl"
+          className="absolute w-[180px] h-[180px] rounded-full bg-accent-blue/5 blur-2xl"
           initial={{ scale: 0 }}
           animate={isLoaded ? { scale: 1 } : {}}
           transition={{ delay: baseDelay + 0.3, duration: 0.8 }}
@@ -247,7 +263,7 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
 
       <motion.div
         className="absolute inset-0 flex items-center justify-center"
-        style={{ transformStyle: 'preserve-3d', rotateX: -5 }}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         {services.map((service, i) => (
           <ServiceCard3D
@@ -259,7 +275,8 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
             color={service.color}
             index={i}
             total={services.length}
-            rotation={currentRotation}
+            rotateX={currentRotX}
+            rotateY={currentRotY}
             isHovered={hoveredIndex === i}
             onHover={setHoveredIndex}
           />
@@ -274,7 +291,7 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
       >
         <span className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/50" />
-          Drag to rotate
+          Drag to rotate in any direction
         </span>
       </motion.div>
     </div>

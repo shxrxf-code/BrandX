@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
 
 const projects = [
@@ -54,7 +54,6 @@ export default function Portfolio() {
   const isMobile = useIsMobile()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [mounted, setMounted] = useState(false)
-  const [activeIndex, setActiveIndex] = useState(0)
   const maxScrollRef = useRef(0)
 
   useEffect(() => {
@@ -81,26 +80,7 @@ export default function Portfolio() {
     offset: ['start start', 'end end'],
   })
 
-  useEffect(() => {
-    if (!mounted) return
-    const unsub = scrollYProgress.on('change', (v) => {
-      setActiveIndex(Math.round(v * (projects.length - 1)))
-    })
-    return unsub
-  }, [mounted, scrollYProgress])
-
   const scrollX = useTransform(scrollYProgress, (v) => -v * maxScrollRef.current)
-
-  const scrollToIndex = (index: number) => {
-    if (!containerRef.current || maxScrollRef.current === 0) return
-    const newIndex = Math.max(0, Math.min(index, projects.length - 1))
-    setActiveIndex(newIndex)
-    const progress = newIndex / (projects.length - 1)
-    const sectionTop = containerRef.current.offsetTop
-    const sectionHeight = containerRef.current.offsetHeight
-    const targetScroll = sectionTop + progress * sectionHeight
-    window.scrollTo({ top: targetScroll, behavior: 'smooth' })
-  }
 
   if (!mounted) return null
 
@@ -128,117 +108,83 @@ export default function Portfolio() {
           </motion.h2>
         </div>
 
-        <div className="relative">
-          <motion.button
-            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full glass-strong flex items-center justify-center text-white hover:text-accent-blue transition-colors duration-300"
-            onClick={() => scrollToIndex(activeIndex - 1)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={activeIndex === 0}
-            style={{ opacity: activeIndex === 0 ? 0.3 : 1, pointerEvents: activeIndex === 0 ? 'none' : 'auto' }}
-          >
-            <ChevronLeft size={24} />
-          </motion.button>
+        <motion.div
+          className="flex gap-6 md:gap-8 px-6 md:px-12 lg:px-16"
+          style={{ x: scrollX }}
+        >
+          {projects.map((project, i) => (
+            <motion.div
+              key={i}
+              className="relative flex-shrink-0 h-[55vh] md:h-[65vh] w-[80vw] md:w-[35vw] group cursor-pointer"
+              onHoverStart={() => setHoveredIndex(i)}
+              onHoverEnd={() => setHoveredIndex(null)}
+            >
+              <div className="absolute inset-0 overflow-hidden rounded-3xl bg-background-secondary">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover transition-transform duration-700"
+                  style={{
+                    transform: hoveredIndex === i ? 'scale(1.05)' : 'scale(1)',
+                    transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                  loading="lazy"
+                  sizes="(max-width: 768px) 80vw, 35vw"
+                  quality={80}
+                />
+              </div>
 
-          <motion.div
-            className="flex gap-6 md:gap-8 px-6 md:px-12 lg:px-16"
-            style={{ x: scrollX }}
-          >
-            {projects.map((project, i) => (
-              <motion.div
-                key={i}
-                className="relative flex-shrink-0 h-[55vh] md:h-[65vh] w-[80vw] md:w-[35vw] group cursor-pointer"
-                onHoverStart={() => setHoveredIndex(i)}
-                onHoverEnd={() => setHoveredIndex(null)}
-              >
-                <div className="absolute inset-0 overflow-hidden rounded-3xl bg-background-secondary">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-700"
-                    style={{
-                      transform: hoveredIndex === i ? 'scale(1.05)' : 'scale(1)',
-                      transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-                    }}
-                    loading="lazy"
-                    sizes="(max-width: 768px) 80vw, 35vw"
-                    quality={80}
-                  />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+
+              <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-mono tracking-wider text-accent-blue">
+                    {project.category}
+                  </span>
+                  <span className="text-sm text-text-muted">
+                    {project.year}
+                  </span>
                 </div>
-
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-
-                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-mono tracking-wider text-accent-blue">
-                      {project.category}
-                    </span>
-                    <span className="text-sm text-text-muted">
-                      {project.year}
-                    </span>
-                  </div>
-                  <h3 className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 group-hover:text-accent-blue transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-text-secondary leading-relaxed mb-4 max-w-md">
-                    {project.description}
-                  </p>
-
-                  <motion.div
-                    className="flex gap-6"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={hoveredIndex === i ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div>
-                      <div className="text-lg font-bold text-accent-blue">{project.metrics.conversion}</div>
-                      <div className="text-[10px] text-text-muted uppercase tracking-wider">Conversion</div>
-                    </div>
-                    <div>
-                      <div className="text-lg font-bold text-accent-purple">{project.metrics.traffic}</div>
-                      <div className="text-[10px] text-text-muted uppercase tracking-wider">Traffic</div>
-                    </div>
-                    <div>
-                      <div className="text-lg font-bold text-accent-cyan">{project.metrics.engagement}</div>
-                      <div className="text-[10px] text-text-muted uppercase tracking-wider">Engagement</div>
-                    </div>
-                  </motion.div>
-                </div>
+                <h3 className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 group-hover:text-accent-blue transition-colors duration-300">
+                  {project.title}
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed mb-4 max-w-md">
+                  {project.description}
+                </p>
 
                 <motion.div
-                  className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={hoveredIndex === i ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                  className="flex gap-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={hoveredIndex === i ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <ArrowUpRight size={20} className="text-white" />
+                  <div>
+                    <div className="text-lg font-bold text-accent-blue">{project.metrics.conversion}</div>
+                    <div className="text-[10px] text-text-muted uppercase tracking-wider">Conversion</div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-accent-purple">{project.metrics.traffic}</div>
+                    <div className="text-[10px] text-text-muted uppercase tracking-wider">Traffic</div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-accent-cyan">{project.metrics.engagement}</div>
+                    <div className="text-[10px] text-text-muted uppercase tracking-wider">Engagement</div>
+                  </div>
                 </motion.div>
+              </div>
+
+              <motion.div
+                className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={hoveredIndex === i ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ArrowUpRight size={20} className="text-white" />
               </motion.div>
-            ))}
-          </motion.div>
-
-          <motion.button
-            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full glass-strong flex items-center justify-center text-white hover:text-accent-blue transition-colors duration-300"
-            onClick={() => scrollToIndex(activeIndex + 1)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={activeIndex === projects.length - 1}
-            style={{ opacity: activeIndex === projects.length - 1 ? 0.3 : 1, pointerEvents: activeIndex === projects.length - 1 ? 'none' : 'auto' }}
-          >
-            <ChevronRight size={24} />
-          </motion.button>
-        </div>
-
-        <div className="flex items-center justify-center gap-2 mt-6">
-          {projects.map((_, i) => (
-            <button
-              key={i}
-              className={`h-1.5 rounded-full transition-all duration-300 ${i === activeIndex ? 'w-8 bg-accent-blue' : 'w-4 bg-white/20 hover:bg-white/40'}`}
-              onClick={() => scrollToIndex(i)}
-            />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

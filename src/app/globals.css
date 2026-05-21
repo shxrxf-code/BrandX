@@ -478,3 +478,60 @@ html.lenis {
     grid-template-columns: 1fr;
   }
 }
+
+/* 3D Holographic card utilities */
+.holographic-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.holographic-layer {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.holographic-layer-fg {
+  transform: translateZ(30px);
+}
+
+.holographic-layer-mg {
+  transform: translateZ(15px);
+}
+
+.holographic-layer-bg {
+  transform: translateZ(0px);
+}
+
+.holographic-layer-float {
+  transform: translateZ(50px);
+}
+
+.holographic-glare {
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.holographic-shine {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.holographic-edge {
+  background: linear-gradient(
+    to var(--edge-direction, bottom right),
+    var(--edge-color, rgba(124, 58, 237, 0.2)) 0%,
+    transparent 40%
+  );
+  pointer-events: none;
+}

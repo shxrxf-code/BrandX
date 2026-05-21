@@ -1,10 +1,9 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
+import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, ExternalLink } from 'lucide-react'
-import { useIsMobile, useReducedMotion } from '@/lib/hooks'
+import { ExternalLink } from 'lucide-react'
+import HolographicCard from '@/components/portfolio/HolographicCard'
 
 const projects = [
   {
@@ -64,178 +63,7 @@ const projects = [
   },
 ]
 
-function ProjectCard({
-  project,
-  index,
-  isHovered,
-  onHover,
-  onLeave,
-  isMobile,
-  reducedMotion,
-}: {
-  project: typeof projects[0]
-  index: number
-  isHovered: boolean
-  onHover: () => void
-  onLeave: () => void
-  isMobile: boolean
-  reducedMotion: boolean
-}) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [tilt, setTilt] = useState({ x: 0, y: 0 })
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || reducedMotion || !cardRef.current) return
-    const rect = cardRef.current.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -10
-    setTilt({ x, y })
-  }, [isMobile, reducedMotion])
-
-  const handleMouseLeave = useCallback(() => {
-    setTilt({ x: 0, y: 0 })
-    onLeave()
-  }, [onLeave])
-
-  return (
-    <motion.div
-      ref={cardRef}
-      className={`relative overflow-hidden rounded-2xl cursor-pointer group ${project.span}`}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        transform: isHovered
-          ? `perspective(800px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg) scale(1.02)`
-          : 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)',
-        transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={onHover}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* Background image */}
-      <div className="absolute inset-0 bg-background-secondary">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover transition-transform duration-500"
-          style={{ transform: isHovered ? 'scale(1.08)' : 'scale(1)' }}
-          loading="lazy"
-          sizes="(max-width: 768px) 90vw, 40vw"
-          quality={80}
-        />
-      </div>
-
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-
-      {/* Glow border on hover */}
-      <div
-        className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          boxShadow: `inset 0 0 0 1px ${project.accent}40, 0 0 30px ${project.accent}15`,
-        }}
-      />
-
-      {/* Content */}
-      <div className="absolute inset-0 p-5 md:p-6 flex flex-col justify-end">
-        {/* Category + Year */}
-        <div className="flex items-center justify-between mb-2">
-          <span
-            className="text-[10px] font-mono tracking-[0.2em] uppercase px-2 py-0.5 rounded-full border"
-            style={{
-              color: project.accent,
-              borderColor: `${project.accent}40`,
-              background: `${project.accent}10`,
-            }}
-          >
-            {project.category}
-          </span>
-          <span className="text-xs text-text-muted font-mono">{project.year}</span>
-        </div>
-
-        {/* Title */}
-        <h3 className="font-display text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 group-hover:text-accent-blue transition-colors duration-200">
-          {project.title}
-        </h3>
-
-        {/* Description - hidden on small cards, shown on large */}
-        {project.span.includes('row-span-2') && (
-          <p className="text-xs text-text-secondary leading-relaxed mb-3 max-w-sm line-clamp-2">
-            {project.description}
-          </p>
-        )}
-
-        {/* Metrics - reveal on hover */}
-        <motion.div
-          className="flex gap-5 md:gap-6 mt-2"
-          initial={{ opacity: 0, y: 8 }}
-          animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div>
-            <div className="text-sm font-bold" style={{ color: project.accent }}>
-              {project.metrics.conversion}
-            </div>
-            <div className="text-[9px] text-text-muted uppercase tracking-wider">Conversion</div>
-          </div>
-          <div>
-            <div className="text-sm font-bold" style={{ color: project.accent }}>
-              {project.metrics.traffic}
-            </div>
-            <div className="text-[9px] text-text-muted uppercase tracking-wider">Traffic</div>
-          </div>
-          <div>
-            <div className="text-sm font-bold" style={{ color: project.accent }}>
-              {project.metrics.engagement}
-            </div>
-            <div className="text-[9px] text-text-muted uppercase tracking-wider">Engagement</div>
-          </div>
-        </motion.div>
-
-        {/* Tech stack pills - only on large card */}
-        {project.span.includes('row-span-2') && (
-          <motion.div
-            className="flex gap-1.5 mt-3"
-            initial={{ opacity: 0 }}
-            animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.1 }}
-          >
-            {project.tech.map((tech, i) => (
-              <span
-                key={i}
-                className="text-[9px] font-mono tracking-wider uppercase px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-text-muted"
-              >
-                {tech}
-              </span>
-            ))}
-          </motion.div>
-        )}
-      </div>
-
-      {/* Arrow button */}
-      <motion.div
-        className="absolute top-4 right-4 w-9 h-9 rounded-full backdrop-blur-sm flex items-center justify-center"
-        style={{
-          background: `${project.accent}20`,
-          border: `1px solid ${project.accent}30`,
-        }}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={isHovered ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.2 }}
-      >
-        <ArrowUpRight size={16} style={{ color: project.accent }} />
-      </motion.div>
-    </motion.div>
-  )
-}
-
 export default function Portfolio() {
-  const isMobile = useIsMobile()
-  const reducedMotion = useReducedMotion()
   const [mounted, setMounted] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -274,15 +102,13 @@ export default function Portfolio() {
           className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 auto-rows-[280px] md:auto-rows-[240px]"
         >
           {projects.map((project, i) => (
-            <ProjectCard
+            <HolographicCard
               key={i}
               project={project}
               index={i}
               isHovered={hoveredIndex === i}
               onHover={() => setHoveredIndex(i)}
               onLeave={() => setHoveredIndex(null)}
-              isMobile={isMobile}
-              reducedMotion={reducedMotion}
             />
           ))}
         </div>

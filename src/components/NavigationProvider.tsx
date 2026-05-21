@@ -1,16 +1,16 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, useRef } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useIsMobile } from '@/lib/hooks'
 
 interface TransitionContextType {
-  navigate: (href: string, e?: React.MouseEvent) => void
+  triggerTransition: () => void
   isTransitioning: boolean
 }
 
 const TransitionContext = createContext<TransitionContextType>({
-  navigate: () => {},
+  triggerTransition: () => {},
   isTransitioning: false,
 })
 
@@ -20,35 +20,29 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
   const isMobile = useIsMobile()
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [transitionKey, setTransitionKey] = useState(0)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const navigate = useCallback((href: string, e?: React.MouseEvent) => {
-    if (e) e.preventDefault()
+  const triggerTransition = useCallback(() => {
     if (isTransitioning) return
-
-    const targetId = href.startsWith('#') ? href.slice(1) : href
-    const target = document.getElementById(targetId)
-    if (!target) {
-      window.location.href = href
-      return
-    }
-
     setIsTransitioning(true)
     setTransitionKey((k) => k + 1)
+    setTimeout(() => setIsTransitioning(false), 800)
+  }, [isTransitioning])
 
-    const duration = isMobile ? 500 : 700
-
-    timeoutRef.current = setTimeout(() => {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-
-      setTimeout(() => {
-        setIsTransitioning(false)
-      }, 300)
-    }, duration * 0.4)
-  }, [isTransitioning, isMobile])
+  // Intercept nav link clicks for transition effect
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      const link = target.closest('a[href^="#"]')
+      if (link && !link.closest('#mobile-menu')) {
+        triggerTransition()
+      }
+    }
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [triggerTransition])
 
   return (
-    <TransitionContext.Provider value={{ navigate, isTransitioning }}>
+    <TransitionContext.Provider value={{ triggerTransition, isTransitioning }}>
       {children}
       <TransitionOverlay key={transitionKey} isMobile={isMobile} />
     </TransitionContext.Provider>
@@ -59,7 +53,6 @@ function TransitionOverlay({ isMobile }: { isMobile: boolean }) {
   return (
     <div className="fixed inset-0 z-[9000] pointer-events-none">
       <AnimatePresence>
-        {/* Sweep line */}
         <motion.div
           className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent-blue to-transparent"
           initial={{ scaleX: 0, opacity: 0 }}
@@ -69,7 +62,6 @@ function TransitionOverlay({ isMobile }: { isMobile: boolean }) {
           style={{ transformOrigin: 'left' }}
         />
 
-        {/* Radial glow sweep */}
         <motion.div
           className="absolute inset-0"
           initial={{ opacity: 0 }}
@@ -80,7 +72,6 @@ function TransitionOverlay({ isMobile }: { isMobile: boolean }) {
           }}
         />
 
-        {/* Blur overlay */}
         <motion.div
           className="absolute inset-0 bg-background/20 backdrop-blur-sm"
           initial={{ opacity: 0 }}

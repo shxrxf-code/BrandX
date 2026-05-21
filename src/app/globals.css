@@ -405,6 +405,11 @@
     background: radial-gradient(circle at center, var(--tw-gradient-stops));
   }
 
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
   .text-stroke {
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
     color: transparent;

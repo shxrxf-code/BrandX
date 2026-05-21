@@ -4,62 +4,71 @@ import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useIsMobile, useReducedMotion } from '@/lib/hooks'
 
-function ApertureBlade({ index, total, progress }: { index: number; total: number; progress: number }) {
+function ApertureBlade({
+  index,
+  total,
+  openProgress,
+}: {
+  index: number
+  total: number
+  openProgress: number
+}) {
   const angle = (360 / total) * index
+  const bladeAngle = 360 / total
+
   const bladePath = useMemo(() => {
     const cx = 200
     const cy = 200
-    const innerR = 20
+    const innerR = 15
     const outerR = 280
-    const bladeAngle = 360 / total
-    const startAngle = (bladeAngle * 0.15) * (Math.PI / 180)
-    const endAngle = (bladeAngle * 0.85) * (Math.PI / 180)
+    const startAngle = (bladeAngle * 0.1) * (Math.PI / 180)
+    const endAngle = (bladeAngle * 0.9) * (Math.PI / 180)
 
     const x1 = cx + innerR * Math.cos(startAngle)
     const y1 = cy + innerR * Math.sin(startAngle)
-    const x2 = cx + outerR * Math.cos(startAngle - 0.15)
-    const y2 = cy + outerR * Math.sin(startAngle - 0.15)
-    const x3 = cx + outerR * Math.cos(endAngle + 0.15)
-    const y3 = cy + outerR * Math.sin(endAngle + 0.15)
+    const x2 = cx + outerR * Math.cos(startAngle - 0.2)
+    const y2 = cy + outerR * Math.sin(startAngle - 0.2)
+    const x3 = cx + outerR * Math.cos(endAngle + 0.2)
+    const y3 = cy + outerR * Math.sin(endAngle + 0.2)
     const x4 = cx + innerR * Math.cos(endAngle)
     const y4 = cy + innerR * Math.sin(endAngle)
 
     return `M ${x1} ${y1} L ${x2} ${y2} L ${x3} ${y3} L ${x4} ${y4} Z`
-  }, [total])
+  }, [bladeAngle])
+
+  const bladeRotation = openProgress * (bladeAngle * 0.6)
 
   return (
-    <g transform={`rotate(${angle} 200 200)`}>
-      <motion.path
+    <g
+      transform={`rotate(${angle + bladeRotation} 200 200)`}
+      style={{ transition: `transform ${openProgress > 0 ? 1.2 : 0.6}s cubic-bezier(0.16, 1, 0.3, 1)` }}
+    >
+      <path
         d={bladePath}
         fill="url(#bladeGradient)"
-        stroke="rgba(59, 130, 246, 0.15)"
+        stroke="rgba(59, 130, 246, 0.12)"
         strokeWidth="0.5"
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: progress < 0.5 ? 1 : 1 - (progress - 0.5) * 2,
-        }}
-        transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.05 }}
+        opacity={openProgress < 0.85 ? 1 : Math.max(0, 1 - (openProgress - 0.85) * 6.67)}
+        style={{ transition: `opacity ${openProgress > 0 ? 1 : 0.4}s ease` }}
       />
     </g>
   )
 }
 
-function Particles({ isMobile, reducedMotion }: { isMobile: boolean; reducedMotion: boolean }) {
-  const particleCount = isMobile ? 8 : 20
+function Particles({ isMobile }: { isMobile: boolean }) {
+  const count = isMobile ? 6 : 16
 
   const particles = useMemo(() => {
-    return Array.from({ length: particleCount }, (_, i) => ({
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 2 + 0.5,
+      size: Math.random() * 1.5 + 0.5,
       duration: Math.random() * 3 + 2,
       delay: Math.random() * 2,
-      opacity: Math.random() * 0.3 + 0.1,
+      opacity: Math.random() * 0.25 + 0.05,
     }))
-  }, [particleCount])
-
-  if (reducedMotion) return null
+  }, [count])
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -67,22 +76,9 @@ function Particles({ isMobile, reducedMotion }: { isMobile: boolean; reducedMoti
         <motion.div
           key={p.id}
           className="absolute rounded-full bg-accent-blue"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0, p.opacity, 0],
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            delay: p.delay,
-            ease: 'easeInOut',
-          }}
+          style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size }}
+          animate={{ y: [0, -25, 0], opacity: [0, p.opacity, 0] }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: 'easeInOut' }}
         />
       ))}
     </div>
@@ -91,10 +87,10 @@ function Particles({ isMobile, reducedMotion }: { isMobile: boolean; reducedMoti
 
 function HUDRing({ radius, duration, direction, opacity }: { radius: number; duration: number; direction: number; opacity: number }) {
   const circumference = 2 * Math.PI * radius
-  const dashArray = `${circumference * 0.15} ${circumference * 0.85}`
+  const dashArray = `${circumference * 0.12} ${circumference * 0.88}`
 
   return (
-    <motion.circle
+    <circle
       cx="200"
       cy="200"
       r={radius}
@@ -102,13 +98,10 @@ function HUDRing({ radius, duration, direction, opacity }: { radius: number; dur
       stroke={`rgba(59, 130, 246, ${opacity})`}
       strokeWidth="0.5"
       strokeDasharray={dashArray}
-      animate={{ rotate: direction * 360 }}
-      transition={{
-        duration,
-        repeat: Infinity,
-        ease: 'linear',
+      style={{
+        transformOrigin: '200px 200px',
+        animation: `spin ${duration}s linear ${direction < 0 ? 'reverse' : 'normal'} infinite`,
       }}
-      style={{ transformOrigin: '200px 200px' }}
     />
   )
 }
@@ -118,6 +111,7 @@ export default function Preloader() {
   const reducedMotion = useReducedMotion()
   const [phase, setPhase] = useState<'init' | 'forming' | 'loading' | 'opening' | 'complete'>('init')
   const [loadProgress, setLoadProgress] = useState(0)
+  const [openProgress, setOpenProgress] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -126,13 +120,13 @@ export default function Preloader() {
       return
     }
 
-    const t1 = setTimeout(() => setPhase('forming'), 200)
-    const t2 = setTimeout(() => setPhase('loading'), 800)
-    const t3 = setTimeout(() => setPhase('opening'), isMobile ? 2000 : 2400)
+    const t1 = setTimeout(() => setPhase('forming'), 150)
+    const t2 = setTimeout(() => setPhase('loading'), 600)
+    const t3 = setTimeout(() => setPhase('opening'), isMobile ? 1800 : 2200)
     const t4 = setTimeout(() => {
       setPhase('complete')
       window.dispatchEvent(new CustomEvent('preloader-complete'))
-    }, isMobile ? 3000 : 3400)
+    }, isMobile ? 3200 : 3600)
 
     return () => {
       clearTimeout(t1)
@@ -150,227 +144,258 @@ export default function Preloader() {
             clearInterval(interval)
             return 100
           }
-          return prev + Math.random() * 8 + 2
+          return prev + Math.random() * 10 + 3
         })
-      }, 80)
+      }, 60)
       return () => clearInterval(interval)
+    }
+  }, [phase])
+
+  useEffect(() => {
+    if (phase === 'opening') {
+      const duration = isMobile ? 1200 : 1400
+      const start = performance.now()
+
+      const animate = (now: number) => {
+        const elapsed = now - start
+        const raw = Math.min(elapsed / duration, 1)
+        const eased = raw < 0.5
+          ? 4 * raw * raw * raw
+          : 1 - Math.pow(-2 * raw + 2, 3) / 2
+        setOpenProgress(eased)
+
+        if (raw < 1) {
+          requestAnimationFrame(animate)
+        }
+      }
+
+      requestAnimationFrame(animate)
+    }
+  }, [phase, isMobile])
+
+  useEffect(() => {
+    if (phase === 'complete') {
+      setOpenProgress(1)
     }
   }, [phase])
 
   if (phase === 'complete') return null
 
   const bladeCount = isMobile ? 6 : 8
-  const apertureProgress = phase === 'opening' ? 1 : phase === 'loading' ? 0 : 0
+
+  /*
+   * THE REVEAL:
+   * - The website is always rendered behind this preloader layer
+   * - A black overlay covers the entire screen
+   * - A radial-gradient mask creates a transparent "hole" in the center
+   * - As the hole grows (openProgress 0→1), the website becomes visible through it
+   * - The aperture blades sit on top, retracting in sync
+   */
+  const maskRadius = phase === 'opening'
+    ? openProgress * 150
+    : phase === 'loading'
+    ? 0
+    : phase === 'forming'
+    ? 0
+    : 0
+
+  const blurAmount = phase === 'opening'
+    ? Math.max(0, 8 - openProgress * 16)
+    : 8
+
+  const scaleAmount = phase === 'opening'
+    ? 1.025 - openProgress * 0.025
+    : 1.025
+
+  const brightnessAmount = phase === 'opening'
+    ? 0.7 + openProgress * 0.3
+    : 0.7
 
   return (
     <AnimatePresence>
       <motion.div
         ref={containerRef}
-        className="fixed inset-0 z-[10000] overflow-hidden bg-background"
+        className="fixed inset-0 z-[10000] overflow-hidden pointer-events-none"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
-        {/* Ambient glow behind lens */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          animate={{
-            opacity: phase === 'forming' ? [0, 0.3, 0.15] : phase === 'loading' ? 0.15 : phase === 'opening' ? [0.15, 0.4, 0] : 0,
+        {/*
+          LAYER 1: Black overlay with radial mask
+          The mask creates a hole that grows — revealing the website behind
+        */}
+        <div
+          className="absolute inset-0 bg-background"
+          style={{
+            WebkitMaskImage: `radial-gradient(circle at 50% 50%, transparent ${maskRadius}%, black ${maskRadius + 3}%)`,
+            maskImage: `radial-gradient(circle at 50% 50%, transparent ${maskRadius}%, black ${maskRadius + 3}%)`,
+            transition: phase === 'opening'
+              ? '-webkit-mask-image 1.4s cubic-bezier(0.16, 1, 0.3, 1), mask-image 1.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              : 'none',
           }}
-          transition={{ duration: 1.5, ease: 'easeInOut' }}
-        >
-          <div className="w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-gradient-radial from-accent-blue/20 via-accent-purple/10 to-transparent blur-[80px]" />
-        </motion.div>
+        />
 
-        {/* Particles */}
-        {(phase === 'loading' || phase === 'opening') && (
-          <Particles isMobile={isMobile} reducedMotion={reducedMotion} />
-        )}
+        {/*
+          LAYER 2: Edge glow at the mask boundary
+          Creates a luminous ring at the edge of the opening
+        */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            WebkitMaskImage: `radial-gradient(circle at 50% 50%, transparent ${Math.max(0, maskRadius - 2)}%, rgba(59, 130, 246, 0.15) ${maskRadius}%, transparent ${maskRadius + 4}%, black ${maskRadius + 6}%)`,
+            maskImage: `radial-gradient(circle at 50% 50%, transparent ${Math.max(0, maskRadius - 2)}%, rgba(59, 130, 246, 0.15) ${maskRadius}%, transparent ${maskRadius + 4}%, black ${maskRadius + 6}%)`,
+            transition: phase === 'opening'
+              ? '-webkit-mask-image 1.4s cubic-bezier(0.16, 1, 0.3, 1), mask-image 1.4s cubic-bezier(0.16, 1, 0.3, 1)'
+              : 'none',
+          }}
+        />
 
-        {/* Main lens assembly */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: phase === 'init' ? 0 : 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        {/*
+          LAYER 3: Aperture blade assembly
+          Sits on top of the reveal, blades retract as the hole opens
+        */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <motion.div
-            className="relative w-[280px] h-[280px] md:w-[420px] md:h-[420px]"
+            className="relative w-[300px] h-[300px] md:w-[440px] md:h-[440px]"
             animate={
               phase === 'opening'
-                ? { scale: [1, 1.05, 1.2], opacity: [1, 0.8, 0] }
+                ? { scale: 1 + openProgress * 0.8, opacity: openProgress < 0.8 ? 1 : Math.max(0, 1 - (openProgress - 0.8) * 5) }
                 : phase === 'loading'
                 ? { scale: 1, opacity: 1 }
-                : { scale: [0.8, 1], opacity: [0, 1] }
+                : { scale: [0.7, 1], opacity: [0, 1] }
             }
-            transition={{
-              duration: phase === 'opening' ? 1 : 0.8,
-              ease: phase === 'opening' ? [0.25, 0.46, 0.45, 0.94] : 'easeOut',
-            }}
+            transition={{ duration: phase === 'opening' ? 0.3 : 0.6, ease: 'easeOut' }}
           >
-            {/* SVG Aperture */}
             <svg
               viewBox="0 0 400 400"
               className="absolute inset-0 w-full h-full"
-              style={{ filter: 'drop-shadow(0 0 30px rgba(59, 130, 246, 0.15))' }}
+              style={{ filter: 'drop-shadow(0 0 40px rgba(59, 130, 246, 0.1))' }}
             >
               <defs>
                 <linearGradient id="bladeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="rgba(26, 26, 26, 0.95)" />
-                  <stop offset="50%" stopColor="rgba(15, 15, 15, 0.98)" />
-                  <stop offset="100%" stopColor="rgba(10, 10, 10, 0.95)" />
+                  <stop offset="0%" stopColor="rgba(22, 22, 22, 0.97)" />
+                  <stop offset="50%" stopColor="rgba(12, 12, 12, 0.99)" />
+                  <stop offset="100%" stopColor="rgba(8, 8, 8, 0.97)" />
                 </linearGradient>
                 <radialGradient id="lensReflection" cx="35%" cy="35%" r="65%">
-                  <stop offset="0%" stopColor="rgba(255, 255, 255, 0.08)" />
-                  <stop offset="50%" stopColor="rgba(59, 130, 246, 0.03)" />
+                  <stop offset="0%" stopColor="rgba(255, 255, 255, 0.06)" />
+                  <stop offset="50%" stopColor="rgba(59, 130, 246, 0.02)" />
                   <stop offset="100%" stopColor="transparent" />
                 </radialGradient>
                 <clipPath id="lensClip">
-                  <circle cx="200" cy="200" r="190" />
+                  <circle cx="200" cy="200" r="195" />
                 </clipPath>
               </defs>
 
-              {/* Outer lens ring */}
+              <circle cx="200" cy="200" r="195" fill="none" stroke="rgba(59, 130, 246, 0.08)" strokeWidth="0.5" />
+
+              {!isMobile && (
+                <g clipPath="url(#lensClip)">
+                  <HUDRing radius={185} duration={25} direction={1} opacity={0.06} />
+                  <HUDRing radius={175} duration={18} direction={-1} opacity={0.04} />
+                  <HUDRing radius={165} duration={30} direction={1} opacity={0.03} />
+                </g>
+              )}
+
+              <g clipPath="url(#lensClip)">
+                {Array.from({ length: bladeCount }, (_, i) => (
+                  <ApertureBlade key={i} index={i} total={bladeCount} openProgress={openProgress} />
+                ))}
+                <circle cx="200" cy="200" r="195" fill="url(#lensReflection)" />
+              </g>
+
               <circle
                 cx="200"
                 cy="200"
                 r="195"
                 fill="none"
-                stroke="rgba(59, 130, 246, 0.1)"
-                strokeWidth="1"
-              />
-
-              {/* HUD rings */}
-              {!isMobile && !reducedMotion && (
-                <g clipPath="url(#lensClip)">
-                  <HUDRing radius={180} duration={20} direction={1} opacity={0.08} />
-                  <HUDRing radius={170} duration={15} direction={-1} opacity={0.06} />
-                  <HUDRing radius={160} duration={25} direction={1} opacity={0.04} />
-                </g>
-              )}
-
-              {/* Aperture blades */}
-              <g clipPath="url(#lensClip)">
-                {Array.from({ length: bladeCount }, (_, i) => (
-                  <ApertureBlade
-                    key={i}
-                    index={i}
-                    total={bladeCount}
-                    progress={apertureProgress}
-                  />
-                ))}
-
-                {/* Lens reflection overlay */}
-                <circle cx="200" cy="200" r="190" fill="url(#lensReflection)" />
-              </g>
-
-              {/* Inner glow ring */}
-              <motion.circle
-                cx="200"
-                cy="200"
-                r="190"
-                fill="none"
-                stroke="rgba(59, 130, 246, 0.2)"
+                stroke="rgba(59, 130, 246, 0.15)"
                 strokeWidth="0.5"
-                animate={{
-                  opacity: phase === 'loading' ? [0.2, 0.4, 0.2] : phase === 'opening' ? [0.4, 0] : 0.2,
-                }}
-                transition={{ duration: 2, repeat: phase === 'loading' ? Infinity : 0 }}
+                opacity={phase === 'loading' ? 0.15 : phase === 'opening' ? Math.max(0, 0.15 - openProgress * 0.3) : 0.15}
+                style={{ transition: 'opacity 0.5s ease' }}
               />
             </svg>
 
-            {/* Center brand logo */}
-            <motion.div
+            {/* Center brand + loading */}
+            <div
               className="absolute inset-0 flex flex-col items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: phase === 'loading' ? 1 : phase === 'opening' ? 0 : 0,
+              style={{
+                opacity: phase === 'loading' ? 1 : phase === 'opening' ? Math.max(0, 1 - openProgress * 2.5) : 0,
+                transition: 'opacity 0.4s ease',
               }}
-              transition={{ duration: 0.5 }}
             >
-              <motion.span
-                className="font-display text-xl md:text-2xl font-bold tracking-tight text-white text-glow-blue"
-                initial={{ opacity: 0, y: 10 }}
-                animate={phase === 'loading' ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.2, duration: 0.4 }}
-              >
+              <span className="font-display text-xl md:text-2xl font-bold tracking-tight text-white text-glow-blue">
                 BRANDEX
                 <span className="ml-1 text-[10px] font-normal text-text-muted tracking-[0.2em] uppercase">
                   Digital
                 </span>
-              </motion.span>
+              </span>
 
-              {/* Loading progress */}
-              <motion.div
-                className="mt-4 flex items-center gap-3"
-                initial={{ opacity: 0 }}
-                animate={phase === 'loading' ? { opacity: 1 } : {}}
-                transition={{ delay: 0.4 }}
-              >
+              <div className="mt-4 flex items-center gap-3">
                 <div className="w-24 h-[1px] bg-white/10 rounded-full overflow-hidden">
-                  <motion.div
+                  <div
                     className="h-full bg-gradient-to-r from-accent-blue to-accent-purple rounded-full"
-                    style={{ width: `${Math.min(loadProgress, 100)}%` }}
-                    transition={{ duration: 0.1 }}
+                    style={{ width: `${Math.min(loadProgress, 100)}%`, transition: 'width 0.08s linear' }}
                   />
                 </div>
                 <span className="text-[10px] font-mono text-text-muted tracking-wider tabular-nums">
                   {Math.min(Math.round(loadProgress), 100)}%
                 </span>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
 
-        {/* Cinematic scan lines during opening */}
+        {/* Particles */}
+        {(phase === 'loading' || phase === 'opening') && (
+          <Particles isMobile={isMobile} />
+        )}
+
+        {/* Cinematic scan lines */}
         {phase === 'opening' && (
-          <motion.div
+          <div
             className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.03, 0] }}
-            transition={{ duration: 1 }}
             style={{
+              opacity: Math.max(0, 0.04 - openProgress * 0.08),
               background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(59, 130, 246, 0.03) 2px, rgba(59, 130, 246, 0.03) 4px)',
+              transition: 'opacity 0.3s ease',
             }}
           />
         )}
 
         {/* Corner HUD accents */}
-        {!isMobile && !reducedMotion && (
-          <motion.div
+        {!isMobile && (
+          <div
             className="absolute inset-0 pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: phase === 'loading' ? 1 : 0 }}
-            transition={{ duration: 0.5 }}
+            style={{
+              opacity: phase === 'loading' ? 1 : phase === 'opening' ? Math.max(0, 1 - openProgress * 2) : 0,
+              transition: 'opacity 0.4s ease',
+            }}
           >
-            {/* Top-left */}
             <div className="absolute top-8 left-8 flex items-center gap-2">
               <div className="w-8 h-[1px] bg-accent-blue/30" />
               <span className="text-[9px] font-mono text-accent-blue/40 tracking-widest uppercase">SYS.INIT</span>
             </div>
-            {/* Top-right */}
             <div className="absolute top-8 right-8 flex items-center gap-2">
               <span className="text-[9px] font-mono text-accent-blue/40 tracking-widest uppercase">LENS.ACTIVE</span>
               <div className="w-8 h-[1px] bg-accent-blue/30" />
             </div>
-            {/* Bottom-left */}
             <div className="absolute bottom-8 left-8 flex items-center gap-2">
               <div className="w-8 h-[1px] bg-accent-purple/30" />
               <span className="text-[9px] font-mono text-accent-purple/40 tracking-widest uppercase">APERTURE.f/1.4</span>
             </div>
-            {/* Bottom-right */}
             <div className="absolute bottom-8 right-8 flex items-center gap-2">
               <span className="text-[9px] font-mono text-accent-purple/40 tracking-widest uppercase">RENDER.CORE</span>
               <div className="w-8 h-[1px] bg-accent-purple/30" />
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Vignette */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 50%, rgba(5, 5, 5, 0.6) 100%)',
+            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(5, 5, 5, 0.7) 100%)',
           }}
         />
       </motion.div>

@@ -1,9 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef, useState, useCallback, useEffect } from 'react'
+import { motion, useMotionValue, useSpring, useInView } from 'framer-motion'
 import { ArrowRight, CheckCircle2, Zap, Award, Code2, TrendingUp } from 'lucide-react'
 import ScrollReveal from '@/components/ui/ScrollReveal'
 import MagneticButton from '@/components/ui/MagneticButton'
+import { useIsMobile } from '@/lib/hooks'
 
 const reasons = [
   {
@@ -12,6 +14,7 @@ const reasons = [
     title: 'Strategic Thinking',
     description: 'Every project begins with deep research and strategic planning. We don\'t guess—we analyze, test, and validate.',
     color: 'blue',
+    accent: '#3B82F6',
   },
   {
     number: '02',
@@ -19,6 +22,7 @@ const reasons = [
     title: 'Award-Winning Design',
     description: 'Our design philosophy blends aesthetics with functionality, creating experiences that are both beautiful and effective.',
     color: 'purple',
+    accent: '#A855F7',
   },
   {
     number: '03',
@@ -26,6 +30,7 @@ const reasons = [
     title: 'Technical Excellence',
     description: 'We build with the latest technologies, ensuring your digital products are fast, secure, and scalable.',
     color: 'cyan',
+    accent: '#22D3EE',
   },
   {
     number: '04',
@@ -33,19 +38,139 @@ const reasons = [
     title: 'Results That Matter',
     description: 'Beautiful design means nothing without results. We measure success by the impact we create for your business.',
     color: 'blue',
+    accent: '#3B82F6',
   },
 ]
 
-const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue', border: 'border-accent-blue/20' },
-  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple', border: 'border-accent-purple/20' },
-  cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan', border: 'border-accent-cyan/20' },
+function ReasonCard({ reason, index, isActive }: { reason: typeof reasons[0]; index: number; isActive: boolean }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
+  const [isHovered, setIsHovered] = useState(false)
+
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const rotateX = useSpring(useMotionValue(0), { stiffness: 150, damping: 20 })
+  const rotateY = useSpring(useMotionValue(0), { stiffness: 150, damping: 20 })
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile || !cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    rotateX.set(((e.clientY - centerY) / rect.height) * -8)
+    rotateY.set(((e.clientX - centerX) / rect.width) * 8)
+  }, [isMobile, rotateX, rotateY])
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false)
+    rotateX.set(0)
+    rotateY.set(0)
+  }, [rotateX, rotateY])
+
+  return (
+    <ScrollReveal delay={index * 0.08} direction="left" distance={40}>
+      <motion.div
+        ref={cardRef}
+        className={`glass-card rounded-3xl p-8 group relative overflow-hidden border transition-all duration-500 cursor-pointer ${
+          isActive ? 'border-white/15' : 'border-white/[0.06] hover:border-white/15'
+        }`}
+        style={{
+          perspective: '1000px',
+          rotateX: isMobile ? 0 : rotateX,
+          rotateY: isMobile ? 0 : rotateY,
+          transformStyle: 'preserve-3d',
+        }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        whileHover={isMobile ? {} : { y: -4 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {/* Active indicator */}
+        <motion.div
+          className="absolute top-0 left-0 w-1 h-full rounded-l-3xl"
+          style={{ background: reason.accent }}
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: isActive || isHovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* Glow effect */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at 20% 50%, ${reason.accent}12, transparent 60%)`,
+          }}
+        />
+
+        <div className="relative z-10 flex items-start gap-6">
+          <div className="flex-shrink-0">
+            <motion.div
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-3`}
+              style={{
+                background: `${reason.accent}15`,
+                border: `1px solid ${reason.accent}30`,
+              }}
+              animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+              <reason.icon size={24} style={{ color: reason.accent }} />
+            </motion.div>
+            <motion.span
+              className="font-display text-2xl font-bold block"
+              style={{ color: reason.accent }}
+              animate={{ opacity: isActive || isHovered ? 1 : 0.4 }}
+              transition={{ duration: 0.3 }}
+            >
+              {reason.number}
+            </motion.span>
+          </div>
+
+          <div>
+            <motion.h3
+              className="font-display text-xl font-bold mb-3 transition-colors duration-300"
+              animate={{ color: isActive || isHovered ? reason.accent : '#fff' }}
+            >
+              {reason.title}
+            </motion.h3>
+            <p className="text-text-secondary text-sm leading-relaxed">
+              {reason.description}
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </ScrollReveal>
+  )
 }
 
 export default function WhyBrandex() {
+  const isMobile = useIsMobile()
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  useEffect(() => {
+    if (!sectionRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const idx = parseInt(entry.target.getAttribute('data-reason-index') || '0')
+          if (entry.isIntersecting) {
+            setActiveIndex(idx)
+          }
+        })
+      },
+      { threshold: 0.5, rootMargin: '-10% 0px -30% 0px' }
+    )
+
+    const cards = sectionRef.current.querySelectorAll('[data-reason-index]')
+    cards.forEach((card) => observer.observe(card))
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section className="section-padding relative overflow-hidden">
-      {/* Background elements */}
+    <section ref={sectionRef} className="section-padding relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-cyan/5 to-transparent pointer-events-none" />
       <div className="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-accent-purple/10 blur-[200px] -translate-y-1/2 pointer-events-none" />
 
@@ -92,10 +217,20 @@ export default function WhyBrandex() {
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
                 {['Data-Driven Decisions', 'Transparent Process', 'Dedicated Support'].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-sm text-text-secondary">
-                    <CheckCircle2 size={16} className="text-accent-blue" />
+                  <motion.div
+                    key={i}
+                    className="flex items-center gap-3 text-sm text-text-secondary"
+                    whileHover={{ x: 4 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.3, rotate: 15 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                    >
+                      <CheckCircle2 size={16} className="text-accent-blue" />
+                    </motion.div>
                     <span>{item}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </motion.div>
 
@@ -114,48 +249,11 @@ export default function WhyBrandex() {
 
           {/* Reason cards */}
           <div className="space-y-6">
-            {reasons.map((reason, i) => {
-              const colors = colorMap[reason.color] || colorMap.blue
-              const Icon = reason.icon
-              return (
-                <ScrollReveal key={i} delay={i * 0.1} direction="left" distance={40}>
-                  <motion.div
-                    className={`glass-card rounded-3xl p-8 group relative overflow-hidden border transition-all duration-500 hover:border-accent-blue/20`}
-                    whileHover={{ scale: 1.02, y: -4 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    {/* Glow effect on hover */}
-                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
-                      style={{
-                        background: `radial-gradient(circle at 20% 50%, ${reason.color === 'blue' ? 'rgba(59,130,246,0.1)' : reason.color === 'purple' ? 'rgba(168,85,247,0.1)' : 'rgba(34,211,238,0.1)'}, transparent 60%)`,
-                      }}
-                    />
-
-                    <div className="relative z-10 flex items-start gap-6">
-                      {/* Icon + Number */}
-                      <div className="flex-shrink-0">
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-3 ${colors.bg} group-hover:scale-110 transition-transform duration-500`}>
-                          <Icon size={24} className={colors.text} />
-                        </div>
-                        <span className={`font-display text-2xl font-bold ${colors.text} opacity-40 group-hover:opacity-100 transition-opacity duration-500`}>
-                          {reason.number}
-                        </span>
-                      </div>
-
-                      {/* Content */}
-                      <div>
-                        <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-accent-blue transition-colors duration-300">
-                          {reason.title}
-                        </h3>
-                        <p className="text-text-secondary text-sm leading-relaxed">
-                          {reason.description}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </ScrollReveal>
-              )
-            })}
+            {reasons.map((reason, i) => (
+              <div key={i} data-reason-index={i}>
+                <ReasonCard reason={reason} index={i} isActive={i === activeIndex} />
+              </div>
+            ))}
           </div>
         </div>
       </div>

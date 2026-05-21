@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
 import ScrollReveal from '@/components/ui/ScrollReveal'
@@ -34,14 +34,45 @@ const faqs = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const toggleFAQ = useCallback((index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index))
+  }, [])
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, index: number) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      toggleFAQ(index)
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      const next = Math.min(index + 1, faqs.length - 1)
+      document.getElementById(`faq-button-${next}`)?.focus()
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      const prev = Math.max(index - 1, 0)
+      document.getElementById(`faq-button-${prev}`)?.focus()
+    }
+  }, [toggleFAQ])
+
+  // Smooth scroll to open item
+  useEffect(() => {
+    if (openIndex !== null && containerRef.current) {
+      const button = document.getElementById(`faq-button-${openIndex}`)
+      if (button) {
+        button.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }
+    }
+  }, [openIndex])
 
   return (
     <section className="section-padding relative overflow-hidden">
-      {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-blue/5 to-transparent pointer-events-none" />
 
       <div className="section-container relative z-10">
-        {/* Section header */}
         <ScrollReveal>
           <div className="text-center mb-16">
             <motion.span
@@ -65,8 +96,7 @@ export default function FAQ() {
           </div>
         </ScrollReveal>
 
-        {/* FAQ list */}
-        <div className="max-w-3xl mx-auto space-y-4" role="region" aria-label="Frequently asked questions">
+        <div ref={containerRef} className="max-w-3xl mx-auto space-y-4" role="region" aria-label="Frequently asked questions">
           {faqs.map((faq, i) => {
             const isOpen = openIndex === i
             const buttonId = `faq-button-${i}`
@@ -83,7 +113,8 @@ export default function FAQ() {
                   <button
                     id={buttonId}
                     className="w-full flex items-center justify-between text-left p-6 group"
-                    onClick={() => setOpenIndex(isOpen ? null : i)}
+                    onClick={() => toggleFAQ(i)}
+                    onKeyDown={(e) => handleKeyDown(e, i)}
                     aria-expanded={isOpen}
                     aria-controls={panelId}
                   >

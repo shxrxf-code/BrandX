@@ -1,15 +1,17 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import MagneticButton from '@/components/ui/MagneticButton'
 import ScrollReveal from '@/components/ui/ScrollReveal'
 import Marquee from '@/components/ui/Marquee'
-import { useIsMobile } from '@/lib/hooks'
+import { useIsMobile, useMousePosition } from '@/lib/hooks'
 
 export default function CTA() {
   const containerRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+  const mouse = useMousePosition()
+  const [isHovered, setIsHovered] = useState(false)
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -18,6 +20,9 @@ export default function CTA() {
 
   const scale = useTransform(scrollYProgress, [0, 0.5], [isMobile ? 0.95 : 0.9, 1])
   const opacity = useTransform(scrollYProgress, [0, 0.3], [0, 1])
+
+  const spotlightX = isMobile ? 50 : ((mouse.x - (typeof window !== 'undefined' ? window.innerWidth : 0) / 2) / (typeof window !== 'undefined' ? window.innerWidth : 1)) * 100 + 50
+  const spotlightY = isMobile ? 50 : ((mouse.y - (typeof window !== 'undefined' ? window.innerHeight : 0) / 2) / (typeof window !== 'undefined' ? window.innerHeight : 1)) * 100 + 50
 
   const marqueeItems = [
     'LET\'S BUILD SOMETHING',
@@ -31,10 +36,35 @@ export default function CTA() {
   ]
 
   return (
-    <section id="contact" className="section-padding relative overflow-hidden" ref={containerRef}>
+    <section
+      id="contact"
+      ref={containerRef}
+      className="section-padding relative overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Mouse-following spotlight */}
+      {!isMobile && (
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-500"
+          style={{
+            opacity: isHovered ? 1 : 0.3,
+            background: `radial-gradient(600px circle at ${spotlightX}% ${spotlightY}%, rgba(59, 130, 246, 0.08), transparent 60%)`,
+          }}
+        />
+      )}
+
       <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-accent-blue/10 blur-[200px]" />
-        <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-purple/10 blur-[150px]" />
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-accent-blue/10 blur-[200px]"
+          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.7, 0.5] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-purple/10 blur-[150px]"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        />
       </div>
 
       <motion.div

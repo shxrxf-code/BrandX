@@ -1,28 +1,30 @@
 'use client'
 
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform, useInView } from 'framer-motion'
 import { useIsMobile } from '@/lib/hooks'
 
 const technologies = [
-  { name: 'Next.js', category: 'Framework', level: 95, icon: '⬢' },
-  { name: 'React', category: 'Library', level: 98, icon: '⚛' },
-  { name: 'TypeScript', category: 'Language', level: 95, icon: '🔷' },
-  { name: 'Tailwind CSS', category: 'Styling', level: 92, icon: '🎨' },
-  { name: 'Framer Motion', category: 'Animation', level: 90, icon: '✨' },
-  { name: 'Node.js', category: 'Runtime', level: 88, icon: '🟢' },
-  { name: 'PostgreSQL', category: 'Database', level: 85, icon: '🐘' },
-  { name: 'AWS', category: 'Cloud', level: 82, icon: '☁' },
-  { name: 'Figma', category: 'Design', level: 95, icon: '🎯' },
-  { name: 'Three.js', category: '3D', level: 78, icon: '🧊' },
-  { name: 'GSAP', category: 'Animation', level: 88, icon: '🚀' },
-  { name: 'Vercel', category: 'Deployment', level: 92, icon: '▲' },
+  { name: 'Next.js', category: 'Framework', level: 95, icon: '⬢', description: 'React framework for production' },
+  { name: 'React', category: 'Library', level: 98, icon: '⚛', description: 'UI component library' },
+  { name: 'TypeScript', category: 'Language', level: 95, icon: '🔷', description: 'Typed JavaScript' },
+  { name: 'Tailwind CSS', category: 'Styling', level: 92, icon: '🎨', description: 'Utility-first CSS' },
+  { name: 'Framer Motion', category: 'Animation', level: 90, icon: '✨', description: 'Production-ready motion' },
+  { name: 'Node.js', category: 'Runtime', level: 88, icon: '🟢', description: 'Server-side JavaScript' },
+  { name: 'PostgreSQL', category: 'Database', level: 85, icon: '🐘', description: 'Relational database' },
+  { name: 'AWS', category: 'Cloud', level: 82, icon: '☁', description: 'Cloud infrastructure' },
+  { name: 'Figma', category: 'Design', level: 95, icon: '🎯', description: 'Collaborative design' },
+  { name: 'Three.js', category: '3D', level: 78, icon: '🧊', description: 'WebGL 3D library' },
+  { name: 'GSAP', category: 'Animation', level: 88, icon: '🚀', description: 'Professional animation' },
+  { name: 'Vercel', category: 'Deployment', level: 92, icon: '▲', description: 'Frontend cloud platform' },
 ]
 
 function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technologies[0]; index: number; isLoaded: boolean; baseDelay: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const [isHovered, setIsHovered] = useState(false)
+  const barRef = useRef<HTMLDivElement>(null)
+  const isBarInView = useInView(barRef, { once: true, margin: '-20px' })
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -69,12 +71,12 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
           </div>
           <span className="text-xs text-text-muted">{tech.category}</span>
         </div>
-        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+        <div ref={barRef} className="h-1.5 bg-white/5 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-accent-blue to-accent-purple rounded-full"
             initial={{ width: 0 }}
-            animate={isLoaded ? { width: `${tech.level}%` } : {}}
-            transition={{ duration: 1, delay: baseDelay + index * 0.08 + 0.3, ease: 'easeOut' }}
+            animate={isBarInView ? { width: `${tech.level}%` } : {}}
+            transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
           />
         </div>
       </motion.div>
@@ -84,7 +86,7 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
   return (
     <motion.div
       ref={cardRef}
-      className="relative"
+      className="relative group"
       initial={{ opacity: 0, y: 40, rotateX: -10 }}
       animate={isLoaded ? { opacity: 1, y: 0, rotateX: 0 } : {}}
       transition={{ delay: baseDelay + index * 0.08, duration: 0.6, ease: 'easeOut' }}
@@ -92,6 +94,16 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Tooltip */}
+      <motion.div
+        className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20 text-xs text-white whitespace-nowrap z-20 pointer-events-none"
+        initial={{ opacity: 0, y: 5 }}
+        animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 5 }}
+        transition={{ duration: 0.2 }}
+      >
+        {tech.description}
+      </motion.div>
+
       <motion.div
         className="rounded-xl border border-white/10 bg-background-secondary/90 backdrop-blur-xl p-5 cursor-pointer overflow-hidden relative"
         style={{
@@ -114,7 +126,7 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
           },
         }}
       >
-        <div className={`absolute inset-0 bg-gradient-to-br from-accent-blue/5 to-accent-purple/5 transition-opacity duration-500`} style={{ opacity: isHovered ? 1 : 0 }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-accent-blue/5 to-accent-purple/5 transition-opacity duration-500" style={{ opacity: isHovered ? 1 : 0 }} />
 
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-3">
@@ -143,14 +155,15 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
           </div>
 
           <motion.div
+            ref={barRef}
             className="h-1.5 bg-white/5 rounded-full overflow-hidden"
             style={{ transform: 'translateZ(10px)' }}
           >
             <motion.div
               className="h-full bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan rounded-full"
               initial={{ width: 0 }}
-              animate={isLoaded ? { width: `${tech.level}%` } : {}}
-              transition={{ duration: 1.2, delay: baseDelay + index * 0.08 + 0.3, ease: 'easeOut' }}
+              animate={isBarInView ? { width: `${tech.level}%` } : {}}
+              transition={{ duration: 1.2, delay: 0.2, ease: 'easeOut' }}
             />
           </motion.div>
 

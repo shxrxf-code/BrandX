@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, useMotionValue } from 'framer-motion'
-import { LucideIcon } from 'lucide-react'
+import { LucideIcon, Pause, Play } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
 
 interface ServiceCard3DProps {
@@ -129,6 +129,7 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   const [mounted, setMounted] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
   useEffect(() => {
     setMounted(true)
@@ -152,14 +153,25 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   const autoRotateRef = useRef<number | null>(null)
   const lastMoveTime = useRef(0)
 
+  // Snap to nearest card on drag release
+  const snapToNearest = useCallback(() => {
+    const angleStep = 360 / services.length
+    const currentY = rotY.get()
+    const normalizedAngle = ((currentY % 360) + 360) % 360
+    const nearestStep = Math.round(normalizedAngle / angleStep) * angleStep
+    const targetY = currentY + (nearestStep - normalizedAngle)
+
+    rotY.set(targetY)
+  }, [rotY, services.length])
+
   const autoRotate = useCallback(() => {
     const now = Date.now()
-    if (!isDragging && now - lastMoveTime.current > 3000) {
+    if (isAutoPlaying && !isDragging && now - lastMoveTime.current > 3000) {
       rotY.set(rotY.get() + 0.12)
       rotX.set(rotX.get() + Math.sin(now / 3000) * 0.05)
     }
     autoRotateRef.current = requestAnimationFrame(autoRotate)
-  }, [rotX, rotY, isDragging])
+  }, [rotX, rotY, isDragging, isAutoPlaying])
 
   useEffect(() => {
     if (!isMobile && mounted) {
@@ -203,7 +215,26 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
     }
     velX.set(0)
     velY.set(0)
-  }, [rotX, rotY, velX, velY])
+
+    // Snap to nearest card
+    setTimeout(snapToNearest, 200)
+  }, [rotX, rotY, velX, velY, snapToNearest])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        rotY.set(rotY.get() - 360 / services.length)
+        lastMoveTime.current = Date.now()
+      }
+      if (e.key === 'ArrowRight') {
+        rotY.set(rotY.get() + 360 / services.length)
+        lastMoveTime.current = Date.now()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [rotY, services.length])
 
   if (!mounted) {
     return (
@@ -290,17 +321,34 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
         ))}
       </motion.div>
 
-      <motion.div
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 text-text-muted text-xs tracking-wider"
-        initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: baseDelay + 1.5 }}
-      >
-        <span className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/50" />
-          Drag to rotate in any direction
-        </span>
-      </motion.div>
+      {/* Controls */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4">
+        <motion.button
+          className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
+          onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          aria-label={isAutoPlaying ? 'Pause rotation' : 'Resume rotation'}
+        >
+          {isAutoPlaying ? (
+            <Pause size={12} className="text-text-muted" />
+          ) : (
+            <Play size={12} className="text-text-muted" />
+          )}
+        </motion.button>
+
+        <motion.span
+          className="text-text-muted text-xs tracking-wider"
+          initial={{ opacity: 0 }}
+          animate={isLoaded ? { opacity: 1 } : {}}
+          transition={{ delay: baseDelay + 1.5 }}
+        >
+          <span className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/50" />
+            Drag to rotate · Arrow keys to navigate
+          </span>
+        </motion.span>
+      </div>
     </div>
   )
 }

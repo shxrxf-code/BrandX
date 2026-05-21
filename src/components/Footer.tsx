@@ -1,7 +1,8 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { ArrowUpRight, Mail, Phone, MapPin, ArrowUp } from 'lucide-react'
 import { TwitterIcon, LinkedinIcon, InstagramIcon, DribbbleIcon } from '@/components/ui/SocialIcons'
 
 const socialLinks = [
@@ -30,15 +31,35 @@ const footerLinks = {
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const [showBackToTop, setShowBackToTop] = useState(false)
+  const ref = useState<HTMLElement | null>(null)[1]
+  const isInView = useInView(ref as any, { once: true, margin: '-100px' })
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 500)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
-    <footer className="relative pt-24 pb-8 border-t border-white/5">
+    <footer ref={ref} className="relative pt-24 pb-8 border-t border-white/5">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-accent-blue/5 to-transparent pointer-events-none" />
 
       <div className="section-container relative z-10">
         {/* Main footer grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20">
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-20"
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
           {/* Brand column */}
           <div className="lg:col-span-2">
             <motion.a
@@ -138,14 +159,19 @@ export default function Footer() {
                     className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
                     whileHover={{ x: 4 }}
                   >
-                    <Icon width={16} height={16} className="group-hover:text-accent-blue transition-colors" />
+                    <motion.div
+                      whileHover={{ scale: 1.2, rotate: 5 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                    >
+                      <Icon width={16} height={16} className="group-hover:text-accent-blue transition-colors" />
+                    </motion.div>
                     {social.label}
                   </motion.a>
                 )
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Divider */}
         <div className="section-divider mb-8" />
@@ -163,6 +189,23 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Back to top button */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center hover:bg-accent-blue/20 hover:border-accent-blue/40 transition-colors duration-300"
+            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            onClick={scrollToTop}
+            aria-label="Back to top"
+          >
+            <ArrowUp size={18} className="text-white" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </footer>
   )
 }

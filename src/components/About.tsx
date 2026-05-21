@@ -1,9 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import { CheckCircle2 } from 'lucide-react'
 import ScrollReveal from '@/components/ui/ScrollReveal'
+import { useIsMobile } from '@/lib/hooks'
 
 const values = [
   { label: 'Innovation First', desc: 'Pushing boundaries with every project' },
@@ -13,8 +15,20 @@ const values = [
 ]
 
 export default function About() {
+  const isMobile = useIsMobile()
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const imageRef = useRef<HTMLDivElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+
+  const imageY = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 1.02])
+
   return (
-    <section id="about" className="section-padding relative overflow-hidden">
+    <section id="about" ref={sectionRef} className="section-padding relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-purple/5 to-transparent pointer-events-none" />
       <div className="absolute top-1/2 left-0 w-96 h-96 rounded-full bg-accent-blue/10 blur-[200px] -translate-y-1/2 pointer-events-none" />
@@ -70,15 +84,21 @@ export default function About() {
                 {values.map((value, i) => (
                   <motion.div
                     key={i}
-                    className="border-l-2 border-accent-blue/30 pl-4"
+                    className="border-l-2 border-accent-blue/30 pl-4 group hover:border-accent-blue transition-colors duration-300"
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                    whileHover={{ x: 4 }}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <CheckCircle2 size={14} className="text-accent-blue" />
-                      <h4 className="font-display text-white font-semibold">
+                      <motion.div
+                        whileHover={{ scale: 1.2, rotate: 10 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                      >
+                        <CheckCircle2 size={14} className="text-accent-blue" />
+                      </motion.div>
+                      <h4 className="font-display text-white font-semibold group-hover:text-accent-blue transition-colors duration-300">
                         {value.label}
                       </h4>
                     </div>
@@ -92,13 +112,15 @@ export default function About() {
           {/* Image side */}
           <ScrollReveal direction="left" distance={60}>
             <div className="relative">
-              {/* Main image with reveal animation */}
+              {/* Main image with parallax and clip-path reveal */}
               <motion.div
+                ref={imageRef}
                 className="aspect-[4/5] rounded-3xl overflow-hidden bg-background-secondary"
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                style={{ y: isMobile ? 0 : imageY, scale: isMobile ? 1 : imageScale }}
+                initial={{ opacity: 0, clipPath: 'inset(0 100% 0 0)' }}
+                whileInView={{ opacity: 1, clipPath: 'inset(0 0% 0 0)' }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               >
                 <Image
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80"
@@ -114,10 +136,11 @@ export default function About() {
               {/* Glass quote card */}
               <motion.div
                 className="absolute -bottom-6 -left-6 glass-strong rounded-2xl p-6 max-w-xs"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.5 }}
+                transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -4, scale: 1.02 }}
               >
                 <p className="font-display text-lg font-bold text-white mb-1">
                   &ldquo;Design is intelligence made visible.&rdquo;
@@ -126,8 +149,16 @@ export default function About() {
               </motion.div>
 
               {/* Decorative blur orbs */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-accent-blue/20 blur-3xl" />
-              <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-full bg-accent-purple/20 blur-3xl" />
+              <motion.div
+                className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-accent-blue/20 blur-3xl"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }}
+                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <motion.div
+                className="absolute -bottom-4 -right-4 w-32 h-32 rounded-full bg-accent-purple/20 blur-3xl"
+                animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0.35, 0.2] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+              />
             </div>
           </ScrollReveal>
         </div>

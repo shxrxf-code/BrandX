@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, useTransform } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import MagneticButton from './ui/MagneticButton'
+import { useIsMobile } from '@/lib/hooks'
 
 const navLinks = [
   { label: 'Services', href: '#services' },
@@ -14,13 +15,37 @@ const navLinks = [
 ]
 
 export default function Navbar() {
+  const isMobile = useIsMobile()
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const { scrollY } = useScroll()
+  const [activeSection, setActiveSection] = useState('')
+  const { scrollY, scrollYProgress } = useScroll()
+  const progressBar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 50)
   })
+
+  // Track active section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id)
+          }
+        })
+      },
+      { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' }
+    )
+
+    navLinks.forEach((link) => {
+      const el = document.querySelector(link.href)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     if (isOpen) {
@@ -35,6 +60,14 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Scroll progress bar */}
+      {!isMobile && (
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-[2px] z-[60] bg-gradient-to-r from-accent-blue via-accent-purple to-accent-cyan origin-left"
+          style={{ scaleX: scrollYProgress, opacity: isScrolled ? 1 : 0 }}
+        />
+      )}
+
       <motion.header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled ? 'py-4' : 'py-6'
@@ -64,18 +97,29 @@ export default function Navbar() {
             </a>
 
             <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.label}
-                  href={link.href}
-                  className="text-sm text-text-secondary hover:text-white transition-colors duration-300 line-through-hover"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 2.5 + i * 0.1 }}
-                >
-                  {link.label}
-                </motion.a>
-              ))}
+              {navLinks.map((link, i) => {
+                const isActive = activeSection === link.href.slice(1)
+                return (
+                  <motion.a
+                    key={link.label}
+                    href={link.href}
+                    className="text-sm transition-colors duration-300 line-through-hover relative"
+                    style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.6)' }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 2.5 + i * 0.1 }}
+                  >
+                    {link.label}
+                    {isActive && (
+                      <motion.div
+                        className="absolute -bottom-1 left-0 right-0 h-px bg-accent-blue"
+                        layoutId="activeNav"
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                  </motion.a>
+                )
+              })}
             </div>
 
             <div className="hidden md:block">

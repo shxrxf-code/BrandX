@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent, useTransform }
 import { Menu, X } from 'lucide-react'
 import MagneticButton from './ui/MagneticButton'
 import { useIsMobile } from '@/lib/hooks'
+import { useNavigation } from '@/components/NavigationProvider'
 
 const navLinks = [
   { label: 'Services', href: '#services' },
@@ -16,17 +17,17 @@ const navLinks = [
 
 export default function Navbar() {
   const isMobile = useIsMobile()
+  const { navigate, isTransitioning } = useNavigation()
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('')
+  const [hoveredLink, setHoveredLink] = useState<string | null>(null)
   const { scrollY, scrollYProgress } = useScroll()
-  const progressBar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setIsScrolled(latest > 50)
   })
 
-  // Track active section
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -57,6 +58,11 @@ export default function Navbar() {
       document.body.style.overflow = ''
     }
   }, [isOpen])
+
+  const handleNavClick = (href: string, e: React.MouseEvent) => {
+    navigate(href, e)
+    if (isOpen) setIsOpen(false)
+  }
 
   return (
     <>
@@ -99,22 +105,38 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link, i) => {
                 const isActive = activeSection === link.href.slice(1)
+                const isHovered = hoveredLink === link.label
                 return (
                   <motion.a
                     key={link.label}
                     href={link.href}
-                    className="text-sm transition-colors duration-300 line-through-hover relative"
+                    className="text-sm transition-colors duration-300 line-through-hover relative cursor-pointer"
                     style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.6)' }}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 2.5 + i * 0.1 }}
+                    onClick={(e) => handleNavClick(link.href, e)}
+                    onMouseEnter={() => setHoveredLink(link.label)}
+                    onMouseLeave={() => setHoveredLink(null)}
+                    whileHover={{ y: -1 }}
+                    whileTap={{ scale: 0.97 }}
                   >
                     {link.label}
+                    {/* Active indicator */}
                     {isActive && (
                       <motion.div
                         className="absolute -bottom-1 left-0 right-0 h-px bg-accent-blue"
                         layoutId="activeNav"
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                    {/* Hover glow underline */}
+                    {!isActive && (
+                      <motion.div
+                        className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-accent-blue/50 via-accent-purple/50 to-accent-cyan/50"
+                        initial={{ scaleX: 0, opacity: 0 }}
+                        animate={{ scaleX: isHovered ? 1 : 0, opacity: isHovered ? 1 : 0 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       />
                     )}
                   </motion.a>
@@ -123,7 +145,7 @@ export default function Navbar() {
             </div>
 
             <div className="hidden md:block">
-              <MagneticButton variant="primary" href="#contact">
+              <MagneticButton variant="primary" href="#contact" onClick={(e) => handleNavClick('#contact', e)}>
                 Let&apos;s Talk
               </MagneticButton>
             </div>
@@ -159,11 +181,13 @@ export default function Navbar() {
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  className="font-display text-4xl md:text-5xl font-bold text-white hover:text-accent-blue transition-colors"
+                  className="font-display text-4xl md:text-5xl font-bold text-white hover:text-accent-blue transition-colors cursor-pointer"
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => handleNavClick(link.href, e)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.97 }}
                 >
                   {link.label}
                 </motion.a>
@@ -174,7 +198,7 @@ export default function Navbar() {
                 transition={{ delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-8"
               >
-                <MagneticButton variant="primary" href="#contact" onClick={() => setIsOpen(false)}>
+                <MagneticButton variant="primary" href="#contact" onClick={(e) => handleNavClick('#contact', e)}>
                   Let&apos;s Talk
                 </MagneticButton>
               </motion.div>

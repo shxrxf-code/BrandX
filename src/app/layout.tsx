@@ -6,6 +6,7 @@ import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
 import AmbientMotion from '@/components/AmbientMotion'
 import Cursor from '@/components/ui/Cursor'
+import { NavigationProvider } from '@/components/NavigationProvider'
 import BodyContent from './body-content'
 
 const inter = Inter({ 
@@ -79,7 +80,9 @@ export default function RootLayout({
         <Cursor />
         <AmbientMotion />
         <SmoothScroll>
-          <BodyContent>{children}</BodyContent>
+          <NavigationProvider>
+            <BodyContent>{children}</BodyContent>
+          </NavigationProvider>
         </SmoothScroll>
         <div className="noise" />
         <Analytics />

@@ -7,7 +7,7 @@ interface MagneticButtonProps {
   children: React.ReactNode
   className?: string
   variant?: 'primary' | 'secondary' | 'ghost'
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent) => void
   href?: string
 }
 

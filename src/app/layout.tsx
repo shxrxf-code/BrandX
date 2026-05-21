@@ -5,7 +5,6 @@ import './globals.css'
 import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
 import AmbientMotion from '@/components/AmbientMotion'
-import Cursor from '@/components/ui/Cursor'
 import { NavigationProvider } from '@/components/NavigationProvider'
 import BodyContent from './body-content'
 
@@ -72,12 +71,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="font-sans antialiased bg-background text-white selection:bg-accent-blue/30 selection:text-white cursor-none">
+      <body className="font-sans antialiased bg-background text-white selection:bg-accent-blue/30 selection:text-white">
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
         <Preloader />
-        <Cursor />
         <AmbientMotion />
         <SmoothScroll>
           <NavigationProvider>

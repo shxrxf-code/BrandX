@@ -1,21 +1,13 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ArrowDown, Sparkles, Zap, Globe, Code2, Palette, TrendingUp } from 'lucide-react'
+import { ArrowDown } from 'lucide-react'
 import GradientOrbs from '@/components/effects/GradientOrbs'
 import Particles from '@/components/effects/Particles'
-import HeroSpotlight from '@/components/effects/HeroSpotlight'
 import FloatingShapes from '@/components/effects/FloatingShapes'
 import MagneticButton from '@/components/ui/MagneticButton'
-import { useIsMobile, useMousePosition } from '@/lib/hooks'
-
-const floatingCards = [
-  { icon: Sparkles, label: 'Brand Strategy', x: '6%', y: '25%', delay: 0 },
-  { icon: Code2, label: 'Web Development', x: '80%', y: '20%', delay: 0.2 },
-  { icon: Palette, label: 'UI/UX Design', x: '85%', y: '65%', delay: 0.4 },
-  { icon: TrendingUp, label: 'Growth Marketing', x: '5%', y: '68%', delay: 0.6 },
-]
+import { useIsMobile } from '@/lib/hooks'
 
 const line1Words = ['Designing']
 const line2Words = ['The', 'Future']
@@ -24,7 +16,6 @@ const line3Words = ['Of', 'Digital', 'Brands']
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
-  const mouse = useMousePosition()
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
@@ -43,14 +34,7 @@ export default function Hero() {
 
   const springY = isMobile ? y : useSpring(y, { stiffness: 100, damping: 30 })
 
-  const mouseParallaxX = isMobile ? 0 : (mouse.x - (typeof window !== 'undefined' ? window.innerWidth : 0) / 2) / 80
-  const mouseParallaxY = isMobile ? 0 : (mouse.y - (typeof window !== 'undefined' ? window.innerHeight : 0) / 2) / 80
-
   const baseDelay = isMobile ? 0.1 : 0.3
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile) return
-  }, [isMobile])
 
   return (
     <section
@@ -59,7 +43,6 @@ export default function Hero() {
     >
       <GradientOrbs count={isMobile ? 0 : 2} />
       <Particles count={isMobile ? 5 : 20} speed={0.15} size={1} color="255,255,255" />
-      <HeroSpotlight />
       <FloatingShapes />
 
       <div className="absolute inset-0 grid-lines opacity-20" />
@@ -74,7 +57,6 @@ export default function Hero() {
           y: springY,
           opacity,
           scale,
-          x: isMobile ? 0 : mouseParallaxX * 0.5,
         }}
       >
         <motion.div
@@ -205,38 +187,6 @@ export default function Hero() {
           ))}
         </motion.div>
       </motion.div>
-
-      {!isMobile && floatingCards.map((card, i) => {
-        const parallaxFactor = 1.5 + i * 0.3
-        return (
-        <motion.div
-          key={i}
-          className="hidden lg:block absolute glass rounded-xl px-4 py-2.5"
-          style={{
-            left: card.x,
-            top: card.y,
-            x: mouseParallaxX * parallaxFactor,
-            y: mouseParallaxY * parallaxFactor,
-            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
-          animate={isLoaded ? { opacity: 1, scale: 1, y: 0 } : {}}
-          transition={{ delay: baseDelay + 1.2 + card.delay, duration: 0.6, ease: 'easeOut' }}
-        >
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 3 + i * 0.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex items-center gap-2.5"
-          >
-            <div className="p-1.5 rounded-lg bg-accent-blue/10">
-              <card.icon size={14} className="text-accent-blue" />
-            </div>
-            <span className="text-xs text-text-secondary whitespace-nowrap font-medium">
-              {card.label}
-            </span>
-        </motion.div>
-      </motion.div>
-      )})}
 
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"

@@ -15,7 +15,7 @@ const projects = [
     description: 'Complete rebrand and web platform for a renewable energy startup',
     metrics: { conversion: '+340%', traffic: '+180%', engagement: '4.2x' },
     tech: ['Next.js', 'Tailwind', 'Framer Motion'],
-    accent: '#3B82F6',
+    accent: '#7C3AED',
     span: 'md:col-span-2 md:row-span-2',
   },
   {
@@ -26,7 +26,7 @@ const projects = [
     description: 'Luxury fashion e-commerce with immersive product experience',
     metrics: { conversion: '+220%', traffic: '+95%', engagement: '3.8x' },
     tech: ['Shopify', 'React', 'GSAP'],
-    accent: '#A855F7',
+    accent: '#06B6D4',
     span: 'md:col-span-1 md:row-span-1',
   },
   {

@@ -163,7 +163,7 @@ function LensParticles({ count = 50 }: { count: number }) {
       </bufferGeometry>
       <pointsMaterial
         size={0.02}
-        color="#3B82F6"
+        color="#7C3AED"
         transparent
         opacity={0.4}
         sizeAttenuation
@@ -197,8 +197,8 @@ function LensScene({ openProgress, onComplete }: { openProgress: number; onCompl
     <>
       <ambientLight intensity={0.2} />
       <spotLight position={[5, 5, 5]} intensity={1.5} angle={0.3} penumbra={0.5} castShadow />
-      <pointLight position={[-3, -2, 3]} intensity={0.5} color="#3B82F6" />
-      <pointLight position={[3, 2, 2]} intensity={0.3} color="#A855F7" />
+      <pointLight position={[-3, -2, 3]} intensity={0.5} color="#7C3AED" />
+      <pointLight position={[3, 2, 2]} intensity={0.3} color="#06B6D4" />
 
       <SceneController openProgress={openProgress} onComplete={onComplete} />
 

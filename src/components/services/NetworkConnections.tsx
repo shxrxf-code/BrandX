@@ -31,16 +31,16 @@ export default function NetworkConnections({ isLoaded, baseDelay }: NetworkConne
     >
       <defs>
         <linearGradient id="lineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#A855F7" stopOpacity="0.3" />
+          <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#06B6D4" stopOpacity="0.3" />
         </linearGradient>
         <linearGradient id="lineGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#A855F7" stopOpacity="0.25" />
+          <stop offset="0%" stopColor="#06B6D4" stopOpacity="0.25" />
           <stop offset="100%" stopColor="#22D3EE" stopOpacity="0.25" />
         </linearGradient>
         <linearGradient id="lineGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#22D3EE" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.25" />
         </linearGradient>
       </defs>
 
@@ -81,7 +81,7 @@ export default function NetworkConnections({ isLoaded, baseDelay }: NetworkConne
             cx={node.cx}
             cy={node.cy}
             r="4"
-            fill="#3B82F6"
+            fill="#7C3AED"
             initial={{ scale: 0, opacity: 0 }}
             animate={isLoaded ? { scale: 1, opacity: 0.5 } : {}}
             transition={{ delay: baseDelay + 0.5 + node.delay, duration: 0.5 }}
@@ -98,7 +98,7 @@ export default function NetworkConnections({ isLoaded, baseDelay }: NetworkConne
             cy={node.cy}
             r="8"
             fill="none"
-            stroke="#3B82F6"
+            stroke="#7C3AED"
             strokeWidth="1"
             initial={{ scale: 0, opacity: 0 }}
             animate={isLoaded ? { scale: 1, opacity: 0.3 } : {}}

@@ -127,7 +127,7 @@ export default function Hero() {
                 key={`l3-${i}`}
                 className="inline-block text-hero"
                 style={{
-                  background: 'linear-gradient(135deg, #3B82F6 0%, #A855F7 50%, #22D3EE 100%)',
+                  background: 'linear-gradient(135deg, #7C3AED 0%, #06B6D4 50%, #22D3EE 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundSize: '200% auto',

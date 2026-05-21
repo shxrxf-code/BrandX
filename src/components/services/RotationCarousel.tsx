@@ -20,8 +20,8 @@ interface ServiceCard3DProps {
 }
 
 const colorMap: Record<string, { bg: string; text: string; border: string; glow: string; accent: string }> = {
-  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue', border: 'border-accent-blue/30', glow: 'shadow-glow-blue', accent: '#3B82F6' },
-  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple', border: 'border-accent-purple/30', glow: 'shadow-glow-purple', accent: '#A855F7' },
+  blue: { bg: 'bg-accent-blue/10', text: 'text-accent-blue', border: 'border-accent-blue/30', glow: 'shadow-glow-blue', accent: '#7C3AED' },
+  purple: { bg: 'bg-accent-purple/10', text: 'text-accent-purple', border: 'border-accent-purple/30', glow: 'shadow-glow-purple', accent: '#06B6D4' },
   cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan', border: 'border-accent-cyan/30', glow: 'shadow-glow-cyan', accent: '#22D3EE' },
 }
 

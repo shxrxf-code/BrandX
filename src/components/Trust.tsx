@@ -13,8 +13,8 @@ const stats = [
 ]
 
 const colorMap: Record<string, string> = {
-  blue: '#3B82F6',
-  purple: '#A855F7',
+  blue: '#7C3AED',
+  purple: '#06B6D4',
   cyan: '#22D3EE',
 }
 

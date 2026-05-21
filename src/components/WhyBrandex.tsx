@@ -14,7 +14,7 @@ const reasons = [
     title: 'Strategic Thinking',
     description: 'Every project begins with deep research and strategic planning. We don\'t guess—we analyze, test, and validate.',
     color: 'blue',
-    accent: '#3B82F6',
+    accent: '#7C3AED',
   },
   {
     number: '02',
@@ -22,7 +22,7 @@ const reasons = [
     title: 'Award-Winning Design',
     description: 'Our design philosophy blends aesthetics with functionality, creating experiences that are both beautiful and effective.',
     color: 'purple',
-    accent: '#A855F7',
+    accent: '#06B6D4',
   },
   {
     number: '03',
@@ -38,7 +38,7 @@ const reasons = [
     title: 'Results That Matter',
     description: 'Beautiful design means nothing without results. We measure success by the impact we create for your business.',
     color: 'blue',
-    accent: '#3B82F6',
+    accent: '#7C3AED',
   },
 ]
 

@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react'
-import { motion, useMotionValue, useSpring, useTransform, animate, useAnimationFrame } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform, useAnimationFrame } from 'framer-motion'
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ExternalLink } from 'lucide-react'
 import { useIsMobile, useReducedMotion } from '@/lib/hooks'
 
 interface ProjectData {
@@ -15,54 +15,22 @@ interface ProjectData {
   metrics: { conversion: string; traffic: string; engagement: string }
   tech: string[]
   accent: string
-  width: number
 }
 
-const CARD_WIDTH = 380
-const CARD_HEIGHT = 280
-const GAP = 20
-const AUTO_SCROLL_SPEED = 0.4
+const CARD_WIDTH = 340
+const CARD_HEIGHT = 260
+const ORBIT_RADIUS_DESKTOP = 520
+const ORBIT_RADIUS_MOBILE = 320
+const AUTO_ROTATE_DURATION = 24000
 
-function useAutoRotation(index: number, isHovered: boolean, isMobile: boolean, reducedMotion: boolean) {
-  const rotateY = useMotionValue(0)
-  const rotateX = useMotionValue(0)
-  const floatY = useMotionValue(0)
-  const autoRotate = useMotionValue(0)
-
-  const springConfig = { stiffness: 80, damping: 20, mass: 1.2 }
-  const springRotateY = useSpring(rotateY, springConfig)
-  const springRotateX = useSpring(rotateX, springConfig)
-  const springFloatY = useSpring(floatY, { stiffness: 60, damping: 15, mass: 1.5 })
-  const springAutoRotate = useSpring(autoRotate, { stiffness: 40, damping: 12, mass: 2 })
-
-  const phaseOffset = index * 1.2
-  const floatAmplitude = isMobile || reducedMotion ? 3 : 6
-  const autoRotateRange = isMobile || reducedMotion ? 2 : 5
-
-  useAnimationFrame((time) => {
-    if (isHovered) return
-
-    const t = time / 1000
-    const float = Math.sin(t * 0.6 + phaseOffset) * floatAmplitude
-    const rotation = Math.sin(t * 0.3 + phaseOffset) * autoRotateRange
-
-    floatY.set(float)
-    autoRotate.set(rotation)
-  })
-
-  return {
-    rotateY: springRotateY,
-    rotateX: springRotateX,
-    floatY: springFloatY,
-    autoRotate: springAutoRotate,
-    setRotateY: rotateY.set,
-    setRotateX: rotateX.set,
-  }
+function getOrbitRadius(isMobile: boolean) {
+  return isMobile ? ORBIT_RADIUS_MOBILE : ORBIT_RADIUS_DESKTOP
 }
 
-function AutoRotatingCard({
+function OrbitCard({
   project,
-  index,
+  angle,
+  isActive,
   isHovered,
   onHover,
   onLeave,
@@ -70,7 +38,8 @@ function AutoRotatingCard({
   reducedMotion,
 }: {
   project: ProjectData
-  index: number
+  angle: number
+  isActive: boolean
   isHovered: boolean
   onHover: () => void
   onLeave: () => void
@@ -78,28 +47,39 @@ function AutoRotatingCard({
   reducedMotion: boolean
 }) {
   const cardRef = useRef<HTMLDivElement>(null)
-  const { rotateY, rotateX, floatY, autoRotate, setRotateY, setRotateX } = useAutoRotation(
-    index, isHovered, isMobile, reducedMotion
-  )
-
   const glareX = useMotionValue(50)
   const glareY = useMotionValue(50)
-  const intensity = useMotionValue(0)
+  const intensity = useMotionValue(isActive ? 0.6 : 0)
   const springIntensity = useSpring(intensity, { stiffness: 200, damping: 15 })
 
-  const maxRotation = isMobile || reducedMotion ? 4 : 8
+  const tiltX = useMotionValue(0)
+  const tiltY = useMotionValue(0)
+  const springTiltX = useSpring(tiltX, { stiffness: 100, damping: 18 })
+  const springTiltY = useSpring(tiltY, { stiffness: 100, damping: 18 })
+
+  const floatPhase = useMemo(() => Math.random() * Math.PI * 2, [])
+  const floatY = useMotionValue(0)
+  const springFloatY = useSpring(floatY, { stiffness: 50, damping: 12 })
+
+  const maxTilt = isMobile || reducedMotion ? 3 : 6
+
+  useAnimationFrame((time) => {
+    if (isHovered || reducedMotion) return
+    const t = time / 1000
+    floatY.set(Math.sin(t * 0.5 + floatPhase) * 4)
+  })
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile || reducedMotion || !cardRef.current) return
     const rect = cardRef.current.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * maxRotation
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -maxRotation
-    setRotateY(x)
-    setRotateX(y)
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * maxTilt
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -maxTilt
+    tiltX.set(x)
+    tiltY.set(y)
     glareX.set(((e.clientX - rect.left) / rect.width) * 100)
     glareY.set(((e.clientY - rect.top) / rect.height) * 100)
     intensity.set(1)
-  }, [isMobile, reducedMotion, maxRotation, setRotateY, setRotateX, glareX, glareY, intensity])
+  }, [isMobile, reducedMotion, maxTilt, tiltX, tiltY, glareX, glareY, intensity])
 
   const handleMouseEnter = useCallback(() => {
     onHover()
@@ -108,31 +88,30 @@ function AutoRotatingCard({
 
   const handleMouseLeave = useCallback(() => {
     onLeave()
-    setRotateY(0)
-    setRotateX(0)
-    intensity.set(0)
-  }, [onLeave, setRotateY, setRotateX, intensity])
+    tiltX.set(0)
+    tiltY.set(0)
+    intensity.set(isActive ? 0.6 : 0)
+  }, [onLeave, tiltX, tiltY, intensity, isActive])
 
-  const scale = useTransform(springIntensity, [0, 1], [1, 1.03])
-  const glareOpacity = useTransform(springIntensity, [0, 1], [0, 0.1])
-  const edgeOpacity = useTransform(springIntensity, [0, 1], [0, 0.35])
-  const shadowDepth = useTransform(springIntensity, [0, 1], [20, 35])
-  const shadowOpacity = useTransform(springIntensity, [0, 1], [0.25, 0.5])
+  const cardScale = useTransform(springIntensity, [0, 1], [1, 1.04])
+  const glareOpacity = useTransform(springIntensity, [0, 1], [0, 0.08])
+  const edgeOpacity = useTransform(springIntensity, [0, 1], [0, 0.3])
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      className="relative flex-shrink-0 rounded-2xl cursor-pointer group"
+      className="absolute rounded-2xl cursor-pointer"
       style={{
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
-        perspective: '1000px',
+        left: '50%',
+        top: '50%',
+        marginLeft: -CARD_WIDTH / 2,
+        marginTop: -CARD_HEIGHT / 2,
         transformStyle: 'preserve-3d',
+        transform: `rotateY(${angle}deg) translateZ(${getOrbitRadius(isMobile)}px)`,
+        pointerEvents: isActive || isHovered ? 'auto' : 'none',
       }}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -141,10 +120,10 @@ function AutoRotatingCard({
         className="relative w-full h-full rounded-2xl overflow-hidden bg-background-secondary"
         style={{
           transformStyle: 'preserve-3d',
-          rotateX,
-          rotateY: useTransform([rotateY, autoRotate], (values) => (values[0] as number) + (values[1] as number)),
-          y: floatY,
-          scale,
+          rotateX: springTiltX,
+          rotateY: springTiltY,
+          y: springFloatY,
+          scale: cardScale,
           transformOrigin: 'center center',
           willChange: 'transform',
         }}
@@ -157,7 +136,7 @@ function AutoRotatingCard({
             fill
             className="object-cover"
             loading="lazy"
-            sizes="(max-width: 768px) 90vw, 380px"
+            sizes="(max-width: 768px) 90vw, 340px"
             quality={75}
           />
         </div>
@@ -169,9 +148,9 @@ function AutoRotatingCard({
             background: `linear-gradient(
               180deg,
               transparent 0%,
-              rgba(5,5,5,0.15) 25%,
-              rgba(5,5,5,0.6) 65%,
-              rgba(5,5,5,0.92) 100%
+              rgba(5,5,5,0.1) 20%,
+              rgba(5,5,5,0.55) 60%,
+              rgba(5,5,5,0.9) 100%
             )`,
           }}
         />
@@ -185,7 +164,7 @@ function AutoRotatingCard({
               (values) => {
                 const gx = values[0] as number
                 const gy = values[1] as number
-                return `radial-gradient(circle at ${gx}% ${gy}%, ${project.accent}20 0%, transparent 50%)`
+                return `radial-gradient(circle at ${gx}% ${gy}%, ${project.accent}18 0%, transparent 45%)`
               }
             ),
             opacity: glareOpacity,
@@ -203,29 +182,10 @@ function AutoRotatingCard({
                 const gy = values[1] as number
                 const dirX = gx < 50 ? 'left' : 'right'
                 const dirY = gy < 50 ? 'top' : 'bottom'
-                return `linear-gradient(to ${dirX} ${dirY}, ${project.accent}25 0%, transparent 35%)`
+                return `linear-gradient(to ${dirX} ${dirY}, ${project.accent}20 0%, transparent 30%)`
               }
             ),
             opacity: edgeOpacity,
-          }}
-        />
-
-        {/* Dynamic shadow */}
-        <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          style={{
-            boxShadow: useTransform(
-              [rotateY, rotateX, shadowDepth, shadowOpacity],
-              (values) => {
-                const ry = values[0] as number
-                const rx = values[1] as number
-                const blur = values[2] as number
-                const opacity = values[3] as number
-                const sx = ry * 1.5
-                const sy = rx * 1.5
-                return `${sx}px ${sy}px ${blur}px rgba(0,0,0,${opacity}), 0 0 ${blur * 0.8}px ${project.accent}08`
-              }
-            ),
           }}
         />
 
@@ -235,36 +195,47 @@ function AutoRotatingCard({
           style={{
             boxShadow: useTransform(
               springIntensity,
-              (i) => `inset 0 0 0 1px ${project.accent}${Math.round(i * 50).toString(16).padStart(2, '0')}`
+              (i) => `inset 0 0 0 1px ${project.accent}${Math.round(i * 45).toString(16).padStart(2, '0')}`
             ),
           }}
         />
 
+        {/* Active indicator */}
+        {isActive && (
+          <motion.div
+            className="absolute top-0 left-0 right-0 h-0.5"
+            style={{ background: project.accent }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          />
+        )}
+
         {/* Content layer */}
         <div
-          className="absolute inset-0 p-5 flex flex-col justify-end"
-          style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}
+          className="absolute inset-0 p-4 flex flex-col justify-end"
+          style={{ transform: 'translateZ(20px)', transformStyle: 'preserve-3d' }}
         >
           {/* Category + Year */}
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-1.5">
             <span
-              className="text-[10px] font-mono tracking-[0.2em] uppercase px-2 py-0.5 rounded-full border backdrop-blur-sm"
+              className="text-[9px] font-mono tracking-[0.2em] uppercase px-1.5 py-0.5 rounded-full border backdrop-blur-sm"
               style={{
                 color: project.accent,
-                borderColor: `${project.accent}40`,
-                background: `${project.accent}10`,
+                borderColor: `${project.accent}35`,
+                background: `${project.accent}08`,
               }}
             >
               {project.category}
             </span>
-            <span className="text-xs text-text-muted font-mono">{project.year}</span>
+            <span className="text-[10px] text-text-muted font-mono">{project.year}</span>
           </div>
 
           {/* Title */}
           <motion.h3
-            className="font-display text-lg font-bold mb-1"
+            className="font-display text-base font-bold mb-0.5"
             style={{
-              transform: 'translateZ(20px)',
+              transform: 'translateZ(15px)',
               color: useTransform(springIntensity, [0, 1], ['#FFFFFF', project.accent]),
             }}
           >
@@ -272,50 +243,50 @@ function AutoRotatingCard({
           </motion.h3>
 
           {/* Description */}
-          <p className="text-xs text-text-secondary leading-relaxed mb-3 line-clamp-2">
+          <p className="text-[10px] text-text-secondary leading-relaxed mb-2 line-clamp-2">
             {project.description}
           </p>
 
           {/* Metrics */}
           <motion.div
-            className="flex gap-5"
-            initial={{ opacity: 0, y: 10 }}
-            animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            style={{ transform: 'translateZ(30px)' }}
+            className="flex gap-4"
+            initial={{ opacity: 0, y: 8 }}
+            animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            style={{ transform: 'translateZ(25px)' }}
           >
             <div>
-              <div className="text-sm font-bold" style={{ color: project.accent }}>
+              <div className="text-xs font-bold" style={{ color: project.accent }}>
                 {project.metrics.conversion}
               </div>
-              <div className="text-[9px] text-text-muted uppercase tracking-wider">Conversion</div>
+              <div className="text-[8px] text-text-muted uppercase tracking-wider">Conversion</div>
             </div>
             <div>
-              <div className="text-sm font-bold" style={{ color: project.accent }}>
+              <div className="text-xs font-bold" style={{ color: project.accent }}>
                 {project.metrics.traffic}
               </div>
-              <div className="text-[9px] text-text-muted uppercase tracking-wider">Traffic</div>
+              <div className="text-[8px] text-text-muted uppercase tracking-wider">Traffic</div>
             </div>
             <div>
-              <div className="text-sm font-bold" style={{ color: project.accent }}>
+              <div className="text-xs font-bold" style={{ color: project.accent }}>
                 {project.metrics.engagement}
               </div>
-              <div className="text-[9px] text-text-muted uppercase tracking-wider">Engagement</div>
+              <div className="text-[8px] text-text-muted uppercase tracking-wider">Engage</div>
             </div>
           </motion.div>
 
           {/* Tech stack */}
           <motion.div
-            className="flex gap-1.5 mt-2.5"
+            className="flex gap-1 mt-1.5"
             initial={{ opacity: 0 }}
             animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.05 }}
-            style={{ transform: 'translateZ(35px)' }}
+            transition={{ duration: 0.15, delay: 0.03 }}
+            style={{ transform: 'translateZ(30px)' }}
           >
             {project.tech.map((tech, i) => (
               <span
                 key={i}
-                className="text-[9px] font-mono tracking-wider uppercase px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-text-muted backdrop-blur-sm"
+                className="text-[8px] font-mono tracking-wider uppercase px-1 py-0.5 rounded bg-white/5 border border-white/10 text-text-muted"
               >
                 {tech}
               </span>
@@ -325,20 +296,20 @@ function AutoRotatingCard({
 
         {/* Arrow button */}
         <motion.div
-          className="absolute top-4 right-4 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center"
+          className="absolute top-3 right-3 w-7 h-7 rounded-full backdrop-blur-sm flex items-center justify-center"
           style={{
-            background: `${project.accent}20`,
-            border: `1px solid ${project.accent}30`,
-            transform: 'translateZ(40px)',
+            background: `${project.accent}18`,
+            border: `1px solid ${project.accent}25`,
+            transform: 'translateZ(35px)',
           }}
           initial={{ opacity: 0, scale: 0.8, rotate: -15 }}
           animate={isHovered ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0.8, rotate: -15 }}
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <ArrowUpRight size={14} style={{ color: project.accent }} />
+          <ArrowUpRight size={12} style={{ color: project.accent }} />
         </motion.div>
       </motion.div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -347,9 +318,15 @@ export default function Portfolio() {
   const reducedMotion = useReducedMotion()
   const [mounted, setMounted] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const scrollX = useMotionValue(0)
-  const isHoveringRail = useRef(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const orbitAngle = useMotionValue(0)
+  const springOrbitAngle = useSpring(orbitAngle, { stiffness: 60, damping: 15, mass: 1.5 })
+  const isDragging = useRef(false)
+  const dragStart = useRef(0)
+  const dragStartAngle = useRef(0)
+  const velocity = useRef(0)
+  const lastDragPos = useRef(0)
+  const lastDragTime = useRef(0)
 
   const projects: ProjectData[] = useMemo(() => [
     {
@@ -361,7 +338,6 @@ export default function Portfolio() {
       metrics: { conversion: '+340%', traffic: '+180%', engagement: '4.2x' },
       tech: ['Next.js', 'Tailwind', 'Framer Motion'],
       accent: '#7C3AED',
-      width: CARD_WIDTH,
     },
     {
       title: "Drifto Men's Fashion",
@@ -372,7 +348,6 @@ export default function Portfolio() {
       metrics: { conversion: '+220%', traffic: '+95%', engagement: '3.8x' },
       tech: ['Shopify', 'React', 'GSAP'],
       accent: '#06B6D4',
-      width: CARD_WIDTH,
     },
     {
       title: 'Mirra Montessori School',
@@ -383,7 +358,6 @@ export default function Portfolio() {
       metrics: { conversion: '+150%', traffic: '+120%', engagement: '2.9x' },
       tech: ['WordPress', 'Custom Theme', 'SEO'],
       accent: '#22D3EE',
-      width: CARD_WIDTH,
     },
     {
       title: 'Diamond Restaurant',
@@ -394,7 +368,6 @@ export default function Portfolio() {
       metrics: { conversion: '+190%', traffic: '+140%', engagement: '3.1x' },
       tech: ['Next.js', 'Stripe', 'Sanity'],
       accent: '#F59E0B',
-      width: CARD_WIDTH,
     },
     {
       title: 'Aero Travels',
@@ -405,61 +378,72 @@ export default function Portfolio() {
       metrics: { conversion: '+210%', traffic: '+130%', engagement: '3.3x' },
       tech: ['Astro', 'Tailwind', 'Contentful'],
       accent: '#10B981',
-      width: CARD_WIDTH,
     },
   ], [])
 
-  const duplicatedProjects = useMemo(() => [...projects, ...projects], [projects])
-  const totalWidth = projects.length * (CARD_WIDTH + GAP)
+  const anglePerCard = 360 / projects.length
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  useAnimationFrame((_, delta) => {
-    if (reducedMotion || isHoveringRail.current) return
+  useAnimationFrame((time, delta) => {
+    if (reducedMotion || isDragging.current || hoveredIndex !== null) return
 
-    const current = scrollX.get()
-    const next = current - AUTO_SCROLL_SPEED * (delta / 16)
+    const speed = 360 / (AUTO_ROTATE_DURATION / 16)
+    const current = orbitAngle.get()
+    orbitAngle.set(current - speed * (delta / 16))
 
-    if (next <= -totalWidth) {
-      scrollX.set(0)
-    } else {
-      scrollX.set(next)
-    }
+    const normalizedAngle = ((current % 360) + 360) % 360
+    const newActive = Math.round(normalizedAngle / anglePerCard) % projects.length
+    setActiveIndex(newActive)
   })
 
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault()
-    const current = scrollX.get()
-    const next = current + e.deltaY * 0.5
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    isDragging.current = true
+    dragStart.current = e.clientX
+    dragStartAngle.current = orbitAngle.get()
+    velocity.current = 0
+    lastDragPos.current = e.clientX
+    lastDragTime.current = performance.now()
+    ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+  }, [orbitAngle])
 
-    if (next <= -totalWidth) {
-      scrollX.set(0)
-    } else if (next > 0) {
-      scrollX.set(-totalWidth)
-    } else {
-      scrollX.set(next)
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!isDragging.current) return
+    const delta = e.clientX - dragStart.current
+    orbitAngle.set(dragStartAngle.current + delta * 0.3)
+
+    const now = performance.now()
+    const dt = now - lastDragTime.current
+    if (dt > 0) {
+      velocity.current = (e.clientX - lastDragPos.current) / dt * 0.3
     }
-  }, [scrollX, totalWidth])
+    lastDragPos.current = e.clientX
+    lastDragTime.current = now
+  }, [orbitAngle])
 
-  const handleTouchStart = useRef<number | null>(null)
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (handleTouchStart.current === null) return
-    const touch = e.touches[0]
-    const delta = touch.clientX - handleTouchStart.current
-    const current = scrollX.get()
-    const next = current + delta * 0.8
+  const handlePointerUp = useCallback(() => {
+    isDragging.current = false
 
-    if (next <= -totalWidth) {
-      scrollX.set(0)
-    } else if (next > 0) {
-      scrollX.set(-totalWidth)
-    } else {
-      scrollX.set(next)
+    const decay = () => {
+      if (isDragging.current || reducedMotion) return
+      velocity.current *= 0.95
+      if (Math.abs(velocity.current) < 0.01) {
+        velocity.current = 0
+        return
+      }
+      orbitAngle.set(orbitAngle.get() + velocity.current * 16)
+
+      const normalizedAngle = ((orbitAngle.get() % 360) + 360) % 360
+      const newActive = Math.round(normalizedAngle / anglePerCard) % projects.length
+      setActiveIndex(newActive)
+
+      requestAnimationFrame(decay)
     }
-    handleTouchStart.current = touch.clientX
-  }, [scrollX, totalWidth])
+
+    requestAnimationFrame(decay)
+  }, [orbitAngle, reducedMotion, anglePerCard, projects.length])
 
   if (!mounted) return null
 
@@ -485,39 +469,128 @@ export default function Portfolio() {
           </p>
         </motion.div>
 
-        {/* Auto-scrolling rail */}
+        {/* Orbit container */}
         <div
-          ref={containerRef}
-          className="relative -mx-6 md:-mx-12 lg:-mx-16 px-6 md:px-12 lg:px-16"
-          onWheel={handleWheel}
-          onTouchStart={(e) => { handleTouchStart.current = e.touches[0].clientX }}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={() => { handleTouchStart.current = null }}
-          onMouseEnter={() => { isHoveringRail.current = true }}
-          onMouseLeave={() => { isHoveringRail.current = false }}
+          className="relative w-full overflow-hidden"
+          style={{
+            height: isMobile ? 360 : 480,
+            perspective: isMobile ? '800px' : '1200px',
+            perspectiveOrigin: '50% 50%',
+          }}
         >
-          <motion.div
-            className="flex gap-5"
-            style={{ x: scrollX, willChange: 'transform' }}
+          {/* Ambient grid lines */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.03]"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '60px 60px',
+            }}
+          />
+
+          {/* Orbit path glow */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: '50%',
+              top: '50%',
+              width: getOrbitRadius(isMobile) * 2 + 100,
+              height: getOrbitRadius(isMobile) * 2 + 100,
+              marginLeft: -(getOrbitRadius(isMobile) + 50),
+              marginTop: -(getOrbitRadius(isMobile) + 50),
+              borderRadius: '50%',
+              border: '1px solid rgba(124, 58, 237, 0.06)',
+              boxShadow: '0 0 60px rgba(124, 58, 237, 0.03)',
+            }}
+          />
+
+          {/* Center glow */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: '50%',
+              top: '50%',
+              width: 200,
+              height: 200,
+              marginLeft: -100,
+              marginTop: -100,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(124, 58, 237, 0.04) 0%, transparent 70%)',
+            }}
+          />
+
+          {/* Rotating carousel */}
+          <div
+            className="absolute inset-0"
+            style={{
+              transformStyle: 'preserve-3d',
+              transform: `rotateY(${springOrbitAngle.get()}deg)`,
+            }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerUp}
           >
-            {duplicatedProjects.map((project, i) => (
-              <AutoRotatingCard
-                key={`${i}-${project.title}`}
-                project={project}
-                index={i}
-                isHovered={hoveredIndex === i}
-                onHover={() => setHoveredIndex(i)}
-                onLeave={() => setHoveredIndex(null)}
-                isMobile={isMobile}
-                reducedMotion={reducedMotion}
-              />
-            ))}
-          </motion.div>
+            {projects.map((project, i) => {
+              const angle = i * anglePerCard
+              const isActive = i === activeIndex
+              const isHovered = hoveredIndex === i
+
+              return (
+                <OrbitCard
+                  key={i}
+                  project={project}
+                  angle={angle}
+                  isActive={isActive}
+                  isHovered={isHovered}
+                  onHover={() => setHoveredIndex(i)}
+                  onLeave={() => setHoveredIndex(null)}
+                  isMobile={isMobile}
+                  reducedMotion={reducedMotion}
+                />
+              )
+            })}
+          </div>
+
+          {/* Fade edges */}
+          <div
+            className="absolute inset-y-0 left-0 w-24 md:w-40 pointer-events-none"
+            style={{
+              background: 'linear-gradient(90deg, rgba(5,5,5,0.9) 0%, transparent 100%)',
+            }}
+          />
+          <div
+            className="absolute inset-y-0 right-0 w-24 md:w-40 pointer-events-none"
+            style={{
+              background: 'linear-gradient(-90deg, rgba(5,5,5,0.9) 0%, transparent 100%)',
+            }}
+          />
+        </div>
+
+        {/* Active project indicator */}
+        <div className="flex items-center justify-center gap-2 mt-6">
+          {projects.map((_, i) => (
+            <button
+              key={i}
+              className="w-1.5 h-1.5 rounded-full transition-all duration-300"
+              style={{
+                background: i === activeIndex ? projects[i].accent : 'rgba(255,255,255,0.15)',
+                width: i === activeIndex ? 24 : 6,
+              }}
+              onClick={() => {
+                orbitAngle.set(-i * anglePerCard)
+                setActiveIndex(i)
+              }}
+              aria-label={`Go to project ${i + 1}`}
+            />
+          ))}
         </div>
 
         {/* CTA */}
         <motion.div
-          className="mt-16 md:mt-20 text-center"
+          className="mt-12 md:mt-16 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -531,7 +604,7 @@ export default function Portfolio() {
             className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-background font-medium text-sm tracking-wide uppercase rounded-full hover:bg-accent-blue hover:text-white transition-all duration-200"
           >
             Start a Project
-            <ArrowUpRight size={14} />
+            <ExternalLink size={14} />
           </a>
         </motion.div>
       </div>

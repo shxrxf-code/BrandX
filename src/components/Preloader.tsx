@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useIsMobile, useReducedMotion } from '@/lib/hooks'
 
 function ApertureBlade({
@@ -109,8 +109,7 @@ function HUDRing({ radius, duration, direction, opacity }: { radius: number; dur
 export default function Preloader() {
   const isMobile = useIsMobile()
   const reducedMotion = useReducedMotion()
-  const [phase, setPhase] = useState<'init' | 'forming' | 'loading' | 'opening' | 'complete'>('init')
-  const [loadProgress, setLoadProgress] = useState(0)
+  const [phase, setPhase] = useState<'init' | 'opening' | 'complete'>('init')
   const [openProgress, setOpenProgress] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -120,36 +119,17 @@ export default function Preloader() {
       return
     }
 
-    const t1 = setTimeout(() => setPhase('forming'), 150)
-    const t2 = setTimeout(() => setPhase('loading'), 600)
-    const t3 = setTimeout(() => setPhase('opening'), isMobile ? 1800 : 2200)
-    const t4 = setTimeout(() => {
+    const t1 = setTimeout(() => setPhase('opening'), isMobile ? 800 : 1200)
+    const t2 = setTimeout(() => {
       setPhase('complete')
       window.dispatchEvent(new CustomEvent('preloader-complete'))
-    }, isMobile ? 3200 : 3600)
+    }, isMobile ? 2200 : 2600)
 
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
-      clearTimeout(t3)
-      clearTimeout(t4)
     }
   }, [isMobile, reducedMotion])
-
-  useEffect(() => {
-    if (phase === 'loading') {
-      const interval = setInterval(() => {
-        setLoadProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval)
-            return 100
-          }
-          return prev + Math.random() * 10 + 3
-        })
-      }, 60)
-      return () => clearInterval(interval)
-    }
-  }, [phase])
 
   useEffect(() => {
     if (phase === 'opening') {
@@ -193,10 +173,6 @@ export default function Preloader() {
    */
   const maskRadius = phase === 'opening'
     ? openProgress * 150
-    : phase === 'loading'
-    ? 0
-    : phase === 'forming'
-    ? 0
     : 0
 
   const blurAmount = phase === 'opening'
@@ -255,17 +231,15 @@ export default function Preloader() {
           Sits on top of the reveal, blades retract as the hole opens
         */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <motion.div
-            className="relative w-[300px] h-[300px] md:w-[440px] md:h-[440px]"
-            animate={
-              phase === 'opening'
-                ? { scale: 1 + openProgress * 0.8, opacity: openProgress < 0.8 ? 1 : Math.max(0, 1 - (openProgress - 0.8) * 5) }
-                : phase === 'loading'
-                ? { scale: 1, opacity: 1 }
-                : { scale: [0.7, 1], opacity: [0, 1] }
-            }
-            transition={{ duration: phase === 'opening' ? 0.3 : 0.6, ease: 'easeOut' }}
-          >
+            <motion.div
+              className="relative w-[300px] h-[300px] md:w-[440px] md:h-[440px]"
+              animate={
+                phase === 'opening'
+                  ? { scale: 1 + openProgress * 0.8, opacity: openProgress < 0.8 ? 1 : Math.max(0, 1 - (openProgress - 0.8) * 5) }
+                  : { scale: [0.7, 1], opacity: [0, 1] }
+              }
+              transition={{ duration: phase === 'opening' ? 0.3 : 0.6, ease: 'easeOut' }}
+            >
             <svg
               viewBox="0 0 400 400"
               className="absolute inset-0 w-full h-full"
@@ -311,43 +285,15 @@ export default function Preloader() {
                 fill="none"
                 stroke="rgba(59, 130, 246, 0.15)"
                 strokeWidth="0.5"
-                opacity={phase === 'loading' ? 0.15 : phase === 'opening' ? Math.max(0, 0.15 - openProgress * 0.3) : 0.15}
+                opacity={phase === 'opening' ? Math.max(0, 0.15 - openProgress * 0.3) : 0.15}
                 style={{ transition: 'opacity 0.5s ease' }}
               />
             </svg>
-
-            {/* Center brand + loading */}
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-center"
-              style={{
-                opacity: phase === 'loading' ? 1 : phase === 'opening' ? Math.max(0, 1 - openProgress * 2.5) : 0,
-                transition: 'opacity 0.4s ease',
-              }}
-            >
-              <span className="font-display text-xl md:text-2xl font-bold tracking-tight text-white text-glow-blue">
-                BRANDEX
-                <span className="ml-1 text-[10px] font-normal text-text-muted tracking-[0.2em] uppercase">
-                  Digital
-                </span>
-              </span>
-
-              <div className="mt-4 flex items-center gap-3">
-                <div className="w-24 h-[1px] bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-accent-blue to-accent-purple rounded-full"
-                    style={{ width: `${Math.min(loadProgress, 100)}%`, transition: 'width 0.08s linear' }}
-                  />
-                </div>
-                <span className="text-[10px] font-mono text-text-muted tracking-wider tabular-nums">
-                  {Math.min(Math.round(loadProgress), 100)}%
-                </span>
-              </div>
-            </div>
           </motion.div>
         </div>
 
         {/* Particles */}
-        {(phase === 'loading' || phase === 'opening') && (
+        {phase === 'opening' && (
           <Particles isMobile={isMobile} />
         )}
 
@@ -368,7 +314,7 @@ export default function Preloader() {
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              opacity: phase === 'loading' ? 1 : phase === 'opening' ? Math.max(0, 1 - openProgress * 2) : 0,
+              opacity: phase === 'init' ? 1 : phase === 'opening' ? Math.max(0, 1 - openProgress * 2) : 0,
               transition: 'opacity 0.4s ease',
             }}
           >

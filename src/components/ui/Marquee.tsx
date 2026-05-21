@@ -20,7 +20,7 @@ export default function Marquee({
   return (
     <div className={`overflow-hidden whitespace-nowrap ${className}`}>
       <div
-        className="inline-flex"
+        className="marquee-content inline-flex"
         style={{
           animation: `marquee ${speed}s linear infinite`,
           animationDirection: direction === 'right' ? 'reverse' : 'normal',

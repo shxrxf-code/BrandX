@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionValueEvent } from 'framer-motion'
 import { useIsMobile } from '@/lib/hooks'
 
 const steps = [
@@ -203,6 +203,11 @@ export default function Process() {
     offset: ['start start', 'end end'],
   })
 
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    const stepIndex = Math.min(Math.floor(v * steps.length), steps.length - 1)
+    setActiveStep(Math.max(0, stepIndex))
+  })
+
   const baseDelay = isMobile ? 0.1 : 0.3
 
   return (
@@ -251,9 +256,6 @@ export default function Process() {
 
           <div className="space-y-8 lg:space-y-12">
             {steps.map((step, i) => {
-              const progress = (i + 1) / steps.length
-              const isActive = scrollYProgress.get?.() >= progress - 0.1 || i === 0
-
               return (
                 <div key={i} className="relative">
                   {!isMobile && (

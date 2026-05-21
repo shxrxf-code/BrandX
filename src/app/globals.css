@@ -442,14 +442,6 @@ html.lenis {
   pointer-events: none;
 }
 
-/* Preloader */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  @apply bg-background;
-}
-
 /* Smooth section transitions */
 .section-divider {
   height: 1px;

@@ -319,6 +319,7 @@ export default function Portfolio() {
   const [mounted, setMounted] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const activeIndexRef = useRef(0)
   const orbitAngle = useMotionValue(0)
   const springOrbitAngle = useSpring(orbitAngle, { stiffness: 60, damping: 15, mass: 1.5 })
   const isDragging = useRef(false)
@@ -387,16 +388,19 @@ export default function Portfolio() {
     setMounted(true)
   }, [])
 
-  useAnimationFrame((time, delta) => {
+  useAnimationFrame((_time, delta) => {
     if (reducedMotion || isDragging.current || hoveredIndex !== null) return
 
     const speed = 360 / (AUTO_ROTATE_DURATION / 16)
     const current = orbitAngle.get()
     orbitAngle.set(current - speed * (delta / 16))
 
-    const normalizedAngle = ((current % 360) + 360) % 360
+    const normalizedAngle = (((current - speed * (delta / 16)) % 360) + 360) % 360
     const newActive = Math.round(normalizedAngle / anglePerCard) % projects.length
-    setActiveIndex(newActive)
+    if (newActive !== activeIndexRef.current) {
+      activeIndexRef.current = newActive
+      setActiveIndex(newActive)
+    }
   })
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
@@ -433,11 +437,15 @@ export default function Portfolio() {
         velocity.current = 0
         return
       }
-      orbitAngle.set(orbitAngle.get() + velocity.current * 16)
+      const newVal = orbitAngle.get() + velocity.current * 16
+      orbitAngle.set(newVal)
 
-      const normalizedAngle = ((orbitAngle.get() % 360) + 360) % 360
+      const normalizedAngle = ((newVal % 360) + 360) % 360
       const newActive = Math.round(normalizedAngle / anglePerCard) % projects.length
-      setActiveIndex(newActive)
+      if (newActive !== activeIndexRef.current) {
+        activeIndexRef.current = newActive
+        setActiveIndex(newActive)
+      }
 
       requestAnimationFrame(decay)
     }
@@ -522,11 +530,11 @@ export default function Portfolio() {
           />
 
           {/* Rotating carousel */}
-          <div
+          <motion.div
             className="absolute inset-0"
             style={{
               transformStyle: 'preserve-3d',
-              transform: `rotateY(${springOrbitAngle.get()}deg)`,
+              rotateY: springOrbitAngle,
             }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
@@ -552,7 +560,7 @@ export default function Portfolio() {
                 />
               )
             })}
-          </div>
+          </motion.div>
 
           {/* Fade edges */}
           <div

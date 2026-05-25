@@ -10,6 +10,7 @@ interface FloatingDustProps {
 
 export default function FloatingDust({ tier }: FloatingDustProps) {
   const pointsRef = useRef<THREE.Points>(null)
+  const timeRef = useRef(0)
   const count = tier === 'low' ? 10 : tier === 'medium' ? 20 : 35
 
   const positions = useMemo(() => {
@@ -22,10 +23,11 @@ export default function FloatingDust({ tier }: FloatingDustProps) {
     return arr
   }, [count])
 
-  useFrame((state) => {
+  useFrame((_state, delta) => {
+    timeRef.current += delta
     if (!pointsRef.current) return
-    pointsRef.current.rotation.y = state.clock.elapsedTime * 0.015
-    pointsRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.01) * 0.03
+    pointsRef.current.rotation.y = timeRef.current * 0.015
+    pointsRef.current.rotation.x = Math.sin(timeRef.current * 0.01) * 0.03
   })
 
   return (

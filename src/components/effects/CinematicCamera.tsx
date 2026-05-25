@@ -13,11 +13,13 @@ interface CinematicCameraProps {
 export default function CinematicCamera({ timeline }: CinematicCameraProps) {
   const { camera } = useThree()
   const driftRef = useRef({ x: 0, y: 0 })
+  const timeRef = useRef(0)
 
-  useFrame((state) => {
+  useFrame((_state, delta) => {
+    timeRef.current += delta
     const cam = camera as THREE.PerspectiveCamera
     const t = Math.max(0, Math.min(1, timeline))
-    const elapsed = state.clock.elapsedTime
+    const elapsed = timeRef.current
 
     const baseZ = 4.8
     const baseFov = 36

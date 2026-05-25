@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Canvas } from '@react-three/fiber'
 import LensScene from '@/components/effects/LensScene'
 import { useIsMobile, useReducedMotion } from '@/lib/hooks'
@@ -140,7 +140,7 @@ export default function Preloader() {
       <div className="absolute inset-0" style={{ zIndex: 2 }}>
         <Canvas
           camera={{ position: [0, 0, 5], fov: 36 }}
-          dpr={tier === 'low' ? 1 : tier === 'medium' ? [1, 1.5] : [1, 2]}
+          dpr={tier === 'low' ? 1 : [1, 1.5]}
           style={{ background: 'transparent' }}
           gl={{
             alpha: true,
@@ -148,6 +148,17 @@ export default function Preloader() {
             powerPreference: 'high-performance',
             stencil: false,
             depth: true,
+            failIfMajorPerformanceCaveat: false,
+          }}
+          onCreated={(state) => {
+            state.gl.domElement.addEventListener('webglcontextlost', (e) => {
+              e.preventDefault()
+              setTimeout(() => {
+                setPhase('complete')
+                setTimeline(1)
+                window.dispatchEvent(new CustomEvent('preloader-complete'))
+              }, 100)
+            }, false)
           }}
         >
           <LensScene timeline={timeline} tier={tier} />

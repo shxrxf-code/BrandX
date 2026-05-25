@@ -10,10 +10,12 @@ interface GlowRingProps {
 
 export default function GlowRing({ openProgress }: GlowRingProps) {
   const ref = useRef<THREE.Mesh>(null)
+  const timeRef = useRef(0)
 
-  useFrame((state) => {
+  useFrame((_state, delta) => {
+    timeRef.current += delta
     if (!ref.current) return
-    const pulse = 1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.05
+    const pulse = 1 + Math.sin(timeRef.current * 0.5) * 0.05
     const scale = openProgress * 0.6 * pulse
     ref.current.scale.setScalar(Math.max(0.01, scale))
     const mat = ref.current.material as THREE.MeshBasicMaterial

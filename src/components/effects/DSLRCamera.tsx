@@ -18,6 +18,7 @@ export default function DSLRCamera({ timeline, tier }: DSLRCameraProps) {
   const innerGlassRef = useRef<THREE.Mesh>(null)
   const brandTexture = useMemo(() => createBrandTexture(), [])
   const ringTexture = useMemo(() => createRingTexture(), [])
+  const timeRef = useRef(0)
 
   const segs = tier === 'low' ? 20 : tier === 'medium' ? 30 : 40
   const isHighTier = tier === 'high'
@@ -31,9 +32,10 @@ export default function DSLRCamera({ timeline, tier }: DSLRCameraProps) {
     ry: (Math.random() - 0.5) * 0.01,
   }), [])
 
-  useFrame((state) => {
+  useFrame((_state, delta) => {
+    timeRef.current += delta
     const t = timeline
-    const elapsed = state.clock.elapsedTime
+    const elapsed = timeRef.current
     const drift = 0.5 + t * 0.5
 
     if (bodyRef.current) {

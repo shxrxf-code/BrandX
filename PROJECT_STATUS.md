@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 26, 2026
+> **Last Updated:** May 20, 2026
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `75171e0`
+> **Latest Commit:** `445f2eb`
 
 ---
 
@@ -59,10 +59,9 @@ BrandX/
 │   │   │   ├── HeroSpotlight.tsx       # Mouse-following radial light (Hero)
 │   │   │   └── Particles.tsx           # Canvas particles (capped FPS, IntersectionObserver)
 │   │   ├── services/
-│   │   │   ├── NeuralNetwork3D.tsx     # Three.js 3D neural network background
-│   │   │   ├── NetworkBackground.tsx   # Ambient background for services (legacy)
-│   │   │   ├── NetworkConnections.tsx  # SVG animated connection lines (legacy)
-│   │   │   ├── NetworkNode.tsx         # 3D tilt service card (legacy)
+│   │   │   ├── NetworkBackground.tsx   # Ambient background for services
+│   │   │   ├── NetworkConnections.tsx  # SVG animated connection lines
+│   │   │   ├── NetworkNode.tsx         # 3D tilt service card
 │   │   │   └── RotationCarousel.tsx    # 3D rotating carousel with drag-to-spin
 │   │   ├── ui/
 │   │   │   ├── AnimatedCounter.tsx     # Scroll-triggered number counter
@@ -150,7 +149,7 @@ RootLayout (server)
 | 1 | **Navbar** | — | Fixed glass pill nav, scroll-aware, mobile fullscreen menu, MagneticButton CTA |
 | 2 | **Hero** | — | Spotlight effect, floating shapes, particles, word reveal, gradient text, scroll parallax, dual CTAs (tel/mailto), inline stats |
 | 3 | **Trust** | — | 4-column stat counters with hover scale, scroll-reveal stagger |
-| 4 | **Services** | `#services` | 3D rotating carousel, drag-to-spin, momentum physics, omnidirectional rotation, Three.js 3D neural network background with flowing particles |
+| 4 | **Services** | `#services` | 3D rotating carousel, drag-to-spin, momentum physics, omnidirectional rotation, network connections |
 | 5 | **Portfolio** | `#work` | Horizontal scroll (sticky pinned), 5 projects, hover metrics reveal, Next.js Image |
 | 6 | **Process** | `#process` | 3D tilt cards, alternating layout, animated progress line, detail tags |
 | 7 | **About** | `#about` | Two-column split, team image (Next.js Image) with glass quote overlay, 4 value props |
@@ -313,8 +312,7 @@ EMAIL_PASS=<gmail-app-password>
 | Next.js Image (Portfolio + About) | Auto WebP/AVIF, lazy loading, responsive sizes |
 | Particles capped (30→20 desktop, 10→5 mobile) | Less CPU/GPU usage |
 | FPS limiter (30fps desktop, 20fps mobile) | Reduced animation overhead |
-| 3D neural network (Three.js Canvas) | GPU-accelerated, fewer DOM nodes vs previous 2D network |
-| IntersectionObserver on 3D scene + particles | Pauses rendering when off-screen |
+| IntersectionObserver on particles | Pauses when off-screen |
 | GradientOrbs reduced (3→2, memo) | Fewer blur layers |
 | Font preload + fallbacks | Faster text rendering |
 | Image formats (AVIF + WebP) | ~30% smaller images |
@@ -328,7 +326,6 @@ EMAIL_PASS=<gmail-app-password>
 ### Resolved
 - ~~Custom cursor causing issues~~ — Removed
 - ~~GSAP unused dependency~~ — Removed
-- ~~2D network background replaced with 3D Three.js neural network~~ — GPU-accelerated canvas rendering with flowing particles, IntersectionObserver pause
 - ~~Missing noise.png reference~~ — Removed from tailwind.config.js
 - ~~Dynamic Tailwind classes in Services~~ — Fixed with colorMap
 - ~~robots.ts syntax error~~ — Fixed with Next.js metadata API
@@ -368,14 +365,10 @@ EMAIL_PASS=<gmail-app-password>
 
 ## 12. Recent Changes (This Session)
 
-- **3D Neural Network Background** — Replaced 2D `NetworkBackground` with `NeuralNetwork3D` using Three.js (`@react-three/fiber`): 28 Fibonacci-distributed nodes, gradient connection lines, 40 flowing particles, auto-rotation + mouse parallax, IntersectionObserver pause, mobile fallback
-
 ### Git History
 
 | Commit | Message |
 |--------|---------|
-| `75171e0` | chore: update tsconfig.tsbuildinfo |
-| `37a1c8f` | feat: replace 2D network background with 3D neural network animation using Three.js |
 | `445f2eb` | remove: navigation buttons and dot indicators from portfolio |
 | `9d19a52` | feat: add left/right navigation buttons and dot indicators for project scroll |
 | `c5ed60c` | fix: horizontal scroll using ref-based transform for live maxScroll updates |

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { motion, useMotionValue } from 'framer-motion'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { LucideIcon, Pause, Play } from 'lucide-react'
 import { useIsMobile } from '@/lib/hooks'
 
@@ -17,6 +17,8 @@ interface ServiceCard3DProps {
   rotateY: number
   isHovered: boolean
   onHover: (index: number | null) => void
+  mouseX: number
+  mouseY: number
 }
 
 const colorMap: Record<string, { bg: string; text: string; border: string; glow: string; accent: string }> = {
@@ -25,9 +27,10 @@ const colorMap: Record<string, { bg: string; text: string; border: string; glow:
   cyan: { bg: 'bg-accent-cyan/10', text: 'text-accent-cyan', border: 'border-accent-cyan/30', glow: 'shadow-glow-cyan', accent: '#22D3EE' },
 }
 
-function ServiceCard3D({ icon: Icon, title, description, tags, color, index, total, rotateX, rotateY, isHovered, onHover }: ServiceCard3DProps) {
+function ServiceCard3D({ icon: Icon, title, description, tags, color, index, total, rotateX, rotateY, isHovered, onHover, mouseX, mouseY }: ServiceCard3DProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
+  const [localHover, setLocalHover] = useState(false)
   const colors = colorMap[color] || colorMap.blue
 
   const angleStep = 360 / total
@@ -38,24 +41,65 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
 
   const x = Math.sin(radianY) * radius
   const z = Math.cos(radianY) * radius
-  const scale = 0.5 + ((z + radius) / (2 * radius)) * 0.5
-  const opacity = 0.3 + ((z + radius) / (2 * radius)) * 0.7
+
+  const isFront = Math.cos(radianY) > 0.9
+  const isNearFront = Math.cos(radianY) > 0.5
+
+  const scaleBoost = isFront ? 0.12 : isNearFront ? 0.05 : 0
+  const opacityBoost = isFront ? 0.15 : 0
+
+  const scale = Math.min(1, 0.5 + ((z + radius) / (2 * radius)) * 0.5 + scaleBoost)
+  const opacity = Math.min(1, 0.3 + ((z + radius) / (2 * radius)) * 0.7 + opacityBoost)
 
   const tiltX = rotateX * 0.3
 
+  // Per-card mouse tilt
+  const cardTiltX = useMotionValue(0)
+  const cardTiltY = useMotionValue(0)
+  const smoothCardTiltX = useSpring(cardTiltX, { stiffness: 120, damping: 15 })
+  const smoothCardTiltY = useSpring(cardTiltY, { stiffness: 120, damping: 15 })
+
+  const handleCardMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const rx = ((e.clientX - rect.left) / rect.width - 0.5) * 2
+    const ry = ((e.clientY - rect.top) / rect.height - 0.5) * 2
+    cardTiltX.set(-ry * 5)
+    cardTiltY.set(rx * 5)
+  }, [cardTiltX, cardTiltY])
+
+  const handleCardMouseEnter = useCallback(() => {
+    setLocalHover(true)
+    onHover(index)
+  }, [onHover, index])
+
+  const handleCardMouseLeave = useCallback(() => {
+    setLocalHover(false)
+    onHover(null)
+    cardTiltX.set(0)
+    cardTiltY.set(0)
+  }, [onHover, cardTiltX, cardTiltY])
+
   const cardContent = (
     <div
-      className={`rounded-2xl border ${isHovered ? colors.border : 'border-white/10'} bg-background-secondary/90 backdrop-blur-xl p-6 overflow-hidden relative`}
+      className={`rounded-2xl border ${isHovered ? colors.border : 'border-white/10'} bg-background-secondary/90 backdrop-blur-xl p-6 overflow-hidden relative transition-shadow duration-500 ${isFront ? 'shadow-2xl shadow-accent-blue/10' : ''}`}
       style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
     >
       <div className={`absolute inset-0 bg-gradient-to-br ${colors.bg} to-transparent transition-opacity duration-500`} style={{ opacity: isHovered ? 0.12 : 0 }} />
 
+      {isFront && (
+        <div className="absolute -inset-[1px] rounded-[17px] opacity-40" style={{
+          background: `linear-gradient(135deg, ${colors.accent}40, transparent 40%, transparent 60%, ${colors.accent}20)`,
+          zIndex: -1,
+        }} />
+      )}
+
       <div className="relative z-10">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg} border ${colors.border}`} style={{ transform: 'translateZ(30px)' }}>
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${colors.bg} border ${colors.border} transition-all duration-300 ${isFront ? 'scale-110 shadow-lg' : ''}`} style={{ transform: 'translateZ(30px)' }}>
           <Icon size={22} className={colors.text} />
         </div>
 
-        <h3 className={`font-display text-lg font-bold mb-2 ${isHovered ? colors.text : 'text-white'}`} style={{ transform: 'translateZ(25px)' }}>
+        <h3 className={`font-display text-lg font-bold mb-2 transition-colors duration-300 ${isHovered ? colors.text : 'text-white'} ${isFront ? 'drop-shadow-[0_0_8px_rgba(124,58,237,0.3)]' : ''}`} style={{ transform: 'translateZ(25px)' }}>
           {title}
         </h3>
 
@@ -82,7 +126,7 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
     return (
       <motion.div
         ref={cardRef}
-        className={`rounded-2xl border ${colors.border} bg-background-secondary/80 backdrop-blur-xl p-6 mb-6`}
+        className={`rounded-2xl border ${colors.border} bg-background-secondary/80 backdrop-blur-xl p-6 mb-6 transition-shadow duration-500`}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1, duration: 0.5 }}
@@ -95,7 +139,7 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
   return (
     <motion.div
       ref={cardRef}
-      className="absolute left-1/2 top-1/2 w-[300px] cursor-grab active:cursor-grabbing"
+      className="absolute left-1/2 top-1/2 w-[300px]"
       style={{
         x: x - 150,
         y: -100 + Math.sin((tiltX * Math.PI) / 180) * 80 * Math.cos(radianY),
@@ -105,14 +149,36 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
         scale,
         opacity,
         transformStyle: 'preserve-3d',
+        cursor: isFront ? 'pointer' : 'grab',
       }}
       initial={false}
-      animate={{ x: x - 150, y: -100 + Math.sin((tiltX * Math.PI) / 180) * 80 * Math.cos(radianY), z, rotateY: baseAngle + rotateY, rotateX: tiltX, scale, opacity }}
-      transition={{ type: 'spring', stiffness: 70, damping: 18, mass: 0.8 }}
-      onMouseEnter={() => onHover(index)}
-      onMouseLeave={() => onHover(null)}
+      animate={{
+        x: x - 150,
+        y: -100 + Math.sin((tiltX * Math.PI) / 180) * 80 * Math.cos(radianY),
+        z,
+        rotateY: baseAngle + rotateY + smoothCardTiltY.get(),
+        rotateX: tiltX + smoothCardTiltX.get(),
+        scale,
+        opacity,
+      }}
+      transition={{ type: 'spring', stiffness: 60, damping: 16, mass: 0.8 }}
+      onMouseEnter={handleCardMouseEnter}
+      onMouseLeave={handleCardMouseLeave}
+      onMouseMove={handleCardMouseMove}
     >
       {cardContent}
+
+      {isFront && (
+        <motion.div
+          className="absolute -inset-4 rounded-[24px] pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 0.3, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          style={{
+            background: `radial-gradient(ellipse at center, ${colors.accent}15, transparent 70%)`,
+          }}
+        />
+      )}
     </motion.div>
   )
 }
@@ -130,6 +196,7 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     setMounted(true)
@@ -153,22 +220,22 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   const autoRotateRef = useRef<number | null>(null)
   const lastMoveTime = useRef(0)
 
-  // Snap to nearest card on drag release
   const snapToNearest = useCallback(() => {
     const angleStep = 360 / services.length
     const currentY = rotY.get()
     const normalizedAngle = ((currentY % 360) + 360) % 360
-    const nearestStep = Math.round(normalizedAngle / angleStep) * angleStep
-    const targetY = currentY + (nearestStep - normalizedAngle)
-
-    rotY.set(targetY)
+    const diff = normalizedAngle % angleStep
+    const snap = diff < angleStep / 2 ? -diff : angleStep - diff
+    rotY.set(currentY + snap)
   }, [rotY, services.length])
 
   const autoRotate = useCallback(() => {
     const now = Date.now()
-    if (isAutoPlaying && !isDragging && now - lastMoveTime.current > 3000) {
-      rotY.set(rotY.get() + 0.12)
-      rotX.set(rotX.get() + Math.sin(now / 3000) * 0.05)
+    if (isAutoPlaying && !isDragging && now - lastMoveTime.current > 2000) {
+      const breathe = Math.sin(now / 4000) * 0.03
+      rotY.set(rotY.get() + 0.08 + breathe)
+      rotX.set(rotX.get() + Math.sin(now / 5000) * 0.03)
+      rotX.set(Math.max(-15, Math.min(15, rotX.get())))
     }
     autoRotateRef.current = requestAnimationFrame(autoRotate)
   }, [rotX, rotY, isDragging, isAutoPlaying])
@@ -190,12 +257,13 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
   }, [])
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    setMousePos({ x: e.clientX, y: e.clientY })
     if (!isDragging) return
     const deltaX = e.clientX - lastPos.current.x
     const deltaY = e.clientY - lastPos.current.y
     rotY.set(rotY.get() + deltaX * 0.35)
-    rotX.set(rotX.get() - deltaY * 0.25)
-    rotX.set(Math.max(-45, Math.min(45, rotX.get())))
+    rotX.set(rotX.get() - deltaY * 0.2)
+    rotX.set(Math.max(-30, Math.min(30, rotX.get())))
     velX.set(deltaY)
     velY.set(deltaX)
     lastPos.current = { x: e.clientX, y: e.clientY }
@@ -207,20 +275,18 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
     const vx = velX.get()
     const vy = velY.get()
     if (Math.abs(vy) > 2) {
-      rotY.set(rotY.get() + vy * 6)
+      rotY.set(rotY.get() + vy * 4)
     }
     if (Math.abs(vx) > 2) {
-      const newX = rotX.get() - vx * 4
-      rotX.set(Math.max(-45, Math.min(45, newX)))
+      const newX = rotX.get() - vx * 3
+      rotX.set(Math.max(-30, Math.min(30, newX)))
     }
     velX.set(0)
     velY.set(0)
 
-    // Snap to nearest card
-    setTimeout(snapToNearest, 200)
+    setTimeout(snapToNearest, 300)
   }, [rotX, rotY, velX, velY, snapToNearest])
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
@@ -261,6 +327,8 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
             rotateY={0}
             isHovered={hoveredIndex === i}
             onHover={setHoveredIndex}
+            mouseX={0}
+            mouseY={0}
           />
         ))}
       </div>
@@ -317,11 +385,12 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
             rotateY={currentRotY}
             isHovered={hoveredIndex === i}
             onHover={setHoveredIndex}
+            mouseX={mousePos.x}
+            mouseY={mousePos.y}
           />
         ))}
       </motion.div>
 
-      {/* Controls */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4">
         <motion.button
           className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
@@ -345,7 +414,7 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
         >
           <span className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/50" />
-            Drag to rotate · Arrow keys to navigate
+            Drag to spin · Hover a card to tilt
           </span>
         </motion.span>
       </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Palette, Code, Megaphone, TrendingUp, Smartphone, Layers } from 'lucide-react'
 import RotationCarousel from '@/components/services/RotationCarousel'
-import NeuralNetwork3D from '@/components/services/NeuralNetwork3D'
+import NetworkBackground from '@/components/services/NetworkBackground'
 import { useIsMobile } from '@/lib/hooks'
 
 const services = [
@@ -65,7 +65,7 @@ export default function Services() {
 
   return (
     <section id="services" className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
-      <NeuralNetwork3D isLoaded={isLoaded} baseDelay={baseDelay} />
+      <NetworkBackground isLoaded={isLoaded} baseDelay={baseDelay} />
 
       <div className="section-container relative z-10">
         <div className="text-center mb-12 md:mb-16">

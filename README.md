@@ -60,7 +60,7 @@ npm run lint
 src/
 ├── app/
 │   ├── globals.css          # Global styles, Tailwind layers, CSS utilities
-│   ├── layout.tsx           # Root layout with fonts, Preloader, Cursor, SmoothScroll
+│   ├── layout.tsx           # Root layout with fonts, SmoothScroll
 │   └── page.tsx             # Main page — composes all 14 sections
 ├── components/
 │   ├── effects/             # Background effects (AnimatedGrid, GradientOrbs, Particles)
@@ -79,7 +79,6 @@ src/
 │   ├── FAQ.tsx              # Accordion FAQ
 │   ├── CTA.tsx              # Final call-to-action with marquee
 │   ├── Footer.tsx           # Multi-column footer
-│   ├── Preloader.tsx        # Animated loading screen
 │   └── SmoothScroll.tsx     # Lenis smooth scroll wrapper
 └── lib/
     └── utils.ts             # cn() utility (clsx + tailwind-merge)

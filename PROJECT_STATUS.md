@@ -9,7 +9,7 @@
 
 ## 1. Project Overview
 
-**BrandX** (branded as **Brandex Digital**) is a premium digital agency website — a single-page cinematic experience with smooth scroll, camera-lens preloader, 3D interactive sections, parallax effects, and extensive Framer Motion animations.
+**BrandX** (branded as **Brandex Digital**) is a premium digital agency website — a single-page cinematic experience with smooth scroll, 3D interactive sections, parallax effects, and extensive Framer Motion animations.
 
 Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 sections.
 
@@ -24,7 +24,7 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Portfolio: 5 projects with horizontal scroll, hover metrics reveal
 - 3D interactive sections: Services (rotating carousel), Process (3D tilt cards), TechStack (floating 3D cards), Metrics (3D rotating counters)
 - Cinematic Hero: Spotlight effect, floating shapes, gradient orbs, particles (capped FPS)
-- Camera-lens opening animation (replaces loading bar)
+- Camera-lens opening animation (replaces loading bar) — removed
 - Performance optimized: Next.js Image, AVIF/WebP, font preload, IntersectionObserver on particles
 - Error boundary: Catches runtime errors gracefully with reload option
 
@@ -81,7 +81,7 @@ BrandX/
 │   │   ├── Metrics.tsx                 # 3D rotating counter cards
 │   │   ├── Navbar.tsx                  # Fixed glass nav + mobile fullscreen menu
 │   │   ├── Portfolio.tsx               # Horizontal scroll, 5 projects (sticky pinned)
-│   │   ├── Preloader.tsx               # Camera-lens opening animation
+│   │   ├── Navbar.tsx                  # Fixed glass nav + mobile fullscreen menu
 │   │   ├── Process.tsx                 # 3D tilt timeline cards
 │   │   ├── Services.tsx                # 3D rotating carousel with drag-to-spin
 │   │   ├── SmoothScroll.tsx            # Lenis wrapper (disabled on mobile)
@@ -108,7 +108,6 @@ BrandX/
 
 ```
 RootLayout (server)
-├── Preloader                           # Camera-lens opening animation
 ├── AmbientMotion                       # Global ambient motion effects
 ├── SmoothScroll (Lenis — desktop only)
 │   └── BodyContent (client)            # Main content wrapper with preloader sync
@@ -291,7 +290,7 @@ EMAIL_PASS=<gmail-app-password>
 
 | Component | Desktop | Mobile |
 |-----------|---------|--------|
-| Preloader | Camera-lens animation (2.2s) | Camera-lens animation (1.8s) |
+| Preloader | Removed | Removed |
 | Lenis Scroll | Enabled (lerp 0.08) | Disabled (native scroll) |
 | Particles | 20 particles, 30fps | 5 particles, 20fps |
 | GradientOrbs | 2 floating orbs | Hidden |
@@ -331,7 +330,7 @@ EMAIL_PASS=<gmail-app-password>
 - ~~robots.ts syntax error~~ — Fixed with Next.js metadata API
 - ~~vercel.json conflicting with Next.js~~ — Fixed with framework preset
 - ~~Mobile crash (Lenis + useScroll conflict)~~ — Lenis disabled on mobile
-- ~~Preloader too slow on mobile~~ — Simplified to camera-lens animation
+- ~~Preloader too slow on mobile~~ — Removed entirely
 - ~~Watermark numbers invisible~~ — Increased opacity to 10%
 - ~~"Book a Strategy Call" not calling~~ — Added tel: link
 - ~~Email button not opening mail app~~ — Added mailto: link
@@ -365,6 +364,7 @@ EMAIL_PASS=<gmail-app-password>
 
 ## 12. Recent Changes (This Session)
 
+- **Preloader removed** — Camera-lens opening animation deleted entirely with its CSS keyframes. Component removed from layout.tsx.
 - **Morphogen Nexus** — Custom Canvas 2D generative animation replacing the service section background. Features 14 organic nuclei (morphing blob shapes via harmonic modulation), adaptive bezier connections with oscillating control points, flowing energy particles with trail rendering, breathing rhythm, mouse interaction, and depth layering. Entirely custom algorithm — no external animation libraries used.
 
 ### Git History

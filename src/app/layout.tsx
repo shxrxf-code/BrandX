@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
-import Preloader from '@/components/Preloader'
 import SmoothScroll from '@/components/SmoothScroll'
 import AmbientMotion from '@/components/AmbientMotion'
 import { NavigationProvider } from '@/components/NavigationProvider'
@@ -75,7 +74,6 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <Preloader />
         <AmbientMotion />
         <SmoothScroll>
           <NavigationProvider>

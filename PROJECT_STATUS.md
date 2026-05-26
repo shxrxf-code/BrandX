@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 20, 2026
+> **Last Updated:** May 26, 2026
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `445f2eb`
+> **Latest Commit:** `f3553c2`
 
 ---
 
@@ -59,7 +59,7 @@ BrandX/
 │   │   │   ├── HeroSpotlight.tsx       # Mouse-following radial light (Hero)
 │   │   │   └── Particles.tsx           # Canvas particles (capped FPS, IntersectionObserver)
 │   │   ├── services/
-│   │   │   ├── NetworkBackground.tsx   # Ambient background for services
+│   │   │   ├── NetworkBackground.tsx   # Canvas 2D generative Morphogen Nexus animation
 │   │   │   ├── NetworkConnections.tsx  # SVG animated connection lines
 │   │   │   ├── NetworkNode.tsx         # 3D tilt service card
 │   │   │   └── RotationCarousel.tsx    # 3D rotating carousel with drag-to-spin
@@ -149,7 +149,7 @@ RootLayout (server)
 | 1 | **Navbar** | — | Fixed glass pill nav, scroll-aware, mobile fullscreen menu, MagneticButton CTA |
 | 2 | **Hero** | — | Spotlight effect, floating shapes, particles, word reveal, gradient text, scroll parallax, dual CTAs (tel/mailto), inline stats |
 | 3 | **Trust** | — | 4-column stat counters with hover scale, scroll-reveal stagger |
-| 4 | **Services** | `#services` | 3D rotating carousel, drag-to-spin, momentum physics, omnidirectional rotation, network connections |
+| 4 | **Services** | `#services` | 3D rotating carousel, drag-to-spin, momentum physics, omnidirectional rotation, generative Morphogen Nexus canvas background |
 | 5 | **Portfolio** | `#work` | Horizontal scroll (sticky pinned), 5 projects, hover metrics reveal, Next.js Image |
 | 6 | **Process** | `#process` | 3D tilt cards, alternating layout, animated progress line, detail tags |
 | 7 | **About** | `#about` | Two-column split, team image (Next.js Image) with glass quote overlay, 4 value props |
@@ -365,10 +365,13 @@ EMAIL_PASS=<gmail-app-password>
 
 ## 12. Recent Changes (This Session)
 
+- **Morphogen Nexus** — Custom Canvas 2D generative animation replacing the service section background. Features 14 organic nuclei (morphing blob shapes via harmonic modulation), adaptive bezier connections with oscillating control points, flowing energy particles with trail rendering, breathing rhythm, mouse interaction, and depth layering. Entirely custom algorithm — no external animation libraries used.
+
 ### Git History
 
 | Commit | Message |
 |--------|---------|
+| `f3553c2` | feat: replace background with unique Morphogen Nexus generative animation |
 | `445f2eb` | remove: navigation buttons and dot indicators from portfolio |
 | `9d19a52` | feat: add left/right navigation buttons and dot indicators for project scroll |
 | `c5ed60c` | fix: horizontal scroll using ref-based transform for live maxScroll updates |

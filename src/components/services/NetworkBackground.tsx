@@ -7,12 +7,20 @@ interface NetworkBackgroundProps {
   baseDelay: number
 }
 
-const NUCLEUS_COUNT = 14
-const CONNECT_DIST = 200
-const PARTICLE_COUNT_PER_CONN = 2
+const RIBBON_COUNT = 6
+const SEGMENTS = 60
+const BASE_SPEED = 0.15
 
-function hsl(h: number, s: number, l: number) {
-  return `hsl(${h}, ${s}%, ${l}%)`
+const PALETTE = [
+  { r: 124, g: 58, b: 237 },
+  { r: 100, g: 120, b: 255 },
+  { r: 6, g: 182, b: 212 },
+  { r: 34, g: 211, b: 238 },
+  { r: 80, g: 80, b: 255 },
+]
+
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t
 }
 
 export default function NetworkBackground({ isLoaded }: NetworkBackgroundProps) {
@@ -42,103 +50,140 @@ export default function NetworkBackground({ isLoaded }: NetworkBackgroundProps) 
     let width = 0
     let height = 0
 
-    const palette = [
-      { h: 268, s: 90, l: 58 },  // violet
-      { h: 187, s: 95, l: 43 },  // teal
-      { h: 178, s: 86, l: 51 },  // cyan
-    ]
+    type RibbonPoint = { x: number; y: number; nx: number; ny: number }
 
-    class Nucleus {
-      x: number
-      y: number
-      z: number
-      vx: number
-      vy: number
-      baseR: number
+    class AuroraRibbon {
+      points: RibbonPoint[] = []
+      amplitude: number
+      frequency: number
+      speed: number
       phase: number
-      morphA: Float64Array
-      morphPhi: Float64Array
-      colorIdx: number
-      hue: number
-      heartbeat: number
+      color: { r: number; g: number; b: number }
+      baseY: number
+      yRange: number
+      waveOffset: number
+      thickness: number
 
       constructor() {
-        this.x = (Math.random() - 0.5) * width * 0.7
-        this.y = (Math.random() - 0.5) * height * 0.7
-        this.z = 0.3 + Math.random() * 0.7
-        this.vx = (Math.random() - 0.5) * 0.15
-        this.vy = (Math.random() - 0.5) * 0.15
-        this.baseR = 8 + Math.random() * 18
+        this.amplitude = 30 + Math.random() * 70
+        this.frequency = 0.003 + Math.random() * 0.006
+        this.speed = BASE_SPEED + Math.random() * BASE_SPEED
         this.phase = Math.random() * Math.PI * 2
-        this.morphA = new Float64Array(8)
-        this.morphPhi = new Float64Array(8)
-        for (let i = 0; i < 8; i++) {
-          this.morphA[i] = (0.15 + Math.random() * 0.35) / (i + 1)
-          this.morphPhi[i] = Math.random() * Math.PI * 2
-        }
-        this.colorIdx = Math.floor(Math.random() * palette.length)
-        this.hue = palette[this.colorIdx].h + (Math.random() - 0.5) * 15
-        this.heartbeat = Math.random() * Math.PI * 2
+        this.color = PALETTE[Math.floor(Math.random() * PALETTE.length)]
+        this.baseY = (Math.random() - 0.5) * height * 0.5
+        this.yRange = 20 + Math.random() * 40
+        this.waveOffset = Math.random() * 100
+        this.thickness = 2 + Math.random() * 3
+        this.generatePoints()
       }
 
-      update(dt: number) {
+      generatePoints() {
+        this.points = []
+        for (let i = 0; i < SEGMENTS; i++) {
+          this.points.push({ x: 0, y: 0, nx: 0, ny: 0 })
+        }
+      }
+
+      update(t: number, dt: number) {
         const mx = mouseRef.current.x
         const my = mouseRef.current.y
-        if (mx > 0 && my > 0) {
-          const dx = mx - width / 2 - this.x
-          const dy = my - height / 2 - this.y
-          const d = Math.sqrt(dx * dx + dy * dy)
-          if (d < 300) {
-            const force = (1 - d / 300) * 0.02
-            this.vx += dx * force * dt
-            this.vy += dy * force * dt
-          }
+        const mouseInfluenceX = mx > 0 ? ((mx - width / 2) / (width / 2)) * 0.3 : 0
+        const mouseInfluenceY = my > 0 ? ((my - height / 2) / (height / 2)) * 0.2 : 0
+
+        for (let i = 0; i < SEGMENTS; i++) {
+          const progress = i / (SEGMENTS - 1)
+          const x = progress * width * 1.3 - width * 0.15
+
+          const wave1 = Math.sin(t * this.speed + progress * 10 + this.phase) * this.amplitude
+          const wave2 = Math.sin(t * this.speed * 0.7 + progress * 6 + this.phase * 1.5) * this.amplitude * 0.5
+          const wave3 = Math.sin(t * this.speed * 0.3 + progress * 3 + this.waveOffset) * this.yRange
+
+          const envelope = Math.sin(progress * Math.PI)
+          const sway = Math.sin(t * 0.3 + this.phase) * 20 * envelope
+
+          const y = this.baseY + (wave1 + wave2) * envelope + wave3 + sway + mouseInfluenceY * 50 * envelope
+          const xOffset = sway * 0.3 + mouseInfluenceX * 80 * envelope
+
+          this.points[i].x = x + xOffset
+          this.points[i].y = y
         }
 
-        this.x += this.vx * dt
-        this.y += this.vy * dt
-        this.vx += (Math.random() - 0.5) * 0.02 * dt
-        this.vy += (Math.random() - 0.5) * 0.02 * dt
-        this.vx *= 0.995
-        this.vy *= 0.995
-
-        const halfW = width * 0.5
-        const halfH = height * 0.5
-        if (Math.abs(this.x) > halfW * 0.8) this.vx -= this.x * 0.001
-        if (Math.abs(this.y) > halfH * 0.8) this.vy -= this.y * 0.001
-
-        this.phase += 0.003 * dt
-        for (let i = 0; i < 8; i++) {
-          this.morphPhi[i] += 0.002 * (1 + i * 0.3) * dt
+        for (let i = 1; i < SEGMENTS - 1; i++) {
+          const dx = this.points[i + 1].x - this.points[i - 1].x
+          const dy = this.points[i + 1].y - this.points[i - 1].y
+          const len = Math.sqrt(dx * dx + dy * dy) || 1
+          this.points[i].nx = -dy / len
+          this.points[i].ny = dx / len
         }
-        this.heartbeat += 0.015 * dt
+        this.points[0].nx = this.points[1].nx
+        this.points[0].ny = this.points[1].ny
+        this.points[SEGMENTS - 1].nx = this.points[SEGMENTS - 2].nx
+        this.points[SEGMENTS - 1].ny = this.points[SEGMENTS - 2].ny
       }
 
-      getShapePoints(count: number): [number, number][] {
-        const pts: [number, number][] = []
-        const r = this.baseR * (0.7 + 0.3 * Math.sin(this.heartbeat))
-        for (let i = 0; i < count; i++) {
-          const theta = (i / count) * Math.PI * 2
-          let mod = 1
-          for (let j = 0; j < 8; j++) {
-            mod += this.morphA[j] * Math.sin((j + 1) * theta + this.morphPhi[j])
-          }
-          const pr = r * mod * this.z
-          pts.push([this.x + pr * Math.cos(theta), this.y + pr * Math.sin(theta)])
-        }
-        return pts
-      }
+      draw(ctx: CanvasRenderingContext2D, t: number) {
+        const alpha = 0.12 + 0.08 * Math.sin(t * 0.2 + this.phase)
+        const glowAlpha = alpha * 2
+        const width = this.thickness
 
-      radius() {
-        return this.baseR * (0.7 + 0.3 * Math.sin(this.heartbeat)) * 1.5 * this.z
+        // Glow pass
+        for (let g = 1; g <= 3; g++) {
+          ctx.beginPath()
+          for (let i = 0; i < SEGMENTS; i++) {
+            const p = this.points[i]
+            const w = width * (3 - g) * 8
+            const nx = p.nx * w
+            const ny = p.ny * w
+            if (i === 0) ctx.moveTo(p.x + nx, p.y + ny)
+            else ctx.lineTo(p.x + nx, p.y + ny)
+          }
+          for (let i = SEGMENTS - 1; i >= 0; i--) {
+            const p = this.points[i]
+            const w = width * (3 - g) * 8
+            const nx = p.nx * w
+            const ny = p.ny * w
+            ctx.lineTo(p.x - nx, p.y - ny)
+          }
+          ctx.closePath()
+          ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${glowAlpha * 0.08 / g})`
+          ctx.fill()
+        }
+
+        // Core ribbon
+        ctx.beginPath()
+        for (let i = 0; i < SEGMENTS; i++) {
+          const p = this.points[i]
+          const w = width
+          const nx = p.nx * w
+          const ny = p.ny * w
+          if (i === 0) ctx.moveTo(p.x + nx, p.y + ny)
+          else ctx.lineTo(p.x + nx, p.y + ny)
+        }
+        for (let i = SEGMENTS - 1; i >= 0; i--) {
+          const p = this.points[i]
+          const w = width
+          const nx = p.nx * w
+          const ny = p.ny * w
+          ctx.lineTo(p.x - nx, p.y - ny)
+        }
+        ctx.closePath()
+
+        const grad = ctx.createLinearGradient(0, -height * 0.5, 0, height * 0.5)
+        grad.addColorStop(0, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`)
+        grad.addColorStop(0.3, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha * 0.7})`)
+        grad.addColorStop(0.5, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha})`)
+        grad.addColorStop(0.7, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${alpha * 0.7})`)
+        grad.addColorStop(1, `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0)`)
+        ctx.fillStyle = grad
+        ctx.fill()
       }
     }
 
-    let nuclei: Nucleus[] = []
+    let ribbons: AuroraRibbon[] = []
 
     function resize() {
       const rect = canvas!.parentElement!.getBoundingClientRect()
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
       width = rect.width
       height = rect.height
       canvas!.width = width * dpr
@@ -149,77 +194,11 @@ export default function NetworkBackground({ isLoaded }: NetworkBackgroundProps) 
     }
 
     resize()
-
-    nuclei = Array.from({ length: NUCLEUS_COUNT }, () => new Nucleus())
-
-    function dist(a: Nucleus, b: Nucleus) {
-      const dx = a.x - b.x
-      const dy = a.y - b.y
-      return Math.sqrt(dx * dx + dy * dy)
-    }
-
-    function bezierPoint(
-      x1: number, y1: number,
-      cx1: number, cy1: number,
-      cx2: number, cy2: number,
-      x2: number, y2: number,
-      t: number
-    ): [number, number] {
-      const u = 1 - t
-      return [
-        u * u * u * x1 + 3 * u * u * t * cx1 + 3 * u * t * t * cx2 + t * t * t * x2,
-        u * u * u * y1 + 3 * u * u * t * cy1 + 3 * u * t * t * cy2 + t * t * t * y2,
-      ]
-    }
-
-    interface Connection {
-      a: number; b: number
-    }
-    interface Particle {
-      connIdx: number
-      t: number
-      speed: number
-      trail: [number, number][]
-    }
-
-    let connections: Connection[] = []
-    let particles: Particle[] = []
-
-    function generateConnections() {
-      const conns: Connection[] = []
-      for (let i = 0; i < nuclei.length; i++) {
-        for (let j = i + 1; j < nuclei.length; j++) {
-          const d = dist(nuclei[i], nuclei[j])
-          const normD = d / CONNECT_DIST
-          if (normD < 1 && Math.random() < 0.7) {
-            conns.push({ a: i, b: j })
-          }
-        }
-      }
-      return conns
-    }
-
-    function generateParticles() {
-      const ps: Particle[] = []
-      for (let ci = 0; ci < connections.length; ci++) {
-        for (let p = 0; p < PARTICLE_COUNT_PER_CONN; p++) {
-          ps.push({
-            connIdx: ci,
-            t: Math.random(),
-            speed: 0.15 + Math.random() * 0.25,
-            trail: [],
-          })
-        }
-      }
-      return ps
-    }
-
-    connections = generateConnections()
-    particles = generateParticles()
+    ribbons = Array.from({ length: RIBBON_COUNT }, () => new AuroraRibbon())
 
     let prevTime = performance.now()
 
-    function drawScreen(ctx: CanvasRenderingContext2D) {
+    function draw(ctx: CanvasRenderingContext2D) {
       const now = performance.now()
       const dt = Math.min((now - prevTime) / 16, 3)
       prevTime = now
@@ -228,161 +207,27 @@ export default function NetworkBackground({ isLoaded }: NetworkBackgroundProps) 
       ctx.clearRect(0, 0, width, height)
 
       ctx.save()
-      ctx.translate(width / 2, height / 2)
+      ctx.translate(0, height / 2)
 
-      for (const n of nuclei) {
-        n.update(dt)
+      for (const ribbon of ribbons) {
+        ribbon.update(time, dt)
       }
 
-      const breathing = 0.9 + 0.1 * Math.sin(time * 0.3)
+      ribbons.sort((a, b) => {
+        const za = Math.sin(time * 0.1 + a.phase)
+        const zb = Math.sin(time * 0.1 + b.phase)
+        return za - zb
+      })
 
-      // Update connections periodically
-      if (Math.floor(time / 60) > Math.floor((time - dt * 0.016) / 60)) {
-        connections = generateConnections()
-        particles = generateParticles()
-      }
-
-      // Draw connections
-      for (const conn of connections) {
-        const na = nuclei[conn.a]
-        const nb = nuclei[conn.b]
-        const d = dist(na, nb)
-        const normD = d / CONNECT_DIST
-        if (normD >= 1) continue
-
-        const alpha = (1 - normD) * 0.25 * breathing
-        const midX = (na.x + nb.x) / 2
-        const midY = (na.y + nb.y) / 2
-        const dx = na.x - nb.x
-        const dy = na.y - nb.y
-        const perpMag = d * 0.4 * Math.sin(time * 0.4 + conn.a + conn.b)
-        const perpX = -dy / (d || 1) * perpMag
-        const perpY = dx / (d || 1) * perpMag
-
-        const cpx1 = midX + perpX + Math.sin(time * 0.2 + conn.a) * 30
-        const cpy1 = midY + perpY + Math.cos(time * 0.2 + conn.b) * 30
-        const cpx2 = midX - perpX + Math.cos(time * 0.25 + conn.a) * 30
-        const cpy2 = midY - perpY + Math.sin(time * 0.25 + conn.b) * 30
-
-        // Glow layer
-        ctx.beginPath()
-        ctx.moveTo(na.x, na.y)
-        ctx.bezierCurveTo(cpx1, cpy1, cpx2, cpy2, nb.x, nb.y)
-        ctx.strokeStyle = `rgba(124, 58, 237, ${alpha * 0.3})`
-        ctx.lineWidth = 8
-        ctx.stroke()
-
-        // Core line
-        ctx.beginPath()
-        ctx.moveTo(na.x, na.y)
-        ctx.bezierCurveTo(cpx1, cpy1, cpx2, cpy2, nb.x, nb.y)
-        const hue = (na.hue * 0.5 + nb.hue * 0.5)
-        ctx.strokeStyle = `hsla(${hue}, 85%, 55%, ${alpha})`
-        ctx.lineWidth = 1.5 * breathing
-        ctx.stroke()
-      }
-
-      // Draw particles
-      for (const p of particles) {
-        if (p.connIdx >= connections.length) continue
-        const conn = connections[p.connIdx]
-        const na = nuclei[conn.a]
-        const nb = nuclei[conn.b]
-        const d = dist(na, nb)
-        const normD = d / CONNECT_DIST
-        if (normD >= 1) continue
-
-        p.t += p.speed * 0.008 * dt
-        if (p.t > 1) p.t = 0
-
-        const midX = (na.x + nb.x) / 2
-        const midY = (na.y + nb.y) / 2
-        const dx = na.x - nb.x
-        const dy = na.y - nb.y
-        const dlen = Math.sqrt(dx * dx + dy * dy) || 1
-        const perpMag = d * 0.4 * Math.sin(time * 0.4 + conn.a + conn.b)
-        const perpX = -dy / dlen * perpMag
-        const perpY = dx / dlen * perpMag
-        const cpx1 = midX + perpX + Math.sin(time * 0.2 + conn.a) * 30
-        const cpy1 = midY + perpY + Math.cos(time * 0.2 + conn.b) * 30
-        const cpx2 = midX - perpX + Math.cos(time * 0.25 + conn.a) * 30
-        const cpy2 = midY - perpY + Math.sin(time * 0.25 + conn.b) * 30
-
-        const [px, py] = bezierPoint(na.x, na.y, cpx1, cpy1, cpx2, cpy2, nb.x, nb.y, p.t)
-
-        p.trail.push([px, py])
-        if (p.trail.length > 8) p.trail.shift()
-
-        // Trail
-        for (let i = 0; i < p.trail.length - 1; i++) {
-          const ta = (i / p.trail.length) * 0.5
-          ctx.beginPath()
-          ctx.arc(p.trail[i][0], p.trail[i][1], 1.5 * (i / p.trail.length), 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(34, 211, 238, ${ta})`
-          ctx.fill()
-        }
-
-        // Particle
-        ctx.beginPath()
-        ctx.arc(px, py, 2.5, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(34, 211, 238, 0.9)'
-        ctx.fill()
-        ctx.beginPath()
-        ctx.arc(px, py, 5, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(34, 211, 238, 0.2)'
-        ctx.fill()
-      }
-
-      // Draw nuclei
-      const sorted = [...nuclei].sort((a, b) => a.z - b.z)
-
-      for (const n of sorted) {
-        const shape = n.getShapePoints(20)
-        const alpha = 0.3 + 0.5 * n.z
-
-        // Outer glow
-        ctx.save()
-        ctx.shadowColor = `hsla(${n.hue}, 85%, 55%, 0.3)`
-        ctx.shadowBlur = 30 * n.z
-        ctx.beginPath()
-        ctx.moveTo(shape[0][0], shape[0][1])
-        for (let i = 1; i < shape.length; i++) {
-          ctx.lineTo(shape[i][0], shape[i][1])
-        }
-        ctx.closePath()
-        ctx.fillStyle = `hsla(${n.hue}, 85%, 58%, ${alpha * 0.15})`
-        ctx.fill()
-        ctx.restore()
-
-        // Fill
-        ctx.beginPath()
-        ctx.moveTo(shape[0][0], shape[0][1])
-        for (let i = 1; i < shape.length; i++) {
-          ctx.lineTo(shape[i][0], shape[i][1])
-        }
-        ctx.closePath()
-        ctx.fillStyle = `hsla(${n.hue}, 85%, 58%, ${alpha * 0.25})`
-        ctx.fill()
-        ctx.strokeStyle = `hsla(${n.hue}, 85%, 65%, ${alpha * 0.4})`
-        ctx.lineWidth = 0.5
-        ctx.stroke()
-
-        // Inner glow
-        const innerR = n.baseR * n.z * 0.4
-        const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, innerR)
-        grad.addColorStop(0, `hsla(${n.hue}, 90%, 70%, ${alpha * 0.6})`)
-        grad.addColorStop(1, `hsla(${n.hue}, 90%, 70%, 0)`)
-        ctx.beginPath()
-        ctx.arc(n.x, n.y, innerR, 0, Math.PI * 2)
-        ctx.fillStyle = grad
-        ctx.fill()
+      for (const ribbon of ribbons) {
+        ribbon.draw(ctx, time)
       }
 
       ctx.restore()
     }
 
     function loop() {
-      drawScreen(ctx!)
+      draw(ctx!)
       animId = requestAnimationFrame(loop)
     }
 
@@ -390,9 +235,7 @@ export default function NetworkBackground({ isLoaded }: NetworkBackgroundProps) 
 
     const ro = new ResizeObserver(() => {
       resize()
-      nuclei = Array.from({ length: NUCLEUS_COUNT }, () => new Nucleus())
-      connections = generateConnections()
-      particles = generateParticles()
+      ribbons = Array.from({ length: RIBBON_COUNT }, () => new AuroraRibbon())
     })
     ro.observe(canvas.parentElement!)
 

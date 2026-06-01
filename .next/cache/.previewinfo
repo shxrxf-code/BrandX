@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"previewModeId":"fba1936329f6f172f8bb1f17af281093","previewModeSigningKey":"a14e00afc496c36c179bab4c3adf3e37031993b30599a95796c4c7a1919e20fa","previewModeEncryptionKey":"c1dc0a0e0fdecd7cf47f8425398f51e8f0140b338ee1920d7ab73f00b47f4ab3","expireAt":1781498407133}
-=======
-{"previewModeId":"9e7e669f133d146c079d026002e583f3","previewModeSigningKey":"879ce85b10507d1d3b2fc82df5f8cb6cef6e4da8b44a7d6459cd029fa7268288","previewModeEncryptionKey":"c7e0f39a2addcc866dd0cdad846cb80d6c702617df008e2796b26d3f28091b7d","expireAt":1781499579757}
->>>>>>> fafc6ea (feat: add CoverFlow component for showcasing projects with interactive card animations)
+{"previewModeId":"ce4c68c248a5e0be66acfe1d9d7d129d","previewModeSigningKey":"b611a7b9728edbee7ca810c64ea848d0a2908894cfd534b2d90879615d8729ac","previewModeEncryptionKey":"b6aa5a0bbb32cb150bac0252f5197dcc76f7108ba866727925993719b31e113f","expireAt":1781500824935}

@@ -58,12 +58,12 @@ function MetricCard3D({ metric, index, isLoaded, baseDelay }: { metric: typeof m
         initial={{ opacity: 0, y: 40, scale: 0.9 }}
         animate={isLoaded ? { opacity: 1, y: 0, scale: 1 } : {}}
         transition={{ delay: baseDelay + index * 0.1, duration: 0.6 }}
-        className="text-center rounded-2xl border border-white/10 bg-background-secondary/80 backdrop-blur-xl p-8"
+        className="text-center rounded-2xl border border-black/10 bg-background-secondary/80 backdrop-blur-xl p-8"
       >
         <div className={`font-display text-5xl md:text-6xl font-bold bg-gradient-to-r ${colors.gradient} bg-clip-text text-transparent mb-4`}>
           <AnimatedCounter value={metric.value} suffix={metric.suffix} duration={2} />
         </div>
-        <div className={`font-display text-white font-semibold text-lg mb-2 ${colors.text}`}>
+        <div className={`font-display text-text-primary font-semibold text-lg mb-2 ${colors.text}`}>
           {metric.label}
         </div>
         <div className="text-sm text-text-muted">{metric.description}</div>
@@ -83,7 +83,7 @@ function MetricCard3D({ metric, index, isLoaded, baseDelay }: { metric: typeof m
       onMouseLeave={handleMouseLeave}
     >
       <motion.div
-        className="rounded-2xl border border-white/10 bg-background-secondary/90 backdrop-blur-xl p-8 cursor-pointer overflow-hidden relative text-center"
+        className="rounded-2xl border border-black/10 bg-background-secondary/90 backdrop-blur-xl p-8 cursor-pointer overflow-hidden relative text-center"
         style={{
           rotateX,
           rotateY,
@@ -110,7 +110,7 @@ function MetricCard3D({ metric, index, isLoaded, baseDelay }: { metric: typeof m
           </motion.div>
 
           <motion.div
-            className={`font-display text-white font-semibold text-xl mb-3 transition-colors duration-300 ${isHovered ? colors.text : ''}`}
+            className={`font-display text-text-primary font-semibold text-xl mb-3 transition-colors duration-300 ${isHovered ? colors.text : ''}`}
             style={{ transform: 'translateZ(30px)' }}
           >
             {metric.label}

@@ -87,7 +87,7 @@ export default function Navbar() {
           >
             <a
               href="#"
-              className="font-display text-xl font-bold tracking-tight text-white"
+              className="font-display text-xl font-bold tracking-tight text-text-primary"
             >
               BRANDEX
               <span className="ml-1 text-xs font-normal text-text-muted tracking-widest uppercase">
@@ -104,7 +104,7 @@ export default function Navbar() {
                     key={link.label}
                     href={link.href}
                     className="text-sm transition-colors duration-300 line-through-hover relative cursor-pointer"
-                    style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.6)' }}
+                    style={{ color: isActive ? '#09090B' : 'rgba(0,0,0,0.5)' }}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 2.5 + i * 0.1 }}
@@ -141,7 +141,7 @@ export default function Navbar() {
             </div>
 
             <button
-              className="md:hidden text-white p-2"
+              className="md:hidden text-text-primary p-2"
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}
@@ -171,7 +171,7 @@ export default function Navbar() {
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  className="font-display text-4xl md:text-5xl font-bold text-white hover:text-accent-blue transition-colors cursor-pointer"
+                  className="font-display text-4xl md:text-5xl font-bold text-text-primary hover:text-accent-blue transition-colors cursor-pointer"
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
@@ -200,7 +200,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <a href="mailto:brandexdigital.in@gmail.com" className="hover:text-white transition-colors">
+              <a href="mailto:brandexdigital.in@gmail.com" className="hover:text-text-primary transition-colors">
                 brandexdigital.in@gmail.com
               </a>
             </motion.div>

@@ -103,11 +103,11 @@ export default function CTA() {
         </ScrollReveal>
       </motion.div>
 
-      <div className="mt-24 pt-12 border-t border-white/5">
+      <div className="mt-24 pt-12 border-t border-black/5">
         <Marquee
           items={marqueeItems}
           speed={25}
-          itemClassName="font-display text-2xl md:text-4xl font-bold text-white/5"
+          itemClassName="font-display text-2xl md:text-4xl font-bold text-black/5"
         />
       </div>
     </section>

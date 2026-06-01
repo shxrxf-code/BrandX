@@ -48,7 +48,7 @@ export default function Footer() {
   }
 
   return (
-    <footer ref={ref} className="relative pt-24 pb-8 border-t border-white/5">
+    <footer ref={ref} className="relative pt-24 pb-8 border-t border-black/5">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-accent-blue/5 to-transparent pointer-events-none" />
 
@@ -64,7 +64,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <motion.a
               href="#"
-              className="font-display text-2xl font-bold text-white mb-6 block"
+              className="font-display text-2xl font-bold text-text-primary mb-6 block"
               whileHover={{ opacity: 0.8 }}
             >
               BRANDEX
@@ -81,14 +81,14 @@ export default function Footer() {
             <div className="space-y-4">
               <a
                 href="mailto:brandexdigital.in@gmail.com"
-                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
+                className="flex items-center gap-3 text-text-secondary hover:text-text-primary transition-colors text-sm group"
               >
                 <Mail size={16} className="group-hover:text-accent-blue transition-colors" />
                 brandexdigital.in@gmail.com
               </a>
               <a
                 href="tel:+9170100096308"
-                className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
+                className="flex items-center gap-3 text-text-secondary hover:text-text-primary transition-colors text-sm group"
               >
                 <Phone size={16} className="group-hover:text-accent-blue transition-colors" />
                 +91 70100 096308
@@ -102,7 +102,7 @@ export default function Footer() {
 
           {/* Services column */}
           <div>
-            <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
+            <h4 className="font-display text-text-primary font-semibold mb-6 text-sm tracking-wider uppercase">
               Services
             </h4>
             <ul className="space-y-3">
@@ -110,7 +110,7 @@ export default function Footer() {
                 <li key={i}>
                   <a
                     href={link.href}
-                    className="text-text-secondary hover:text-white transition-colors text-sm flex items-center gap-2 group"
+                    className="text-text-secondary hover:text-text-primary transition-colors text-sm flex items-center gap-2 group"
                   >
                     <span className="w-0 group-hover:w-3 transition-all duration-300 overflow-hidden">
                       <ArrowUpRight size={12} className="text-accent-blue" />
@@ -124,7 +124,7 @@ export default function Footer() {
 
           {/* Company column */}
           <div>
-            <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
+            <h4 className="font-display text-text-primary font-semibold mb-6 text-sm tracking-wider uppercase">
               Company
             </h4>
             <ul className="space-y-3">
@@ -132,7 +132,7 @@ export default function Footer() {
                 <li key={i}>
                   <a
                     href={link.href}
-                    className="text-text-secondary hover:text-white transition-colors text-sm flex items-center gap-2 group"
+                    className="text-text-secondary hover:text-text-primary transition-colors text-sm flex items-center gap-2 group"
                   >
                     <span className="w-0 group-hover:w-3 transition-all duration-300 overflow-hidden">
                       <ArrowUpRight size={12} className="text-accent-blue" />
@@ -146,7 +146,7 @@ export default function Footer() {
 
           {/* Social column */}
           <div>
-            <h4 className="font-display text-white font-semibold mb-6 text-sm tracking-wider uppercase">
+            <h4 className="font-display text-text-primary font-semibold mb-6 text-sm tracking-wider uppercase">
               Follow Us
             </h4>
             <div className="space-y-3">
@@ -156,7 +156,7 @@ export default function Footer() {
                   <motion.a
                     key={i}
                     href={social.href}
-                    className="flex items-center gap-3 text-text-secondary hover:text-white transition-colors text-sm group"
+                    className="flex items-center gap-3 text-text-secondary hover:text-text-primary transition-colors text-sm group"
                     whileHover={{ x: 4 }}
                   >
                     <motion.div
@@ -180,10 +180,10 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-text-muted">
           <p>&copy; {currentYear} Brandex Digital. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="#" className="hover:text-text-primary transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a href="#" className="hover:text-text-primary transition-colors">
               Terms of Service
             </a>
           </div>
@@ -194,7 +194,7 @@ export default function Footer() {
       <AnimatePresence>
         {showBackToTop && (
           <motion.button
-            className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center hover:bg-accent-blue/20 hover:border-accent-blue/40 transition-colors duration-300"
+            className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-black/10 backdrop-blur-xl border border-black/20 flex items-center justify-center hover:bg-accent-blue/20 hover:border-accent-blue/40 transition-colors duration-300"
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.8 }}
@@ -202,7 +202,7 @@ export default function Footer() {
             onClick={scrollToTop}
             aria-label="Back to top"
           >
-            <ArrowUp size={18} className="text-white" />
+            <ArrowUp size={18} className="text-text-primary" />
           </motion.button>
         )}
       </AnimatePresence>

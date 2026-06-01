@@ -98,7 +98,7 @@ export default function About() {
                       >
                         <CheckCircle2 size={14} className="text-accent-blue" />
                       </motion.div>
-                      <h4 className="font-display text-white font-semibold group-hover:text-accent-blue transition-colors duration-300">
+                      <h4 className="font-display text-text-primary font-semibold group-hover:text-accent-blue transition-colors duration-300">
                         {value.label}
                       </h4>
                     </div>
@@ -142,7 +142,7 @@ export default function About() {
                 transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 whileHover={{ y: -4, scale: 1.02 }}
               >
-                <p className="font-display text-lg font-bold text-white mb-1">
+                <p className="font-display text-lg font-bold text-text-primary mb-1">
                   &ldquo;Design is intelligence made visible.&rdquo;
                 </p>
                 <p className="text-xs text-text-muted">— Alina Wheeler</p>

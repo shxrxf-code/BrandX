@@ -63,7 +63,7 @@ export default function FloatingShapes({ className = '' }: FloatingShapesProps) 
       x: '90%',
       y: '45%',
       size: 'w-1 h-1',
-      color: 'bg-white/20',
+      color: 'bg-black/10',
       duration: 4,
       delay: 3,
     },

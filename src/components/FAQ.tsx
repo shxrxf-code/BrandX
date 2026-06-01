@@ -106,8 +106,8 @@ export default function FAQ() {
                 <motion.div
                   className={`rounded-2xl border transition-all duration-500 ${
                     isOpen
-                      ? 'bg-white/[0.04] border-accent-blue/20'
-                      : 'bg-white/[0.02] border-white/[0.06] hover:border-white/[0.1]'
+                      ? 'bg-black/[0.04] border-accent-blue/20'
+                      : 'bg-black/[0.02] border-black/[0.06] hover:border-black/[0.1]'
                   }`}
                 >
                   <button
@@ -119,13 +119,13 @@ export default function FAQ() {
                     aria-controls={panelId}
                   >
                     <span className={`font-display text-lg md:text-xl font-semibold pr-8 transition-colors duration-300 ${
-                      isOpen ? 'text-accent-blue' : 'text-white group-hover:text-accent-blue'
+                      isOpen ? 'text-accent-blue' : 'text-text-primary group-hover:text-accent-blue'
                     }`}>
                       {faq.question}
                     </span>
                     <motion.div
                       className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300 ${
-                        isOpen ? 'bg-accent-blue/20' : 'bg-white/5 group-hover:bg-white/10'
+                        isOpen ? 'bg-accent-blue/20' : 'bg-black/5 group-hover:bg-black/10'
                       }`}
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.3 }}
@@ -134,7 +134,7 @@ export default function FAQ() {
                       {isOpen ? (
                         <Minus size={18} className="text-accent-blue" />
                       ) : (
-                        <Plus size={18} className="text-white" />
+                        <Plus size={18} className="text-text-primary" />
                       )}
                     </motion.div>
                   </button>

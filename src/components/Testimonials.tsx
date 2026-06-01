@@ -103,7 +103,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: typeof testimoni
         </p>
 
         {/* Author info */}
-        <div className="flex items-center gap-4 pt-6 border-t border-white/5">
+        <div className="flex items-center gap-4 pt-6 border-t border-black/5">
           <motion.div
             className="w-12 h-12 rounded-full bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center text-white font-display font-bold text-sm"
             whileHover={{ scale: 1.1 }}
@@ -112,7 +112,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: typeof testimoni
             {testimonial.avatar}
           </motion.div>
           <div>
-            <div className="font-display text-white font-semibold group-hover:text-accent-blue transition-colors duration-300">
+            <div className="font-display text-text-primary font-semibold group-hover:text-accent-blue transition-colors duration-300">
               {testimonial.author}
             </div>
             <div className="text-xs text-text-muted">{testimonial.role}</div>

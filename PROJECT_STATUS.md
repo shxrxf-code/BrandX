@@ -1,9 +1,9 @@
 # BrandX — Project Status & Reference Document
 
-> **Last Updated:** May 26, 2026
+> **Last Updated:** June 1, 2026
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `f3553c2`
+> **Latest Commit:** `7145f50`
 
 ---
 
@@ -27,6 +27,7 @@ Migrated from Vite + React Router SPA to **Next.js 15 App Router** with 14 secti
 - Camera-lens opening animation (replaces loading bar) — removed
 - Performance optimized: Next.js Image, AVIF/WebP, font preload, IntersectionObserver on particles
 - Error boundary: Catches runtime errors gracefully with reload option
+- **Light theme** — Background `#FAFAFA`, text `#09090B`, updated glass/button/utility classes
 
 ---
 
@@ -168,12 +169,11 @@ RootLayout (server)
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `background.DEFAULT` | `#050505` | Page background |
-| `background.secondary` | `#0A0A0A` | Card/image backgrounds |
-| `surface.DEFAULT` | `#1A1A1A` | Interactive surfaces |
-| `text.primary` | `#FFFFFF` | Headings |
-| `text.secondary` | `rgba(255,255,255,0.60)` | Body text |
-| `text.muted` | `rgba(255,255,255,0.35)` | Labels |
+| `background.DEFAULT` | `#FAFAFA` | Page background |
+| `background.secondary` | `#F4F4F5` | Card/image backgrounds |
+| `text.primary` | `#09090B` | Headings |
+| `text.secondary` | `#52525B` | Body text |
+| `text.muted` | `#A1A1AA` | Labels |
 | `accent.blue` | `#3B82F6` | Primary accent |
 | `accent.purple` | `#A855F7` | Secondary accent |
 | `accent.cyan` | `#22D3EE` | Tertiary accent |
@@ -343,7 +343,7 @@ EMAIL_PASS=<gmail-app-password>
 ### Remaining
 - Social links still point to `#` (awaiting URLs)
 - Portfolio images use external Unsplash URLs
-- No dark/light mode toggle
+- ~~No dark/light mode toggle~~ — Now light theme by default (dark mode removed)
 
 ---
 
@@ -364,6 +364,7 @@ EMAIL_PASS=<gmail-app-password>
 
 ## 12. Recent Changes (This Session)
 
+- **Light theme conversion** — Complete light theme: background `#050505` → `#FAFAFA`, text `#FFFFFF` → `#09090B`, all glass effects, buttons, borders, overlays, and text colors updated across all 25+ component files, globals.css, and tailwind.config.js.
 - **Preloader removed** — Camera-lens opening animation deleted entirely with its CSS keyframes. Component removed from layout.tsx.
 - **Morphogen Nexus** — Custom Canvas 2D generative animation replacing the service section background. Features 14 organic nuclei (morphing blob shapes via harmonic modulation), adaptive bezier connections with oscillating control points, flowing energy particles with trail rendering, breathing rhythm, mouse interaction, and depth layering. Entirely custom algorithm — no external animation libraries used.
 
@@ -371,6 +372,7 @@ EMAIL_PASS=<gmail-app-password>
 
 | Commit | Message |
 |--------|---------|
+| `7145f50` | feat: convert site from dark theme to full light theme |
 | `f3553c2` | feat: replace background with unique Morphogen Nexus generative animation |
 | `445f2eb` | remove: navigation buttons and dot indicators from portfolio |
 | `9d19a52` | feat: add left/right navigation buttons and dot indicators for project scroll |

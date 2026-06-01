@@ -95,7 +95,7 @@ function ProcessCard3D({ step, index, isLoaded, baseDelay, isActive }: { step: t
               <p className="text-text-secondary text-sm leading-relaxed mb-4">{step.description}</p>
               <div className="flex flex-wrap gap-2">
                 {step.details.map((detail, j) => (
-                  <span key={j} className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-2 py-1 rounded-full">
+                  <span key={j} className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-black/5 px-2 py-1 rounded-full">
                     {detail}
                   </span>
                 ))}
@@ -119,7 +119,7 @@ function ProcessCard3D({ step, index, isLoaded, baseDelay, isActive }: { step: t
     >
       <div
         ref={cardRef}
-        className={`rounded-2xl border ${isActive ? colors.border : 'border-white/10'} bg-background-secondary/90 backdrop-blur-xl p-8 cursor-pointer overflow-hidden relative`}
+        className={`rounded-2xl border ${isActive ? colors.border : 'border-black/10'} bg-background-secondary/90 backdrop-blur-xl p-8 cursor-pointer overflow-hidden relative`}
         style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => { setIsHovered(true); scale.set(1.03) }}
@@ -147,7 +147,7 @@ function ProcessCard3D({ step, index, isLoaded, baseDelay, isActive }: { step: t
 
               <div className="flex-1">
                 <motion.h3
-                  className={`font-display text-2xl font-bold mb-3 transition-colors duration-300 ${isHovered ? colors.text : 'text-white'}`}
+                  className={`font-display text-2xl font-bold mb-3 transition-colors duration-300 ${isHovered ? colors.text : 'text-text-primary'}`}
                   style={{ transform: 'translateZ(30px)' }}
                 >
                   {step.title}
@@ -167,7 +167,7 @@ function ProcessCard3D({ step, index, isLoaded, baseDelay, isActive }: { step: t
                   {step.details.map((detail, j) => (
                     <span
                       key={j}
-                      className="text-xs font-mono tracking-wider uppercase text-text-muted bg-white/5 px-3 py-1.5 rounded-full border border-white/5"
+                      className="text-xs font-mono tracking-wider uppercase text-text-muted bg-black/5 px-3 py-1.5 rounded-full border border-black/5"
                     >
                       {detail}
                     </span>
@@ -246,7 +246,7 @@ export default function Process() {
         <div className="relative">
           {!isMobile && (
             <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2">
-              <div className="absolute inset-0 bg-white/5" />
+              <div className="absolute inset-0 bg-black/5" />
               <motion.div
                 className="absolute top-0 w-full bg-gradient-to-b from-accent-blue via-accent-purple to-accent-cyan"
                 style={{ height: useTransform(scrollYProgress, [0, 1], ['0%', '100%']) }}

@@ -286,7 +286,7 @@ function OrbitCard({
             {project.tech.map((tech, i) => (
               <span
                 key={i}
-                className="text-[8px] font-mono tracking-wider uppercase px-1 py-0.5 rounded bg-white/5 border border-white/10 text-text-muted"
+                className="text-[8px] font-mono tracking-wider uppercase px-1 py-0.5 rounded bg-black/5 border border-black/10 text-text-muted"
               >
                 {tech}
               </span>
@@ -609,7 +609,7 @@ export default function Portfolio() {
           </p>
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-background font-medium text-sm tracking-wide uppercase rounded-full hover:bg-accent-blue hover:text-white transition-all duration-200"
+            className="inline-flex items-center gap-2 px-7 py-3.5 bg-text-primary text-white font-medium text-sm tracking-wide uppercase rounded-full hover:bg-accent-blue hover:text-white transition-all duration-200"
           >
             Start a Project
             <ExternalLink size={14} />

@@ -73,7 +73,7 @@ function AnimatedStat({ stat, index }: { stat: typeof stats[0]; index: number })
           </motion.div>
 
           {/* Value */}
-          <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2">
+          <div className="font-display text-4xl md:text-5xl font-bold text-text-primary mb-2">
             <span style={{ color: colorMap[stat.color] }}>
               {count}
             </span>
@@ -92,7 +92,7 @@ function AnimatedStat({ stat, index }: { stat: typeof stats[0]; index: number })
 
 export default function Trust() {
   return (
-    <section className="relative py-20 border-t border-white/5">
+    <section className="relative py-20 border-t border-black/5">
       <div className="section-container">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {stats.map((stat, i) => (

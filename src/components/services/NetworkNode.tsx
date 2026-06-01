@@ -97,7 +97,7 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
               <Icon size={22} className={colors.text} />
             </div>
 
-            <h3 className={`font-display text-lg font-bold mb-2 ${isHovered ? colors.text : 'text-white'}`}>
+            <h3 className={`font-display text-lg font-bold mb-2 ${isHovered ? colors.text : 'text-text-primary'}`}>
               {title}
             </h3>
 
@@ -109,7 +109,7 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
               {tags.map((tag, j) => (
                 <span
                   key={j}
-                  className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-2 py-1 rounded-full"
+                  className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-black/5 px-2 py-1 rounded-full"
                 >
                   {tag}
                 </span>
@@ -139,7 +139,7 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
       onMouseLeave={handleMouseLeave}
     >
       <motion.div
-        className="relative rounded-2xl border border-white/10 bg-background-secondary/90 backdrop-blur-xl p-6 cursor-pointer overflow-hidden"
+        className="relative rounded-2xl border border-black/10 bg-background-secondary/90 backdrop-blur-xl p-6 cursor-pointer overflow-hidden"
         style={{
           rotateX,
           rotateY,
@@ -168,7 +168,7 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
           </motion.div>
 
           <motion.h3
-            className={`font-display text-lg font-bold mb-2 transition-colors duration-300 ${isHovered ? colors.text : 'text-white'}`}
+            className={`font-display text-lg font-bold mb-2 transition-colors duration-300 ${isHovered ? colors.text : 'text-text-primary'}`}
             style={{ transform: 'translateZ(30px)' }}
           >
             {title}
@@ -188,7 +188,7 @@ export default function NetworkNode({ icon: Icon, title, description, tags, colo
             {tags.map((tag, j) => (
               <span
                 key={j}
-                className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-2 py-1 rounded-full"
+                className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-black/5 px-2 py-1 rounded-full"
               >
                 {tag}
               </span>

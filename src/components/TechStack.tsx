@@ -62,16 +62,16 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
         initial={{ opacity: 0, y: 30, scale: 0.9 }}
         animate={isLoaded ? { opacity: 1, y: 0, scale: 1 } : {}}
         transition={{ delay: baseDelay + index * 0.08, duration: 0.5 }}
-        className="rounded-xl border border-white/10 bg-background-secondary/80 backdrop-blur-xl p-4"
+        className="rounded-xl border border-black/10 bg-background-secondary/80 backdrop-blur-xl p-4"
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <span className="text-lg">{tech.icon}</span>
-            <span className="font-display text-white font-semibold text-sm">{tech.name}</span>
+            <span className="font-display text-text-primary font-semibold text-sm">{tech.name}</span>
           </div>
           <span className="text-xs text-text-muted">{tech.category}</span>
         </div>
-        <div ref={barRef} className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+        <div ref={barRef} className="h-1.5 bg-black/5 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-accent-blue to-accent-purple rounded-full"
             initial={{ width: 0 }}
@@ -96,7 +96,7 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
     >
       {/* Tooltip */}
       <motion.div
-        className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20 text-xs text-white whitespace-nowrap z-20 pointer-events-none"
+        className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg bg-black/10 backdrop-blur-xl border border-black/20 text-xs text-text-primary whitespace-nowrap z-20 pointer-events-none"
         initial={{ opacity: 0, y: 5 }}
         animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 5 }}
         transition={{ duration: 0.2 }}
@@ -105,7 +105,7 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
       </motion.div>
 
       <motion.div
-        className="rounded-xl border border-white/10 bg-background-secondary/90 backdrop-blur-xl p-5 cursor-pointer overflow-hidden relative"
+        className="rounded-xl border border-black/10 bg-background-secondary/90 backdrop-blur-xl p-5 cursor-pointer overflow-hidden relative"
         style={{
           rotateX: rotateX,
           rotateY: rotateY,
@@ -140,7 +140,7 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
                 {tech.icon}
               </motion.span>
               <motion.span
-                className="font-display text-white font-semibold text-sm"
+                className="font-display text-text-primary font-semibold text-sm"
                 style={{ transform: 'translateZ(20px)' }}
               >
                 {tech.name}
@@ -156,7 +156,7 @@ function TechCard3D({ tech, index, isLoaded, baseDelay }: { tech: typeof technol
 
           <motion.div
             ref={barRef}
-            className="h-1.5 bg-white/5 rounded-full overflow-hidden"
+            className="h-1.5 bg-black/5 rounded-full overflow-hidden"
             style={{ transform: 'translateZ(10px)' }}
           >
             <motion.div

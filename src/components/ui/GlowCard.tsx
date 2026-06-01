@@ -26,7 +26,7 @@ export default function GlowCard({
     blue: `rgba(59, 130, 246, ${intensity})`,
     purple: `rgba(168, 85, 247, ${intensity})`,
     cyan: `rgba(34, 211, 238, ${intensity})`,
-    white: `rgba(255, 255, 255, ${intensity})`,
+    white: `rgba(0, 0, 0, ${intensity * 0.6})`,
   }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -54,7 +54,7 @@ export default function GlowCard({
     <div
       ref={cardRef}
       className={cn(
-        'relative overflow-hidden rounded-3xl bg-white/[0.02] border border-white/[0.06] transition-all duration-500 hover:border-white/[0.12]',
+        'relative overflow-hidden rounded-3xl bg-black/[0.02] border border-black/[0.06] transition-all duration-500 hover:border-black/[0.12]',
         className
       )}
       style={{

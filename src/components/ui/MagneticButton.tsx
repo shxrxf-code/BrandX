@@ -37,9 +37,9 @@ export default function MagneticButton({
 
   const baseStyles = cn(
     'relative inline-flex items-center justify-center rounded-full font-medium tracking-wide uppercase text-sm transition-all duration-400',
-    variant === 'primary' && 'bg-white text-background hover:bg-accent-blue hover:text-white hover:shadow-glow-blue hover:scale-105',
-    variant === 'secondary' && 'bg-transparent border border-white/20 text-white hover:border-white hover:bg-white/5 hover:scale-105',
-    variant === 'ghost' && 'bg-transparent text-white hover:text-accent-blue',
+    variant === 'primary' && 'bg-text-primary text-white hover:bg-accent-blue hover:text-white hover:shadow-glow-blue hover:scale-105',
+    variant === 'secondary' && 'bg-transparent border border-black/20 text-text-primary hover:border-black hover:bg-black/5 hover:scale-105',
+    variant === 'ghost' && 'bg-transparent text-text-primary hover:text-accent-blue',
     'px-8 py-4',
     className
   )

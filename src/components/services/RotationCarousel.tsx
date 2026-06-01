@@ -82,7 +82,7 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
 
   const cardContent = (
     <div
-      className={`rounded-2xl border ${isHovered ? colors.border : 'border-white/10'} bg-background-secondary/90 backdrop-blur-xl p-6 overflow-hidden relative transition-shadow duration-500 ${isFront ? 'shadow-2xl shadow-accent-blue/10' : ''}`}
+      className={`rounded-2xl border ${isHovered ? colors.border : 'border-black/10'} bg-background-secondary/90 backdrop-blur-xl p-6 overflow-hidden relative transition-shadow duration-500 ${isFront ? 'shadow-2xl shadow-accent-blue/10' : ''}`}
       style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
     >
       <div className={`absolute inset-0 bg-gradient-to-br ${colors.bg} to-transparent transition-opacity duration-500`} style={{ opacity: isHovered ? 0.12 : 0 }} />
@@ -99,7 +99,7 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
           <Icon size={22} className={colors.text} />
         </div>
 
-        <h3 className={`font-display text-lg font-bold mb-2 transition-colors duration-300 ${isHovered ? colors.text : 'text-white'} ${isFront ? 'drop-shadow-[0_0_8px_rgba(124,58,237,0.3)]' : ''}`} style={{ transform: 'translateZ(25px)' }}>
+        <h3 className={`font-display text-lg font-bold mb-2 transition-colors duration-300 ${isHovered ? colors.text : 'text-text-primary'} ${isFront ? 'drop-shadow-[0_0_8px_rgba(124,58,237,0.3)]' : ''}`} style={{ transform: 'translateZ(25px)' }}>
           {title}
         </h3>
 
@@ -109,7 +109,7 @@ function ServiceCard3D({ icon: Icon, title, description, tags, color, index, tot
 
         <div className="flex flex-wrap gap-1.5" style={{ transform: 'translateZ(10px)' }}>
           {tags.map((tag, j) => (
-            <span key={j} className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-white/5 px-2 py-1 rounded-full">
+            <span key={j} className="text-[10px] font-mono tracking-wider uppercase text-text-muted bg-black/5 px-2 py-1 rounded-full">
               {tag}
             </span>
           ))}
@@ -346,7 +346,7 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
     >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div
-          className="w-[550px] h-[550px] rounded-full border border-white/5"
+          className="w-[550px] h-[550px] rounded-full border border-black/5"
           style={{ transform: 'rotateX(60deg)' }}
           initial={{ scale: 0, opacity: 0 }}
           animate={isLoaded ? { scale: 1, opacity: 1 } : {}}
@@ -393,7 +393,7 @@ export default function RotationCarousel({ services, isLoaded, baseDelay }: Rota
 
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4">
         <motion.button
-          className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
+          className="w-8 h-8 rounded-full bg-black/5 border border-black/10 flex items-center justify-center hover:bg-black/10 transition-colors"
           onClick={() => setIsAutoPlaying(!isAutoPlaying)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}

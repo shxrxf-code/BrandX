@@ -72,7 +72,7 @@ function ReasonCard({ reason, index, isActive }: { reason: typeof reasons[0]; in
       <motion.div
         ref={cardRef}
         className={`glass-card rounded-3xl p-8 group relative overflow-hidden border transition-all duration-500 cursor-pointer ${
-          isActive ? 'border-white/15' : 'border-white/[0.06] hover:border-white/15'
+          isActive ? 'border-black/15' : 'border-black/[0.06] hover:border-black/15'
         }`}
         style={{
           perspective: '1000px',
@@ -129,7 +129,7 @@ function ReasonCard({ reason, index, isActive }: { reason: typeof reasons[0]; in
           <div>
             <motion.h3
               className="font-display text-xl font-bold mb-3 transition-colors duration-300"
-              animate={{ color: isActive || isHovered ? reason.accent : '#fff' }}
+              animate={{ color: isActive || isHovered ? reason.accent : '#09090B' }}
             >
               {reason.title}
             </motion.h3>

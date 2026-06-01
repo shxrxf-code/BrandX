@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Trust from '@/components/Trust'
 import Services from '@/components/Services'
-import Portfolio from '@/components/Portfolio'
+import CoverFlow from '@/components/CoverFlow'
 import Process from '@/components/Process'
 import About from '@/components/About'
 import Metrics from '@/components/Metrics'
@@ -21,7 +21,7 @@ export default function Home() {
       <Hero />
       <Trust />
       <Services />
-      <Portfolio />
+      <CoverFlow />
       <Process />
       <About />
       <Metrics />

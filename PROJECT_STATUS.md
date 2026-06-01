@@ -3,7 +3,8 @@
 > **Last Updated:** June 1, 2026
 > **Status:** Production — Deployed on Vercel
 > **Branch:** `main` (up to date with `origin/main`)
-> **Latest Commit:** `92963cd`
+<<<<<<< HEAD
+> **Latest Commit:** `fafc6ea`
 
 ---
 
@@ -373,7 +374,9 @@ EMAIL_PASS=<gmail-app-password>
 | Commit | Message |
 |--------|---------|
 | `658d7cd` | feat: convert site from dark theme to full light theme |
-| `92963cd` | docs: update PROJECT_STATUS.md with light theme conversion details |
+| `42e5b49` | docs: update PROJECT_STATUS.md with light theme conversion details |
+| `797f08c` | chore: cleanup .next cache files |
+| `dba7db6` | docs: correct PROJECT_STATUS.md latest commit hash |
 | `f3553c2` | feat: replace background with unique Morphogen Nexus generative animation |
 | `445f2eb` | remove: navigation buttons and dot indicators from portfolio |
 | `9d19a52` | feat: add left/right navigation buttons and dot indicators for project scroll |

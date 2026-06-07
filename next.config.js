@@ -23,17 +23,7 @@ const nextConfig = {
     } : false,
   },
   experimental: {
-    optimizePackageImports: [
-      'framer-motion',
-      'lucide-react',
-    ],
-  },
-  webpack: (config, { isServer }) => {
-    config.experiments = {
-      ...config.experiments,
-      topLevelAwait: true,
-    }
-    return config
+    optimizePackageImports: [],
   },
   headers: async () => [
     {

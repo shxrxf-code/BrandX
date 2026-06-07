@@ -15,27 +15,25 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center px-6">
-        <div className="text-eyebrow uppercase tracking-[0.2em] text-accent mb-6">
-          Error
-        </div>
-        <h2 className="font-display text-5xl md:text-7xl font-semibold text-white mb-4 tracking-tight">
-          Something went wrong
-        </h2>
-        <p className="text-white/55 text-lg mb-8 max-w-md mx-auto">
+    <div className="min-h-screen flex items-center justify-center px-6">
+      <div className="text-center max-w-text">
+        <p className="text-eyebrow uppercase text-muted mb-6">Error</p>
+        <h1 className="text-section font-semibold text-foreground">
+          Something went wrong.
+        </h1>
+        <p className="mt-6 text-muted">
           An unexpected error occurred. Please try again.
         </p>
-        <div className="flex items-center justify-center gap-3">
+        <div className="mt-12 flex items-center justify-center gap-3">
           <button
             onClick={reset}
-            className="px-8 py-3.5 bg-white text-black rounded-full font-medium text-sm uppercase tracking-wider hover:bg-accent hover:text-white transition-colors"
+            className="px-6 py-3 bg-foreground text-background text-sm font-medium hover:bg-accent hover:text-foreground transition-colors duration-400"
           >
             Try Again
           </button>
           <Link
             href="/"
-            className="px-8 py-3.5 border border-white/15 text-white rounded-full font-medium text-sm uppercase tracking-wider hover:border-accent hover:text-accent transition-colors"
+            className="px-6 py-3 text-sm font-medium text-foreground border border-border hover:border-foreground transition-colors duration-400"
           >
             Go Home
           </Link>

@@ -88,15 +88,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <meta name="theme-color" content="#000000" />
-      </head>
-      <body className="font-sans antialiased bg-background text-text-primary selection:bg-accent/40 selection:text-white">
-        <a href="#main-content" className="skip-link">
-          Skip to main content
-        </a>
+      <body className="font-sans antialiased bg-background text-foreground">
         {children}
         <Analytics />
       </body>

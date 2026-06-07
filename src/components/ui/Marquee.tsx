@@ -1,37 +1,59 @@
 'use client'
 
+import { cn } from '@/lib/utils'
+
 interface MarqueeProps {
   items: string[]
   speed?: number
-  direction?: 'left' | 'right'
   className?: string
   itemClassName?: string
+  reverse?: boolean
+  pauseOnHover?: boolean
+  separator?: React.ReactNode
 }
 
 export default function Marquee({
   items,
-  speed = 30,
-  direction = 'left',
-  className = '',
-  itemClassName = '',
+  speed = 40,
+  className,
+  itemClassName,
+  reverse = false,
+  pauseOnHover = true,
+  separator = '◆',
 }: MarqueeProps) {
-  const duplicatedItems = [...items, ...items]
+  const duration = items.length * speed / 10
 
   return (
-    <div className={`overflow-hidden whitespace-nowrap ${className}`}>
+    <div
+      className={cn('marquee-container relative w-full overflow-hidden', className)}
+      style={{
+        maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+      }}
+    >
       <div
-        className="marquee-content inline-flex"
+        className={cn(
+          'marquee-content whitespace-nowrap',
+          pauseOnHover && 'hover:[animation-play-state:paused]'
+        )}
         style={{
-          animation: `marquee ${speed}s linear infinite`,
-          animationDirection: direction === 'right' ? 'reverse' : 'normal',
+          animationDuration: `${duration}s`,
+          animationName: 'marquee',
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
+          animationDirection: reverse ? 'reverse' : 'normal',
         }}
       >
-        {duplicatedItems.map((item, i) => (
+        {[...items, ...items, ...items].map((item, i) => (
           <span
             key={i}
-            className={`inline-flex items-center mx-8 ${itemClassName}`}
+            className={cn(
+              'inline-flex items-center gap-8 px-6',
+              itemClassName
+            )}
           >
-            {item}
+            <span>{item}</span>
+            <span className="text-accent/50">{separator}</span>
           </span>
         ))}
       </div>

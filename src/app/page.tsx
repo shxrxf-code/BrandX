@@ -1,16 +1,14 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
-import Trust from '@/components/Trust'
-import Services from '@/components/Services'
-import CoverFlow from '@/components/CoverFlow'
-import Process from '@/components/Process'
-import About from '@/components/About'
-import Metrics from '@/components/Metrics'
-import TechStack from '@/components/TechStack'
+import SocialProof from '@/components/SocialProof'
+import FeaturedCaseStudies from '@/components/FeaturedCaseStudies'
+import FourPillars from '@/components/FourPillars'
+import InteractiveServices from '@/components/InteractiveServices'
+import ProcessTimeline from '@/components/ProcessTimeline'
+import FounderVision from '@/components/FounderVision'
 import Testimonials from '@/components/Testimonials'
-import WhyBrandex from '@/components/WhyBrandex'
-import FAQ from '@/components/FAQ'
-import CTA from '@/components/CTA'
+import Insights from '@/components/Insights'
+import FinalCTA from '@/components/FinalCTA'
 import Footer from '@/components/Footer'
 import ErrorBoundary from '@/components/ErrorBoundary'
 
@@ -18,18 +16,18 @@ export default function Home() {
   return (
     <ErrorBoundary>
       <Navbar />
-      <Hero />
-      <Trust />
-      <Services />
-      <CoverFlow />
-      <Process />
-      <About />
-      <Metrics />
-      <TechStack />
-      <Testimonials />
-      <WhyBrandex />
-      <FAQ />
-      <CTA />
+      <main id="main-content">
+        <Hero />
+        <SocialProof />
+        <FeaturedCaseStudies />
+        <FourPillars />
+        <InteractiveServices />
+        <ProcessTimeline />
+        <FounderVision />
+        <Testimonials />
+        <Insights />
+        <FinalCTA />
+      </main>
       <Footer />
     </ErrorBoundary>
   )

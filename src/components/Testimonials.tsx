@@ -1,163 +1,251 @@
 'use client'
 
-import { useRef, useState, useCallback } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { Quote, Star } from 'lucide-react'
-import ScrollReveal from '@/components/ui/ScrollReveal'
-import { useIsMobile } from '@/lib/hooks'
+import { useRef, useState, useEffect } from 'react'
+import Image from 'next/image'
+import { motion, useScroll, useTransform, AnimatePresence, useInView } from 'framer-motion'
+import { Play, Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
+import SectionLabel from '@/components/ui/SectionLabel'
+import { cn } from '@/lib/utils'
 
 const testimonials = [
   {
-    quote: "Brandex transformed our digital presence completely. The attention to detail and strategic thinking behind every decision was remarkable. Our conversions increased by 340%.",
+    id: 1,
+    quote:
+      "Brandex didn't just deliver a website — they re-architected how we go to market. We closed our $48M Series B using their brand system, and our inbound pipeline is 3.2x what it was before.",
     author: 'Rajesh Kumar',
     role: 'CEO, SolarTech Energy',
     avatar: 'RK',
     rating: 5,
+    company: 'SolarTech',
+    industry: 'Clean Energy',
+    metric: { value: '+340%', label: 'Inbound qualified leads' },
   },
   {
-    quote: "Working with Brandex felt like having an extension of our own team. They understood our vision instantly and delivered beyond our highest expectations.",
+    id: 2,
+    quote:
+      "Working with Brandex felt like having an Awwwards-winning studio and a McKinsey strategy team in the same room. They are obsessively rigorous and unfailingly kind.",
     author: 'Priya Sharma',
-    role: 'Founder, Drifto Fashion',
+    role: 'Founder & CEO, Drifto',
     avatar: 'PS',
     rating: 5,
+    company: 'Drifto',
+    industry: 'Fashion Tech',
+    metric: { value: '2.4x', label: 'Average project value' },
   },
   {
-    quote: "The level of craft and precision in their work is unmatched. Every interaction feels intentional, every animation serves a purpose. Truly world-class.",
+    id: 3,
+    quote:
+      "In 12 weeks they unified four product squads on a single design system, doubled our ship velocity, and unblocked $2.4M in ARR expansion. The work paid for itself in the first month.",
     author: 'Arjun Mehta',
     role: 'CTO, FinFlow',
     avatar: 'AM',
     rating: 5,
+    company: 'FinFlow',
+    industry: 'B2B Fintech',
+    metric: { value: '+62%', label: 'Ship velocity' },
+  },
+  {
+    id: 4,
+    quote:
+      "Brandex treats every interaction as a chance to earn trust. From the kickoff to the launch, they operated as a true partner — not a vendor. Our NPS has never been higher.",
+    author: 'Sarah Chen',
+    role: 'CMO, Lumen Clinics',
+    avatar: 'SC',
+    rating: 5,
+    company: 'Lumen',
+    industry: 'Healthcare',
+    metric: { value: '+410%', label: 'Appointment bookings' },
   },
 ]
 
-function TestimonialCard({ testimonial, index }: { testimonial: typeof testimonials[0]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const isMobile = useIsMobile()
-  const [isHovered, setIsHovered] = useState(false)
-
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const rotateX = useSpring(useMotionValue(0), { stiffness: 150, damping: 20 })
-  const rotateY = useSpring(useMotionValue(0), { stiffness: 150, damping: 20 })
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (isMobile || !cardRef.current) return
-    const rect = cardRef.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    const normalizedX = (e.clientX - centerX) / rect.width
-    const normalizedY = (e.clientY - centerY) / rect.height
-    rotateX.set(normalizedY * -8)
-    rotateY.set(normalizedX * 8)
-  }, [isMobile, rotateX, rotateY])
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false)
-    rotateX.set(0)
-    rotateY.set(0)
-  }, [rotateX, rotateY])
-
-  return (
-    <ScrollReveal delay={index * 0.1} direction="up" distance={40}>
-      <motion.div
-        ref={cardRef}
-        className="glass-card rounded-3xl p-8 h-full flex flex-col relative group hover:border-accent-blue/20 transition-colors duration-500"
-        style={{
-          perspective: '1000px',
-          rotateX: isMobile ? 0 : rotateX,
-          rotateY: isMobile ? 0 : rotateY,
-          transformStyle: 'preserve-3d',
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={handleMouseLeave}
-        whileHover={isMobile ? {} : { y: -8 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {/* Quote icon */}
-        <motion.div
-          animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Quote size={32} className="text-accent-blue/20 mb-6 group-hover:text-accent-blue/40 transition-colors duration-500" />
-        </motion.div>
-
-        {/* Rating stars */}
-        <div className="flex gap-1 mb-4">
-          {Array.from({ length: testimonial.rating }).map((_, j) => (
-            <motion.div
-              key={j}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 + j * 0.05, duration: 0.3 }}
-            >
-              <Star size={14} className="text-accent-blue fill-accent-blue" />
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Quote text */}
-        <p className="text-text-secondary leading-relaxed mb-8 flex-grow text-body">
-          {testimonial.quote}
-        </p>
-
-        {/* Author info */}
-        <div className="flex items-center gap-4 pt-6 border-t border-black/5">
-          <motion.div
-            className="w-12 h-12 rounded-full bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center text-white font-display font-bold text-sm"
-            whileHover={{ scale: 1.1 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          >
-            {testimonial.avatar}
-          </motion.div>
-          <div>
-            <div className="font-display text-text-primary font-semibold group-hover:text-accent-blue transition-colors duration-300">
-              {testimonial.author}
-            </div>
-            <div className="text-xs text-text-muted">{testimonial.role}</div>
-          </div>
-        </div>
-      </motion.div>
-    </ScrollReveal>
-  )
-}
-
 export default function Testimonials() {
+  const [active, setActive] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const current = testimonials[active]
+
   return (
-    <section className="section-padding relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-purple/5 to-transparent pointer-events-none" />
+    <section
+      ref={ref}
+      className="relative py-24 md:py-32 overflow-hidden border-t border-white/[0.04]"
+    >
+      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-accent/[0.04] rounded-full blur-[200px] pointer-events-none" />
 
       <div className="section-container relative z-10">
-        {/* Section header */}
-        <ScrollReveal>
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <motion.span
-              className="text-xs font-mono tracking-[0.3em] text-accent-purple uppercase mb-4 block"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              Client Stories
-            </motion.span>
+        <div className="grid lg:grid-cols-12 gap-8 mb-16">
+          <div className="lg:col-span-7">
+            <SectionLabel number="07" label="Client Stories" className="mb-6" />
             <motion.h2
-              className="font-display text-section font-bold text-gradient mb-6"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display text-4xl md:text-6xl font-semibold tracking-tight text-white"
             >
-              Trusted by Industry Leaders
+              Trust, earned in{' '}
+              <span className="text-gradient-shine">measurable outcomes</span>.
             </motion.h2>
           </div>
-        </ScrollReveal>
+          <div className="lg:col-span-5 flex items-end justify-start lg:justify-end">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setActive((p) => (p - 1 + testimonials.length) % testimonials.length)}
+                className="w-12 h-12 rounded-full glass-elevated border border-white/10 hover:border-accent/40 hover:text-accent transition-colors flex items-center justify-center text-white/70"
+                aria-label="Previous testimonial"
+                data-cursor-hover
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={() => setActive((p) => (p + 1) % testimonials.length)}
+                className="w-12 h-12 rounded-full glass-elevated border border-white/10 hover:border-accent/40 hover:text-accent transition-colors flex items-center justify-center text-white/70"
+                aria-label="Next testimonial"
+                data-cursor-hover
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
 
-        {/* Testimonials grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, i) => (
-            <TestimonialCard key={i} testimonial={testimonial} index={i} />
+        {/* Featured testimonial */}
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 mb-12">
+          <div className="lg:col-span-8">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="relative p-8 md:p-12 rounded-3xl glass-elevated border border-white/[0.08] overflow-hidden"
+              >
+                <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-accent/15 blur-3xl" />
+
+                <Quote size={48} className="text-accent/30 mb-6" />
+
+                <p className="font-display text-2xl md:text-3xl lg:text-4xl font-medium text-white leading-[1.25] tracking-tight mb-10">
+                  &ldquo;{current.quote}&rdquo;
+                </p>
+
+                <div className="flex items-center justify-between flex-wrap gap-4 pt-8 border-t border-white/[0.06]">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-accent to-accent-bright flex items-center justify-center text-white font-display font-semibold text-lg">
+                      {current.avatar}
+                    </div>
+                    <div>
+                      <div className="font-display text-base font-medium text-white">
+                        {current.author}
+                      </div>
+                      <div className="text-sm text-white/50">{current.role}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: current.rating }).map((_, i) => (
+                      <Star key={i} size={14} className="text-accent fill-accent" />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Metric + video panel */}
+          <div className="lg:col-span-4 flex flex-col gap-6">
+            {/* Metric card */}
+            <motion.div
+              key={`metric-${current.id}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="relative p-8 rounded-3xl glass-elevated border border-white/[0.06] overflow-hidden"
+            >
+              <div className="absolute -bottom-20 -right-20 w-60 h-60 rounded-full bg-accent/15 blur-3xl" />
+              <div className="text-eyebrow uppercase tracking-[0.2em] text-accent mb-4">
+                Outcome
+              </div>
+              <div className="font-display text-5xl md:text-6xl font-semibold text-white mb-2 tabular-nums">
+                {current.metric.value}
+              </div>
+              <div className="text-white/60 text-sm">{current.metric.label}</div>
+              <div className="mt-6 pt-6 border-t border-white/[0.06] flex items-center justify-between text-xs">
+                <span className="text-white/40 font-mono uppercase tracking-wider">
+                  {current.company}
+                </span>
+                <span className="text-white/40">{current.industry}</span>
+              </div>
+            </motion.div>
+
+            {/* Video testimonial card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="group relative aspect-[4/3] rounded-3xl overflow-hidden bg-background-tertiary border border-white/[0.06] cursor-pointer"
+              data-cursor-hover
+            >
+              <Image
+                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=80"
+                alt="Video testimonial"
+                fill
+                className="object-cover opacity-50 group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                quality={80}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent group-hover:scale-110 transition-all duration-500">
+                  <Play size={20} className="text-white ml-1" fill="currentColor" />
+                </div>
+              </div>
+
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="text-eyebrow uppercase tracking-[0.2em] text-accent mb-1">
+                  Watch
+                </div>
+                <div className="text-sm font-medium text-white">
+                  Priya on the Drifto rebrand
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Thumbnail row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {testimonials.map((t, i) => (
+            <button
+              key={t.id}
+              onClick={() => setActive(i)}
+              className={cn(
+                'group text-left p-4 rounded-2xl border transition-all duration-500',
+                i === active
+                  ? 'border-accent/40 bg-accent/[0.04]'
+                  : 'border-white/[0.05] hover:border-white/15 hover:bg-white/[0.02]'
+              )}
+              data-cursor-hover
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div
+                  className={cn(
+                    'w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold transition-colors',
+                    i === active
+                      ? 'bg-accent text-white'
+                      : 'bg-white/5 text-white/60 group-hover:bg-white/10'
+                  )}
+                >
+                  {t.avatar}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-xs font-medium text-white truncate">
+                    {t.author}
+                  </div>
+                  <div className="text-[10px] text-white/40 truncate">
+                    {t.company}
+                  </div>
+                </div>
+              </div>
+            </button>
           ))}
         </div>
       </div>

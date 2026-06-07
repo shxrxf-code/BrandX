@@ -32,12 +32,18 @@ export default class ErrorBoundary extends Component<Props, State> {
         this.props.fallback || (
           <div className="min-h-screen flex items-center justify-center bg-background">
             <div className="text-center px-6">
-              <h2 className="text-4xl font-bold text-text-primary mb-4">
+              <div className="text-eyebrow uppercase tracking-[0.2em] text-accent mb-4">
+                Error
+              </div>
+              <h2 className="font-display text-4xl md:text-5xl font-semibold text-white mb-4 tracking-tight">
                 Something went wrong
               </h2>
+              <p className="text-white/55 mb-8 max-w-md mx-auto">
+                A render error occurred. Please refresh to try again.
+              </p>
               <button
                 onClick={() => window.location.reload()}
-                className="px-8 py-3 bg-text-primary text-white rounded-full font-medium text-sm uppercase tracking-wide hover:bg-accent-blue hover:text-white transition-colors"
+                className="px-8 py-3.5 bg-white text-black rounded-full font-medium text-sm uppercase tracking-wider hover:bg-accent hover:text-white transition-colors"
               >
                 Reload Page
               </button>

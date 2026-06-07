@@ -1,84 +1,55 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface TextRevealProps {
   text: string
   className?: string
   delay?: number
-  staggerDelay?: number
-  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'
-  wordByWord?: boolean
-  blurIn?: boolean
+  stagger?: number
+  splitBy?: 'word' | 'char' | 'line'
+  trigger?: 'inView' | 'scroll'
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span' | 'div'
 }
 
 export default function TextReveal({
   text,
-  className = '',
+  className,
   delay = 0,
-  staggerDelay = 0.03,
-  as: Component = 'p',
-  wordByWord = true,
-  blurIn = false,
+  stagger = 0.04,
+  splitBy = 'word',
+  trigger = 'inView',
+  as: Component = 'div',
 }: TextRevealProps) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-  const [hasAnimated, setHasAnimated] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-10%' })
 
-  useEffect(() => {
-    if (isInView && !hasAnimated) {
-      setHasAnimated(true)
-    }
-  }, [isInView, hasAnimated])
-
-  const words = text.split(' ')
-
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: staggerDelay,
-        delayChildren: delay,
-      },
-    },
-  }
-
-  const wordVariants = {
-    hidden: {
-      opacity: 0,
-      y: wordByWord ? 40 : 0,
-      filter: blurIn ? 'blur(10px)' : 'blur(0px)',
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: {
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  }
+  const units = splitBy === 'char' ? [...text] : splitBy === 'line' ? text.split('\n') : text.split(' ')
 
   return (
-    <Component ref={ref} className={className}>
-      <motion.span
-        variants={containerVariants}
-        initial="hidden"
-        animate={hasAnimated ? 'visible' : 'hidden'}
-        className="inline-flex flex-wrap"
-      >
-        {words.map((word, i) => (
-          <motion.span
-            key={i}
-            variants={wordVariants}
-            className="inline-block mr-[0.25em]"
-          >
-            {word}
-          </motion.span>
+    <Component ref={ref as any} className={cn('overflow-hidden', className)}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true" className="flex flex-wrap">
+        {units.map((unit, i) => (
+          <span key={i} className="inline-block overflow-hidden">
+            <motion.span
+              className="inline-block"
+              initial={{ y: '110%', opacity: 0 }}
+              animate={isInView ? { y: '0%', opacity: 1 } : {}}
+              transition={{
+                duration: 0.9,
+                delay: delay + i * stagger,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+            >
+              {unit}
+              {splitBy === 'word' && i < units.length - 1 ? '\u00A0' : ''}
+            </motion.span>
+          </span>
         ))}
-      </motion.span>
+      </span>
     </Component>
   )
 }

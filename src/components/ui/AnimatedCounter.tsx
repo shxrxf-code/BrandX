@@ -1,63 +1,57 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useAnimation, useInView } from 'framer-motion'
+import { useInView } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface AnimatedCounterProps {
   value: number
   suffix?: string
   prefix?: string
-  className?: string
   duration?: number
+  className?: string
+  decimals?: number
+  separator?: string
 }
 
 export default function AnimatedCounter({
   value,
   suffix = '',
   prefix = '',
-  className = '',
-  duration = 2,
+  duration = 2000,
+  className,
+  decimals = 0,
+  separator = ',',
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.5 })
-  const controls = useAnimation()
-  const [displayValue, setDisplayValue] = useState(0)
-  const hasAnimated = useRef(false)
+  const isInView = useInView(ref, { once: true, margin: '-50px' })
+  const [display, setDisplay] = useState(0)
 
   useEffect(() => {
-    if (isInView && !hasAnimated.current) {
-      hasAnimated.current = true
-      controls.start({
-        opacity: 1,
-        transition: { duration: 0.5 },
-      })
-
-      const startTime = Date.now()
-      const endTime = startTime + duration * 1000
-
-      const updateCounter = () => {
-        const now = Date.now()
-        const progress = Math.min((now - startTime) / (endTime - startTime), 1)
-        const easedProgress = 1 - Math.pow(1 - progress, 3)
-        setDisplayValue(Math.round(easedProgress * value))
-
-        if (progress < 1) {
-          requestAnimationFrame(updateCounter)
-        }
-      }
-
-      requestAnimationFrame(updateCounter)
+    if (!isInView) return
+    const startTime = performance.now()
+    let raf: number
+    const tick = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 4)
+      setDisplay(value * eased)
+      if (progress < 1) raf = requestAnimationFrame(tick)
     }
-  }, [isInView, controls, value, duration])
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [isInView, value, duration])
+
+  const formatted = display.toFixed(decimals)
+  const withSeparator = separator
+    ? formatted.replace(/\B(?=(\d{3})+(?!\d))/g, separator)
+    : formatted
 
   return (
-    <motion.span
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0 }}
-      animate={controls}
-    >
-      {prefix}{displayValue}{suffix}
-    </motion.span>
+    <span ref={ref} className={cn('tabular-nums', className)}>
+      {prefix}
+      {withSeparator}
+      {suffix}
+    </span>
   )
 }

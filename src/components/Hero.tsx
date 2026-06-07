@@ -1,27 +1,46 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import { ArrowDown } from 'lucide-react'
-import GradientOrbs from '@/components/effects/GradientOrbs'
-import Particles from '@/components/effects/Particles'
-import FloatingShapes from '@/components/effects/FloatingShapes'
 import MagneticButton from '@/components/ui/MagneticButton'
+import HeroCanvas from '@/components/effects/HeroCanvas'
 import { useIsMobile } from '@/lib/hooks'
 
-const line1Words = ['Designing']
-const line2Words = ['The', 'Future']
-const line3Words = ['Of', 'Digital', 'Brands']
+const headline = ['Building', 'Digital', 'Brands']
+const subline = ['That', 'People', 'Remember.']
+
+const trustedBy = ['SolarTech', 'Drifto', 'FinFlow', 'Lumen', 'Meridian', 'Arc Studio']
+
+const metrics = [
+  { value: '150', suffix: '+', label: 'Projects Shipped' },
+  { value: '40', suffix: 'M+', label: 'Users Reached' },
+  { value: '12', suffix: '', label: 'Industries' },
+  { value: '97', suffix: '', label: 'Lighthouse' },
+]
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
   const isMobile = useIsMobile()
   const [isLoaded, setIsLoaded] = useState(false)
+  const [typedText, setTypedText] = useState('')
+  const fullText = 'Premium digital transformation partner for ambitious brands.'
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100)
-    return () => clearTimeout(timer)
+    const t = setTimeout(() => setIsLoaded(true), 80)
+    return () => clearTimeout(t)
   }, [])
+
+  useEffect(() => {
+    if (!isLoaded) return
+    let i = 0
+    const id = setInterval(() => {
+      i++
+      setTypedText(fullText.slice(0, i))
+      if (i >= fullText.length) clearInterval(id)
+    }, 28)
+    return () => clearInterval(id)
+  }, [isLoaded])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -29,186 +48,200 @@ export default function Hero() {
   })
 
   const y = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 80 : 200])
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.6], [1, 0.96])
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.7], [1, 0.96])
 
-  const springY = isMobile ? y : useSpring(y, { stiffness: 100, damping: 30 })
+  // Mouse parallax
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const smoothX = useSpring(mouseX, { stiffness: 60, damping: 20 })
+  const smoothY = useSpring(mouseY, { stiffness: 60, damping: 20 })
 
-  const baseDelay = isMobile ? 0.1 : 0.3
+  useEffect(() => {
+    if (isMobile) return
+    const handle = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 30
+      const y = (e.clientY / window.innerHeight - 0.5) * 30
+      mouseX.set(x)
+      mouseY.set(y)
+    }
+    window.addEventListener('mousemove', handle, { passive: true })
+    return () => window.removeEventListener('mousemove', handle)
+  }, [isMobile, mouseX, mouseY])
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24"
     >
-      <GradientOrbs count={isMobile ? 0 : 2} />
-      <Particles count={isMobile ? 5 : 20} speed={0.15} size={1} color="255,255,255" />
-      <FloatingShapes />
-
-      <div className="absolute inset-0 grid-lines opacity-20" />
-      <div className="absolute inset-0 bg-gradient-radial from-accent-blue/5 via-transparent to-transparent" />
-
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
-      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background/80 to-transparent" />
+      {/* Mesh gradient + particles */}
+      <div className="absolute inset-0 z-0">
+        <HeroCanvas />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(91,91,255,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 100%, rgba(91,91,255,0.08) 0%, transparent 60%)',
+          }}
+        />
+        <div className="absolute inset-0 grid-pattern opacity-40" />
+      </div>
 
       <motion.div
         className="relative z-10 section-container text-center"
-        style={{
-          y: springY,
-          opacity,
-          scale,
-        }}
+        style={{ y, opacity, scale }}
       >
+        {/* Eyebrow */}
         <motion.div
-          className="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-accent-blue/60 to-transparent mb-10"
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={isLoaded ? { scaleX: 1, opacity: 1 } : {}}
-          transition={{ delay: baseDelay + 0.1, duration: 0.8, ease: 'easeOut' }}
-        />
+          initial={{ opacity: 0, y: 12 }}
+          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center gap-3 mb-10 px-4 py-2 rounded-full glass border border-white/10"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-75 animate-ping" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+          </span>
+          <span className="text-eyebrow uppercase tracking-[0.18em] text-white/70 font-medium">
+            Accepting Q3 2026 Partnerships
+          </span>
+        </motion.div>
 
-        <h1 className="font-display font-bold leading-[0.9] tracking-[-0.04em] mb-10">
-          <div className="flex flex-wrap justify-center gap-x-3 md:gap-x-5 mb-1">
-            {line1Words.map((word, i) => (
-              <motion.span
-                key={`l1-${i}`}
-                className="inline-block text-hero text-gradient"
-                initial={{ opacity: 0, y: isMobile ? 40 : 120, rotateX: isMobile ? 0 : -90, filter: 'blur(10px)' }}
-                animate={isLoaded ? { opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' } : {}}
-                transition={{
-                  delay: baseDelay + 0.2 + i * 0.08,
-                  duration: isMobile ? 0.5 : 0.9,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-x-3 md:gap-x-5 mb-1">
-            {line2Words.map((word, i) => (
-              <motion.span
-                key={`l2-${i}`}
-                className="inline-block text-hero text-gradient"
-                initial={{ opacity: 0, y: isMobile ? 40 : 120, rotateX: isMobile ? 0 : -90, filter: 'blur(10px)' }}
-                animate={isLoaded ? { opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' } : {}}
-                transition={{
-                  delay: baseDelay + 0.35 + i * 0.08,
-                  duration: isMobile ? 0.5 : 0.9,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-x-3 md:gap-x-5">
-            {line3Words.map((word, i) => (
-              <motion.span
-                key={`l3-${i}`}
-                className="inline-block text-hero"
-                style={{
-                  background: 'linear-gradient(135deg, #7C3AED 0%, #06B6D4 50%, #22D3EE 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundSize: '200% auto',
-                  animation: 'gradient 4s ease infinite',
-                }}
-                initial={{ opacity: 0, y: isMobile ? 40 : 120, rotateX: isMobile ? 0 : -90, filter: 'blur(10px)' }}
-                animate={isLoaded ? { opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)' } : {}}
-                transition={{
-                  delay: baseDelay + 0.5 + i * 0.08,
-                  duration: isMobile ? 0.5 : 0.9,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </div>
+        {/* Headline */}
+        <h1 className="font-display font-semibold leading-[0.92] tracking-[-0.04em] mb-2 text-display">
+          <span className="block overflow-hidden">
+            <motion.span
+              className="inline-block text-white"
+              initial={{ y: '110%' }}
+              animate={isLoaded ? { y: '0%' } : {}}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {headline[0]}&nbsp;{headline[1]}&nbsp;{headline[2]}
+            </motion.span>
+          </span>
+          <span className="block overflow-hidden">
+            <motion.span
+              className="inline-block text-gradient-shine"
+              initial={{ y: '110%' }}
+              animate={isLoaded ? { y: '0%' } : {}}
+              transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {subline[0]}&nbsp;{subline[1]}&nbsp;{subline[2]}
+            </motion.span>
+          </span>
         </h1>
 
-        <motion.div
-          className="h-px w-32 mx-auto bg-gradient-to-r from-transparent via-white/20 to-transparent mb-10"
-          initial={{ scaleX: 0 }}
-          animate={isLoaded ? { scaleX: 1 } : {}}
-          transition={{ delay: baseDelay + 0.6, duration: 0.6 }}
-        />
-
+        {/* Subheadline */}
         <motion.p
-          className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 leading-relaxed"
-          initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
-          animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ delay: baseDelay + 0.65, duration: 0.8 }}
+          className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-6 leading-relaxed font-light"
+          initial={{ opacity: 0, y: 16 }}
+          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
-          We craft premium digital experiences that elevate brands, drive growth,
-          and leave lasting impressions in the minds of your audience.
+          We craft websites, brands, campaigns, and digital experiences that
+          accelerate growth.
         </motion.p>
 
+        {/* Cursor typewriter */}
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: baseDelay + 0.85, duration: 0.6 }}
+          className="text-sm text-white/40 mb-12 font-mono h-6 flex items-center justify-center"
+          initial={{ opacity: 0 }}
+          animate={isLoaded ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <MagneticButton variant="primary" href="#work">
-            View Our Work
+          <span className="text-accent">→</span>
+          <span className="ml-2 min-h-[1.5em]">{typedText}</span>
+          <span className="ml-0.5 inline-block w-2 h-4 bg-accent animate-pulse" />
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-16"
+          initial={{ opacity: 0, y: 16 }}
+          animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.7 }}
+        >
+          <MagneticButton
+            variant="primary"
+            size="lg"
+            href="/contact"
+            showArrow
+          >
+            Start Your Project
           </MagneticButton>
-          <MagneticButton variant="secondary" href="tel:+9170100096308">
-            Book a Strategy Call
+          <MagneticButton
+            variant="outline"
+            size="lg"
+            href="/portfolio"
+          >
+            View Case Studies
           </MagneticButton>
         </motion.div>
 
+        {/* Floating metrics */}
         <motion.div
-          className="grid grid-cols-3 gap-6 md:gap-12 max-w-xl mx-auto"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: baseDelay + 1, duration: 0.6 }}
+          transition={{ duration: 0.8, delay: 0.85 }}
         >
-          {[
-            { value: '50+', label: 'Projects Delivered' },
-            { value: '50+', label: 'Global Clients' },
-            { value: '100%', label: 'Client Satisfaction' },
-          ].map((stat, i) => (
+          {metrics.map((m, i) => (
             <motion.div
-              key={i}
-              className="text-center group cursor-default"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+              key={m.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.9 + i * 0.08 }}
+              className="glass-elevated rounded-2xl px-4 py-5 group hover:border-accent/40 transition-colors duration-500"
             >
-              <div className="font-display text-2xl md:text-3xl font-bold text-gradient-blue">
-                {stat.value}
+              <div className="font-display text-3xl md:text-4xl font-semibold text-white tabular-nums">
+                {m.value}
+                <span className="text-accent">{m.suffix}</span>
               </div>
-              <div className="text-xs text-text-muted mt-1.5 tracking-wide uppercase">
-                {stat.label}
+              <div className="text-[10px] font-mono uppercase tracking-[0.15em] text-white/40 mt-1.5">
+                {m.label}
               </div>
             </motion.div>
           ))}
         </motion.div>
-      </motion.div>
 
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: baseDelay + 1.5 }}
-      >
+        {/* Trusted by */}
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="flex flex-col items-center gap-2 text-text-muted"
+          className="flex flex-col items-center gap-5"
+          initial={{ opacity: 0 }}
+          animate={isLoaded ? { opacity: 1 } : {}}
+          transition={{ duration: 0.8, delay: 1.2 }}
         >
-          <span className="text-[10px] tracking-[0.3em] uppercase">Scroll to explore</span>
-          <div className="relative">
-            <ArrowDown size={16} />
-            <motion.div
-              className="absolute inset-0 rounded-full bg-accent-blue/30"
-              animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+          <span className="text-eyebrow uppercase tracking-[0.25em] text-white/30 font-medium">
+            Trusted by growing brands worldwide
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 max-w-4xl">
+            {trustedBy.map((brand, i) => (
+              <motion.span
+                key={brand}
+                initial={{ opacity: 0, y: 8 }}
+                animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 1.3 + i * 0.05 }}
+                className="font-display text-lg md:text-xl font-medium text-white/30 hover:text-white/80 transition-colors duration-500 cursor-default"
+              >
+                {brand}
+              </motion.span>
+            ))}
           </div>
         </motion.div>
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={isLoaded ? { opacity: 1 } : {}}
+        transition={{ duration: 1, delay: 2 }}
+        style={{ animation: 'float 3s ease-in-out infinite' }}
+      >
+        <span className="text-[10px] tracking-[0.3em] uppercase text-white/30 font-mono">
+          Scroll
+        </span>
+        <ArrowDown size={14} className="text-white/30" />
       </motion.div>
     </section>
   )

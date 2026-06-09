@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useCursor } from '@/components/providers/CursorProvider'
 import MagneticButton from '@/components/ui/MagneticButton'
 
 const footerLinks: Record<string, { href: string; label: string; external?: boolean }[]> = {
@@ -26,8 +25,6 @@ const footerLinks: Record<string, { href: string; label: string; external?: bool
 }
 
 export default function Footer() {
-  const { setCursor } = useCursor()
-
   return (
     <footer className="relative bg-subtle border-t border-border overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.02] to-transparent pointer-events-none" />
@@ -35,12 +32,10 @@ export default function Footer() {
       <div className="max-w-content mx-auto px-6 md:px-10 py-20 md:py-32">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 lg:gap-24">
           <div className="lg:col-span-1">
-            <Link
-              href="/"
-              className="inline-block"
-              onMouseEnter={() => { setCursor('Home', 'expand') }}
-              onMouseLeave={() => { setCursor(null, 'default') }}
-            >
+          <Link
+            href="/"
+            className="inline-block"
+          >
               <span className="text-2xl font-display font-bold tracking-tight text-foreground">
                 Brandex
                 <span className="text-accent">.</span>
@@ -57,8 +52,6 @@ export default function Footer() {
                   key={social}
                   href="#"
                   className="w-10 h-10 rounded-full border border-border-light flex items-center justify-center text-xs text-muted hover:text-foreground hover:border-accent hover:bg-accent/10 transition-all duration-400"
-                  onMouseEnter={() => { setCursor('Open', 'expand') }}
-                  onMouseLeave={() => { setCursor(null, 'default') }}
                 >
                   {social}
                 </Link>
@@ -78,8 +71,6 @@ export default function Footer() {
                       href={link.href}
                       {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                       className="text-sm text-foreground/70 hover:text-foreground transition-colors duration-300 group inline-flex items-center gap-1"
-                      onMouseEnter={() => { setCursor('Open', 'expand') }}
-                      onMouseLeave={() => { setCursor(null, 'default') }}
                     >
                       {link.label}
                       {link.external && (

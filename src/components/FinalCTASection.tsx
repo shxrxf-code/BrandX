@@ -101,7 +101,6 @@ export default function FinalCTASection() {
 
         <div ref={btnRef} className="mt-16">
           <MagneticButton
-            cursorText="Contact"
             as="a"
             href="/contact"
             className="group relative inline-flex px-10 py-5 rounded-full border border-border-light text-foreground text-sm tracking-wider uppercase overflow-hidden transition-all duration-500 hover:border-accent"

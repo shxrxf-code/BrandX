@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useCursor } from '@/components/providers/CursorProvider'
 
 const navItems = [
   { href: '/work', label: 'Work' },
@@ -15,7 +14,6 @@ const navItems = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { setCursor } = useCursor()
   const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -34,14 +32,6 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
 
-  const handleNavHover = useCallback((label: string) => {
-    setCursor(label, 'expand')
-  }, [setCursor])
-
-  const handleNavLeave = useCallback(() => {
-    setCursor(null, 'default')
-  }, [setCursor])
-
   return (
     <>
       <header
@@ -54,8 +44,6 @@ export default function Navbar() {
           <Link
             href="/"
             className="relative group"
-            onMouseEnter={() => { setCursor('Home', 'expand') }}
-            onMouseLeave={handleNavLeave}
           >
             <span className="text-xl font-display font-bold tracking-tight text-foreground">
               Brandex
@@ -69,8 +57,6 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 className="relative text-sm text-muted hover:text-foreground transition-colors duration-400 group"
-                onMouseEnter={() => handleNavHover(item.label)}
-                onMouseLeave={handleNavLeave}
               >
                 <span className="inline-block">{item.label}</span>
                 <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-accent transition-all duration-500 group-hover:w-full" />
@@ -81,8 +67,6 @@ export default function Navbar() {
           <Link
             href="/contact"
             className="hidden md:inline-flex group"
-            onMouseEnter={() => { setCursor('Start', 'expand') }}
-            onMouseLeave={handleNavLeave}
           >
             <span className="relative text-sm text-foreground border border-border-light px-5 py-2.5 rounded-full overflow-hidden transition-all duration-500 hover:border-accent hover:bg-accent/10">
               <span className="relative z-10">Start a project</span>
@@ -92,8 +76,6 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(true)}
             className="md:hidden flex flex-col gap-1.5 p-2"
-            onMouseEnter={() => { setCursor('Menu', 'expand') }}
-            onMouseLeave={handleNavLeave}
             aria-label="Open menu"
           >
             <span className="block w-6 h-[1.5px] bg-foreground/80" />
@@ -135,8 +117,6 @@ export default function Navbar() {
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className="text-4xl md:text-6xl font-display font-bold tracking-tight text-foreground/80 hover:text-foreground transition-colors duration-400"
-                    onMouseEnter={() => handleNavHover(item.label)}
-                    onMouseLeave={handleNavLeave}
                   >
                     {item.label}
                   </Link>
@@ -154,8 +134,6 @@ export default function Navbar() {
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
                   className="text-lg text-foreground border border-border-light px-8 py-3 rounded-full hover:bg-accent/10 hover:border-accent transition-all duration-400"
-                  onMouseEnter={() => { setCursor('Start', 'expand') }}
-                  onMouseLeave={handleNavLeave}
                 >
                   Start a project
                 </Link>

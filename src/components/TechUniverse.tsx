@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useCursor } from '@/components/providers/CursorProvider'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -30,7 +29,6 @@ const technologies = [
 export default function TechUniverse() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
-  const { setCursor } = useCursor()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -126,12 +124,6 @@ export default function TechUniverse() {
                 left: `${tech.x * 0.7 + 15}%`,
                 top: `${tech.y * 0.7 + 10}%`,
                 transform: 'translate(-50%, -50%)',
-              }}
-              onMouseEnter={() => {
-                setCursor('Explore', 'expand')
-              }}
-              onMouseLeave={() => {
-                setCursor(null, 'default')
               }}
             >
               <div

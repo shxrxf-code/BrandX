@@ -31,20 +31,6 @@
     overflow-x: hidden;
   }
 
-  @media (pointer: fine) {
-    html.has-custom-cursor,
-    html.has-custom-cursor * {
-      cursor: none !important;
-    }
-  }
-
-  @media (pointer: coarse) {
-    html.has-custom-cursor,
-    html.has-custom-cursor * {
-      cursor: auto !important;
-    }
-  }
-
   h1, h2, h3, h4, h5, h6 {
     @apply font-display tracking-tight;
   }

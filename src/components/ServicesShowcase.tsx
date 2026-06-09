@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useCursor } from '@/components/providers/CursorProvider'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -56,7 +55,6 @@ const services = [
 
 export default function ServicesShowcase() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const { setCursor } = useCursor()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -128,8 +126,6 @@ export default function ServicesShowcase() {
             <div
               key={service.title}
               className="service-card group relative overflow-hidden rounded-2xl border border-border bg-subtle hover:bg-subtle-light transition-colors duration-500"
-              onMouseEnter={() => { setCursor('Explore', 'expand') }}
-              onMouseLeave={() => { setCursor(null, 'default') }}
             >
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"

@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useCursor } from '@/components/providers/CursorProvider'
 import MagneticButton from '@/components/ui/MagneticButton'
 
 const articles = [
@@ -26,7 +25,6 @@ const articles = [
 ]
 
 export default function InsightsSection() {
-  const { setCursor } = useCursor()
 
   return (
     <section className="relative bg-background py-24 md:py-32 overflow-hidden">
@@ -41,7 +39,6 @@ export default function InsightsSection() {
             </h2>
           </div>
           <MagneticButton
-            cursorText="Read More"
             as="a"
             href="/insights"
             className="text-sm text-muted hover:text-foreground transition-colors duration-400 flex items-center gap-2 group"
@@ -57,8 +54,6 @@ export default function InsightsSection() {
               key={article.title}
               href="/insights"
               className="group relative rounded-2xl overflow-hidden border border-border bg-subtle aspect-[4/3] md:aspect-auto md:min-h-[400px]"
-              onMouseEnter={() => { setCursor('Read', 'expand') }}
-              onMouseLeave={() => { setCursor(null, 'default') }}
             >
               <div
                 className="absolute inset-0 opacity-30 group-hover:opacity-60 transition-opacity duration-700"

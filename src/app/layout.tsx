@@ -3,8 +3,6 @@ import { Inter, Space_Grotesk, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import SmoothScroll from '@/components/providers/SmoothScroll'
-import CursorProvider from '@/components/providers/CursorProvider'
-import Cursor from '@/components/cursor/Cursor'
 import Navbar from '@/components/Navbar'
 
 const inter = Inter({
@@ -102,12 +100,9 @@ export default function RootLayout({
     >
       <body className="font-sans bg-background text-foreground antialiased">
         <SmoothScroll>
-          <CursorProvider>
-            <Cursor />
-            <Navbar />
-            {children}
-            <div className="grain" />
-          </CursorProvider>
+          <Navbar />
+          {children}
+          <div className="grain" />
         </SmoothScroll>
         <Analytics />
       </body>

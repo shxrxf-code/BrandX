@@ -3,7 +3,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Link from 'next/link'
-import { useCursor } from '@/components/providers/CursorProvider'
 
 const projects = [
   {
@@ -42,7 +41,6 @@ const projects = [
 
 export default function CaseStudiesSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const { setCursor } = useCursor()
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
@@ -67,8 +65,6 @@ export default function CaseStudiesSection() {
             key={project.slug}
             href={`/work/${project.slug}`}
             className="group flex-shrink-0 w-[85vw] md:w-[500px] lg:w-[600px]"
-            onMouseEnter={() => { setCursor('View Project', 'expand') }}
-            onMouseLeave={() => { setCursor(null, 'default') }}
           >
             <motion.div
               initial={{ opacity: 0, y: 40 }}

@@ -1,14 +1,11 @@
 'use client'
 
 import { useRef, useCallback, ReactNode } from 'react'
-import { useCursor } from '@/components/providers/CursorProvider'
 import { cn } from '@/lib/utils'
 
 type Props = {
   children: ReactNode
   className?: string
-  cursorText?: string
-  cursorVariant?: 'default' | 'view' | 'drag' | 'expand'
   strength?: number
   as?: 'button' | 'a' | 'div'
   href?: string
@@ -20,8 +17,6 @@ type Props = {
 export default function MagneticButton({
   children,
   className,
-  cursorText,
-  cursorVariant = 'expand',
   strength = 0.35,
   as = 'button',
   href,
@@ -30,7 +25,6 @@ export default function MagneticButton({
   disabled = false,
 }: Props) {
   const ref = useRef<HTMLElement>(null)
-  const { setCursor } = useCursor()
 
   const onMouseMove = useCallback(
     (e: React.MouseEvent) => {
@@ -48,12 +42,7 @@ export default function MagneticButton({
     const el = ref.current
     if (!el) return
     el.style.transform = 'translate(0px, 0px)'
-    setCursor(null, 'default')
-  }, [setCursor])
-
-  const onMouseEnter = useCallback(() => {
-    if (cursorText) setCursor(cursorText, cursorVariant)
-  }, [cursorText, cursorVariant, setCursor])
+  }, [])
 
   const baseClass = cn(
     'inline-flex items-center justify-center gap-2 transition-transform duration-500 ease-out will-change-transform',
@@ -65,7 +54,6 @@ export default function MagneticButton({
     className: baseClass,
     onMouseMove,
     onMouseLeave,
-    onMouseEnter,
     onClick,
     style: { transform: 'translate(0,0)' },
   }

@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useCursor } from '@/components/providers/CursorProvider'
 import MagneticButton from '@/components/ui/MagneticButton'
 
 if (typeof window !== 'undefined') {
@@ -19,7 +18,6 @@ export default function HeroSection() {
   const ctaRef = useRef<HTMLDivElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
   const gradientRef = useRef<HTMLDivElement>(null)
-  const { setCursor } = useCursor()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -85,8 +83,6 @@ export default function HeroSection() {
     <section
       ref={sectionRef}
       className="relative w-full min-h-screen flex items-center justify-center overflow-hidden"
-      onMouseEnter={() => setCursor(null, 'explore')}
-      onMouseLeave={() => setCursor(null, 'default')}
     >
       <div
         ref={bgRef}
@@ -149,7 +145,6 @@ export default function HeroSection() {
 
         <div ref={ctaRef} className="mt-12 md:mt-16 flex flex-col md:flex-row items-center justify-center gap-6">
           <MagneticButton
-            cursorText="Explore"
             as="a"
             href="/work"
             className="group relative px-8 py-4 rounded-full border border-border-light text-foreground text-sm tracking-wider uppercase overflow-hidden transition-all duration-500 hover:border-accent"
@@ -159,7 +154,6 @@ export default function HeroSection() {
           </MagneticButton>
 
           <MagneticButton
-            cursorText="Contact"
             as="a"
             href="/contact"
             className="group relative px-8 py-4 rounded-full bg-accent/10 border border-accent/30 text-foreground text-sm tracking-wider uppercase overflow-hidden transition-all duration-500 hover:bg-accent/20 hover:border-accent"

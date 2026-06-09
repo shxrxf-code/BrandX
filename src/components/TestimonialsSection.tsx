@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useCursor } from '@/components/providers/CursorProvider'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -38,7 +37,6 @@ const testimonials = [
 
 export default function TestimonialsSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const { setCursor } = useCursor()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -87,8 +85,6 @@ export default function TestimonialsSection() {
             <div
               key={t.name}
               className="testimonial-card group relative p-8 md:p-10 rounded-2xl border border-border bg-background overflow-hidden cursor-pointer"
-              onMouseEnter={() => { setCursor('Read', 'expand') }}
-              onMouseLeave={() => { setCursor(null, 'default') }}
             >
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"

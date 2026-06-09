@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useCursor } from '@/components/providers/CursorProvider'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -50,7 +49,6 @@ export default function InsideTheStudio() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const toolsRef = useRef<HTMLDivElement>(null)
-  const { setCursor } = useCursor()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -123,8 +121,6 @@ export default function InsideTheStudio() {
             <div
               key={item.title}
               className="studio-item group relative rounded-2xl border border-border bg-background overflow-hidden min-h-[200px] md:min-h-[240px] cursor-pointer"
-              onMouseEnter={() => { setCursor('Explore', 'expand') }}
-              onMouseLeave={() => { setCursor(null, 'default') }}
             >
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"

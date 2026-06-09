@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import Preloader from '@/components/Preloader'
 import HeroSection from '@/components/HeroSection'
 import HowBrandexWorks from '@/components/HowBrandexWorks'
@@ -20,14 +20,6 @@ export default function Home() {
 
   const handleComplete = useCallback(() => {
     setLoading(false)
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const isFine = window.matchMedia('(pointer: fine)').matches
-    if (!isFine) {
-      setLoading(false)
-    }
   }, [])
 
   return (

@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useCursor } from '@/components/providers/CursorProvider'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -46,7 +45,6 @@ const pillars = [
 
 export default function HowBrandexWorks() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const { setCursor } = useCursor()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -114,8 +112,6 @@ export default function HowBrandexWorks() {
               key={pillar.title}
               data-pillar={i}
               className="group relative overflow-hidden rounded-2xl border border-border bg-subtle hover:bg-subtle-light transition-all duration-700"
-              onMouseEnter={() => { setCursor('Explore', 'expand') }}
-              onMouseLeave={() => { setCursor(null, 'default') }}
             >
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"

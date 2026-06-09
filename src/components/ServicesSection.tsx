@@ -10,40 +10,39 @@ if (typeof window !== 'undefined') {
 
 const services = [
   {
-    icon: '⬡',
+    number: '01',
     title: 'Web Development',
-    tagline: 'High-performance platforms',
-    description: 'Custom web applications, headless CMS architectures, and scalable frontends built with modern frameworks. Performance-optimized, accessibility-first, and engineered for growth.',
+    desc: 'Custom web applications, headless CMS architectures, and scalable frontends built with modern frameworks.',
+    metric: '100+',
+    metricLabel: 'sites shipped',
   },
   {
-    icon: '◇',
+    number: '02',
     title: 'UI/UX Design',
-    tagline: 'Human-centered interfaces',
-    description: 'Research-driven design systems, interactive prototypes, and intuitive user flows. Every interaction is crafted to feel natural, responsive, and delightful.',
+    desc: 'Research-driven design systems, interactive prototypes, and intuitive user flows crafted for conversion.',
+    metric: '3x',
+    metricLabel: 'avg. engagement lift',
   },
   {
-    icon: '○',
+    number: '03',
     title: 'Brand Identity',
-    tagline: 'Distinct visual language',
-    description: 'Strategic brand systems including visual identity, typography, color systems, and guidelines that communicate your unique value across every touchpoint.',
+    desc: 'Strategic brand systems including visual identity, typography, and guidelines that communicate unique value.',
+    metric: '14',
+    metricLabel: 'markets unified',
   },
   {
-    icon: '△',
+    number: '04',
     title: 'SEO & Performance',
-    tagline: 'Visibility meets velocity',
-    description: 'Technical SEO audits, content strategy, performance optimization, and Lighthouse 90+ compliance engineered to drive organic growth and search dominance.',
+    desc: 'Technical SEO audits, content strategy, and performance engineering for Lighthouse 90+ compliance.',
+    metric: '90+',
+    metricLabel: 'Lighthouse score',
   },
   {
-    icon: '▽',
-    title: 'Digital Marketing',
-    tagline: 'Conversion-driven strategy',
-    description: 'Integrated marketing campaigns, conversion optimization, analytics infrastructure, and growth strategies that turn visitors into loyal customers.',
-  },
-  {
-    icon: '▣',
+    number: '05',
     title: 'AI Solutions',
-    tagline: 'Intelligent automation',
-    description: 'Custom AI agents, LLM-powered features, intelligent search, content generation pipelines, and automation systems that transform business operations.',
+    desc: 'Custom AI agents, LLM-powered features, and intelligent automation that transform business operations.',
+    metric: '40%',
+    metricLabel: 'efficiency gain',
   },
 ]
 
@@ -52,20 +51,15 @@ export default function ServicesSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const cards = sectionRef.current?.querySelectorAll('.service-card')
-      cards?.forEach((card, i) => {
-        gsap.fromTo(
-          card,
-          { y: 40, opacity: 0, scale: 0.95 },
+      const rows = sectionRef.current?.querySelectorAll('.service-row')
+      rows?.forEach((row, i) => {
+        gsap.fromTo(row,
+          { y: 40, opacity: 0 },
           {
-            y: 0, opacity: 1, scale: 1,
-            duration: 0.7, delay: i * 0.08,
+            y: 0, opacity: 1,
+            duration: 0.7, delay: i * 0.1,
             ease: 'power4.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
+            scrollTrigger: { trigger: row, start: 'top 85%', toggleActions: 'play none none none' },
           }
         )
       })
@@ -74,54 +68,43 @@ export default function ServicesSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-background py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-subtle py-24 md:py-32 overflow-hidden">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <div className="mb-16">
-          <span className="scene-eyebrow">What We Do</span>
+          <span className="scene-eyebrow">Services</span>
           <h2 className="text-4xl md:text-7xl font-display font-bold tracking-tight mt-4 leading-[1.05]">
-            Full-service digital
+            What we
             <br />
-            <span className="text-accent">excellence.</span>
+            <span className="text-accent">deliver.</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {services.map((s, idx) => (
+        <div className="divide-y divide-border">
+          {services.map((s) => (
             <div
               key={s.title}
-              className="service-card group relative rounded-2xl border border-border bg-subtle p-8 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:border-accent/30"
+              className="service-row group py-8 md:py-10 lg:py-12 flex flex-col md:flex-row md:items-center gap-6 md:gap-10 lg:gap-16 cursor-pointer transition-all duration-500 hover:pl-4"
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0.04) 50%, transparent 100%)' }}
-              />
-
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="relative z-10">
-                <span className="text-2xl font-display mb-6 block text-accent transition-colors duration-500">
-                  {s.icon}
-                </span>
-
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                  <span className="text-[10px] tracking-[0.2em] uppercase font-medium text-accent">
-                    {s.tagline}
-                  </span>
-                </div>
-
-                <h3 className="text-xl md:text-2xl font-display font-bold tracking-tight mb-3 group-hover:text-accent transition-colors duration-400">
+              <span className="text-[10px] font-mono tracking-[0.2em] text-muted-dark md:w-12 shrink-0">
+                {s.number}
+              </span>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold tracking-tight text-foreground group-hover:text-accent transition-colors duration-400">
                   {s.title}
                 </h3>
-
-                <p className="text-sm text-muted leading-relaxed">
-                  {s.description}
+                <p className="text-sm text-muted mt-2 max-w-lg leading-relaxed">
+                  {s.desc}
                 </p>
-
-                <div className="mt-6 flex items-center gap-1 text-xs text-muted group-hover:text-accent transition-colors duration-400">
-                  <span>Learn more</span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-                </div>
               </div>
+              <div className="flex items-baseline gap-3 shrink-0">
+                <span className="text-3xl md:text-4xl font-display font-bold text-accent/80 group-hover:text-accent transition-colors duration-400">
+                  {s.metric}
+                </span>
+                <span className="text-[10px] text-muted-dark font-mono tracking-wide">{s.metricLabel}</span>
+              </div>
+              <span className="text-lg text-muted group-hover:text-accent group-hover:translate-x-1 transition-all duration-300 hidden md:block">
+                →
+              </span>
             </div>
           ))}
         </div>

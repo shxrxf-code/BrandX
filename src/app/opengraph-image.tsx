@@ -31,7 +31,7 @@ export default async function Image() {
             width: '500px',
             height: '500px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(0,229,255,0.3) 0%, transparent 70%)',
             filter: 'blur(80px)',
           }}
         />

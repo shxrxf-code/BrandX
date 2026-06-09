@@ -64,7 +64,7 @@ export default function Navbar() {
             href="/contact"
             className="hidden md:inline-flex group"
           >
-            <span className="relative text-sm text-foreground border border-border-light px-5 py-2.5 rounded-full overflow-hidden transition-all duration-500 hover:border-accent hover:bg-accent/10 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]">
+            <span className="relative text-sm text-foreground border border-border-light px-5 py-2.5 rounded-full overflow-hidden transition-all duration-500 hover:border-accent hover:bg-accent/10 hover:shadow-[0_0_20px_rgba(0,229,255,0.15)]">
               <span className="relative z-10">Start Project</span>
             </span>
           </Link>

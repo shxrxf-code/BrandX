@@ -77,7 +77,7 @@ export default function TechUniverse() {
           {technologyGroups.map((group, gi) => (
             <div
               key={group.category}
-              className="tech-card group relative rounded-2xl border border-border bg-subtle p-8 md:p-10 transition-all duration-700 hover:border-accent/30 hover:shadow-[0_20px_60px_-10px_rgba(59,130,246,0.15)]"
+              className="tech-card group relative rounded-2xl border border-border bg-subtle p-8 md:p-10 transition-all duration-700 hover:border-accent/30 hover:shadow-[0_20px_60px_-10px_rgba(0,229,255,0.15)]"
             >
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-xl bg-accent/15 border border-accent/30 flex items-center justify-center group-hover:bg-accent/25 transition-colors duration-500">

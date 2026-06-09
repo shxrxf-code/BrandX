@@ -7,22 +7,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#050816',
+        background: '#0A0A0A',
         foreground: '#FFFFFF',
         muted: {
-          DEFAULT: '#94A3B8',
-          dark: '#64748B',
-          light: '#CBD5E1',
+          DEFAULT: '#A1A1AA',
+          dark: '#71717A',
+          light: '#D4D4D8',
         },
-        subtle: '#0B1120',
-        'subtle-light': '#0F1A2E',
-        border: 'rgba(59,130,246,0.08)',
-        'border-light': 'rgba(59,130,246,0.18)',
+        subtle: '#111111',
+        'subtle-light': '#18181B',
+        border: 'rgba(255,255,255,0.06)',
+        'border-light': 'rgba(255,255,255,0.12)',
         accent: {
-          DEFAULT: '#3B82F6',
-          dim: '#2563EB',
-          light: '#60A5FA',
-          glow: 'rgba(59, 130, 246, 0.3)',
+          DEFAULT: '#00E5FF',
+          dim: '#00C4E0',
+          light: '#33EAFF',
+          glow: 'rgba(0, 229, 255, 0.3)',
         },
       },
       fontFamily: {

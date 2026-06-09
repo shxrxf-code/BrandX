@@ -78,7 +78,7 @@ export default function CaseStudiesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15, duration: 0.9, ease: [0.32, 0.72, 0, 1] }}
               viewport={{ once: true, margin: '-150px' }}
-              className="relative rounded-3xl overflow-hidden border border-border bg-subtle transition-all duration-700 hover:border-accent/30 hover:shadow-[0_40px_80px_-20px_rgba(59,130,246,0.12)]"
+              className="relative rounded-3xl overflow-hidden border border-border bg-subtle transition-all duration-700 hover:border-accent/30 hover:shadow-[0_40px_80px_-20px_rgba(0,229,255,0.12)]"
             >
               <div className="relative aspect-[16/10] md:aspect-[4/3] overflow-hidden">
                 <div

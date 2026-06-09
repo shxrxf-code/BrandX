@@ -100,7 +100,7 @@ export default function MetricsSection() {
           {stats.map((s) => (
             <div
               key={s.label}
-              className="stat-entry relative p-8 md:p-10 rounded-3xl border border-border bg-background transition-all duration-500 hover:border-accent/30 hover:shadow-[0_20px_60px_-10px_rgba(59,130,246,0.10)]"
+              className="stat-entry relative p-8 md:p-10 rounded-3xl border border-border bg-background transition-all duration-500 hover:border-accent/30 hover:shadow-[0_20px_60px_-10px_rgba(0,229,255,0.10)]"
             >
               <div className="flex items-baseline gap-3 mb-4">
                 <span className="text-4xl md:text-5xl font-display font-bold text-accent tracking-tight">

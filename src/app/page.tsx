@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import Preloader from '@/components/Preloader'
 import HeroSection from '@/components/HeroSection'
-import FeaturedWorkSection from '@/components/FeaturedWorkSection'
+import FeaturedCaseStudySection from '@/components/FeaturedCaseStudySection'
 import ProcessSection from '@/components/ProcessSection'
 import ServicesSection from '@/components/ServicesSection'
 import CaseStudiesSection from '@/components/CaseStudiesSection'
@@ -24,7 +24,7 @@ export default function Home() {
       {loading && <Preloader onComplete={handleComplete} />}
       <main className={loading ? 'invisible' : 'visible'}>
         <HeroSection />
-        <FeaturedWorkSection />
+        <FeaturedCaseStudySection />
         <ProcessSection />
         <ServicesSection />
         <CaseStudiesSection />

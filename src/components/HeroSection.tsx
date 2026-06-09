@@ -123,7 +123,7 @@ export default function HeroSection() {
               <MagneticButton
                 as="a"
                 href="/contact"
-                className="hero-cta group relative px-8 py-4 rounded-full bg-accent text-background text-sm font-medium tracking-wide overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
+                className="hero-cta group relative px-8 py-4 rounded-full bg-accent text-background text-sm font-medium tracking-wide overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)]"
               >
                 <span className="relative z-10">Start Project</span>
                 <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />

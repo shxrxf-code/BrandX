@@ -9,162 +9,695 @@ if (typeof window !== 'undefined') {
 }
 
 const stages = [
-  { number: '01', title: 'Research', desc: 'Deep discovery — market analysis, user research, technical audit, competitive landscape. We learn before we build.', accent: '#5B5BFF' },
-  { number: '02', title: 'Strategy', desc: 'Data-driven roadmap — information architecture, user flows, content strategy, technical specification.', accent: '#22D3EE' },
-  { number: '03', title: 'Design', desc: 'Systematic design — wireframes, design systems, interactive prototypes, motion libraries.', accent: '#A855F7' },
-  { number: '04', title: 'Development', desc: 'Production engineering — component architecture, API integration, performance tuning, CI/CD.', accent: '#34D399' },
-  { number: '05', title: 'Launch', desc: 'Coordinated deployment — QA testing, analytics setup, deployment scripts, monitoring.', accent: '#F97316' },
-  { number: '06', title: 'Growth', desc: 'Continuous optimization — performance monitoring, A/B testing, iterative improvements, scale planning.', accent: '#EC4899' },
+  {
+    number: '01',
+    title: 'Research',
+    subtitle: 'Discovery & Understanding',
+    tagline: 'Uncover insights that drive every decision.',
+    color: '#5B5BFF',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(91,91,255,0.10), transparent)',
+  },
+  {
+    number: '02',
+    title: 'Strategy',
+    subtitle: 'Architecture & Blueprint',
+    tagline: 'Structure emerges from raw potential.',
+    color: '#22D3EE',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(34,211,238,0.10), transparent)',
+  },
+  {
+    number: '03',
+    title: 'Design',
+    subtitle: 'Interface & Experience',
+    tagline: 'Wireframes evolve into living interfaces.',
+    color: '#A855F7',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(168,85,247,0.10), transparent)',
+  },
+  {
+    number: '04',
+    title: 'Development',
+    subtitle: 'Engineering & Assembly',
+    tagline: 'Components converge into systems.',
+    color: '#34D399',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(52,211,153,0.10), transparent)',
+  },
+  {
+    number: '05',
+    title: 'Testing',
+    subtitle: 'Quality & Assurance',
+    tagline: 'Every detail verified. Every edge case covered.',
+    color: '#F97316',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(249,115,22,0.10), transparent)',
+  },
+  {
+    number: '06',
+    title: 'Launch',
+    subtitle: 'Deploy & Scale',
+    tagline: 'Built. Shipped. performing.',
+    color: '#EC4899',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(236,72,153,0.10), transparent)',
+  },
 ]
+
+/* ------------------------------------------------------------------ */
+/*  Per-stage visual JSX helpers                                       */
+/* ------------------------------------------------------------------ */
+
+function ResearchVisual() {
+  return (
+    <div className="relative w-full h-[320px] lg:h-[420px]">
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Network nodes */}
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none">
+          <line className="research-line" x1="120" y1="100" x2="280" y2="180" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="280" y1="180" x2="200" y2="300" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="120" y1="100" x2="80" y2="250" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="80" y1="250" x2="200" y2="300" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="200" y1="300" x2="310" y2="280" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <circle className="research-node" cx="120" cy="100" r="6" fill="#5B5BFF" opacity="0" />
+          <circle className="research-node" cx="280" cy="180" r="5" fill="#5B5BFF" opacity="0" />
+          <circle className="research-node" cx="200" cy="300" r="7" fill="#5B5BFF" opacity="0" />
+          <circle className="research-node" cx="80" cy="250" r="4" fill="#5B5BFF" opacity="0" />
+          <circle className="research-node" cx="310" cy="280" r="5" fill="#5B5BFF" opacity="0" />
+        </svg>
+
+        {/* Animated sticky notes */}
+        <div className="research-note absolute top-[5%] left-[8%] w-28 h-20 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
+          <div className="w-16 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+          <div className="w-20 h-1 rounded bg-white/10 mb-1" />
+          <div className="w-14 h-1 rounded bg-white/10" />
+        </div>
+        <div className="research-note absolute top-[25%] right-[10%] w-32 h-24 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
+          <div className="w-20 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+          <div className="w-24 h-1 rounded bg-white/10 mb-1" />
+          <div className="w-16 h-1 rounded bg-white/10 mb-1" />
+          <div className="w-20 h-1 rounded bg-white/10" />
+        </div>
+        <div className="research-note absolute bottom-[18%] left-[15%] w-24 h-20 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
+          <div className="w-14 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+          <div className="w-18 h-1 rounded bg-white/10 mb-1" />
+          <div className="w-12 h-1 rounded bg-white/10" />
+        </div>
+        <div className="research-note absolute top-[15%] right-[20%] w-20 h-16 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
+          <div className="w-12 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+          <div className="w-14 h-1 rounded bg-white/10" />
+        </div>
+
+        {/* Center glow */}
+        <div className="absolute w-40 h-40 rounded-full bg-[#5B5BFF]/5 blur-3xl" />
+      </div>
+    </div>
+  )
+}
+
+function StrategyVisual() {
+  return (
+    <div className="relative w-full h-[320px] lg:h-[420px] flex items-center justify-center">
+      <div className="grid grid-cols-5 grid-rows-5 gap-2 w-[260px] h-[260px]">
+        {Array.from({ length: 25 }).map((_, i) => (
+          <div
+            key={i}
+            className="strategy-cell aspect-square rounded-sm border opacity-0"
+            style={{
+              borderColor: (i === 6 || i === 7 || i === 8 || i === 11 || i === 12 || i === 13 || i === 16 || i === 17 || i === 18)
+                ? '#22D3EE'
+                : 'rgba(255,255,255,0.06)',
+              backgroundColor: (i === 6 || i === 7 || i === 8 || i === 11 || i === 12 || i === 13 || i === 16 || i === 17 || i === 18)
+                ? 'rgba(34,211,238,0.08)'
+                : 'transparent',
+              transform: 'scale(0)',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Structure highlight lines */}
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none">
+        <rect className="strategy-gridline" x="95" y="95" width="210" height="210" rx="4" stroke="#22D3EE" strokeWidth="1" opacity="0" strokeDasharray="6 4" />
+        <line className="strategy-gridline" x1="145" y1="95" x2="145" y2="305" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
+        <line className="strategy-gridline" x1="255" y1="95" x2="255" y2="305" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
+        <line className="strategy-gridline" x1="95" y1="145" x2="305" y2="145" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
+        <line className="strategy-gridline" x1="95" y1="255" x2="305" y2="255" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
+      </svg>
+    </div>
+  )
+}
+
+function DesignVisual() {
+  return (
+    <div className="relative w-full h-[320px] lg:h-[420px] flex items-center justify-center">
+      {/* Wireframe layer */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="design-wireframe relative w-56 h-64 rounded-xl border-2 border-white/20 bg-transparent p-4 transition-all duration-500">
+          <div className="w-20 h-2 rounded bg-white/20 mb-4" />
+          <div className="w-full h-16 rounded-lg bg-white/5 mb-3" />
+          <div className="flex gap-2 mb-3">
+            <div className="w-1/3 h-8 rounded bg-white/5" />
+            <div className="w-2/3 h-8 rounded bg-white/5" />
+          </div>
+          <div className="w-3/4 h-2 rounded bg-white/10 mb-2" />
+          <div className="w-1/2 h-2 rounded bg-white/10" />
+        </div>
+        <div className="design-wireframe absolute -right-4 top-[15%] w-40 h-48 rounded-xl border-2 border-white/15 bg-transparent p-3 transition-all duration-500">
+          <div className="w-16 h-1.5 rounded bg-white/20 mb-3" />
+          <div className="w-full h-12 rounded-lg bg-white/5 mb-2" />
+          <div className="w-3/4 h-1.5 rounded bg-white/10" />
+        </div>
+      </div>
+
+      {/* UI elements that appear after morph */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none">
+        <div className="design-ui relative w-56 h-64 rounded-xl bg-gradient-to-br from-[#A855F7]/10 to-transparent border border-[#A855F7]/30 p-4 shadow-lg shadow-[#A855F7]/5">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-2 h-2 rounded-full bg-[#A855F7]" />
+            <div className="w-16 h-1.5 rounded bg-[#A855F7]/40" />
+          </div>
+          <div className="w-full h-16 rounded-lg bg-[#A855F7]/10 mb-3 border border-[#A855F7]/10" />
+          <div className="flex gap-2 mb-3">
+            <div className="flex-1 h-8 rounded bg-[#A855F7]/10 border border-[#A855F7]/10" />
+            <div className="flex-1 h-8 rounded bg-[#A855F7]/15 border border-[#A855F7]/15" />
+          </div>
+          <div className="w-3/4 h-2 rounded bg-[#A855F7]/20 mb-2" />
+          <div className="w-1/2 h-2 rounded bg-[#A855F7]/20" />
+        </div>
+        <div className="design-ui absolute -right-4 top-[15%] w-40 h-48 rounded-xl bg-gradient-to-br from-[#A855F7]/8 to-transparent border border-[#A855F7]/20 p-3">
+          <div className="w-12 h-1.5 rounded bg-[#A855F7]/30 mb-3" />
+          <div className="w-full h-12 rounded-lg bg-[#A855F7]/10 mb-2 border border-[#A855F7]/10" />
+          <div className="w-3/4 h-1.5 rounded bg-[#A855F7]/20" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DevelopmentVisual() {
+  return (
+    <div className="relative w-full h-[320px] lg:h-[420px] flex items-center justify-center">
+      {/* Code-like blocks assembling */}
+      <div className="relative w-72">
+        <div className="dev-block flex items-center gap-2 mb-2 opacity-0">
+          <span className="w-3 h-3 rounded border border-[#34D399]/40 flex-shrink-0" />
+          <div className="h-3 flex-1 rounded bg-[#34D399]/15" />
+          <div className="w-12 h-3 rounded bg-[#34D399]/10" />
+        </div>
+        <div className="dev-block flex items-center gap-2 mb-2 opacity-0">
+          <span className="w-3 h-3 rounded border border-[#34D399]/40 flex-shrink-0" />
+          <div className="w-20 h-3 rounded bg-[#34D399]/15" />
+          <div className="flex-1 h-3 rounded bg-[#34D399]/10 ml-12" />
+        </div>
+        <div className="dev-block flex items-center gap-2 mb-3 opacity-0">
+          <span className="w-3 h-3 rounded border border-[#34D399]/40 flex-shrink-0" />
+          <div className="w-28 h-3 rounded bg-[#34D399]/15" />
+          <div className="flex-1 h-3 rounded bg-[#34D399]/8" />
+        </div>
+
+        {/* Bracket connectors */}
+        <div className="dev-connector absolute left-3 top-0 bottom-0 w-0.5 bg-[#34D399]/20 opacity-0" />
+
+        <div className="dev-block flex gap-2 mt-4 ml-8 opacity-0">
+          <div className="flex-1 h-12 rounded-lg bg-[#34D399]/8 border border-[#34D399]/15" />
+          <div className="flex-1 h-12 rounded-lg bg-[#34D399]/12 border border-[#34D399]/20" />
+          <div className="flex-[0.6] h-12 rounded-lg bg-[#34D399]/8 border border-[#34D399]/15" />
+        </div>
+
+        <div className="dev-block flex gap-1.5 mt-2 ml-8 opacity-0">
+          <div className="flex-[0.3] h-6 rounded bg-[#34D399]/10" />
+          <div className="flex-[0.7] h-6 rounded bg-[#34D399]/15" />
+          <div className="flex-[0.4] h-6 rounded bg-[#34D399]/8" />
+          <div className="flex-[0.5] h-6 rounded bg-[#34D399]/12" />
+        </div>
+
+        <div className="dev-connector absolute left-11 top-[88px] bottom-0 w-0.5 bg-[#34D399]/15 opacity-0" />
+      </div>
+
+      {/* Right side component indicators */}
+      <div className="absolute right-[5%] top-[20%] space-y-3">
+        <div className="dev-block flex items-center gap-2 opacity-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
+          <span className="text-[10px] font-mono text-[#34D399]/60">module</span>
+        </div>
+        <div className="dev-block flex items-center gap-2 opacity-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
+          <span className="text-[10px] font-mono text-[#34D399]/60">api</span>
+        </div>
+        <div className="dev-block flex items-center gap-2 opacity-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
+          <span className="text-[10px] font-mono text-[#34D399]/60">config</span>
+        </div>
+        <div className="dev-block flex items-center gap-2 opacity-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
+          <span className="text-[10px] font-mono text-[#34D399]/60">routes</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TestingVisual() {
+  return (
+    <div className="relative w-full h-[320px] lg:h-[420px] flex flex-col justify-center">
+      <div className="space-y-4 max-w-sm mx-auto w-full">
+        {/* Checklist items */}
+        <div className="test-check flex items-center gap-3 opacity-0">
+          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="text-sm font-mono text-muted">Functional coverage</span>
+          <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
+            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+          </div>
+        </div>
+
+        <div className="test-check flex items-center gap-3 opacity-0">
+          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="text-sm font-mono text-muted">Performance benchmarks</span>
+          <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
+            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+          </div>
+        </div>
+
+        <div className="test-check flex items-center gap-3 opacity-0">
+          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="text-sm font-mono text-muted">Accessibility audit</span>
+          <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
+            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+          </div>
+        </div>
+
+        <div className="test-check flex items-center gap-3 opacity-0">
+          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+          <span className="text-sm font-mono text-muted">Security scan</span>
+          <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
+            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+          </div>
+        </div>
+
+        {/* Status badges */}
+        <div className="flex gap-3 mt-6 justify-center">
+          <div className="test-badge px-3 py-1.5 rounded-full border border-[#F97316]/20 bg-[#F97316]/5 text-[10px] font-mono text-[#F97316] tracking-wider opacity-0">
+            PASSED
+          </div>
+          <div className="test-badge px-3 py-1.5 rounded-full border border-[#F97316]/20 bg-[#F97316]/5 text-[10px] font-mono text-[#F97316] tracking-wider opacity-0">
+            VERIFIED
+          </div>
+          <div className="test-badge px-3 py-1.5 rounded-full border border-[#F97316]/20 bg-[#F97316]/5 text-[10px] font-mono text-[#F97316] tracking-wider opacity-0">
+            APPROVED
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function LaunchVisual() {
+  return (
+    <div className="relative w-full h-[320px] lg:h-[420px] flex items-center justify-center">
+      <div className="grid grid-cols-3 gap-6 w-full max-w-sm">
+        {/* Metrics */}
+        <div className="launch-metric text-center">
+          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#EC4899]">0</div>
+          <div className="text-[10px] font-mono text-muted-dark mt-1 tracking-wider">PERFORMANCE</div>
+        </div>
+        <div className="launch-metric text-center">
+          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#EC4899]">0</div>
+          <div className="text-[10px] font-mono text-muted-dark mt-1 tracking-wider">UPTIME</div>
+        </div>
+        <div className="launch-metric text-center">
+          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#EC4899]">0</div>
+          <div className="text-[10px] font-mono text-muted-dark mt-1 tracking-wider">COVERAGE</div>
+        </div>
+
+        {/* Bars */}
+        <div className="col-span-3 flex gap-2 items-end h-24 mt-2">
+          <div className="flex-1 flex flex-col items-center gap-1">
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <span className="text-[8px] font-mono text-muted-dark">Response</span>
+          </div>
+          <div className="flex-1 flex flex-col items-center gap-1">
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <span className="text-[8px] font-mono text-muted-dark">Throughput</span>
+          </div>
+          <div className="flex-1 flex flex-col items-center gap-1">
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <span className="text-[8px] font-mono text-muted-dark">Reliability</span>
+          </div>
+          <div className="flex-1 flex flex-col items-center gap-1">
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <span className="text-[8px] font-mono text-muted-dark">SEO</span>
+          </div>
+          <div className="flex-1 flex flex-col items-center gap-1">
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <span className="text-[8px] font-mono text-muted-dark">Access</span>
+          </div>
+        </div>
+
+        {/* Status indicator */}
+        <div className="launch-status col-span-3 text-center mt-4 opacity-0">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#EC4899]/20 bg-[#EC4899]/5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#EC4899] animate-pulse" />
+            <span className="text-xs font-mono text-[#EC4899] tracking-widest">ALL SYSTEMS OPERATIONAL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Main Component                                                     */
+/* ------------------------------------------------------------------ */
 
 export default function ProcessSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const pinRef = useRef<HTMLDivElement>(null)
-  const progressRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const panelsRef = useRef<(HTMLDivElement | null)[]>([])
   const [activeIdx, setActiveIdx] = useState(0)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      ScrollTrigger.create({
+      const pin = ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top top',
-        end: '+=500%',
+        end: `+=${stages.length * 100}vh`,
         pin: pinRef.current,
         anticipatePin: 1,
         scrub: 1,
       })
 
-      const items = sectionRef.current?.querySelectorAll('.process-stage')
-      if (items) {
-        items.forEach((item, i) => {
-          const start = i / stages.length
-          const end = (i + 1) / stages.length
-          ScrollTrigger.create({
-            trigger: sectionRef.current,
-            start: `top+=${start * 100}% top`,
-            end: `top+=${end * 100}% top`,
-            scrub: 1,
-            onUpdate: (self) => {
-              const p = self.progress
-              const el = item as HTMLElement
-              const active = p > 0.1 && p < 0.9
-              gsap.to(el, {
-                opacity: active ? 1 : 0.25,
-                scale: active ? 1 : 0.95,
-                filter: active ? 'blur(0px)' : 'blur(2px)',
-                duration: 0.3,
-              })
-              if (active) setActiveIdx(i)
-            },
-          })
-        })
-      }
-
-      if (progressRef.current) {
-        ScrollTrigger.create({
+      const master = gsap.timeline({
+        scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=500%',
+          end: `+=${stages.length * 100}vh`,
           scrub: 1,
           onUpdate: (self) => {
-            gsap.to(progressRef.current, { scaleY: self.progress, duration: 0.1 })
+            const idx = Math.min(Math.floor(self.progress * stages.length), stages.length - 1)
+            setActiveIdx(idx)
           },
-        })
-      }
+        },
+      })
+
+      master.to(wrapperRef.current, {
+        y: () => -(stages.length - 1) * window.innerHeight,
+        ease: 'none',
+      }, 0)
+
+      stages.forEach((_, i) => {
+        const panel = panelsRef.current[i]
+        if (!panel) return
+
+        const start = i / stages.length
+        const mid = (i + 0.5) / stages.length
+        const end = (i + 1) / stages.length
+
+        const title = panel.querySelector('.process-title')
+        const accentBar = panel.querySelector('.accent-bar')
+        const subtitle = panel.querySelector('.process-subtitle')
+        const tagline = panel.querySelector('.process-tagline')
+
+        if (title) {
+          master.fromTo(title, { y: 80, opacity: 0, rotateX: -15 }, { y: 0, opacity: 1, rotateX: 0, duration: 0.04, ease: 'power4.out' }, start)
+        }
+        if (accentBar) {
+          master.fromTo(accentBar, { scaleX: 0 }, { scaleX: 1, duration: 0.04, ease: 'power4.out' }, start + 0.01)
+        }
+        if (subtitle) {
+          master.fromTo(subtitle, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.035, ease: 'power4.out' }, start + 0.015)
+        }
+        if (tagline) {
+          master.fromTo(tagline, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.03, ease: 'power4.out' }, start + 0.025)
+        }
+
+        switch (i) {
+          case 0: researchTimeline(master, panel, start, mid, end); break
+          case 1: strategyTimeline(master, panel, start, mid, end); break
+          case 2: designTimeline(master, panel, start, mid, end); break
+          case 3: developmentTimeline(master, panel, start, mid, end); break
+          case 4: testingTimeline(master, panel, start, mid, end); break
+          case 5: launchTimeline(master, panel, start, mid, end); break
+        }
+      })
+
+      ScrollTrigger.addEventListener('refresh', () => master.scrollTrigger?.refresh())
     }, sectionRef)
+
     return () => ctx.revert()
   }, [])
+
+  /* ------------------------------------------------------------------ */
+  /*  Per-stage animation builders                                       */
+  /* ------------------------------------------------------------------ */
+
+  function researchTimeline(tl: gsap.core.Timeline, panel: HTMLDivElement, start: number, _mid: number, _end: number) {
+    const notes = panel.querySelectorAll('.research-note')
+    const lines = panel.querySelectorAll('.research-line')
+    const nodes = panel.querySelectorAll('.research-node')
+
+    notes.forEach((note, i) => {
+      const x = gsap.utils.random(-200, 200)
+      const y = gsap.utils.random(-120, 120)
+      const rot = gsap.utils.random(-12, 12)
+      tl.fromTo(note, { x, y, opacity: 0, rotation: rot * 2.5 }, { x: 0, y: 0, opacity: 1, rotation: rot, duration: 0.04, ease: 'power4.out' }, start + 0.03 + i * 0.02)
+    })
+
+    lines.forEach((line, i) => {
+      tl.fromTo(line, { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 0.4, duration: 0.03, ease: 'power4.out' }, start + 0.04 + i * 0.015)
+    })
+
+    nodes.forEach((node) => {
+      tl.fromTo(node, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.02, ease: 'back.out(2.5)' }, start + 0.05)
+      tl.to(node, { scale: 1.8, opacity: 0.25, duration: 0.03, ease: 'sine.inOut', repeat: -1, yoyo: true }, start + 0.08)
+    })
+  }
+
+  function strategyTimeline(tl: gsap.core.Timeline, panel: HTMLDivElement, start: number, _mid: number, _end: number) {
+    const cells = panel.querySelectorAll('.strategy-cell')
+    const gridlines = panel.querySelectorAll('.strategy-gridline')
+
+    cells.forEach((cell, i) => {
+      tl.to(cell, { scale: 1, opacity: 1, duration: 0.01, ease: 'back.out(2)' }, start + 0.02 + i * 0.004)
+    })
+
+    gridlines.forEach((line, i) => {
+      tl.fromTo(line, { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 0.5, duration: 0.03, ease: 'power4.out' }, start + 0.04 + i * 0.01)
+    })
+  }
+
+  function designTimeline(tl: gsap.core.Timeline, panel: HTMLDivElement, start: number, _mid: number, _end: number) {
+    const wireframes = panel.querySelectorAll('.design-wireframe')
+    const uiElements = panel.querySelectorAll('.design-ui')
+
+    wireframes.forEach((wf) => {
+      tl.to(wf, {
+        borderColor: '#A855F7',
+        backgroundColor: 'rgba(168, 85, 247, 0.08)',
+        duration: 0.03,
+        ease: 'power4.out',
+      }, start + 0.03)
+    })
+
+    tl.to(uiElements[0]?.parentElement, { opacity: 1, duration: 0.02, ease: 'power4.out' }, start + 0.06)
+
+    uiElements.forEach((el, i) => {
+      tl.fromTo(el, { opacity: 0, y: 30, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.04, ease: 'back.out(1.7)' }, start + 0.07 + i * 0.02)
+    })
+  }
+
+  function developmentTimeline(tl: gsap.core.Timeline, panel: HTMLDivElement, start: number, _mid: number, _end: number) {
+    const blocks = panel.querySelectorAll('.dev-block')
+    const connectors = panel.querySelectorAll('.dev-connector')
+
+    blocks.forEach((block, i) => {
+      const fromX = i % 2 === 0 ? gsap.utils.random(-80, 80) : 0
+      const fromY = i % 2 !== 0 ? gsap.utils.random(40, 90) : 0
+      const rot = gsap.utils.random(-4, 4)
+      tl.fromTo(block,
+        { x: fromX, y: fromY, opacity: 0, rotation: rot * 2 },
+        { x: 0, y: 0, opacity: 1, rotation: 0, duration: 0.03, ease: 'power4.out' },
+        start + 0.02 + i * 0.015
+      )
+    })
+
+    connectors.forEach((conn, i) => {
+      tl.fromTo(conn, { scaleY: 0, opacity: 0 }, { scaleY: 1, opacity: 1, duration: 0.02, ease: 'power4.out' }, start + 0.04 + i * 0.015)
+    })
+  }
+
+  function testingTimeline(tl: gsap.core.Timeline, panel: HTMLDivElement, start: number, _mid: number, _end: number) {
+    const checks = panel.querySelectorAll('.test-check')
+    const bars = panel.querySelectorAll('.test-bar')
+    const badges = panel.querySelectorAll('.test-badge')
+
+    checks.forEach((check, i) => {
+      tl.fromTo(check, { scale: 0.8, opacity: 0, x: -20 }, { scale: 1, opacity: 1, x: 0, duration: 0.03, ease: 'power4.out' }, start + 0.02 + i * 0.015)
+    })
+
+    bars.forEach((bar, i) => {
+      tl.fromTo(bar, { width: '0%' }, { width: '100%', duration: 0.03, ease: 'power4.out' }, start + 0.04 + i * 0.015)
+    })
+
+    badges.forEach((badge, i) => {
+      tl.fromTo(badge, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.025, ease: 'power4.out' }, start + 0.05 + i * 0.012)
+    })
+  }
+
+  function launchTimeline(tl: gsap.core.Timeline, panel: HTMLDivElement, start: number, _mid: number, _end: number) {
+    const metricNums = panel.querySelectorAll('.metric-number')
+    const bars = panel.querySelectorAll('.launch-bar')
+    const status = panel.querySelectorAll('.launch-status')
+
+    const heights = [95, 88, 100, 78, 92]
+
+    metricNums.forEach((num, i) => {
+      const vals = [100, 99.97, 96]
+      tl.fromTo(num, { textContent: '0' }, { textContent: `${vals[i]}`, duration: 0.06, ease: 'power4.out', snap: { textContent: 1 } }, start + 0.03 + i * 0.015)
+    })
+
+    bars.forEach((bar, i) => {
+      tl.fromTo(bar, { height: '0%' }, { height: `${heights[i]}%`, duration: 0.04, ease: 'power4.out' }, start + 0.04 + i * 0.01)
+    })
+
+    status.forEach((s, i) => {
+      tl.fromTo(s, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.025, ease: 'power4.out' }, start + 0.07 + i * 0.01)
+    })
+  }
 
   const active = stages[activeIdx]
 
   return (
-    <section ref={sectionRef} className="relative bg-subtle overflow-hidden">
-      <div ref={pinRef} className="min-h-screen flex items-center">
-        <div className="max-w-content mx-auto px-6 md:px-10 w-full">
-          <div className="grid md:grid-cols-[1.2fr_1fr] gap-12 md:gap-20 lg:gap-28">
-            <div>
-              <div className="mb-10">
-                <span className="scene-eyebrow">Our Process</span>
-                <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight mt-4 leading-[1.05]">
-                  From idea to
-                  <br />
-                  <span className="text-accent">impact.</span>
-                </h2>
-              </div>
-
-              <div className="relative pl-10">
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-border rounded-full overflow-hidden">
-                  <div ref={progressRef} className="w-full bg-accent rounded-full origin-top" style={{ transform: 'scaleY(0)' }} />
-                </div>
-
-                <div className="space-y-12 md:space-y-16">
-                  {stages.map((stage) => (
-                    <div key={stage.number} className="process-stage">
-                      <div className="flex items-start gap-5">
-                        <span className="text-sm font-mono font-bold pt-1 shrink-0" style={{ color: stage.accent }}>
-                          {stage.number}
-                        </span>
-                        <div className="min-w-0">
-                          <h3 className="text-xl md:text-2xl font-display font-bold tracking-tight mb-2">
-                            {stage.title}
-                          </h3>
-                          <p className="text-sm text-muted leading-relaxed">
-                            {stage.desc}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="hidden md:flex flex-col justify-center">
-              <div className="sticky top-[20vh]">
-                <div
-                  className="relative rounded-2xl border overflow-hidden p-8 md:p-10 lg:p-12 min-h-[280px] transition-all duration-700"
-                  style={{
-                    borderColor: `${active.accent}30`,
-                    background: `radial-gradient(ellipse at 50% 0%, ${stages[activeIdx].accent}10, transparent)`,
-                  }}
-                >
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="w-2 h-2 rounded-full" style={{ background: active.accent }} />
-                      <span className="text-xs font-mono font-bold" style={{ color: active.accent }}>
-                        Stage {active.number}
-                      </span>
-                    </div>
-                    <h3 className="text-2xl lg:text-3xl font-display font-bold tracking-tight mb-4" style={{ color: active.accent }}>
-                      {active.title}
-                    </h3>
-                    <p className="text-sm text-muted leading-relaxed">
-                      {active.desc}
-                    </p>
-                    <div className="mt-6 flex gap-2">
-                      {Array.from({ length: stages.length }).map((_, i) => (
-                        <div
-                          key={i}
-                          className="h-1 rounded-full transition-all duration-500"
-                          style={{
-                            width: i === activeIdx ? 24 : 8,
-                            background: i <= activeIdx ? active.accent : 'rgba(255,255,255,0.1)',
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <div
-                    className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                    style={{
-                      backgroundImage: `radial-gradient(circle at 50% 50%, ${active.accent} 1px, transparent 1px)`,
-                      backgroundSize: '24px 24px',
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
+    <section ref={sectionRef} className="relative bg-background" style={{ height: `${stages.length * 100}vh` }}>
+      {/* Stage indicator — right side */}
+      <div className="fixed right-6 md:right-10 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-center gap-4 pointer-events-none">
+        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+        {stages.map((s, i) => (
+          <div key={s.number} className="flex items-center gap-3 transition-all duration-700" style={{ opacity: i === activeIdx ? 1 : i < activeIdx ? 0.3 : 0.15 }}>
+            <span
+              className="text-[9px] font-mono font-bold tracking-widest transition-all duration-700"
+              style={{ color: i <= activeIdx ? s.color : 'rgba(255,255,255,0.2)' }}
+            >
+              {s.number}
+            </span>
+            <div
+              className="w-[6px] h-[6px] rounded-full transition-all duration-700"
+              style={{
+                background: i === activeIdx ? s.color : i < activeIdx ? `${s.color}60` : 'rgba(255,255,255,0.12)',
+                boxShadow: i === activeIdx ? `0 0 12px ${s.color}60` : 'none',
+              }}
+            />
           </div>
+        ))}
+        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+      </div>
+
+      {/* Stage number badge — bottom left */}
+      <div className="fixed bottom-8 left-6 md:left-10 z-50 pointer-events-none hidden lg:block">
+        <div className="flex items-end gap-3">
+          <span
+            className="text-[clamp(4rem,10vw,8rem)] font-display font-bold leading-none transition-colors duration-700"
+            style={{ color: active.color, opacity: 0.12 }}
+          >
+            {active.number}
+          </span>
+          <div className="mb-1.5 flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full transition-colors duration-700" style={{ background: active.color }} />
+            <span className="text-[10px] font-mono tracking-[0.25em] transition-colors duration-700" style={{ color: active.color }}>
+              STAGE {active.number}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile stage indicator */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 lg:hidden pointer-events-none">
+        {stages.map((s, i) => (
+          <div
+            key={s.number}
+            className="w-1.5 h-1.5 rounded-full transition-all duration-500"
+            style={{
+              background: i === activeIdx ? s.color : 'rgba(255,255,255,0.12)',
+              width: i === activeIdx ? 6 : 4,
+              height: i === activeIdx ? 6 : 4,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Pinned container */}
+      <div ref={pinRef} className="h-screen w-full overflow-hidden fixed top-0 left-0 bg-background">
+        <div ref={wrapperRef} className="will-change-transform" style={{ height: `${stages.length * 100}vh` }}>
+          {stages.map((stage, i) => (
+            <div
+              key={stage.number}
+              ref={(el) => { panelsRef.current[i] = el }}
+              className="h-screen w-full flex-shrink-0 relative overflow-hidden flex items-center"
+            >
+              {/* Dynamic background glow */}
+              <div
+                className="absolute inset-0 transition-opacity duration-1000"
+                style={{ background: stage.bgGlow, opacity: i === activeIdx ? 1 : 0.3 }}
+              />
+
+              {/* Subtle dot grid */}
+              <div className="absolute inset-0 dot-grid-sm opacity-20 pointer-events-none" />
+
+              <div className="relative z-10 w-full max-w-content mx-auto px-6 md:px-10 lg:px-16">
+                <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-16 xl:gap-24">
+                  {/* Text side */}
+                  <div className="flex-1 max-w-xl">
+                    <div className="overflow-hidden mb-4">
+                      <span
+                        className="accent-bar block h-[3px] w-20 rounded-full origin-left"
+                        style={{ background: stage.color, transform: 'scaleX(0)' }}
+                      />
+                    </div>
+                    <h2
+                      className="process-title text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-display font-bold tracking-tight leading-[0.88]"
+                      style={{ opacity: 0, transform: 'translateY(80px)' }}
+                    >
+                      {stage.title}
+                    </h2>
+                    <p
+                      className="process-subtitle text-lg md:text-xl lg:text-2xl mt-4 text-muted font-display font-medium"
+                      style={{ opacity: 0, transform: 'translateY(40px)' }}
+                    >
+                      {stage.subtitle}
+                    </p>
+                    <p
+                      className="process-tagline text-sm md:text-base mt-3 text-muted-dark font-mono"
+                      style={{ opacity: 0, transform: 'translateY(20px)' }}
+                    >
+                      {stage.tagline}
+                    </p>
+                  </div>
+
+                  {/* Visual side */}
+                  <div className="flex-1 visual-area">
+                    {i === 0 && <ResearchVisual />}
+                    {i === 1 && <StrategyVisual />}
+                    {i === 2 && <DesignVisual />}
+                    {i === 3 && <DevelopmentVisual />}
+                    {i === 4 && <TestingVisual />}
+                    {i === 5 && <LaunchVisual />}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

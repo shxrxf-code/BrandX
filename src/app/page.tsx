@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import Preloader from '@/components/Preloader'
 import HeroSection from '@/components/HeroSection'
-import StorySection from '@/components/StorySection'
+import HowBrandexWorks from '@/components/HowBrandexWorks'
+import InsideTheStudio from '@/components/InsideTheStudio'
 import ServicesShowcase from '@/components/ServicesShowcase'
-import WorkflowSection from '@/components/WorkflowSection'
+import ProjectTransformation from '@/components/ProjectTransformation'
 import CaseStudiesSection from '@/components/CaseStudiesSection'
 import TechUniverse from '@/components/TechUniverse'
 import MetricsSection from '@/components/MetricsSection'
@@ -34,9 +35,10 @@ export default function Home() {
       {loading && <Preloader onComplete={handleComplete} />}
       <main className={loading ? 'invisible' : 'visible'}>
         <HeroSection />
-        <StorySection />
+        <HowBrandexWorks />
+        <InsideTheStudio />
         <ServicesShowcase />
-        <WorkflowSection />
+        <ProjectTransformation />
         <CaseStudiesSection />
         <TechUniverse />
         <MetricsSection />

@@ -5,9 +5,9 @@
 @layer base {
   :root {
     color-scheme: dark;
-    --background: #000000;
+    --background: #050816;
     --foreground: #ffffff;
-    --accent: #5B5BFF;
+    --accent: #3B82F6;
   }
 
   * {
@@ -21,7 +21,7 @@
   }
 
   html, body {
-    background: #000000;
+    background: #050816;
     color: #ffffff;
   }
 
@@ -36,12 +36,12 @@
   }
 
   ::selection {
-    background: #5B5BFF;
+    background: #3B82F6;
     color: #ffffff;
   }
 
   *:focus-visible {
-    outline: 1px solid #5B5BFF;
+    outline: 1px solid #3B82F6;
     outline-offset: 4px;
   }
 
@@ -74,7 +74,7 @@
   }
 
   .text-stroke-accent {
-    -webkit-text-stroke: 1px rgba(91, 91, 255, 0.6);
+    -webkit-text-stroke: 1px rgba(59, 130, 246, 0.6);
     color: transparent;
   }
 
@@ -172,7 +172,7 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(91, 91, 255, 0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
   }
 
   .preloader-logo {
@@ -204,7 +204,7 @@
   }
 
   .shimmer-text {
-    background: linear-gradient(90deg, #ffffff 0%, #5B5BFF 50%, #ffffff 100%);
+    background: linear-gradient(90deg, #ffffff 0%, #3B82F6 50%, #ffffff 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

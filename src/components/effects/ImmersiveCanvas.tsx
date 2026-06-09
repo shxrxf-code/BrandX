@@ -123,9 +123,9 @@ export default function ImmersiveCanvas({ density = 60, accentOnScroll = true }:
       // accent ring around mouse
       if (mouseRef.current.x > 0 || mouseRef.current.y > 0) {
         const grad = ctx.createRadialGradient(mx, my, 0, mx, my, 220)
-        grad.addColorStop(0, 'rgba(91, 91, 255, 0.15)')
-        grad.addColorStop(0.5, 'rgba(91, 91, 255, 0.04)')
-        grad.addColorStop(1, 'rgba(91, 91, 255, 0)')
+        grad.addColorStop(0, 'rgba(59, 130, 246, 0.15)')
+        grad.addColorStop(0.5, 'rgba(59, 130, 246, 0.04)')
+        grad.addColorStop(1, 'rgba(59, 130, 246, 0)')
         ctx.fillStyle = grad
         ctx.beginPath()
         ctx.arc(mx, my, 220, 0, Math.PI * 2)
@@ -144,9 +144,9 @@ export default function ImmersiveCanvas({ density = 60, accentOnScroll = true }:
       if (accentOnScroll) {
         const accentY = (scrollRef.current * 0.4) % h
         const accentGrad = ctx.createLinearGradient(0, accentY - 100, 0, accentY + 100)
-        accentGrad.addColorStop(0, 'rgba(91, 91, 255, 0)')
-        accentGrad.addColorStop(0.5, 'rgba(91, 91, 255, 0.04)')
-        accentGrad.addColorStop(1, 'rgba(91, 91, 255, 0)')
+        accentGrad.addColorStop(0, 'rgba(59, 130, 246, 0)')
+        accentGrad.addColorStop(0.5, 'rgba(59, 130, 246, 0.04)')
+        accentGrad.addColorStop(1, 'rgba(59, 130, 246, 0)')
         ctx.fillStyle = accentGrad
         ctx.fillRect(0, accentY - 100, w, 200)
       }

@@ -14,48 +14,48 @@ const stages = [
     title: 'Research',
     subtitle: 'Discovery & Understanding',
     tagline: 'Uncover insights that drive every decision.',
-    color: '#5B5BFF',
-    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(91,91,255,0.10), transparent)',
+    color: '#3B82F6',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(59,130,246,0.10), transparent)',
   },
   {
     number: '02',
     title: 'Strategy',
     subtitle: 'Architecture & Blueprint',
     tagline: 'Structure emerges from raw potential.',
-    color: '#22D3EE',
-    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(34,211,238,0.10), transparent)',
+    color: '#3B82F6',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(59,130,246,0.08), transparent)',
   },
   {
     number: '03',
     title: 'Design',
     subtitle: 'Interface & Experience',
     tagline: 'Wireframes evolve into living interfaces.',
-    color: '#A855F7',
-    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(168,85,247,0.10), transparent)',
+    color: '#3B82F6',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(96,165,250,0.10), transparent)',
   },
   {
     number: '04',
     title: 'Development',
     subtitle: 'Engineering & Assembly',
     tagline: 'Components converge into systems.',
-    color: '#34D399',
-    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(52,211,153,0.10), transparent)',
+    color: '#3B82F6',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(59,130,246,0.08), transparent)',
   },
   {
     number: '05',
     title: 'Testing',
     subtitle: 'Quality & Assurance',
     tagline: 'Every detail verified. Every edge case covered.',
-    color: '#F97316',
-    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(249,115,22,0.10), transparent)',
+    color: '#3B82F6',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(96,165,250,0.08), transparent)',
   },
   {
     number: '06',
     title: 'Launch',
     subtitle: 'Deploy & Scale',
     tagline: 'Built. Shipped. performing.',
-    color: '#EC4899',
-    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(236,72,153,0.10), transparent)',
+    color: '#3B82F6',
+    bgGlow: 'radial-gradient(ellipse 60% 50% at 35% 50%, rgba(59,130,246,0.10), transparent)',
   },
 ]
 
@@ -69,42 +69,42 @@ function ResearchVisual() {
       <div className="absolute inset-0 flex items-center justify-center">
         {/* Network nodes */}
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none">
-          <line className="research-line" x1="120" y1="100" x2="280" y2="180" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
-          <line className="research-line" x1="280" y1="180" x2="200" y2="300" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
-          <line className="research-line" x1="120" y1="100" x2="80" y2="250" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
-          <line className="research-line" x1="80" y1="250" x2="200" y2="300" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
-          <line className="research-line" x1="200" y1="300" x2="310" y2="280" stroke="#5B5BFF" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
-          <circle className="research-node" cx="120" cy="100" r="6" fill="#5B5BFF" opacity="0" />
-          <circle className="research-node" cx="280" cy="180" r="5" fill="#5B5BFF" opacity="0" />
-          <circle className="research-node" cx="200" cy="300" r="7" fill="#5B5BFF" opacity="0" />
-          <circle className="research-node" cx="80" cy="250" r="4" fill="#5B5BFF" opacity="0" />
-          <circle className="research-node" cx="310" cy="280" r="5" fill="#5B5BFF" opacity="0" />
+          <line className="research-line" x1="120" y1="100" x2="280" y2="180" stroke="#3B82F6" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="280" y1="180" x2="200" y2="300" stroke="#3B82F6" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="120" y1="100" x2="80" y2="250" stroke="#3B82F6" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="80" y1="250" x2="200" y2="300" stroke="#3B82F6" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <line className="research-line" x1="200" y1="300" x2="310" y2="280" stroke="#3B82F6" strokeWidth="1" strokeDasharray="4 4" opacity="0" />
+          <circle className="research-node" cx="120" cy="100" r="6" fill="#3B82F6" opacity="0" />
+          <circle className="research-node" cx="280" cy="180" r="5" fill="#3B82F6" opacity="0" />
+          <circle className="research-node" cx="200" cy="300" r="7" fill="#3B82F6" opacity="0" />
+          <circle className="research-node" cx="80" cy="250" r="4" fill="#3B82F6" opacity="0" />
+          <circle className="research-node" cx="310" cy="280" r="5" fill="#3B82F6" opacity="0" />
         </svg>
 
         {/* Animated sticky notes */}
-        <div className="research-note absolute top-[5%] left-[8%] w-28 h-20 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
-          <div className="w-16 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+        <div className="research-note absolute top-[5%] left-[8%] w-28 h-20 rounded-md bg-[#3B82F6]/10 border border-[#3B82F6]/20 p-2.5 opacity-0">
+          <div className="w-16 h-1.5 rounded bg-[#3B82F6]/30 mb-2" />
           <div className="w-20 h-1 rounded bg-white/10 mb-1" />
           <div className="w-14 h-1 rounded bg-white/10" />
         </div>
-        <div className="research-note absolute top-[25%] right-[10%] w-32 h-24 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
-          <div className="w-20 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+        <div className="research-note absolute top-[25%] right-[10%] w-32 h-24 rounded-md bg-[#3B82F6]/10 border border-[#3B82F6]/20 p-2.5 opacity-0">
+          <div className="w-20 h-1.5 rounded bg-[#3B82F6]/30 mb-2" />
           <div className="w-24 h-1 rounded bg-white/10 mb-1" />
           <div className="w-16 h-1 rounded bg-white/10 mb-1" />
           <div className="w-20 h-1 rounded bg-white/10" />
         </div>
-        <div className="research-note absolute bottom-[18%] left-[15%] w-24 h-20 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
-          <div className="w-14 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+        <div className="research-note absolute bottom-[18%] left-[15%] w-24 h-20 rounded-md bg-[#3B82F6]/10 border border-[#3B82F6]/20 p-2.5 opacity-0">
+          <div className="w-14 h-1.5 rounded bg-[#3B82F6]/30 mb-2" />
           <div className="w-18 h-1 rounded bg-white/10 mb-1" />
           <div className="w-12 h-1 rounded bg-white/10" />
         </div>
-        <div className="research-note absolute top-[15%] right-[20%] w-20 h-16 rounded-md bg-[#5B5BFF]/10 border border-[#5B5BFF]/20 p-2.5 opacity-0">
-          <div className="w-12 h-1.5 rounded bg-[#5B5BFF]/30 mb-2" />
+        <div className="research-note absolute top-[15%] right-[20%] w-20 h-16 rounded-md bg-[#3B82F6]/10 border border-[#3B82F6]/20 p-2.5 opacity-0">
+          <div className="w-12 h-1.5 rounded bg-[#3B82F6]/30 mb-2" />
           <div className="w-14 h-1 rounded bg-white/10" />
         </div>
 
         {/* Center glow */}
-        <div className="absolute w-40 h-40 rounded-full bg-[#5B5BFF]/5 blur-3xl" />
+        <div className="absolute w-40 h-40 rounded-full bg-[#3B82F6]/5 blur-3xl" />
       </div>
     </div>
   )
@@ -120,10 +120,10 @@ function StrategyVisual() {
             className="strategy-cell aspect-square rounded-sm border opacity-0"
             style={{
               borderColor: (i === 6 || i === 7 || i === 8 || i === 11 || i === 12 || i === 13 || i === 16 || i === 17 || i === 18)
-                ? '#22D3EE'
+                ? '#3B82F6'
                 : 'rgba(255,255,255,0.06)',
               backgroundColor: (i === 6 || i === 7 || i === 8 || i === 11 || i === 12 || i === 13 || i === 16 || i === 17 || i === 18)
-                ? 'rgba(34,211,238,0.08)'
+                ? 'rgba(59,130,246,0.08)'
                 : 'transparent',
               transform: 'scale(0)',
             }}
@@ -133,11 +133,11 @@ function StrategyVisual() {
 
       {/* Structure highlight lines */}
       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400" fill="none">
-        <rect className="strategy-gridline" x="95" y="95" width="210" height="210" rx="4" stroke="#22D3EE" strokeWidth="1" opacity="0" strokeDasharray="6 4" />
-        <line className="strategy-gridline" x1="145" y1="95" x2="145" y2="305" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
-        <line className="strategy-gridline" x1="255" y1="95" x2="255" y2="305" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
-        <line className="strategy-gridline" x1="95" y1="145" x2="305" y2="145" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
-        <line className="strategy-gridline" x1="95" y1="255" x2="305" y2="255" stroke="#22D3EE" strokeWidth="0.5" opacity="0" />
+        <rect className="strategy-gridline" x="95" y="95" width="210" height="210" rx="4" stroke="#3B82F6" strokeWidth="1" opacity="0" strokeDasharray="6 4" />
+        <line className="strategy-gridline" x1="145" y1="95" x2="145" y2="305" stroke="#3B82F6" strokeWidth="0.5" opacity="0" />
+        <line className="strategy-gridline" x1="255" y1="95" x2="255" y2="305" stroke="#3B82F6" strokeWidth="0.5" opacity="0" />
+        <line className="strategy-gridline" x1="95" y1="145" x2="305" y2="145" stroke="#3B82F6" strokeWidth="0.5" opacity="0" />
+        <line className="strategy-gridline" x1="95" y1="255" x2="305" y2="255" stroke="#3B82F6" strokeWidth="0.5" opacity="0" />
       </svg>
     </div>
   )
@@ -167,23 +167,23 @@ function DesignVisual() {
 
       {/* UI elements that appear after morph */}
       <div className="absolute inset-0 flex items-center justify-center opacity-0 pointer-events-none">
-        <div className="design-ui relative w-56 h-64 rounded-xl bg-gradient-to-br from-[#A855F7]/10 to-transparent border border-[#A855F7]/30 p-4 shadow-lg shadow-[#A855F7]/5">
+        <div className="design-ui relative w-56 h-64 rounded-xl bg-gradient-to-br from-[#3B82F6]/10 to-transparent border border-[#3B82F6]/30 p-4 shadow-lg shadow-[#3B82F6]/5">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-2 h-2 rounded-full bg-[#A855F7]" />
-            <div className="w-16 h-1.5 rounded bg-[#A855F7]/40" />
+            <div className="w-2 h-2 rounded-full bg-[#3B82F6]" />
+            <div className="w-16 h-1.5 rounded bg-[#3B82F6]/40" />
           </div>
-          <div className="w-full h-16 rounded-lg bg-[#A855F7]/10 mb-3 border border-[#A855F7]/10" />
+          <div className="w-full h-16 rounded-lg bg-[#3B82F6]/10 mb-3 border border-[#3B82F6]/10" />
           <div className="flex gap-2 mb-3">
-            <div className="flex-1 h-8 rounded bg-[#A855F7]/10 border border-[#A855F7]/10" />
-            <div className="flex-1 h-8 rounded bg-[#A855F7]/15 border border-[#A855F7]/15" />
+            <div className="flex-1 h-8 rounded bg-[#3B82F6]/10 border border-[#3B82F6]/10" />
+            <div className="flex-1 h-8 rounded bg-[#3B82F6]/15 border border-[#3B82F6]/15" />
           </div>
-          <div className="w-3/4 h-2 rounded bg-[#A855F7]/20 mb-2" />
-          <div className="w-1/2 h-2 rounded bg-[#A855F7]/20" />
+          <div className="w-3/4 h-2 rounded bg-[#3B82F6]/20 mb-2" />
+          <div className="w-1/2 h-2 rounded bg-[#3B82F6]/20" />
         </div>
-        <div className="design-ui absolute -right-4 top-[15%] w-40 h-48 rounded-xl bg-gradient-to-br from-[#A855F7]/8 to-transparent border border-[#A855F7]/20 p-3">
-          <div className="w-12 h-1.5 rounded bg-[#A855F7]/30 mb-3" />
-          <div className="w-full h-12 rounded-lg bg-[#A855F7]/10 mb-2 border border-[#A855F7]/10" />
-          <div className="w-3/4 h-1.5 rounded bg-[#A855F7]/20" />
+        <div className="design-ui absolute -right-4 top-[15%] w-40 h-48 rounded-xl bg-gradient-to-br from-[#3B82F6]/8 to-transparent border border-[#3B82F6]/20 p-3">
+          <div className="w-12 h-1.5 rounded bg-[#3B82F6]/30 mb-3" />
+          <div className="w-full h-12 rounded-lg bg-[#3B82F6]/10 mb-2 border border-[#3B82F6]/10" />
+          <div className="w-3/4 h-1.5 rounded bg-[#3B82F6]/20" />
         </div>
       </div>
     </div>
@@ -196,57 +196,57 @@ function DevelopmentVisual() {
       {/* Code-like blocks assembling */}
       <div className="relative w-72">
         <div className="dev-block flex items-center gap-2 mb-2 opacity-0">
-          <span className="w-3 h-3 rounded border border-[#34D399]/40 flex-shrink-0" />
-          <div className="h-3 flex-1 rounded bg-[#34D399]/15" />
-          <div className="w-12 h-3 rounded bg-[#34D399]/10" />
+          <span className="w-3 h-3 rounded border border-[#3B82F6]/40 flex-shrink-0" />
+          <div className="h-3 flex-1 rounded bg-[#3B82F6]/15" />
+          <div className="w-12 h-3 rounded bg-[#3B82F6]/10" />
         </div>
         <div className="dev-block flex items-center gap-2 mb-2 opacity-0">
-          <span className="w-3 h-3 rounded border border-[#34D399]/40 flex-shrink-0" />
-          <div className="w-20 h-3 rounded bg-[#34D399]/15" />
-          <div className="flex-1 h-3 rounded bg-[#34D399]/10 ml-12" />
+          <span className="w-3 h-3 rounded border border-[#3B82F6]/40 flex-shrink-0" />
+          <div className="w-20 h-3 rounded bg-[#3B82F6]/15" />
+          <div className="flex-1 h-3 rounded bg-[#3B82F6]/10 ml-12" />
         </div>
         <div className="dev-block flex items-center gap-2 mb-3 opacity-0">
-          <span className="w-3 h-3 rounded border border-[#34D399]/40 flex-shrink-0" />
-          <div className="w-28 h-3 rounded bg-[#34D399]/15" />
-          <div className="flex-1 h-3 rounded bg-[#34D399]/8" />
+          <span className="w-3 h-3 rounded border border-[#3B82F6]/40 flex-shrink-0" />
+          <div className="w-28 h-3 rounded bg-[#3B82F6]/15" />
+          <div className="flex-1 h-3 rounded bg-[#3B82F6]/8" />
         </div>
 
         {/* Bracket connectors */}
-        <div className="dev-connector absolute left-3 top-0 bottom-0 w-0.5 bg-[#34D399]/20 opacity-0" />
+        <div className="dev-connector absolute left-3 top-0 bottom-0 w-0.5 bg-[#3B82F6]/20 opacity-0" />
 
         <div className="dev-block flex gap-2 mt-4 ml-8 opacity-0">
-          <div className="flex-1 h-12 rounded-lg bg-[#34D399]/8 border border-[#34D399]/15" />
-          <div className="flex-1 h-12 rounded-lg bg-[#34D399]/12 border border-[#34D399]/20" />
-          <div className="flex-[0.6] h-12 rounded-lg bg-[#34D399]/8 border border-[#34D399]/15" />
+          <div className="flex-1 h-12 rounded-lg bg-[#3B82F6]/8 border border-[#3B82F6]/15" />
+          <div className="flex-1 h-12 rounded-lg bg-[#3B82F6]/12 border border-[#3B82F6]/20" />
+          <div className="flex-[0.6] h-12 rounded-lg bg-[#3B82F6]/8 border border-[#3B82F6]/15" />
         </div>
 
         <div className="dev-block flex gap-1.5 mt-2 ml-8 opacity-0">
-          <div className="flex-[0.3] h-6 rounded bg-[#34D399]/10" />
-          <div className="flex-[0.7] h-6 rounded bg-[#34D399]/15" />
-          <div className="flex-[0.4] h-6 rounded bg-[#34D399]/8" />
-          <div className="flex-[0.5] h-6 rounded bg-[#34D399]/12" />
+          <div className="flex-[0.3] h-6 rounded bg-[#3B82F6]/10" />
+          <div className="flex-[0.7] h-6 rounded bg-[#3B82F6]/15" />
+          <div className="flex-[0.4] h-6 rounded bg-[#3B82F6]/8" />
+          <div className="flex-[0.5] h-6 rounded bg-[#3B82F6]/12" />
         </div>
 
-        <div className="dev-connector absolute left-11 top-[88px] bottom-0 w-0.5 bg-[#34D399]/15 opacity-0" />
+        <div className="dev-connector absolute left-11 top-[88px] bottom-0 w-0.5 bg-[#3B82F6]/15 opacity-0" />
       </div>
 
       {/* Right side component indicators */}
       <div className="absolute right-[5%] top-[20%] space-y-3">
         <div className="dev-block flex items-center gap-2 opacity-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
-          <span className="text-[10px] font-mono text-[#34D399]/60">module</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
+          <span className="text-[10px] font-mono text-[#3B82F6]/60">module</span>
         </div>
         <div className="dev-block flex items-center gap-2 opacity-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
-          <span className="text-[10px] font-mono text-[#34D399]/60">api</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
+          <span className="text-[10px] font-mono text-[#3B82F6]/60">api</span>
         </div>
         <div className="dev-block flex items-center gap-2 opacity-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
-          <span className="text-[10px] font-mono text-[#34D399]/60">config</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
+          <span className="text-[10px] font-mono text-[#3B82F6]/60">config</span>
         </div>
         <div className="dev-block flex items-center gap-2 opacity-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#34D399]" />
-          <span className="text-[10px] font-mono text-[#34D399]/60">routes</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
+          <span className="text-[10px] font-mono text-[#3B82F6]/60">routes</span>
         </div>
       </div>
     </div>
@@ -259,62 +259,62 @@ function TestingVisual() {
       <div className="space-y-4 max-w-sm mx-auto w-full">
         {/* Checklist items */}
         <div className="test-check flex items-center gap-3 opacity-0">
-          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
-            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+          <div className="w-6 h-6 rounded-full border-2 border-[#3B82F6]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#3B82F6]" viewBox="0 0 12 12" fill="none">
               <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <span className="text-sm font-mono text-muted">Functional coverage</span>
           <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
-            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+            <div className="test-bar h-full rounded-full bg-[#3B82F6] w-0" />
           </div>
         </div>
 
         <div className="test-check flex items-center gap-3 opacity-0">
-          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
-            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+          <div className="w-6 h-6 rounded-full border-2 border-[#3B82F6]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#3B82F6]" viewBox="0 0 12 12" fill="none">
               <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <span className="text-sm font-mono text-muted">Performance benchmarks</span>
           <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
-            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+            <div className="test-bar h-full rounded-full bg-[#3B82F6] w-0" />
           </div>
         </div>
 
         <div className="test-check flex items-center gap-3 opacity-0">
-          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
-            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+          <div className="w-6 h-6 rounded-full border-2 border-[#3B82F6]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#3B82F6]" viewBox="0 0 12 12" fill="none">
               <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <span className="text-sm font-mono text-muted">Accessibility audit</span>
           <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
-            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+            <div className="test-bar h-full rounded-full bg-[#3B82F6] w-0" />
           </div>
         </div>
 
         <div className="test-check flex items-center gap-3 opacity-0">
-          <div className="w-6 h-6 rounded-full border-2 border-[#F97316]/40 flex items-center justify-center">
-            <svg className="w-3 h-3 text-[#F97316]" viewBox="0 0 12 12" fill="none">
+          <div className="w-6 h-6 rounded-full border-2 border-[#3B82F6]/40 flex items-center justify-center">
+            <svg className="w-3 h-3 text-[#3B82F6]" viewBox="0 0 12 12" fill="none">
               <path d="M2.5 6L5 8.5L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
           <span className="text-sm font-mono text-muted">Security scan</span>
           <div className="flex-1 h-2 rounded-full bg-white/5 overflow-hidden">
-            <div className="test-bar h-full rounded-full bg-[#F97316] w-0" />
+            <div className="test-bar h-full rounded-full bg-[#3B82F6] w-0" />
           </div>
         </div>
 
         {/* Status badges */}
         <div className="flex gap-3 mt-6 justify-center">
-          <div className="test-badge px-3 py-1.5 rounded-full border border-[#F97316]/20 bg-[#F97316]/5 text-[10px] font-mono text-[#F97316] tracking-wider opacity-0">
+          <div className="test-badge px-3 py-1.5 rounded-full border border-[#3B82F6]/20 bg-[#3B82F6]/5 text-[10px] font-mono text-[#3B82F6] tracking-wider opacity-0">
             PASSED
           </div>
-          <div className="test-badge px-3 py-1.5 rounded-full border border-[#F97316]/20 bg-[#F97316]/5 text-[10px] font-mono text-[#F97316] tracking-wider opacity-0">
+          <div className="test-badge px-3 py-1.5 rounded-full border border-[#3B82F6]/20 bg-[#3B82F6]/5 text-[10px] font-mono text-[#3B82F6] tracking-wider opacity-0">
             VERIFIED
           </div>
-          <div className="test-badge px-3 py-1.5 rounded-full border border-[#F97316]/20 bg-[#F97316]/5 text-[10px] font-mono text-[#F97316] tracking-wider opacity-0">
+          <div className="test-badge px-3 py-1.5 rounded-full border border-[#3B82F6]/20 bg-[#3B82F6]/5 text-[10px] font-mono text-[#3B82F6] tracking-wider opacity-0">
             APPROVED
           </div>
         </div>
@@ -329,47 +329,47 @@ function LaunchVisual() {
       <div className="grid grid-cols-3 gap-6 w-full max-w-sm">
         {/* Metrics */}
         <div className="launch-metric text-center">
-          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#EC4899]">0</div>
+          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#3B82F6]">0</div>
           <div className="text-[10px] font-mono text-muted-dark mt-1 tracking-wider">PERFORMANCE</div>
         </div>
         <div className="launch-metric text-center">
-          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#EC4899]">0</div>
+          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#3B82F6]">0</div>
           <div className="text-[10px] font-mono text-muted-dark mt-1 tracking-wider">UPTIME</div>
         </div>
         <div className="launch-metric text-center">
-          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#EC4899]">0</div>
+          <div className="metric-number text-3xl lg:text-4xl font-display font-bold text-[#3B82F6]">0</div>
           <div className="text-[10px] font-mono text-muted-dark mt-1 tracking-wider">COVERAGE</div>
         </div>
 
         {/* Bars */}
         <div className="col-span-3 flex gap-2 items-end h-24 mt-2">
           <div className="flex-1 flex flex-col items-center gap-1">
-            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#3B82F6]/40 to-[#3B82F6]/80" style={{ height: '0%' }} />
             <span className="text-[8px] font-mono text-muted-dark">Response</span>
           </div>
           <div className="flex-1 flex flex-col items-center gap-1">
-            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#3B82F6]/40 to-[#3B82F6]/80" style={{ height: '0%' }} />
             <span className="text-[8px] font-mono text-muted-dark">Throughput</span>
           </div>
           <div className="flex-1 flex flex-col items-center gap-1">
-            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#3B82F6]/40 to-[#3B82F6]/80" style={{ height: '0%' }} />
             <span className="text-[8px] font-mono text-muted-dark">Reliability</span>
           </div>
           <div className="flex-1 flex flex-col items-center gap-1">
-            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#3B82F6]/40 to-[#3B82F6]/80" style={{ height: '0%' }} />
             <span className="text-[8px] font-mono text-muted-dark">SEO</span>
           </div>
           <div className="flex-1 flex flex-col items-center gap-1">
-            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#EC4899]/40 to-[#EC4899]/80" style={{ height: '0%' }} />
+            <div className="launch-bar w-full rounded-t-sm bg-gradient-to-t from-[#3B82F6]/40 to-[#3B82F6]/80" style={{ height: '0%' }} />
             <span className="text-[8px] font-mono text-muted-dark">Access</span>
           </div>
         </div>
 
         {/* Status indicator */}
         <div className="launch-status col-span-3 text-center mt-4 opacity-0">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#EC4899]/20 bg-[#EC4899]/5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#EC4899] animate-pulse" />
-            <span className="text-xs font-mono text-[#EC4899] tracking-widest">ALL SYSTEMS OPERATIONAL</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#3B82F6]/20 bg-[#3B82F6]/5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] animate-pulse" />
+            <span className="text-xs font-mono text-[#3B82F6] tracking-widest">ALL SYSTEMS OPERATIONAL</span>
           </div>
         </div>
       </div>
@@ -504,8 +504,8 @@ export default function ProcessSection() {
 
     wireframes.forEach((wf) => {
       tl.to(wf, {
-        borderColor: '#A855F7',
-        backgroundColor: 'rgba(168, 85, 247, 0.08)',
+        borderColor: '#3B82F6',
+        backgroundColor: 'rgba(59, 130, 246, 0.08)',
         duration: 0.03,
         ease: 'power4.out',
       }, start + 0.03)

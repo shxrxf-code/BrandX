@@ -9,21 +9,21 @@ if (typeof window !== 'undefined') {
 }
 
 const technologies = [
-  { name: 'Next.js', category: 'Frontend', x: 50, y: 18, size: 'lg', accent: '#5B5BFF' },
-  { name: 'React', category: 'Frontend', x: 20, y: 32, size: 'lg', accent: '#22D3EE' },
-  { name: 'TypeScript', category: 'Language', x: 78, y: 28, size: 'md', accent: '#3178C6' },
-  { name: 'Flutter', category: 'Mobile', x: 32, y: 48, size: 'md', accent: '#54C5F8' },
-  { name: 'Node.js', category: 'Backend', x: 68, y: 52, size: 'lg', accent: '#34D399' },
-  { name: 'Python', category: 'AI/ML', x: 22, y: 68, size: 'md', accent: '#F7C948' },
-  { name: 'AI', category: 'Intelligence', x: 78, y: 72, size: 'lg', accent: '#A855F7' },
-  { name: 'Cloud', category: 'Infrastructure', x: 50, y: 85, size: 'md', accent: '#F97316' },
-  { name: 'GraphQL', category: 'API', x: 88, y: 42, size: 'sm', accent: '#E535AB' },
-  { name: 'Three.js', category: '3D', x: 12, y: 52, size: 'sm', accent: '#5B5BFF' },
-  { name: 'GSAP', category: 'Animation', x: 88, y: 60, size: 'sm', accent: '#88CE02' },
-  { name: 'Tailwind', category: 'CSS', x: 40, y: 28, size: 'sm', accent: '#38BDF8' },
-  { name: 'PostgreSQL', category: 'Database', x: 65, y: 65, size: 'sm', accent: '#336791' },
-  { name: 'Docker', category: 'DevOps', x: 35, y: 78, size: 'sm', accent: '#2496ED' },
-  { name: 'Redis', category: 'Cache', x: 55, y: 38, size: 'sm', accent: '#DC382D' },
+  { name: 'Next.js', category: 'Frontend', x: 50, y: 18, size: 'lg' },
+  { name: 'React', category: 'Frontend', x: 20, y: 32, size: 'lg' },
+  { name: 'TypeScript', category: 'Language', x: 78, y: 28, size: 'md' },
+  { name: 'Flutter', category: 'Mobile', x: 32, y: 48, size: 'md' },
+  { name: 'Node.js', category: 'Backend', x: 68, y: 52, size: 'lg' },
+  { name: 'Python', category: 'AI/ML', x: 22, y: 68, size: 'md' },
+  { name: 'AI', category: 'Intelligence', x: 78, y: 72, size: 'lg' },
+  { name: 'Cloud', category: 'Infrastructure', x: 50, y: 85, size: 'md' },
+  { name: 'GraphQL', category: 'API', x: 88, y: 42, size: 'sm' },
+  { name: 'Three.js', category: '3D', x: 12, y: 52, size: 'sm' },
+  { name: 'GSAP', category: 'Animation', x: 88, y: 60, size: 'sm' },
+  { name: 'Tailwind', category: 'CSS', x: 40, y: 28, size: 'sm' },
+  { name: 'PostgreSQL', category: 'Database', x: 65, y: 65, size: 'sm' },
+  { name: 'Docker', category: 'DevOps', x: 35, y: 78, size: 'sm' },
+  { name: 'Redis', category: 'Cache', x: 55, y: 38, size: 'sm' },
 ]
 
 export default function TechUniverse() {
@@ -74,7 +74,7 @@ export default function TechUniverse() {
               line.setAttribute('y1', `${technologies[i].y * pct + 10}%`)
               line.setAttribute('x2', `${technologies[j].x * pct + 15}%`)
               line.setAttribute('y2', `${technologies[j].y * pct + 10}%`)
-              line.setAttribute('stroke', 'rgba(91, 91, 255, 0.06)')
+              line.setAttribute('stroke', 'rgba(59, 130, 246, 0.06)')
               line.setAttribute('stroke-width', '0.5')
               svg.appendChild(line)
             }
@@ -111,7 +111,7 @@ export default function TechUniverse() {
             >
               <div
                 className={`
-                  relative flex items-center justify-center rounded-full border transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(91,91,255,0.15)]
+                  relative flex items-center justify-center rounded-full border transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]
                   ${tech.size === 'lg' ? 'w-20 h-20 md:w-28 md:h-28 border-accent/30 bg-accent/10' : ''}
                   ${tech.size === 'md' ? 'w-16 h-16 md:w-20 md:h-20 border-border-light bg-subtle-light' : ''}
                   ${tech.size === 'sm' ? 'w-12 h-12 md:w-16 md:h-16 border-border-light bg-subtle-light' : ''}

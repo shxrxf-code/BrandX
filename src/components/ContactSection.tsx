@@ -54,7 +54,7 @@ export default function ContactSection() {
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       <div ref={bgRef} className="absolute inset-0 opacity-10"
-        style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(91, 91, 255, 0.2) 0%, transparent 60%)' }}
+        style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 60%)' }}
       />
       <div className="dot-grid absolute inset-0 opacity-30" />
 
@@ -75,7 +75,7 @@ export default function ContactSection() {
           <MagneticButton
             as="a"
             href="/contact"
-            className="group relative inline-flex px-10 py-5 rounded-full bg-accent text-background text-sm font-medium tracking-wide overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(91,91,255,0.3)]"
+            className="group relative inline-flex px-10 py-5 rounded-full bg-accent text-background text-sm font-medium tracking-wide overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(59,130,246,0.3)]"
           >
             <span className="relative z-10">Start Your Project</span>
             <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />

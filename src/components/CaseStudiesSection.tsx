@@ -13,7 +13,7 @@ const projects = [
     solution: 'Unified brand narrative with a premium visual system and modular web platform built for global scale.',
     result: '+340%',
     resultLabel: 'Inbound Leads',
-    gradient: 'from-amber-500/20 via-orange-500/10 to-transparent',
+    gradient: 'from-blue-500/20 via-blue-400/10 to-transparent',
   },
   {
     slug: 'drifto',
@@ -23,7 +23,7 @@ const projects = [
     solution: 'Headless Next.js platform with editorial CMS, creator-led product pages, and TikTok-optimized velocity.',
     result: '+260%',
     resultLabel: 'Conversion Rate',
-    gradient: 'from-rose-500/20 via-pink-500/10 to-transparent',
+    gradient: 'from-blue-600/20 via-blue-500/10 to-transparent',
   },
   {
     slug: 'finflow',
@@ -33,7 +33,7 @@ const projects = [
     solution: 'Tokenized design system, documented component library, and an internal playbook for independent shipping.',
     result: '$2.4M',
     resultLabel: 'ARR Expansion',
-    gradient: 'from-emerald-500/20 via-teal-500/10 to-transparent',
+    gradient: 'from-blue-500/15 via-blue-400/8 to-transparent',
   },
   {
     slug: 'lumen',
@@ -43,7 +43,7 @@ const projects = [
     solution: 'Brand rebuilt around clinical authority with a content engine driven by specialist expertise.',
     result: '+410%',
     resultLabel: 'Bookings',
-    gradient: 'from-violet-500/20 via-purple-500/10 to-transparent',
+    gradient: 'from-blue-400/20 via-blue-600/10 to-transparent',
   },
 ]
 

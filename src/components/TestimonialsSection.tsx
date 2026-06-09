@@ -13,25 +13,25 @@ const testimonials = [
     quote: 'They didn\'t just redesign our website — they reimagined how our customers experience our brand. The results exceeded every benchmark we set.',
     name: 'Sarah Chen',
     role: 'CEO, SolarTech Energy',
-    gradient: 'from-amber-500/10 via-orange-500/5 to-transparent',
+    gradient: 'from-blue-500/10 via-blue-400/5 to-transparent',
   },
   {
     quote: 'Working with this team feels like having a world-class design studio and engineering firm rolled into one. The speed and quality are unmatched.',
     name: 'Marcus Rivera',
     role: 'Founder, Drifto',
-    gradient: 'from-rose-500/10 via-pink-500/5 to-transparent',
+    gradient: 'from-blue-600/10 via-blue-500/5 to-transparent',
   },
   {
     quote: 'They don\'t just deliver projects — they become true partners invested in your success. Our NPS score jumped 35 points post-launch.',
     name: 'Priya Patel',
     role: 'CTO, FinFlow',
-    gradient: 'from-emerald-500/10 via-teal-500/5 to-transparent',
+    gradient: 'from-blue-500/8 via-blue-400/4 to-transparent',
   },
   {
     quote: 'Our conversion rates increased 156% after the redesign. More importantly, our team\'s ability to iterate and improve has been transformed.',
     name: 'Dr. James Kim',
     role: 'Director, Lumen Clinics',
-    gradient: 'from-violet-500/10 via-purple-500/5 to-transparent',
+    gradient: 'from-blue-400/10 via-blue-600/5 to-transparent',
   },
 ]
 

@@ -97,7 +97,7 @@ export default function HeroSection() {
     <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden bg-background pt-24">
       <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.04] via-transparent to-transparent pointer-events-none" />
       <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/3 w-[400px] h-[400px] rounded-full bg-purple-500/5 blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/3 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] pointer-events-none" />
 
       <div className="max-w-content mx-auto px-6 md:px-10 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -123,7 +123,7 @@ export default function HeroSection() {
               <MagneticButton
                 as="a"
                 href="/contact"
-                className="hero-cta group relative px-8 py-4 rounded-full bg-accent text-background text-sm font-medium tracking-wide overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(91,91,255,0.3)]"
+                className="hero-cta group relative px-8 py-4 rounded-full bg-accent text-background text-sm font-medium tracking-wide overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
               >
                 <span className="relative z-10">Start Project</span>
                 <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />

@@ -9,16 +9,16 @@ if (typeof window !== 'undefined') {
 }
 
 const metrics = [
-  { value: '200+', label: 'Projects Delivered' },
-  { value: '50+', label: 'Team Members' },
-  { value: '98%', label: 'Client Satisfaction' },
-  { value: '8+', label: 'Years Active' },
+  { value: '200+', label: 'Projects Delivered', highlight: '200' },
+  { value: '50+', label: 'Team Members', highlight: '50' },
+  { value: '98%', label: 'Client Satisfaction', highlight: '98' },
+  { value: '8+', label: 'Years Active', highlight: '8' },
 ]
 
 const stats = [
-  { value: '350%', label: 'Average ROI', desc: 'Measured across all campaigns and projects delivered in the last 24 months' },
-  { value: '3.2x', label: 'Faster Time-to-Market', desc: 'Through optimized agile workflows and parallelized delivery streams' },
-  { value: '94%', label: 'Repeat Client Rate', desc: 'Trust built through consistent delivery and measurable business impact' },
+  { value: '350%', label: 'Average ROI', desc: 'Measured across all campaigns and projects delivered in the last 24 months', bar: 100 },
+  { value: '3.2x', label: 'Faster Time-to-Market', desc: 'Through optimized agile workflows and parallelized delivery streams', bar: 92 },
+  { value: '94%', label: 'Repeat Client Rate', desc: 'Trust built through consistent delivery and measurable business impact', bar: 94 },
 ]
 
 export default function MetricsSection() {
@@ -41,13 +41,28 @@ export default function MetricsSection() {
         })
       })
 
-      const bars = sectionRef.current?.querySelectorAll('.stat-bar')
+      const statEntries = sectionRef.current?.querySelectorAll('.stat-entry')
+      statEntries?.forEach((entry, i) => {
+        gsap.fromTo(entry,
+          { y: 40, opacity: 0 },
+          {
+            y: 0, opacity: 1,
+            duration: 0.7, delay: i * 0.15,
+            ease: 'power4.out',
+            scrollTrigger: { trigger: entry, start: 'top 85%', toggleActions: 'play none none none' },
+          }
+        )
+      })
+
+      const bars = sectionRef.current?.querySelectorAll('.stat-fill')
       bars?.forEach((bar, i) => {
+        const el = bar as HTMLElement
+        const target = el.dataset.width || '100'
         gsap.fromTo(bar,
           { width: '0%' },
           {
-            width: '100%',
-            duration: 1.5, delay: i * 0.2,
+            width: `${target}%`,
+            duration: 1.2, delay: 0.4 + i * 0.15,
             ease: 'power4.out',
             scrollTrigger: { trigger: bar, start: 'top 85%', toggleActions: 'play none none none' },
           }
@@ -59,36 +74,48 @@ export default function MetricsSection() {
 
   return (
     <section ref={sectionRef} className="relative bg-subtle py-24 md:py-32 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.02] to-transparent pointer-events-none" />
       <div className="max-w-content mx-auto px-6 md:px-10">
         <div className="mb-16">
           <span className="scene-eyebrow">Client Results</span>
           <h2 className="text-4xl md:text-7xl font-display font-bold tracking-tight mt-4 leading-[1.05]">
-            Numbers that
+            Measurable
             <br />
-            <span className="text-accent">tell the story.</span>
+            <span className="text-accent">impact.</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-20 md:mb-32">
-          {metrics.map((m, i) => (
+        <div className="grid md:grid-cols-4 gap-8 md:gap-12 mb-24 md:mb-40">
+          {metrics.map((m) => (
             <div key={m.label} className="text-center md:text-left">
-              <span className="metric-value inline-block text-5xl md:text-7xl font-display font-bold text-accent tracking-tight">
+              <span className="metric-value inline-block text-5xl md:text-7xl lg:text-8xl font-display font-bold text-accent tracking-tight">
                 {m.value}
               </span>
-              <p className="text-sm text-muted mt-2 tracking-wide">{m.label}</p>
+              <p className="text-sm text-muted mt-3 tracking-wide">{m.label}</p>
             </div>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {stats.map((s, i) => (
-            <div key={s.label} className="relative p-8 rounded-2xl border border-border bg-background">
-              <div className="stat-bar absolute top-0 left-0 h-[2px] bg-accent rounded-full" style={{ width: '0%' }} />
-              <span className="text-3xl md:text-4xl font-display font-bold text-accent block mb-3">
-                {s.value}
-              </span>
-              <h4 className="text-base font-display font-semibold tracking-tight mb-2">{s.label}</h4>
-              <p className="text-sm text-muted leading-relaxed">{s.desc}</p>
+        <div className="grid md:grid-cols-3 gap-8 md:gap-10">
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              className="stat-entry relative p-8 md:p-10 rounded-3xl border border-border bg-background transition-all duration-500 hover:border-accent/30 hover:shadow-[0_20px_60px_-10px_rgba(59,130,246,0.10)]"
+            >
+              <div className="flex items-baseline gap-3 mb-4">
+                <span className="text-4xl md:text-5xl font-display font-bold text-accent tracking-tight">
+                  {s.value}
+                </span>
+                <h4 className="text-sm font-display font-semibold text-foreground">{s.label}</h4>
+              </div>
+              <p className="text-sm text-muted leading-relaxed mb-6">{s.desc}</p>
+              <div className="w-full h-1.5 rounded-full bg-border overflow-hidden">
+                <div
+                  className="stat-fill h-full rounded-full bg-gradient-to-r from-accent to-accent/60"
+                  data-width={s.bar}
+                  style={{ width: '0%' }}
+                />
+              </div>
             </div>
           ))}
         </div>

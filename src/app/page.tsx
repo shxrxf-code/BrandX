@@ -3,12 +3,12 @@
 import { useState, useCallback } from 'react'
 import Preloader from '@/components/Preloader'
 import HeroSection from '@/components/HeroSection'
-import ServicesSection from '@/components/ServicesSection'
+import FeaturedWorkSection from '@/components/FeaturedWorkSection'
 import ProcessSection from '@/components/ProcessSection'
+import ServicesSection from '@/components/ServicesSection'
 import CaseStudiesSection from '@/components/CaseStudiesSection'
 import TechUniverse from '@/components/TechUniverse'
 import MetricsSection from '@/components/MetricsSection'
-import TestimonialsSection from '@/components/TestimonialsSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 
@@ -24,12 +24,12 @@ export default function Home() {
       {loading && <Preloader onComplete={handleComplete} />}
       <main className={loading ? 'invisible' : 'visible'}>
         <HeroSection />
-        <ServicesSection />
+        <FeaturedWorkSection />
         <ProcessSection />
+        <ServicesSection />
         <CaseStudiesSection />
         <TechUniverse />
         <MetricsSection />
-        <TestimonialsSection />
         <ContactSection />
       </main>
       <Footer />

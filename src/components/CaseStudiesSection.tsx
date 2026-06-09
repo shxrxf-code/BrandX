@@ -58,61 +58,78 @@ export default function CaseStudiesSection() {
   return (
     <section ref={sectionRef} className="relative bg-background py-24 md:py-32 overflow-hidden">
       <div className="max-w-content mx-auto px-6 md:px-10 mb-16">
-        <span className="scene-eyebrow">Featured Projects</span>
+        <span className="scene-eyebrow">Case Studies</span>
         <h2 className="text-4xl md:text-7xl font-display font-bold tracking-tight mt-4 leading-[1.05]">
-          Real projects,
+          Deep dives into
           <br />
-          <span className="text-accent">real results.</span>
+          <span className="text-accent">transformational work.</span>
         </h2>
       </div>
 
-      <motion.div style={{ x }} className="flex gap-6 md:gap-8 px-6 md:px-10">
+      <motion.div style={{ x }} className="flex gap-8 md:gap-10 px-6 md:px-10">
         {projects.map((p, i) => (
           <Link
             key={p.slug}
             href={`/work/${p.slug}`}
-            className="group flex-shrink-0 w-[85vw] md:w-[480px] lg:w-[560px]"
+            className="group flex-shrink-0 w-[90vw] md:w-[520px] lg:w-[600px] xl:w-[680px]"
           >
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.12, duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-              viewport={{ once: true, margin: '-100px' }}
-              className="relative rounded-2xl overflow-hidden border border-border bg-subtle"
+              transition={{ delay: i * 0.15, duration: 0.9, ease: [0.32, 0.72, 0, 1] }}
+              viewport={{ once: true, margin: '-150px' }}
+              className="relative rounded-3xl overflow-hidden border border-border bg-subtle transition-all duration-700 hover:border-accent/30 hover:shadow-[0_40px_80px_-20px_rgba(59,130,246,0.12)]"
             >
-              <div
-                className="absolute inset-0 opacity-40 group-hover:opacity-70 transition-opacity duration-700"
-                style={{ background: `radial-gradient(ellipse at center, ${p.gradient})` }}
-              />
-              <div className="absolute inset-0 dot-grid opacity-20" />
+              <div className="relative aspect-[16/10] md:aspect-[4/3] overflow-hidden">
+                <div
+                  className="absolute inset-0 opacity-50 group-hover:opacity-80 transition-opacity duration-700"
+                  style={{ background: `radial-gradient(ellipse at center, ${p.gradient})` }}
+                />
+                <div className="absolute inset-0 dot-grid opacity-15" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent pointer-events-none" />
 
-              <div className="relative z-10 p-8 md:p-10 lg:p-12 min-h-[380px] flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] text-accent tracking-[0.2em] uppercase font-medium">
-                    {p.industry}
-                  </span>
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold tracking-tight mt-3 mb-4">
-                    {p.title}
-                  </h3>
-                  <div className="space-y-3 mb-6">
-                    <div>
-                      <span className="text-[10px] text-muted-dark tracking-[0.15em] uppercase font-mono block mb-1">Challenge</span>
-                      <p className="text-xs md:text-sm text-muted leading-relaxed">{p.challenge}</p>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-muted-dark tracking-[0.15em] uppercase font-mono block mb-1">Solution</span>
-                      <p className="text-xs md:text-sm text-muted leading-relaxed">{p.solution}</p>
-                    </div>
+                <div className="absolute inset-0 flex items-end p-8 md:p-10 lg:p-12">
+                  <div className="w-full">
+                    <span className="text-[10px] text-accent tracking-[0.2em] uppercase font-medium mb-3 block">
+                      {p.industry}
+                    </span>
+                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight text-foreground mb-6">
+                      {p.title}
+                    </h3>
                   </div>
                 </div>
 
-                <div className="flex items-end justify-between pt-4 border-t border-border">
-                  <div>
-                    <span className="text-3xl md:text-5xl font-display font-bold text-accent">{p.result}</span>
-                    <p className="text-[10px] text-muted tracking-[0.15em] uppercase mt-1">{p.resultLabel}</p>
+                <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+                  <div className="w-12 h-12 rounded-xl bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center group-hover:bg-accent/20 group-hover:border-accent transition-all duration-500">
+                    <span className="text-2xl group-hover:translate-x-1 transition-transform duration-500">→</span>
                   </div>
-                  <div className="w-10 h-10 rounded-full border border-border-light flex items-center justify-center group-hover:bg-accent/20 group-hover:border-accent transition-all duration-500">
-                    <span className="text-base group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-500">→</span>
+                </div>
+              </div>
+
+              <div className="p-8 md:p-10 lg:p-12 space-y-8 border-t border-border">
+                <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                  <div>
+                    <span className="text-[10px] text-muted-dark tracking-[0.15em] uppercase font-mono block mb-2">Challenge</span>
+                    <p className="text-base md:text-lg text-muted leading-relaxed">{p.challenge}</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-muted-dark tracking-[0.15em] uppercase font-mono block mb-2">Solution</span>
+                    <p className="text-base md:text-lg text-muted leading-relaxed">{p.solution}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-end justify-between pt-6 border-t border-border">
+                  <div className="flex items-baseline gap-4">
+                    <span className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-accent tracking-tight">
+                      {p.result}
+                    </span>
+                    <div className="pl-4 border-l border-border/50">
+                      <p className="text-[10px] text-muted tracking-[0.15em] uppercase mb-1">{p.resultLabel}</p>
+                      <p className="text-sm text-muted-dark font-medium">Measured outcome</p>
+                    </div>
+                  </div>
+                  <div className="w-14 h-14 rounded-xl border border-border-light flex items-center justify-center group-hover:bg-accent/20 group-hover:border-accent transition-all duration-500">
+                    <span className="text-xl group-hover:translate-x-1 transition-transform duration-500">→</span>
                   </div>
                 </div>
               </div>

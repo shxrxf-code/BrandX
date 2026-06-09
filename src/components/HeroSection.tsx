@@ -9,6 +9,35 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
+const nodeData = [
+  { angle: 0, dist: 32, label: 'UX', size: 'lg' as const },
+  { angle: 45, dist: 22, label: 'AI', size: 'sm' as const },
+  { angle: 72, dist: 38, label: 'Web', size: 'lg' as const },
+  { angle: 120, dist: 24, label: 'API', size: 'sm' as const },
+  { angle: 144, dist: 36, label: 'Cloud', size: 'lg' as const },
+  { angle: 185, dist: 20, label: 'IoT', size: 'sm' as const },
+  { angle: 216, dist: 42, label: 'Mobile', size: 'lg' as const },
+  { angle: 260, dist: 26, label: 'Data', size: 'sm' as const },
+  { angle: 288, dist: 44, label: 'Design', size: 'lg' as const },
+  { angle: 330, dist: 22, label: 'SEO', size: 'sm' as const },
+]
+
+const cardData = [
+  { x: 10, y: 14, label: '+240% ROI' },
+  { x: 82, y: 10, label: '98% Satisfaction' },
+  { x: 88, y: 48, label: '50+ Delivered' },
+  { x: 6, y: 54, label: '3x Speed' },
+  { x: 78, y: 80, label: '24/7 Support' },
+]
+
+const particles = Array.from({ length: 25 }, (_, i) => ({
+  x: 8 + Math.random() * 84,
+  y: 8 + Math.random() * 84,
+  size: 1 + Math.random() * 2,
+  delay: Math.random() * 2,
+  duration: 3 + Math.random() * 3,
+}))
+
 export default function HeroSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
@@ -16,6 +45,7 @@ export default function HeroSection() {
   const globeRef = useRef<HTMLDivElement>(null)
   const nodesRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
+  const particlesRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -46,7 +76,7 @@ export default function HeroSection() {
         orbits.forEach((ring, i) => {
           gsap.to(ring, {
             rotation: 360,
-            duration: 20 + i * 8,
+            duration: 18 + i * 8,
             repeat: -1,
             ease: 'none',
           })
@@ -58,15 +88,15 @@ export default function HeroSection() {
         nodes.forEach((node, i) => {
           gsap.fromTo(node, { scale: 0, opacity: 0 }, {
             scale: 1, opacity: 1,
-            duration: 0.6, delay: 0.5 + i * 0.08,
+            duration: 0.5, delay: 0.5 + i * 0.06,
             ease: 'back.out(2)',
           })
           gsap.to(node, {
-            y: -8 + (i % 3) * 4,
-            duration: 2 + (i % 5) * 1.5,
+            y: -8 + (i % 4) * 4,
+            duration: 2 + (i % 6) * 1.2,
             repeat: -1, yoyo: true,
             ease: 'sine.inOut',
-            delay: i * 0.3,
+            delay: i * 0.25,
           })
         })
       }
@@ -74,17 +104,37 @@ export default function HeroSection() {
       const cards = cardsRef.current?.querySelectorAll('.float-card')
       if (cards) {
         cards.forEach((card, i) => {
-          gsap.fromTo(card, { y: 30, opacity: 0 }, {
+          gsap.fromTo(card, { y: 25, opacity: 0 }, {
             y: 0, opacity: 1,
-            duration: 0.8, delay: 1.2 + i * 0.2,
+            duration: 0.7, delay: 1.2 + i * 0.15,
             ease: 'power4.out',
           })
           gsap.to(card, {
-            y: -6,
-            duration: 3 + i * 0.5,
+            y: -5,
+            duration: 3 + i * 0.4,
             repeat: -1, yoyo: true,
             ease: 'sine.inOut',
-            delay: i * 0.5,
+            delay: i * 0.4,
+          })
+        })
+      }
+
+      const dots = particlesRef.current?.querySelectorAll('.particle-dot')
+      if (dots) {
+        dots.forEach((dot, i) => {
+          gsap.fromTo(dot, { opacity: 0 }, {
+            opacity: 0.4 + Math.random() * 0.3,
+            duration: 1,
+            delay: 1.5 + i * 0.04,
+            ease: 'power2.out',
+          })
+          gsap.to(dot, {
+            y: -4 - Math.random() * 4,
+            x: -3 + Math.random() * 6,
+            duration: 3 + Math.random() * 3,
+            repeat: -1, yoyo: true,
+            ease: 'sine.inOut',
+            delay: i * 0.15,
           })
         })
       }
@@ -148,60 +198,80 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div ref={globeRef} className="relative hidden lg:flex items-center justify-center min-h-[500px]">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-[400px] h-[400px] rounded-full border border-accent/10 relative">
-                <div className="orbit-ring absolute inset-0 rounded-full border border-accent/5" />
-                <div
-                  className="orbit-ring absolute inset-[15%] rounded-full border border-accent/10"
-                  style={{ transformOrigin: 'center' }}
-                />
-                <div
-                  className="orbit-ring absolute inset-[30%] rounded-full border border-accent/8"
-                  style={{ transformOrigin: 'center' }}
-                />
+          <div ref={globeRef} className="relative hidden lg:flex items-center justify-center min-h-[550px]">
+            <div className="absolute w-[520px] h-[520px] rounded-full bg-accent/5 blur-[100px] pointer-events-none" />
 
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-accent animate-pulse-slow" />
-                  </div>
+            <div className="relative w-[480px] h-[480px] flex items-center justify-center">
+              {[18, 30, 42, 54, 66].map((pct, i) => (
+                <div
+                  key={i}
+                  className="orbit-ring absolute rounded-full border"
+                  style={{
+                    inset: `${pct}%`,
+                    borderColor: i % 2 === 0 ? 'rgba(0,229,255,0.08)' : 'rgba(124,58,237,0.08)',
+                    borderStyle: i === 2 ? 'dashed' : 'solid',
+                  }}
+                />
+              ))}
+
+              <div className="absolute flex items-center justify-center" style={{ inset: '44%' }}>
+                <div className="w-14 h-14 rounded-full bg-accent/15 border border-accent/30 flex items-center justify-center">
+                  <div className="w-3 h-3 rounded-full bg-accent animate-pulse-slow" />
                 </div>
               </div>
             </div>
 
             <div ref={nodesRef} className="absolute inset-0">
-              {[
-                { angle: 0, dist: 32, label: 'UX' },
-                { angle: 72, dist: 28, label: 'AI' },
-                { angle: 144, dist: 38, label: 'Web' },
-                { angle: 216, dist: 25, label: 'Cloud' },
-                { angle: 288, dist: 35, label: 'Mobile' },
-              ].map((node, i) => {
+              {nodeData.map((node) => {
                 const angleRad = (node.angle * Math.PI) / 180
                 const x = 50 + node.dist * Math.cos(angleRad)
                 const y = 50 + node.dist * Math.sin(angleRad)
+                const size = node.size === 'lg' ? 48 : 32
                 return (
                   <div
                     key={node.label}
-                    className="globe-node absolute w-12 h-12 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20 bg-accent/5 flex items-center justify-center cursor-pointer hover:border-accent/50 hover:bg-accent/15 transition-all duration-500"
-                    style={{ left: `${x}%`, top: `${y}%` }}
+                    className="globe-node absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20 bg-background/80 backdrop-blur-sm flex items-center justify-center cursor-pointer hover:border-accent/50 hover:bg-accent/10 transition-all duration-500"
+                    style={{
+                      width: size,
+                      height: size,
+                      left: `${x}%`,
+                      top: `${y}%`,
+                    }}
                   >
-                    <span className="text-[9px] font-mono font-bold text-accent tracking-wider uppercase">{node.label}</span>
+                    <span className={`font-mono font-bold text-accent tracking-wider uppercase ${node.size === 'lg' ? 'text-[9px]' : 'text-[7px]'}`}>
+                      {node.label}
+                    </span>
                   </div>
                 )
               })}
             </div>
 
             <div ref={cardsRef} className="absolute inset-0 pointer-events-none">
-              <div className="float-card absolute top-[15%] right-[5%] px-4 py-2 rounded-lg border border-border bg-subtle/80 backdrop-blur-sm">
-                <span className="text-[10px] text-accent font-mono">+240% ROI</span>
-              </div>
-              <div className="float-card absolute bottom-[25%] left-[8%] px-4 py-2 rounded-lg border border-border bg-subtle/80 backdrop-blur-sm">
-                <span className="text-[10px] text-accent font-mono">98% Satisfaction</span>
-              </div>
-              <div className="float-card absolute top-[40%] -right-[2%] px-4 py-2 rounded-lg border border-border bg-subtle/80 backdrop-blur-sm">
-                <span className="text-[10px] text-accent font-mono">50+ Delivered</span>
-              </div>
+              {cardData.map((card, i) => (
+                <div
+                  key={i}
+                  className="float-card absolute px-3 py-1.5 rounded-lg border border-border bg-subtle/80 backdrop-blur-sm"
+                  style={{ left: `${card.x}%`, top: `${card.y}%` }}
+                >
+                  <span className="text-[9px] text-accent font-mono tracking-wide">{card.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div ref={particlesRef} className="absolute inset-0 pointer-events-none">
+              {particles.map((p, i) => (
+                <div
+                  key={i}
+                  className="particle-dot absolute rounded-full bg-accent"
+                  style={{
+                    left: `${p.x}%`,
+                    top: `${p.y}%`,
+                    width: p.size,
+                    height: p.size,
+                    opacity: 0,
+                  }}
+                />
+              ))}
             </div>
           </div>
         </div>

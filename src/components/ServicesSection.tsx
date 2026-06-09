@@ -48,6 +48,7 @@ const services = [
 
 export default function ServicesSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const bgRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -63,13 +64,31 @@ export default function ServicesSection() {
           }
         )
       })
+
+      const orbs = sectionRef.current?.querySelectorAll('.svc-orb')
+      orbs?.forEach((orb) => {
+        gsap.to(orb, {
+          y: -10,
+          duration: 3 + Math.random() * 2,
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+        })
+      })
     }, sectionRef)
     return () => ctx.revert()
   }, [])
 
   return (
     <section ref={sectionRef} className="relative bg-subtle py-24 md:py-32 overflow-hidden">
-      <div className="max-w-content mx-auto px-6 md:px-10">
+      <div ref={bgRef} className="absolute inset-0 pointer-events-none">
+        <div className="svc-orb absolute -top-20 -right-20 w-80 h-80 rounded-full bg-accent/[0.04] blur-[80px]" />
+        <div className="svc-orb absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-accent/[0.03] blur-[60px]" style={{ animationDelay: '1.5s' }} />
+        <span className="absolute right-10 top-1/4 text-[clamp(12rem,20vw,24rem)] font-display font-bold text-foreground/[0.015] select-none pointer-events-none leading-none">
+          05
+        </span>
+      </div>
+      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
         <div className="mb-16">
           <span className="scene-eyebrow">Services</span>
           <h2 className="text-4xl md:text-7xl font-display font-bold tracking-tight mt-4 leading-[1.05]">

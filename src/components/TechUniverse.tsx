@@ -126,7 +126,7 @@ export default function TechUniverse() {
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
 
   return (
-    <section ref={sectionRef} className="relative bg-background py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-subtle py-24 md:py-32 overflow-hidden">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <div className="mb-12 md:mb-16">
           <span className="scene-eyebrow">Technology Stack</span>

@@ -57,7 +57,14 @@ export default function CaseStudiesSection() {
 
   return (
     <section ref={sectionRef} className="relative bg-background py-24 md:py-32 overflow-hidden">
-      <div className="max-w-content mx-auto px-6 md:px-10 mb-16">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 w-[500px] h-[500px] rounded-full bg-accent/[0.03] blur-[100px]" />
+        <div className="absolute -bottom-10 -right-10 w-72 h-72 rounded-full bg-accent/[0.04] blur-[80px]" />
+        <span className="absolute left-6 top-1/4 text-[clamp(8rem,12vw,16rem)] font-display font-bold text-foreground/[0.015] select-none pointer-events-none leading-none">
+          WORK
+        </span>
+      </div>
+      <div className="max-w-content mx-auto px-6 md:px-10 mb-16 relative z-10">
         <span className="scene-eyebrow">Case Studies</span>
         <h2 className="text-4xl md:text-7xl font-display font-bold tracking-tight mt-4 leading-[1.05]">
           Deep dives into

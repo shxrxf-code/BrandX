@@ -23,9 +23,22 @@ const stats = [
 
 export default function MetricsSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const gridLines = gridRef.current?.querySelectorAll('.metric-grid-line')
+      gridLines?.forEach((line, i) => {
+        gsap.fromTo(line,
+          { scaleX: 0, opacity: 0 },
+          {
+            scaleX: 1, opacity: 1,
+            duration: 1.5, delay: i * 0.1,
+            ease: 'power4.out',
+            scrollTrigger: { trigger: gridRef.current, start: 'top 85%', toggleActions: 'play none none none' },
+          }
+        )
+      })
       const counters = sectionRef.current?.querySelectorAll('.metric-value')
       counters?.forEach((counter) => {
         ScrollTrigger.create({
@@ -73,9 +86,18 @@ export default function MetricsSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-subtle py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} className="relative bg-background py-24 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.02] to-transparent pointer-events-none" />
-      <div className="max-w-content mx-auto px-6 md:px-10">
+      <div ref={gridRef} className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="metric-grid-line absolute left-[20%] top-0 w-[1px] h-full bg-gradient-to-b from-accent/[0.04] via-accent/[0.02] to-transparent origin-left" />
+        <div className="metric-grid-line absolute left-[40%] top-0 w-[1px] h-full bg-gradient-to-b from-accent/[0.03] via-accent/[0.01] to-transparent origin-left" />
+        <div className="metric-grid-line absolute left-[60%] top-0 w-[1px] h-full bg-gradient-to-b from-accent/[0.04] via-accent/[0.02] to-transparent origin-left" />
+        <div className="metric-grid-line absolute left-[80%] top-0 w-[1px] h-full bg-gradient-to-b from-accent/[0.03] via-accent/[0.01] to-transparent origin-left" />
+        <div className="metric-grid-line absolute left-0 top-[25%] w-full h-[1px] bg-gradient-to-r from-transparent via-accent/[0.04] to-transparent origin-left" />
+        <div className="metric-grid-line absolute left-0 top-[50%] w-full h-[1px] bg-gradient-to-r from-transparent via-accent/[0.03] to-transparent origin-left" />
+        <div className="metric-grid-line absolute left-0 top-[75%] w-full h-[1px] bg-gradient-to-r from-transparent via-accent/[0.04] to-transparent origin-left" />
+      </div>
+      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
         <div className="mb-16">
           <span className="scene-eyebrow">Client Results</span>
           <h2 className="text-4xl md:text-7xl font-display font-bold tracking-tight mt-4 leading-[1.05]">

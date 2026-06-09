@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import { Inter, Space_Grotesk, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
+import SmoothScroll from '@/components/providers/SmoothScroll'
+import CursorProvider from '@/components/providers/CursorProvider'
+import Cursor from '@/components/cursor/Cursor'
+import Navbar from '@/components/Navbar'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,6 +25,15 @@ const spaceGrotesk = Space_Grotesk({
   adjustFontFallback: true,
 })
 
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  display: 'swap',
+  preload: true,
+  fallback: ['ui-monospace', 'monospace'],
+  adjustFontFallback: true,
+})
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -32,19 +45,19 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://brandexdigital.in'),
   title: {
-    default: 'Brandex Digital — Premium Digital Transformation Partner',
-    template: '%s | Brandex Digital',
+    default: 'Brandex — Digital Experience Studio',
+    template: '%s | Brandex',
   },
   description:
-    'A premium digital transformation partner helping ambitious brands dominate online. Strategy, design, technology, and growth — engineered for measurable impact.',
+    'We engineer digital experiences that drive business growth. A digital experience studio crafting premium interactive products.',
   keywords: [
-    'digital agency',
-    'premium agency',
+    'digital experience studio',
+    'creative design',
+    'interactive experiences',
     'brand transformation',
     'web design',
-    'brand strategy',
-    'enterprise design',
-    'digital consultancy',
+    'UI/UX',
+    'digital product design',
   ],
   authors: [{ name: 'Brandex Digital' }],
   creator: 'Brandex Digital',
@@ -52,32 +65,28 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: 'https://brandexdigital.in',
-    title: 'Brandex Digital — Premium Digital Transformation Partner',
+    title: 'Brandex — Digital Experience Studio',
     description:
-      'Strategy, design, technology, and growth — engineered for ambitious brands.',
-    siteName: 'Brandex Digital',
+      'We engineer digital experiences that drive business growth.',
+    siteName: 'Brandex',
     images: [
       {
         url: '/opengraph-image.png',
         width: 1200,
         height: 630,
-        alt: 'Brandex Digital — Premium Digital Transformation Partner',
+        alt: 'Brandex',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Brandex Digital — Premium Digital Transformation Partner',
-    description:
-      'Strategy, design, technology, and growth — engineered for ambitious brands.',
+    title: 'Brandex — Digital Experience Studio',
+    description: 'We engineer digital experiences that drive business growth.',
     images: ['/opengraph-image.png'],
   },
   robots: {
     index: true,
     follow: true,
-  },
-  other: {
-    'Cache-Control': 'public, max-age=3600, s-maxage=3600',
   },
 }
 
@@ -87,9 +96,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="font-sans antialiased bg-background text-foreground">
-        {children}
+    <html
+      lang="en"
+      className={`${inter.variable} ${spaceGrotesk.variable} ${geistMono.variable}`}
+    >
+      <body className="font-sans bg-background text-foreground antialiased">
+        <SmoothScroll>
+          <CursorProvider>
+            <Cursor />
+            <Navbar />
+            {children}
+            <div className="grain" />
+          </CursorProvider>
+        </SmoothScroll>
         <Analytics />
       </body>
     </html>

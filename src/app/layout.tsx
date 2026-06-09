@@ -47,15 +47,15 @@ export const metadata: Metadata = {
     template: '%s | Brandex',
   },
   description:
-    'We engineer digital experiences that drive business growth. A digital experience studio crafting premium interactive products.',
+    'We engineer digital experiences that drive business growth. Premium web development, UI/UX design, brand identity, and AI solutions.',
   keywords: [
-    'digital experience studio',
-    'creative design',
-    'interactive experiences',
-    'brand transformation',
-    'web design',
-    'UI/UX',
-    'digital product design',
+    'web development',
+    'UI/UX design',
+    'brand identity',
+    'SEO',
+    'digital marketing',
+    'AI solutions',
+    'digital experience',
   ],
   authors: [{ name: 'Brandex Digital' }],
   creator: 'Brandex Digital',
@@ -64,40 +64,22 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: 'https://brandexdigital.in',
     title: 'Brandex — Digital Experience Studio',
-    description:
-      'We engineer digital experiences that drive business growth.',
+    description: 'Premium web development, UI/UX, brand identity, and AI solutions.',
     siteName: 'Brandex',
-    images: [
-      {
-        url: '/opengraph-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Brandex',
-      },
-    ],
+    images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Brandex' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Brandex — Digital Experience Studio',
-    description: 'We engineer digital experiences that drive business growth.',
+    description: 'Premium web development, UI/UX, brand identity, and AI solutions.',
     images: ['/opengraph-image.png'],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${geistMono.variable}`}
-    >
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${geistMono.variable}`}>
       <body className="font-sans bg-background text-foreground antialiased">
         <SmoothScroll>
           <Navbar />

@@ -3,16 +3,13 @@
 import { useState, useCallback } from 'react'
 import Preloader from '@/components/Preloader'
 import HeroSection from '@/components/HeroSection'
-import HowBrandexWorks from '@/components/HowBrandexWorks'
-import InsideTheStudio from '@/components/InsideTheStudio'
-import ServicesShowcase from '@/components/ServicesShowcase'
-import ProjectTransformation from '@/components/ProjectTransformation'
+import ServicesSection from '@/components/ServicesSection'
+import ProcessSection from '@/components/ProcessSection'
 import CaseStudiesSection from '@/components/CaseStudiesSection'
 import TechUniverse from '@/components/TechUniverse'
 import MetricsSection from '@/components/MetricsSection'
 import TestimonialsSection from '@/components/TestimonialsSection'
-import InsightsSection from '@/components/InsightsSection'
-import FinalCTASection from '@/components/FinalCTASection'
+import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -27,16 +24,13 @@ export default function Home() {
       {loading && <Preloader onComplete={handleComplete} />}
       <main className={loading ? 'invisible' : 'visible'}>
         <HeroSection />
-        <HowBrandexWorks />
-        <InsideTheStudio />
-        <ServicesShowcase />
-        <ProjectTransformation />
+        <ServicesSection />
+        <ProcessSection />
         <CaseStudiesSection />
         <TechUniverse />
         <MetricsSection />
         <TestimonialsSection />
-        <InsightsSection />
-        <FinalCTASection />
+        <ContactSection />
       </main>
       <Footer />
     </>

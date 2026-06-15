@@ -30,27 +30,27 @@ export default function WorkPage() {
               <Link
                 key={project.slug}
                 href={`/work/${project.slug}`}
-                className="group block rounded-xl overflow-hidden border border-border bg-white hover:shadow-sm transition-all duration-300"
+                className="group block rounded-xl overflow-hidden border border-border bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
                   <Image
                     src={project.cover}
-                    alt={project.title}
+                    alt={project.client}
                     fill
                     sizes="(min-width: 768px) 50vw, 100vw"
-                    className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 <div className="p-5">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h2 className="text-lg font-display font-bold tracking-tight group-hover:text-accent transition-colors duration-200">
-                        {project.client}
-                      </h2>
-                      <p className="text-sm text-muted mt-0.5">{project.title}</p>
-                    </div>
-                    <span className="text-xs text-muted font-medium shrink-0">{project.result}</span>
-                  </div>
+                  <h2 className="text-lg font-display font-bold tracking-tight group-hover:text-accent transition-colors duration-200 mb-1">
+                    {project.client}
+                  </h2>
+                  <p className="text-xs text-muted font-medium mb-2">
+                    {project.type}
+                  </p>
+                  <p className="text-sm text-muted leading-relaxed line-clamp-2">
+                    {project.title}
+                  </p>
                 </div>
               </Link>
             ))}

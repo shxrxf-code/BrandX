@@ -18,7 +18,7 @@ export default function FeaturedCaseStudySection() {
             Featured Project
           </span>
           <h2 className="text-heading-2 font-bold tracking-tight mb-10">
-            SolarTech Energy
+            SunSolar Power System
           </h2>
         </motion.div>
 
@@ -33,7 +33,7 @@ export default function FeaturedCaseStudySection() {
             <div className="absolute inset-0 flex items-center justify-center">
               <Image
                 src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=80"
-                alt="SolarTech Energy project"
+                alt="SunSolar Power System project"
                 fill
                 className="object-cover opacity-90"
               />
@@ -42,16 +42,16 @@ export default function FeaturedCaseStudySection() {
 
             <div className="absolute bottom-4 left-4 right-4 flex gap-3">
               <div className="bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 border border-border shadow-sm">
-                <span className="text-2xl md:text-3xl font-display font-bold text-accent">+340%</span>
-                <span className="text-[10px] text-muted font-medium block mt-0.5">Inbound Leads</span>
+                <span className="text-xs font-semibold text-accent">Solar Energy</span>
+                <span className="text-[10px] text-muted font-medium block mt-0.5">Industry</span>
               </div>
               <div className="bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 border border-border shadow-sm">
-                <span className="text-2xl md:text-3xl font-display font-bold text-accent">14</span>
-                <span className="text-[10px] text-muted font-medium block mt-0.5">Markets Unified</span>
+                <span className="text-xs font-semibold text-accent">Website & Branding</span>
+                <span className="text-[10px] text-muted font-medium block mt-0.5">Service</span>
               </div>
               <div className="bg-white/95 backdrop-blur-sm rounded-xl px-4 py-3 border border-border shadow-sm">
-                <span className="text-2xl md:text-3xl font-display font-bold text-accent">3x</span>
-                <span className="text-[10px] text-muted font-medium block mt-0.5">Engagement</span>
+                <span className="text-xs font-semibold text-accent">Lead Generation</span>
+                <span className="text-[10px] text-muted font-medium block mt-0.5">Goal</span>
               </div>
             </div>
           </div>
@@ -60,18 +60,18 @@ export default function FeaturedCaseStudySection() {
             <div className="p-6 md:p-8">
               <span className="text-[10px] text-muted font-semibold tracking-wider uppercase mb-2 block">Challenge</span>
               <p className="text-sm text-foreground leading-relaxed">
-                Fragmented brand identity across 14 markets with a dated web platform that failed to inspire investor confidence.
+                The client needed a professional digital presence that could effectively communicate their renewable energy expertise and generate qualified leads.
               </p>
             </div>
             <div className="p-6 md:p-8">
               <span className="text-[10px] text-muted font-semibold tracking-wider uppercase mb-2 block">Solution</span>
               <p className="text-sm text-foreground leading-relaxed">
-                Unified brand narrative with a premium visual system and modular web platform engineered for global scale.
+                A comprehensive solar energy platform featuring service showcases, installation galleries, and optimized lead capture flows.
               </p>
             </div>
             <div className="p-6 md:p-8 flex items-center">
               <Link
-                href="/work/solartech-energy"
+                href="/work/sunsolar-power-system"
                 className="inline-flex items-center gap-1.5 text-sm text-accent font-medium hover:text-accent-dark transition-colors duration-200"
               >
                 Read full case study

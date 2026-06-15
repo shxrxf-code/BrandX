@@ -6,32 +6,36 @@ import Image from 'next/image'
 
 const projects = [
   {
-    slug: 'solartech-energy',
-    title: 'SolarTech Energy',
-    tag: 'Clean Energy',
+    slug: 'sunsolar-power-system',
+    title: 'SunSolar Power System',
+    type: 'Website Development & Branding',
+    description: 'Professional solar energy company website designed to showcase renewable energy solutions, services, installations, and lead generation.',
+    tag: 'Solar Energy',
     image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80',
-    result: '+340% Inbound Leads',
   },
   {
-    slug: 'drifto-fashion',
+    slug: 'drifto',
     title: 'Drifto',
-    tag: 'E-Commerce',
+    type: 'E-Commerce Website',
+    description: 'Modern men\'s wear e-commerce website featuring premium shopping experiences, product catalogs, and optimized conversion-focused design.',
+    tag: "Men's Fashion",
     image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
-    result: '+260% Conversion Rate',
   },
   {
-    slug: 'finflow',
-    title: 'FinFlow',
-    tag: 'Fintech',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-    result: '$2.4M ARR Expansion',
+    slug: 'mirra-montessori-school',
+    title: 'Mirra Montessori School',
+    type: 'Personal Branding in social media',
+    description: 'Personal branding and digital presence website created for a modern Montessori educational institution, highlighting values, programs, and admissions.',
+    tag: 'Personal Branding',
+    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80',
   },
   {
-    slug: 'lumen-clinics',
-    title: 'Lumen Clinics',
-    tag: 'Healthcare',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
-    result: '+410% Bookings',
+    slug: 'ravelon',
+    title: 'RAVELON',
+    type: 'Car Accessories E-Commerce Website',
+    description: 'Premium automotive accessories website designed for product showcasing, online sales, and brand growth.',
+    tag: 'Automotive',
+    image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80',
   },
 ]
 
@@ -65,14 +69,14 @@ export default function CaseStudiesSection() {
             >
               <Link
                 href={`/work/${p.slug}`}
-                className="group block rounded-xl overflow-hidden border border-border bg-white hover:shadow-sm transition-all duration-300"
+                className="group block rounded-xl overflow-hidden border border-border bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Image
                     src={p.image}
                     alt={p.title}
                     fill
-                    className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -81,13 +85,16 @@ export default function CaseStudiesSection() {
                     </span>
                   </div>
                 </div>
-                <div className="p-5">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-display font-bold tracking-tight group-hover:text-accent transition-colors duration-200">
-                      {p.title}
-                    </h3>
-                    <span className="text-xs text-muted font-medium">{p.result}</span>
-                  </div>
+                <div className="p-5 md:p-6">
+                  <h3 className="text-lg font-display font-bold tracking-tight group-hover:text-accent transition-colors duration-200 mb-1">
+                    {p.title}
+                  </h3>
+                  <p className="text-xs text-muted font-medium mb-2">
+                    {p.type}
+                  </p>
+                  <p className="text-sm text-muted leading-relaxed line-clamp-2">
+                    {p.description}
+                  </p>
                 </div>
               </Link>
             </motion.div>

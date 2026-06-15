@@ -4,7 +4,6 @@ import ServicesSection from '@/components/ServicesSection'
 import ProcessSection from '@/components/ProcessSection'
 import CaseStudiesSection from '@/components/CaseStudiesSection'
 import TechStackSection from '@/components/TechStackSection'
-import ResultsSection from '@/components/ResultsSection'
 import TestimonialsSection from '@/components/TestimonialsSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
@@ -18,7 +17,6 @@ export default function Home() {
       <ProcessSection />
       <CaseStudiesSection />
       <TechStackSection />
-      <ResultsSection />
       <TestimonialsSection />
       <ContactSection />
       <Footer />

@@ -23,19 +23,19 @@ const projects = [
   },
   {
     slug: 'mirra-montessori-school',
-    title: 'Mirra Montessori School',
-    type: 'Personal Branding in social media',
-    description: 'Personal branding and digital presence website created for a modern Montessori educational institution, highlighting values, programs, and admissions.',
+    title: 'Mirra Montessori',
+    type: 'Personal Branding & Social Media Strategy',
+    description: 'Instagram branding showcase and social media content system designed for a modern Montessori educational institution.',
     tag: 'Personal Branding',
-    image: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=80&auto=format',
+    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80&auto=format',
   },
   {
     slug: 'ravelon',
     title: 'RAVELON',
-    type: 'Car Accessories E-Commerce Website',
-    description: 'Premium automotive accessories website designed for product showcasing, online sales, and brand growth.',
+    type: 'Luxury Automotive Brand Experience',
+    description: 'Premium automotive landing page and brand storytelling experience designed for a luxury vehicle brand.',
     tag: 'Automotive',
-    image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80&auto=format',
+    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format',
   },
 ]
 

@@ -1,8 +1,7 @@
 import HeroSection from '@/components/HeroSection'
-import FeaturedCaseStudySection from '@/components/FeaturedCaseStudySection'
 import ServicesSection from '@/components/ServicesSection'
-import ProcessSection from '@/components/ProcessSection'
 import CaseStudiesSection from '@/components/CaseStudiesSection'
+import ProcessSection from '@/components/ProcessSection'
 import TechStackSection from '@/components/TechStackSection'
 import TestimonialsSection from '@/components/TestimonialsSection'
 import ContactSection from '@/components/ContactSection'
@@ -12,10 +11,9 @@ export default function Home() {
   return (
     <main>
       <HeroSection />
-      <FeaturedCaseStudySection />
       <ServicesSection />
-      <ProcessSection />
       <CaseStudiesSection />
+      <ProcessSection />
       <TechStackSection />
       <TestimonialsSection />
       <ContactSection />

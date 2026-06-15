@@ -1,7 +1,7 @@
 {
   "name": "brand-ex",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,8 +12,6 @@
     "@vercel/analytics": "^1.6.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.17",
-    "gsap": "^3.12.5",
-    "lenis": "^1.1.13",
     "next": "^15.1.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

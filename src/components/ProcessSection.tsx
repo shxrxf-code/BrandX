@@ -1,291 +1,102 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
-}
-
-const stageDots = [
-  [
-    { x: 50, y: 50, r: 3 },
-    { x: 50, y: 50, r: 5 },
-    { x: 50, y: 50, r: 8 },
-  ],
-  [
-    { x: 20, y: 30, r: 3 },
-    { x: 35, y: 60, r: 4 },
-    { x: 65, y: 25, r: 3 },
-    { x: 80, y: 55, r: 5 },
-    { x: 45, y: 75, r: 2 },
-  ],
-  [
-    { x: 25, y: 25, r: 4 },
-    { x: 50, y: 25, r: 4 },
-    { x: 75, y: 25, r: 4 },
-    { x: 25, y: 75, r: 4 },
-    { x: 50, y: 75, r: 4 },
-    { x: 75, y: 75, r: 4 },
-  ],
-  [
-    { x: 50, y: 35, r: 3 },
-    { x: 65, y: 50, r: 3 },
-    { x: 50, y: 65, r: 3 },
-    { x: 35, y: 50, r: 3 },
-    { x: 70, y: 28, r: 2 },
-    { x: 70, y: 72, r: 2 },
-    { x: 30, y: 28, r: 2 },
-    { x: 30, y: 72, r: 2 },
-  ],
-  [
-    { x: 30, y: 25, r: 3 },
-    { x: 30, y: 50, r: 3 },
-    { x: 30, y: 75, r: 3 },
-    { x: 55, y: 18, r: 3 },
-    { x: 55, y: 45, r: 3 },
-    { x: 55, y: 72, r: 3 },
-    { x: 80, y: 30, r: 3 },
-    { x: 80, y: 58, r: 3 },
-    { x: 80, y: 82, r: 3 },
-  ],
-  [
-    { x: 18, y: 72, r: 3 },
-    { x: 30, y: 60, r: 4 },
-    { x: 45, y: 48, r: 3 },
-    { x: 58, y: 36, r: 4 },
-    { x: 72, y: 24, r: 3 },
-    { x: 85, y: 14, r: 4 },
-  ],
-]
+import { motion } from 'framer-motion'
+import { useState } from 'react'
 
 const stages = [
-  {
-    title: 'Idea',
-    subtitle: 'Every great product starts with a single question.',
-    desc: 'We explore your vision, market landscape, and the problem worth solving. No assumptions — just curiosity and deep listening.',
-    visual: '◈',
-    accent: '#00E5FF',
-    dots: stageDots[0],
-  },
-  {
-    title: 'Research',
-    subtitle: 'Insights that separate opinion from truth.',
-    desc: 'User interviews, competitive audits, data analysis. We build a foundation of knowledge that every decision stands on.',
-    visual: '◇',
-    accent: '#00E5FF',
-    dots: stageDots[1],
-  },
-  {
-    title: 'Strategy',
-    subtitle: 'A plan that turns ambiguity into direction.',
-    desc: 'Information architecture, technical specification, user journeys. Every detail mapped before a single line of code.',
-    visual: '▣',
-    accent: '#4F46E5',
-    dots: stageDots[2],
-  },
-  {
-    title: 'Design',
-    subtitle: 'Where structure becomes experience.',
-    desc: 'Systems thinking meets craft. Component libraries, interactive prototypes, motion design — built to scale and evolve.',
-    visual: '○',
-    accent: '#00E5FF',
-    dots: stageDots[3],
-  },
-  {
-    title: 'Development',
-    subtitle: 'Engineering that ships with confidence.',
-    desc: 'Production-grade code, performance budgets, CI/CD pipelines. We build for speed, reliability, and the long tail.',
-    visual: '△',
-    accent: '#4F46E5',
-    dots: stageDots[4],
-  },
-  {
-    title: 'Growth',
-    subtitle: 'Launch is just the beginning.',
-    desc: 'Analytics instrumentation, A/B testing infrastructure, iterative optimization. We stay until the metrics move.',
-    visual: '⬡',
-    accent: '#00E5FF',
-    dots: stageDots[5],
-  },
+  { title: 'Research', description: 'Understanding your market, users, and competition before making any decisions.' },
+  { title: 'Strategy', description: 'Turning insights into a clear roadmap with defined goals and milestones.' },
+  { title: 'Design', description: 'Crafting intuitive interfaces and compelling visual experiences.' },
+  { title: 'Development', description: 'Building robust, scalable solutions with modern technology.' },
+  { title: 'Launch', description: 'Deploying, testing, and optimizing for production readiness.' },
+  { title: 'Growth', description: 'Continuous improvement through data-driven iteration and optimization.' },
 ]
 
 export default function ProcessSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const pinRef = useRef<HTMLDivElement>(null)
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const panelsRef = useRef<(HTMLDivElement | null)[]>([])
-  const [activeIdx, setActiveIdx] = useState(0)
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: `+=${stages.length * 100}vh`,
-        pin: pinRef.current,
-        anticipatePin: 1,
-        scrub: 1,
-      })
-
-      const master = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: `+=${stages.length * 100}vh`,
-          scrub: 1,
-          onUpdate: (self) => {
-            const idx = Math.min(Math.floor(self.progress * stages.length), stages.length - 1)
-            setActiveIdx(idx)
-          },
-        },
-      })
-
-      master.to(wrapperRef.current, {
-        y: () => -(stages.length - 1) * window.innerHeight,
-        ease: 'none',
-      }, 0)
-
-      stages.forEach((_, i) => {
-        const panel = panelsRef.current[i]
-        if (!panel) return
-        const start = i / stages.length
-        const end = (i + 1) / stages.length
-
-        const title = panel.querySelector('.stage-title')
-        const subtitle = panel.querySelector('.stage-subtitle')
-        const desc = panel.querySelector('.stage-desc')
-        const visual = panel.querySelector('.stage-visual')
-        const bar = panel.querySelector('.stage-bar')
-
-        if (title) master.fromTo(title, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.04, ease: 'power4.out' }, start)
-        if (bar) master.fromTo(bar, { scaleX: 0 }, { scaleX: 1, duration: 0.05, ease: 'power4.out' }, start + 0.01)
-        if (subtitle) master.fromTo(subtitle, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.03, ease: 'power4.out' }, start + 0.015)
-        if (desc) master.fromTo(desc, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.03, ease: 'power4.out' }, start + 0.025)
-        if (visual) master.fromTo(visual, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.04, ease: 'elastic.out(1,0.6)' }, start + 0.01)
-
-        const dots = panel.querySelectorAll('.stage-dot')
-        dots.forEach((dot, j) => {
-          master.fromTo(dot, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.02, ease: 'back.out(2)' }, start + 0.02 + j * 0.005)
-        })
-      })
-
-      stageDots.forEach((_, si) => {
-        const panel = panelsRef.current[si]
-        if (!panel) return
-        const dots = panel.querySelectorAll('.stage-dot')
-        dots.forEach((dot) => {
-          gsap.to(dot, {
-            y: -8,
-            duration: 2 + Math.random() * 2,
-            ease: 'sine.inOut',
-            yoyo: true,
-            repeat: -1,
-            delay: Math.random() * 2,
-          })
-        })
-      })
-    }, sectionRef)
-    return () => ctx.revert()
-  }, [])
-
-  const active = stages[activeIdx]
+  const [active, setActive] = useState(0)
 
   return (
-    <section ref={sectionRef} className="relative bg-background" style={{ height: `${stages.length * 100}vh` }}>
-      {/* Minimal stage indicator */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 pointer-events-none">
-        {stages.map((s, i) => (
-          <div
-            key={s.title}
-            className="h-[2px] rounded-full transition-all duration-700"
-            style={{
-              width: i === activeIdx ? 32 : i < activeIdx ? 16 : 8,
-              background: i <= activeIdx ? active.accent : 'rgba(255,255,255,0.08)',
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Stage name badge */}
-      <div className="fixed top-24 right-6 md:right-10 z-50 pointer-events-none hidden md:block">
-        <span
-          className="text-[10px] font-mono tracking-[0.25em] uppercase transition-colors duration-700"
-          style={{ color: active.accent }}
+    <section className="relative bg-secondary py-20 md:py-28 overflow-hidden">
+      <div className="max-w-content mx-auto px-6 md:px-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.5 }}
+          className="mb-14"
         >
-          {active.title}
-        </span>
-      </div>
+          <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-3">
+            How We Work
+          </span>
+          <h2 className="text-heading-2 font-bold tracking-tight">
+            From idea to impact.
+          </h2>
+        </motion.div>
 
-      <div ref={pinRef} className="h-screen w-full overflow-hidden fixed top-0 left-0 bg-background">
-        <div ref={wrapperRef} className="will-change-transform" style={{ height: `${stages.length * 100}vh` }}>
-          {stages.map((stage, i) => (
-            <div
-              key={stage.title}
-              ref={(el) => { panelsRef.current[i] = el }}
-              className="h-screen w-full flex-shrink-0 relative overflow-hidden flex items-center"
-            >
-              <div
-                className="absolute inset-0 transition-opacity duration-1000"
-                style={{
-                  background: `radial-gradient(ellipse 60% 50% at 50% 50%, ${stage.accent}08, transparent)`,
-                  opacity: i === activeIdx ? 1 : 0.3,
-                }}
-              />
-
-              <div className="relative z-10 w-full max-w-content mx-auto px-6 md:px-10 lg:px-16">
-                <div className="max-w-3xl">
-                  <span
-                    className="stage-bar block h-[3px] w-16 rounded-full origin-left mb-6"
-                    style={{ background: stage.accent, transform: 'scaleX(0)' }}
-                  />
-                  <h2
-                    className="stage-title text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tight leading-[0.9] text-foreground"
-                    style={{ opacity: 0 }}
-                  >
-                    {stage.title}
-                  </h2>
-                  <p
-                    className="stage-subtitle text-lg md:text-xl lg:text-2xl mt-4 text-foreground/80 font-display"
-                    style={{ opacity: 0 }}
-                  >
-                    {stage.subtitle}
-                  </p>
-                  <p
-                    className="stage-desc text-sm md:text-base mt-4 max-w-lg leading-relaxed text-muted"
-                    style={{ opacity: 0 }}
-                  >
-                    {stage.desc}
-                  </p>
-                </div>
-
-                <div
-                  className="stage-visual absolute right-0 bottom-0 md:bottom-auto md:top-1/2 md:-translate-y-1/2 text-[clamp(8rem,30vw,30rem)] font-display font-bold leading-none pointer-events-none select-none transition-colors duration-700"
-                  style={{ color: `${stage.accent}08`, opacity: 0 }}
+        <div className="flex flex-col md:flex-row gap-0 md:gap-12">
+          <div className="md:w-64 shrink-0">
+            <div className="flex md:flex-col gap-2 overflow-x-auto pb-4 md:pb-0 -mx-6 px-6 md:mx-0 md:px-0">
+              {stages.map((stage, i) => (
+                <button
+                  key={stage.title}
+                  onClick={() => setActive(i)}
+                  className={`text-left whitespace-nowrap md:whitespace-normal px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    active === i
+                      ? 'bg-accent text-white'
+                      : 'text-muted hover:text-foreground hover:bg-white'
+                  }`}
                 >
-                  {stage.visual}
-                </div>
-              </div>
-
-              {stage.dots.map((dot, di) => (
-                <div
-                  key={di}
-                  className="stage-dot absolute rounded-full pointer-events-none"
-                  style={{
-                    left: `${dot.x}%`,
-                    top: `${dot.y}%`,
-                    width: dot.r * 2,
-                    height: dot.r * 2,
-                    background: stage.accent,
-                    opacity: 0,
-                    transform: 'scale(0)',
-                  }}
-                />
+                  {stage.title}
+                </button>
               ))}
             </div>
-          ))}
+          </div>
+
+          <div className="flex-1 min-h-[200px]">
+            {stages.map((stage, i) => (
+              <motion.div
+                key={stage.title}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{
+                  opacity: active === i ? 1 : 0,
+                  y: active === i ? 0 : 10,
+                }}
+                transition={{ duration: 0.3 }}
+                className={active === i ? 'block' : 'hidden'}
+              >
+                <div className="bg-white rounded-xl border border-border p-8">
+                  <span className="text-4xl font-display font-bold text-accent/20 mb-3 block">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="text-xl font-display font-bold tracking-tight mb-3">
+                    {stage.title}
+                  </h3>
+                  <p className="text-muted leading-relaxed max-w-lg">
+                    {stage.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-10 flex items-center gap-2"
+        >
+          {stages.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === active ? 'w-8 bg-accent' : 'w-2 bg-border hover:bg-accent/50'
+              }`}
+            />
+          ))}
+        </motion.div>
       </div>
     </section>
   )

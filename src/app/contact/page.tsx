@@ -1,4 +1,3 @@
-import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ContactForm from '@/components/ContactForm'
 
@@ -10,41 +9,38 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <>
-      <Navbar />
-
-      <main className="pt-40">
-        <section className="px-6 md:px-12">
+      <main className="pt-32">
+        <section className="px-6 md:px-10">
           <div className="max-w-content mx-auto">
-            <h1 className="text-hero font-semibold text-foreground max-w-text">
+            <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-4">Contact</span>
+            <h1 className="text-heading-1 font-bold tracking-tight max-w-text">
               Get in touch.
             </h1>
-            <p className="mt-8 text-lg text-muted max-w-text leading-relaxed">
+            <p className="mt-6 text-base text-muted max-w-text leading-relaxed">
               Tell us about your project and we will get back to you within two business days.
             </p>
           </div>
         </section>
 
-        <section className="py-32 md:py-40 px-6 md:px-12 border-t border-border">
-          <div className="max-w-content mx-auto grid grid-cols-1 md:grid-cols-12 gap-16">
-            <aside className="md:col-span-4 space-y-12">
+        <section className="py-20 md:py-24 px-6 md:px-10 mt-12 border-t border-border">
+          <div className="max-w-content mx-auto grid md:grid-cols-12 gap-12">
+            <aside className="md:col-span-4 space-y-8">
               <div>
-                <p className="text-eyebrow uppercase text-muted mb-3">Email</p>
+                <p className="text-xs text-muted font-semibold tracking-wider uppercase mb-2">Email</p>
                 <a
-                  href="mailto:hello@brandex.studio"
-                  className="text-foreground hover:text-accent transition-colors duration-400"
+                  href="mailto:hello@brandexdigital.in"
+                  className="text-sm text-foreground hover:text-accent transition-colors duration-200"
                 >
-                  hello@brandex.studio
+                  hello@brandexdigital.in
                 </a>
               </div>
-
               <div>
-                <p className="text-eyebrow uppercase text-muted mb-3">Location</p>
-                <p className="text-foreground">Remote · Worldwide</p>
+                <p className="text-xs text-muted font-semibold tracking-wider uppercase mb-2">Location</p>
+                <p className="text-sm text-foreground">Remote · Worldwide</p>
               </div>
-
               <div>
-                <p className="text-eyebrow uppercase text-muted mb-3">Response time</p>
-                <p className="text-foreground">Within 2 business days</p>
+                <p className="text-xs text-muted font-semibold tracking-wider uppercase mb-2">Response time</p>
+                <p className="text-sm text-foreground">Within 2 business days</p>
               </div>
             </aside>
 
@@ -54,7 +50,6 @@ export default function ContactPage() {
           </div>
         </section>
       </main>
-
       <Footer />
     </>
   )

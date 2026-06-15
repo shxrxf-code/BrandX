@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Space_Grotesk, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
-import SmoothScroll from '@/components/providers/SmoothScroll'
 import Navbar from '@/components/Navbar'
 
 const inter = Inter({
@@ -36,8 +35,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#000000',
-  colorScheme: 'dark',
+  themeColor: '#FFFFFF',
+  colorScheme: 'light',
 }
 
 export const metadata: Metadata = {
@@ -47,7 +46,7 @@ export const metadata: Metadata = {
     template: '%s | Brandex',
   },
   description:
-    'We engineer digital experiences that drive business growth. Premium web development, UI/UX design, brand identity, and AI solutions.',
+    'We build digital products that drive real growth. Web development, UI/UX design, brand identity, and AI solutions.',
   keywords: [
     'web development',
     'UI/UX design',
@@ -64,14 +63,14 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: 'https://brandexdigital.in',
     title: 'Brandex — Digital Experience Studio',
-    description: 'Premium web development, UI/UX, brand identity, and AI solutions.',
+    description: 'We build digital products that drive real growth.',
     siteName: 'Brandex',
     images: [{ url: '/opengraph-image.png', width: 1200, height: 630, alt: 'Brandex' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Brandex — Digital Experience Studio',
-    description: 'Premium web development, UI/UX, brand identity, and AI solutions.',
+    description: 'We build digital products that drive real growth.',
     images: ['/opengraph-image.png'],
   },
   robots: { index: true, follow: true },
@@ -81,11 +80,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${geistMono.variable}`}>
       <body className="font-sans bg-background text-foreground antialiased">
-        <SmoothScroll>
-          <Navbar />
-          {children}
-          <div className="grain" />
-        </SmoothScroll>
+        <Navbar />
+        {children}
         <Analytics />
       </body>
     </html>

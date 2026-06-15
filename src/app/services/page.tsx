@@ -1,73 +1,52 @@
-import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import CTA from '@/components/CTA'
 import { services } from '@/data/services'
 
 export const metadata = {
   title: 'Services',
-  description: 'Brand, web, SEO, and digital marketing for ambitious companies.',
+  description: 'Web development, UI/UX design, SEO, and digital marketing services.',
 }
 
 export default function ServicesPage() {
   return (
     <>
-      <Navbar />
-
-      <main className="pt-40">
-        <section className="px-6 md:px-12">
+      <main className="pt-32">
+        <section className="px-6 md:px-10">
           <div className="max-w-content mx-auto">
-            <h1 className="text-hero font-semibold text-foreground max-w-text">
-              Services.
+            <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-4">Services</span>
+            <h1 className="text-heading-1 font-bold tracking-tight max-w-text">
+              What we do.
             </h1>
-            <p className="mt-8 text-lg text-muted max-w-text leading-relaxed">
-              We focus on four core capabilities. Each one is staffed by senior practitioners and delivered as a single integrated team.
+            <p className="mt-6 text-base text-muted max-w-text leading-relaxed">
+              We focus on core capabilities. Each one is staffed by senior practitioners and delivered as a single integrated team.
             </p>
           </div>
         </section>
 
-        <section className="py-32 md:py-40 px-6 md:px-12 border-t border-border">
+        <section className="py-24 md:py-32 px-6 md:px-10 mt-16 border-t border-border">
           <div className="max-w-content mx-auto">
-            <ul className="divide-y divide-border">
+            <div className="grid md:grid-cols-2 gap-6">
               {services.map((service, i) => (
-                <li key={service.id} className="py-12 md:py-16">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                    <div className="md:col-span-1">
-                      <span className="text-sm text-muted">
-                        0{i + 1}
-                      </span>
-                    </div>
-
-                    <div className="md:col-span-7">
-                      <h2 className="text-3xl md:text-4xl font-medium text-foreground">
-                        {service.title}
-                      </h2>
-                      <p className="mt-4 text-muted leading-relaxed max-w-md">
-                        {service.description}
-                      </p>
-                    </div>
-
-                    <div className="md:col-span-4">
-                      <p className="text-eyebrow uppercase text-muted mb-4">
-                        What you get
-                      </p>
-                      <ul className="space-y-2">
-                        {service.deliverables.map((d) => (
-                          <li key={d} className="text-sm text-foreground">
-                            {d}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                <div key={service.id} className="rounded-xl border border-border bg-white p-8">
+                  <span className="text-xs text-muted font-semibold tracking-wider uppercase mb-2 block">0{i + 1}</span>
+                  <h2 className="text-xl font-display font-bold tracking-tight mb-3">{service.title}</h2>
+                  <p className="text-sm text-muted leading-relaxed mb-6">{service.description}</p>
+                  <div>
+                    <p className="text-[10px] text-muted font-semibold tracking-wider uppercase mb-2">What you get</p>
+                    <ul className="space-y-1.5">
+                      {service.deliverables.map((d) => (
+                        <li key={d} className="text-sm text-foreground flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         </section>
-
-        <CTA />
       </main>
-
       <Footer />
     </>
   )

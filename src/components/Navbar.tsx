@@ -6,10 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 const navItems = [
-  { href: '/services', label: 'Services' },
   { href: '/work', label: 'Work' },
-  { href: '/process', label: 'Process' },
-  { href: '/technologies', label: 'Technologies' },
+  { href: '/services', label: 'Services' },
+  { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]
 
@@ -33,9 +32,9 @@ export default function Navbar() {
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-700',
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
           scrolled
-            ? 'py-3 bg-background/80 backdrop-blur-xl border-b border-border'
+            ? 'py-3 bg-white/90 backdrop-blur-md border-b border-border'
             : 'py-5 bg-transparent'
         )}
       >
@@ -47,26 +46,23 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-10">
+          <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="relative text-sm text-muted hover:text-foreground transition-colors duration-300 group"
+                className="relative text-sm text-muted hover:text-foreground transition-colors duration-200"
               >
-                <span className="inline-block">{item.label}</span>
-                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-accent to-accent/50 transition-all duration-500 group-hover:w-full" />
+                {item.label}
               </Link>
             ))}
           </nav>
 
           <Link
             href="/contact"
-            className="hidden md:inline-flex group"
+            className="hidden md:inline-flex items-center px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200"
           >
-            <span className="relative text-sm text-foreground border border-border-light px-5 py-2.5 rounded-full overflow-hidden transition-all duration-500 hover:border-accent hover:bg-accent/10 hover:shadow-[0_0_20px_rgba(0,229,255,0.15)]">
-              <span className="relative z-10">Start Project</span>
-            </span>
+            Start Your Project
           </Link>
 
           <button
@@ -86,13 +82,13 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed inset-0 z-[100] bg-background flex flex-col"
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] bg-white flex flex-col"
           >
             <div className="flex justify-end p-6">
               <button
                 onClick={() => setMobileOpen(false)}
-                className="w-10 h-10 flex items-center justify-center"
+                className="w-10 h-10 flex items-center justify-center relative"
                 aria-label="Close menu"
               >
                 <span className="block w-6 h-[1.5px] bg-foreground rotate-45 absolute" />
@@ -104,14 +100,14 @@ export default function Navbar() {
               {navItems.map((item, i) => (
                 <motion.div
                   key={item.href}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08, duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
                 >
                   <Link
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
-                    className="text-4xl md:text-6xl font-display font-bold tracking-tight text-foreground/80 hover:text-foreground hover:text-accent transition-colors duration-300"
+                    className="text-3xl md:text-5xl font-display font-bold tracking-tight text-foreground/80 hover:text-foreground transition-colors duration-200"
                   >
                     {item.label}
                   </Link>
@@ -119,26 +115,20 @@ export default function Navbar() {
               ))}
 
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                transition={{ delay: 0.4, duration: 0.4 }}
                 className="mt-8"
               >
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
-                  className="text-lg text-foreground border border-border-light px-8 py-3 rounded-full hover:bg-accent/10 hover:border-accent transition-all duration-400"
+                  className="inline-flex px-8 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200"
                 >
-                  Start Project
+                  Start Your Project
                 </Link>
               </motion.div>
             </nav>
-
-            <div className="p-6 text-center">
-              <p className="text-xs text-muted tracking-[0.2em] uppercase">
-                Digital Experience Studio
-              </p>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -11,7 +11,7 @@ const projects = [
     type: 'Website Development & Branding',
     description: 'Professional solar energy company website designed to showcase renewable energy solutions, services, installations, and lead generation.',
     tag: 'Solar Energy',
-    image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80&auto=format',
   },
   {
     slug: 'drifto',
@@ -19,7 +19,7 @@ const projects = [
     type: 'E-Commerce Website',
     description: 'Modern men\'s wear e-commerce website featuring premium shopping experiences, product catalogs, and optimized conversion-focused design.',
     tag: "Men's Fashion",
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80&auto=format',
   },
   {
     slug: 'mirra-montessori-school',
@@ -27,7 +27,7 @@ const projects = [
     type: 'Personal Branding in social media',
     description: 'Personal branding and digital presence website created for a modern Montessori educational institution, highlighting values, programs, and admissions.',
     tag: 'Personal Branding',
-    image: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=80&auto=format',
   },
   {
     slug: 'ravelon',
@@ -35,7 +35,7 @@ const projects = [
     type: 'Car Accessories E-Commerce Website',
     description: 'Premium automotive accessories website designed for product showcasing, online sales, and brand growth.',
     tag: 'Automotive',
-    image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80&auto=format',
   },
 ]
 

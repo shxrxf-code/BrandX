@@ -32,7 +32,7 @@ export default function FeaturedCaseStudySection() {
           <div className="relative aspect-[16/9] md:aspect-[3/1] overflow-hidden bg-gradient-to-br from-blue-50 via-white to-white">
             <div className="absolute inset-0 flex items-center justify-center">
               <Image
-                src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=80"
+                src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=85&auto=format"
                 alt="SunSolar Power System project"
                 fill
                 className="object-cover opacity-90"

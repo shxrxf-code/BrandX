@@ -1,8 +1,8 @@
 'use client'
 
 import { useRef, useState, useMemo, useEffect, useCallback } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, Text, Html } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -10,45 +10,60 @@ const services = [
   {
     title: 'Web Development',
     description: 'Custom web applications, headless CMS architectures, and scalable frontends built with modern frameworks.',
-    benefits: ['Full-stack development', 'Headless CMS', 'API integration', 'Performance optimization'],
+    deliverables: ['Full-stack development', 'Headless CMS', 'API Integration', 'Performance Optimization'],
+    size: 'large',
   },
   {
     title: 'UI/UX Design',
     description: 'Research-driven design systems, interactive prototypes, and intuitive user flows crafted for conversion.',
-    benefits: ['User research', 'Wireframing', 'Visual design', 'Interactive prototypes'],
+    deliverables: ['User Research', 'Wireframing & Prototyping', 'Visual Design', 'Usability Testing'],
+    size: 'large',
   },
   {
     title: 'Brand Identity',
     description: 'Strategic brand systems including visual identity, typography, and guidelines that communicate unique value.',
-    benefits: ['Brand strategy', 'Visual identity', 'Logo design', 'Brand guidelines'],
+    deliverables: ['Brand Strategy', 'Visual Identity & Logo', 'Typography', 'Brand Guidelines'],
+    size: 'medium',
   },
   {
     title: 'SEO',
     description: 'Technical SEO audits, content strategy, and performance engineering for sustainable organic growth.',
-    benefits: ['Technical audit', 'Keyword strategy', 'Content production', 'Authority building'],
+    deliverables: ['Technical Audit', 'Keyword Strategy', 'Content Production', 'Authority Building'],
+    size: 'small',
   },
   {
     title: 'Digital Marketing',
     description: 'Paid media, lifecycle programs, and analytics-driven campaigns that turn traffic into revenue.',
-    benefits: ['Paid search & social', 'Lifecycle & CRM', 'Analytics & attribution', 'Creative production'],
+    deliverables: ['Paid Search & Social', 'Lifecycle & CRM', 'Analytics & Attribution', 'Creative Production'],
+    size: 'medium',
   },
   {
     title: 'AI Solutions',
     description: 'Custom AI agents, LLM-powered features, and intelligent automation that transform business operations.',
-    benefits: ['AI strategy', 'Custom agents', 'LLM integration', 'Process automation'],
+    deliverables: ['AI Strategy & Consulting', 'Custom AI Agents', 'LLM Integration', 'Process Automation'],
+    size: 'large',
   },
 ]
 
-const RADIUS = 2.8
+const RADIUS = 3
 const COLORS = {
   accent: '#2563EB',
   accentLight: '#60A5FA',
-  accentGlow: 'rgba(37, 99, 235, 0.15)',
-  line: 'rgba(37, 99, 235, 0.12)',
-  lineActive: 'rgba(37, 99, 235, 0.4)',
+  purple: '#8B5CF6',
+  purpleLight: '#A78BFA',
+  line: 'rgba(37, 99, 235, 0.10)',
+  lineActive: 'rgba(37, 99, 235, 0.45)',
   text: '#0F172A',
   muted: '#64748B',
-  bg: '#FFFFFF',
+}
+
+function getNodeRadius(size: string) {
+  switch (size) {
+    case 'large': return 0.24
+    case 'medium': return 0.19
+    case 'small': return 0.15
+    default: return 0.20
+  }
 }
 
 function getSpherePositions(count: number, radius: number) {
@@ -66,12 +81,43 @@ function getSpherePositions(count: number, radius: number) {
   return positions
 }
 
+function HoverCard({ service, position }: { service: typeof services[0]; position: THREE.Vector3 }) {
+  const offset = position.clone().normalize().multiplyScalar(0.9)
+  const hoverPos = new THREE.Vector3().addVectors(position, offset)
+
+  return (
+    <Html position={hoverPos} center style={{ pointerEvents: 'none', zIndex: 20 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 8, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="bg-white/95 backdrop-blur-md rounded-xl border border-border shadow-lg p-4 w-56"
+      >
+        <h4 className="text-sm font-bold text-foreground mb-1.5">{service.title}</h4>
+        <p className="text-[11px] text-muted leading-relaxed mb-2.5">{service.description}</p>
+        <div className="flex flex-wrap gap-1">
+          {service.deliverables.slice(0, 2).map((d) => (
+            <span
+              key={d}
+              className="inline-block px-1.5 py-0.5 bg-accent/5 border border-accent/10 rounded text-[9px] text-accent font-medium"
+            >
+              {d}
+            </span>
+          ))}
+        </div>
+      </motion.div>
+    </Html>
+  )
+}
+
 function Node({
   position,
   label,
   index,
+  size,
   activeIndex,
   hoveredIndex,
+  revealed,
   onHover,
   onClick,
   onLeave,
@@ -79,48 +125,71 @@ function Node({
   position: THREE.Vector3
   label: string
   index: number
+  size: string
   activeIndex: number | null
   hoveredIndex: number | null
+  revealed: boolean
   onHover: (i: number) => void
   onClick: (i: number) => void
   onLeave: () => void
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
+  const glowRef = useRef<THREE.Mesh>(null)
   const isActive = activeIndex === index
   const isHovered = hoveredIndex === index
-  const scale = isHovered || isActive ? 1.5 : 1
+  const baseRadius = getNodeRadius(size)
+  const targetScale = isHovered || isActive ? 1.6 : 1
 
   useFrame(({ clock }) => {
     if (meshRef.current) {
-      const pulse = 0.92 + 0.08 * Math.sin(clock.getElapsedTime() * 1.5 + index)
-      const s = scale * pulse
-      meshRef.current.scale.setScalar(s)
+      const pulse = 0.94 + 0.06 * Math.sin(clock.getElapsedTime() * 1.4 + index * 0.7)
+      meshRef.current.scale.setScalar(targetScale * pulse)
+    }
+    if (glowRef.current) {
+      const gs = (isHovered || isActive ? 1.8 : 1) * (0.95 + 0.05 * Math.sin(clock.getElapsedTime() * 0.9))
+      glowRef.current.scale.setScalar(gs)
+      const mat = glowRef.current.material as THREE.MeshBasicMaterial
+      mat.opacity = (isHovered || isActive ? 0.35 : 0.08) + 0.03 * Math.sin(clock.getElapsedTime())
     }
   })
 
+  const entryDelay = 0.05 * index
+  const entryScale = revealed ? 1 : 0
+
   return (
     <group position={position}>
+      <mesh ref={glowRef} scale={entryScale}>
+        <sphereGeometry args={[baseRadius * 2.8, 20, 20]} />
+        <meshBasicMaterial
+          color={isHovered || isActive ? COLORS.purple : COLORS.accent}
+          transparent
+          opacity={isHovered || isActive ? 0.35 : 0.08}
+        />
+      </mesh>
       <mesh
         ref={meshRef}
+        scale={entryScale}
         onPointerEnter={() => onHover(index)}
         onPointerLeave={onLeave}
         onClick={(e) => { e.stopPropagation(); onClick(index) }}
       >
-        <sphereGeometry args={[0.18, 16, 16]} />
+        <sphereGeometry args={[baseRadius, 20, 20]} />
         <meshStandardMaterial
-          color={isActive || isHovered ? COLORS.accent : COLORS.accentLight}
-          emissive={COLORS.accent}
-          emissiveIntensity={isHovered || isActive ? 0.4 : 0.15}
+          color={isHovered || isActive ? COLORS.accent : COLORS.accentLight}
+          emissive={isHovered || isActive ? COLORS.purple : COLORS.accent}
+          emissiveIntensity={isHovered || isActive ? 0.5 : 0.15}
           transparent
           opacity={isHovered || isActive ? 1 : 0.85}
         />
       </mesh>
+
+      {/* Node label */}
       <Html
         center
         style={{
           pointerEvents: 'none',
-          transform: 'translateY(20px)',
-          opacity: isHovered || isActive ? 1 : 0.8,
+          transform: 'translateY(22px)',
+          opacity: isHovered || isActive ? 1 : 0.7,
           transition: 'opacity 0.3s',
         }}
       >
@@ -137,6 +206,16 @@ function Node({
           {label}
         </span>
       </Html>
+
+      {/* Hover card */}
+      <AnimatePresence>
+        {isHovered && !isActive && (
+          <HoverCard
+            service={services[index]}
+            position={position.clone().normalize().multiplyScalar(0.5)}
+          />
+        )}
+      </AnimatePresence>
     </group>
   )
 }
@@ -145,10 +224,14 @@ function ConnectionLine({
   start,
   end,
   isActive,
+  revealed,
+  delay,
 }: {
   start: THREE.Vector3
   end: THREE.Vector3
   isActive: boolean
+  revealed: boolean
+  delay: number
 }) {
   const ref = useRef<THREE.Mesh>(null)
 
@@ -163,19 +246,29 @@ function ConnectionLine({
     }
   }, [start, end])
 
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    if (revealed) {
+      const t = setTimeout(() => setVisible(true), delay * 1000)
+      return () => clearTimeout(t)
+    }
+  }, [revealed, delay])
+
+  if (!revealed || !visible) return null
+
   return (
     <mesh ref={ref}>
-      <boxGeometry args={[0.008, 0.008, 1]} />
+      <boxGeometry args={[0.006, 0.006, 1]} />
       <meshBasicMaterial
         color={isActive ? COLORS.accent : COLORS.line}
         transparent
-        opacity={isActive ? 0.6 : 0.25}
+        opacity={isActive ? 0.7 : 0.3}
       />
     </mesh>
   )
 }
 
-function CenterNode() {
+function CenterNode({ revealed }: { revealed: boolean }) {
   const ref = useRef<THREE.Mesh>(null)
   const glowRef = useRef<THREE.Mesh>(null)
 
@@ -188,28 +281,30 @@ function CenterNode() {
       const s = 1 + 0.08 * Math.sin(clock.getElapsedTime() * 0.8)
       glowRef.current.scale.setScalar(s)
       const mat = glowRef.current.material as THREE.MeshBasicMaterial
-      mat.opacity = 0.12 + 0.04 * Math.sin(clock.getElapsedTime())
+      mat.opacity = 0.15 + 0.05 * Math.sin(clock.getElapsedTime())
     }
   })
 
+  const entryScale = revealed ? 1 : 0
+
   return (
     <group>
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[0.7, 24, 24]} />
-        <meshBasicMaterial color={COLORS.accent} transparent opacity={0.1} />
+      <mesh ref={glowRef} scale={entryScale}>
+        <sphereGeometry args={[0.8, 24, 24]} />
+        <meshBasicMaterial color={COLORS.purple} transparent opacity={0.1} />
       </mesh>
-      <mesh ref={ref}>
-        <sphereGeometry args={[0.3, 20, 20]} />
+      <mesh ref={ref} scale={entryScale}>
+        <sphereGeometry args={[0.35, 20, 20]} />
         <meshStandardMaterial
           color={COLORS.accent}
           emissive={COLORS.accent}
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.6}
         />
       </mesh>
-      <Html center style={{ pointerEvents: 'none' }}>
+      <Html center style={{ pointerEvents: 'none', opacity: revealed ? 1 : 0, transition: 'opacity 0.6s 0.4s' }}>
         <span
           style={{
-            fontSize: '12px',
+            fontSize: '13px',
             fontWeight: 700,
             color: COLORS.accent,
             letterSpacing: '0.15em',
@@ -223,12 +318,12 @@ function CenterNode() {
   )
 }
 
-function Particles({ count = 40 }: { count?: number }) {
+function Particles({ count = 30, revealed }: { count?: number; revealed: boolean }) {
   const ref = useRef<THREE.Points>(null)
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
-      const r = 3 + Math.random() * 2
+      const r = 3.5 + Math.random() * 2.5
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
@@ -240,7 +335,7 @@ function Particles({ count = 40 }: { count?: number }) {
 
   useFrame(({ clock }) => {
     if (ref.current) {
-      ref.current.rotation.y = clock.getElapsedTime() * 0.02
+      ref.current.rotation.y = clock.getElapsedTime() * 0.015
     }
   })
 
@@ -250,9 +345,11 @@ function Particles({ count = 40 }: { count?: number }) {
     return geo
   }, [positions])
 
+  if (!revealed) return null
+
   return (
     <points ref={ref} geometry={geometry}>
-      <pointsMaterial size={0.03} color={COLORS.accent} transparent opacity={0.3} />
+      <pointsMaterial size={0.025} color={COLORS.accent} transparent opacity={0.2} />
     </points>
   )
 }
@@ -262,25 +359,23 @@ function GlobeScene({
   setActiveIndex,
   hoveredIndex,
   setHoveredIndex,
+  revealed,
 }: {
   activeIndex: number | null
   setActiveIndex: (i: number | null) => void
   hoveredIndex: number | null
   setHoveredIndex: (i: number | null) => void
+  revealed: boolean
 }) {
   const positions = useMemo(() => getSpherePositions(services.length, RADIUS), [])
   const controlsRef = useRef<any>(null)
 
-  useFrame(({ clock }) => {
-    if (controlsRef.current && !controlsRef.current.enabled) {
-      // Auto-rotate when not dragging
-    }
-  })
-
   return (
     <>
-      <ambientLight intensity={0.6} />
-      <pointLight position={[5, 5, 5]} intensity={0.5} color={COLORS.accent} />
+      <ambientLight intensity={0.5} />
+      <pointLight position={[4, 4, 4]} intensity={0.4} color={COLORS.accent} />
+      <pointLight position={[-3, -2, 4]} intensity={0.3} color={COLORS.purple} />
+
       <OrbitControls
         ref={controlsRef}
         enableZoom={false}
@@ -288,12 +383,12 @@ function GlobeScene({
         rotateSpeed={0.6}
         dampingFactor={0.08}
         autoRotate
-        autoRotateSpeed={1.2}
-        minPolarAngle={Math.PI / 3}
-        maxPolarAngle={Math.PI - Math.PI / 3}
+        autoRotateSpeed={revealed ? 1.0 : 0}
+        minPolarAngle={Math.PI / 3.5}
+        maxPolarAngle={Math.PI - Math.PI / 3.5}
       />
 
-      <CenterNode />
+      <CenterNode revealed={revealed} />
 
       {positions.map((pos, i) => (
         <ConnectionLine
@@ -301,6 +396,8 @@ function GlobeScene({
           start={new THREE.Vector3(0, 0, 0)}
           end={pos}
           isActive={activeIndex === i || hoveredIndex === i}
+          revealed={revealed}
+          delay={0.3 + 0.08 * i}
         />
       ))}
 
@@ -310,20 +407,22 @@ function GlobeScene({
           position={positions[i]}
           label={service.title}
           index={i}
+          size={service.size}
           activeIndex={activeIndex}
           hoveredIndex={hoveredIndex}
+          revealed={revealed}
           onHover={setHoveredIndex}
           onClick={setActiveIndex}
           onLeave={() => setHoveredIndex(null)}
         />
       ))}
 
-      <Particles count={40} />
+      <Particles count={30} revealed={revealed} />
     </>
   )
 }
 
-function ServiceInfoPanel({
+function SidePanel({
   service,
   onClose,
 }: {
@@ -332,33 +431,42 @@ function ServiceInfoPanel({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.3 }}
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-white/95 backdrop-blur-md rounded-xl border border-border shadow-lg p-5 z-10"
+      initial={{ opacity: 0, x: 300 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 300 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 250 }}
+      className="fixed top-0 right-0 h-full w-full max-w-sm bg-white border-l border-border shadow-2xl z-50 overflow-y-auto"
     >
-      <div className="flex items-start justify-between mb-3">
-        <h3 className="text-lg font-display font-bold text-foreground">{service.title}</h3>
-        <button
-          onClick={onClose}
-          className="w-6 h-6 flex items-center justify-center text-muted hover:text-foreground transition-colors duration-200"
-        >
-          ✕
-        </button>
-      </div>
-      <p className="text-sm text-muted leading-relaxed mb-4">{service.description}</p>
-      <div>
-        <p className="text-[10px] text-accent font-semibold tracking-wider uppercase mb-2">Benefits</p>
-        <div className="flex flex-wrap gap-1.5">
-          {service.benefits.map((b) => (
-            <span
-              key={b}
-              className="inline-block px-2 py-1 bg-secondary border border-border rounded-md text-[10px] text-foreground font-medium"
-            >
-              {b}
-            </span>
-          ))}
+      <div className="p-8">
+        <div className="flex items-center justify-between mb-8">
+          <span className="text-xs text-accent font-semibold tracking-wider uppercase">Service</span>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-border text-muted hover:text-foreground hover:bg-secondary transition-all duration-200"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-2xl font-display font-bold tracking-tight mb-3">{service.title}</h3>
+          <p className="text-sm text-muted leading-relaxed">{service.description}</p>
+        </div>
+
+        <div>
+          <span className="text-[10px] text-accent font-semibold tracking-wider uppercase mb-3 block">
+            Key Deliverables
+          </span>
+          <div className="space-y-2">
+            {service.deliverables.map((d) => (
+              <div key={d} className="flex items-center gap-3 p-3 bg-secondary rounded-lg border border-border">
+                <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                <span className="text-sm text-foreground font-medium">{d}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -378,7 +486,7 @@ function MobileCarousel() {
     <div className="md:hidden">
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-6 px-6"
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {services.map((service, i) => (
@@ -392,12 +500,12 @@ function MobileCarousel() {
             <h3 className="text-lg font-display font-bold tracking-tight mb-2">{service.title}</h3>
             <p className="text-sm text-muted leading-relaxed mb-4">{service.description}</p>
             <div className="flex flex-wrap gap-1.5">
-              {service.benefits.map((b) => (
+              {service.deliverables.map((d) => (
                 <span
-                  key={b}
+                  key={d}
                   className="inline-block px-2 py-1 bg-secondary border border-border rounded-md text-[10px] text-foreground font-medium"
                 >
-                  {b}
+                  {d}
                 </span>
               ))}
             </div>
@@ -421,11 +529,17 @@ function MobileCarousel() {
 
 export default function ServicesSection() {
   const [mounted, setMounted] = useState(false)
+  const [revealed, setRevealed] = useState(false)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  const handleSetActive = useCallback((i: number | null) => {
+    setActiveIndex(i)
+    setHoveredIndex(null)
   }, [])
 
   return (
@@ -437,43 +551,62 @@ export default function ServicesSection() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5 }}
           className="mb-10"
+          onViewportEnter={() => setRevealed(true)}
         >
           <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-3">
             Services
           </span>
           <h2 className="text-heading-2 font-bold tracking-tight">
-            Explore our ecosystem.
+            Explore Our Digital Ecosystem.
           </h2>
-          <p className="text-muted text-sm mt-2 max-w-md">
-            Interact with the network to discover how we deliver value across every service.
+          <p className="text-muted text-sm mt-2 max-w-lg">
+            Discover how Brandex combines strategy, design, development, marketing, and AI to build digital experiences that drive growth.
           </p>
         </motion.div>
       </div>
 
       {/* Desktop 3D Globe */}
-      <div className="hidden md:block relative" style={{ height: '520px' }}>
-        {mounted && (
-          <Canvas
-            camera={{ position: [0, 0, 6], fov: 45 }}
-            dpr={[1, 1.5]}
-            gl={{ antialias: true, alpha: true }}
-            style={{ background: 'transparent' }}
-          >
-            <GlobeScene
-              activeIndex={activeIndex}
-              setActiveIndex={setActiveIndex}
-              hoveredIndex={hoveredIndex}
-              setHoveredIndex={setHoveredIndex}
-            />
-          </Canvas>
-        )}
+      <div className="hidden md:block relative" style={{ height: '540px' }}>
+        <motion.div
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={revealed ? { scale: 1, opacity: 1 } : {}}
+          transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+          className="w-full h-full"
+        >
+          {mounted && (
+            <Canvas
+              camera={{ position: [0, 0, 6.5], fov: 42 }}
+              dpr={[1, 1.5]}
+              gl={{ antialias: true, alpha: true }}
+              style={{ background: 'transparent' }}
+            >
+              <GlobeScene
+                activeIndex={activeIndex}
+                setActiveIndex={handleSetActive}
+                hoveredIndex={hoveredIndex}
+                setHoveredIndex={setHoveredIndex}
+                revealed={revealed}
+              />
+            </Canvas>
+          )}
+        </motion.div>
 
+        {/* Click side panel */}
         <AnimatePresence>
           {activeIndex !== null && (
-            <ServiceInfoPanel
-              service={services[activeIndex]}
-              onClose={() => setActiveIndex(null)}
-            />
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/10 z-40"
+                onClick={() => setActiveIndex(null)}
+              />
+              <SidePanel
+                service={services[activeIndex]}
+                onClose={() => setActiveIndex(null)}
+              />
+            </>
           )}
         </AnimatePresence>
       </div>

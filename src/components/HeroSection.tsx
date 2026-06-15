@@ -85,13 +85,14 @@ export default function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="mt-12 flex items-center gap-6"
+              className="mt-8"
             >
-              {['Next.js', 'React', 'TypeScript', 'Node.js'].map((tech) => (
-                <span key={tech} className="text-xs text-muted font-mono tracking-wide">
-                  {tech}
-                </span>
-              ))}
+              <span className="text-xs text-muted">
+                Built with modern technology{' '}
+                <Link href="/services" className="text-accent hover:text-accent-dark underline underline-offset-2 transition-colors duration-200">
+                  Learn more
+                </Link>
+              </span>
             </motion.div>
           </div>
 

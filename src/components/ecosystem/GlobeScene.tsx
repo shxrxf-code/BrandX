@@ -324,20 +324,26 @@ function ServiceNode({
         center
         style={{
           pointerEvents: 'none',
-          transform: 'translateY(14px)',
-          opacity: isHighlighted ? 1 : 0.75,
-          transition: 'opacity 0.3s',
+          transform: `translateY(18px) scale(${isActive || isHovered ? 1.1 : 1})`,
+          opacity: isActive ? 1 : isHovered ? 1 : 0.8,
+          transition: 'transform 0.25s ease, opacity 0.25s ease',
         }}
       >
         <span
           style={{
-            fontSize: isHighlighted ? '12px' : '11px',
-            fontWeight: 600,
-            color: isHighlighted ? COLORS.accent : '#475569',
+            fontSize: isActive ? '22px' : isHovered ? '20px' : '18px',
+            fontWeight: 700,
+            color: isActive ? COLORS.accent : isHovered ? '#1D4ED8' : '#0F172A',
             whiteSpace: 'nowrap',
             fontFamily: 'Inter, system-ui, sans-serif',
-            transition: 'color 0.3s, font-size 0.3s',
-            textShadow: '0 1px 3px rgba(255,255,255,0.8)',
+            transition: 'color 0.25s ease, font-size 0.25s ease',
+            textShadow: '0 1px 4px rgba(255,255,255,0.9)',
+            background: isActive || isHovered ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.7)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            padding: '3px 10px',
+            borderRadius: '8px',
+            border: isActive || isHovered ? '1px solid rgba(37, 99, 235, 0.2)' : '1px solid rgba(0,0,0,0.04)',
           }}
         >
           {label}

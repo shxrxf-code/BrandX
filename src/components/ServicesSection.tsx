@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useRef } from 'react'
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
 const services = [
   {
@@ -106,134 +106,174 @@ function ServiceCard({
 }) {
   const [expanded, setExpanded] = useState(false)
   const isFeatured = service.id === 'ai-solutions'
+  const cardRef = useRef<HTMLDivElement>(null)
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const smoothX = useSpring(mouseX, { stiffness: 300, damping: 25 })
+  const smoothY = useSpring(mouseY, { stiffness: 300, damping: 25 })
+
+  const iconX = useTransform(smoothX, [-1, 1], [-8, 8])
+  const iconY = useTransform(smoothY, [-1, 1], [-8, 8])
+  const titleX = useTransform(smoothX, [-1, 1], [-5, 5])
+  const titleY = useTransform(smoothY, [-1, 1], [-5, 5])
+  const descX = useTransform(smoothX, [-1, 1], [-3, 3])
+  const descY = useTransform(smoothY, [-1, 1], [-3, 3])
+  const arrowX = useTransform(smoothX, [-1, 1], [-10, 10])
+  const arrowY = useTransform(smoothY, [-1, 1], [-10, 10])
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = cardRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const x = (e.clientX - rect.left) / rect.width
+    const y = (e.clientY - rect.top) / rect.height
+    mouseX.set((x - 0.5) * 2)
+    mouseY.set((y - 0.5) * 2)
+  }
+
+  const handleMouseLeave = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+  }
 
   return (
     <motion.div
       variants={cardVariants}
       className="group relative"
     >
-      <motion.div
-        layout
-        onClick={() => setExpanded(!expanded)}
-        style={{
-          transition: 'transform 0.25s ease',
-          willChange: 'transform',
-        }}
-        className={`
-          relative cursor-pointer rounded-2xl border overflow-hidden
-          hover:-translate-y-1
-          ${expanded
-            ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02]'
-            : 'border-border bg-white'
-          }
-        `}
+      <div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
       >
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out" />
+        <motion.div
+          layout
+          onClick={() => setExpanded(!expanded)}
+          style={{
+            transition: 'transform 0.25s ease',
+            willChange: 'transform',
+          }}
+          className={`
+            relative cursor-pointer rounded-2xl border overflow-hidden
+            hover:-translate-y-1
+            ${expanded
+              ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02]'
+              : 'border-border bg-white'
+            }
+          `}
+        >
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out" />
 
-        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/[0.06] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[400ms] ease-out" />
-        </div>
-
-        {isFeatured && !expanded && (
-          <div
-            style={{ top: 16, right: 16 }}
-            className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase group-hover:animate-pulse"
-          >
-            Popular
+          <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/[0.06] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[400ms] ease-out" />
           </div>
-        )}
 
-        <div className="p-5 sm:p-6">
-          <div className="flex items-start justify-between mb-3">
+          {isFeatured && !expanded && (
             <div
-              className={`
-                w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-250 ease-out
-                group-hover:rotate-6
-                ${expanded
-                  ? 'bg-accent text-white'
-                  : 'bg-accent/5 text-accent group-hover:bg-accent/10'
-                }
-              `}
+              style={{ top: 16, right: 16 }}
+              className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase group-hover:animate-pulse"
             >
-              {service.icon}
+              Popular
             </div>
-            {expanded && (
-              <button
-                onClick={(e) => { e.stopPropagation(); setExpanded(false) }}
-                className="w-7 h-7 flex items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-black/5 transition-colors duration-200 -mr-1 -mt-1"
+          )}
+
+          <div className="p-5 sm:p-6">
+            <div className="flex items-start justify-between mb-3">
+              <motion.div
+                style={{ x: iconX, y: iconY }}
+                className={`
+                  w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-250 ease-out
+                  group-hover:rotate-6
+                  ${expanded
+                    ? 'bg-accent text-white'
+                    : 'bg-accent/5 text-accent group-hover:bg-accent/10'
+                  }
+                `}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 6L6 18M6 6l12 12" />
+                {service.icon}
+              </motion.div>
+              {expanded && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setExpanded(false) }}
+                  className="w-7 h-7 flex items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-black/5 transition-colors duration-200 -mr-1 -mt-1"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            <motion.h3
+              style={{ x: titleX, y: titleY }}
+              className="text-base sm:text-lg font-display font-bold tracking-tight text-foreground mb-1.5"
+            >
+              {service.title}
+            </motion.h3>
+
+            <motion.p
+              style={{ x: descX, y: descY }}
+              className={`text-sm text-muted leading-relaxed mb-3 ${!expanded ? 'line-clamp-2' : ''}`}
+            >
+              {service.description}
+            </motion.p>
+
+            {!expanded && (
+              <motion.div
+                style={{ x: arrowX, y: arrowY }}
+                className="flex items-center gap-1 text-sm font-medium group-hover:text-accent"
+              >
+                <span>Learn More</span>
+                <svg
+                  width="14" height="14" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" strokeWidth="2"
+                  strokeLinecap="round" strokeLinejoin="round"
+                  style={{
+                    transition: 'transform 0.25s ease',
+                  }}
+                  className="group-hover:translate-x-2"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-              </button>
+              </motion.div>
             )}
           </div>
 
-          <h3 className="text-base sm:text-lg font-display font-bold tracking-tight text-foreground mb-1.5">
-            {service.title}
-          </h3>
-
-          <p className={`text-sm text-muted leading-relaxed mb-3 ${!expanded ? 'line-clamp-2' : ''}`}>
-            {service.description}
-          </p>
-
-          {!expanded && (
-            <div
-              style={{
-                transition: 'color 0.25s ease',
-              }}
-              className="flex items-center gap-1 text-sm font-medium group-hover:text-accent"
-            >
-              <span>Learn More</span>
-              <svg
-                width="14" height="14" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" strokeWidth="2"
-                strokeLinecap="round" strokeLinejoin="round"
-                style={{
-                  transition: 'transform 0.25s ease',
-                }}
-                className="group-hover:translate-x-2"
+          <AnimatePresence initial={false}>
+            {expanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                className="overflow-hidden"
               >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </div>
-          )}
-        </div>
-
-        <AnimatePresence initial={false}>
-          {expanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="overflow-hidden"
-            >
-              <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0 border-t border-border/50">
-                <div className="pt-4">
-                  <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
-                    Key Deliverables
-                  </span>
-                  <div className="space-y-2 mb-5">
-                    {service.deliverables.map((d) => (
-                      <div key={d} className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                        <span className="text-sm text-foreground">{d}</span>
-                      </div>
-                    ))}
+                <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0 border-t border-border/50">
+                  <div className="pt-4">
+                    <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
+                      Key Deliverables
+                    </span>
+                    <div className="space-y-2 mb-5">
+                      {service.deliverables.map((d) => (
+                        <div key={d} className="flex items-center gap-3">
+                          <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                          <span className="text-sm text-foreground">{d}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <a
+                      href="/contact"
+                      className="inline-flex items-center justify-center w-full py-2.5 px-4 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors duration-200"
+                    >
+                      Start Project
+                    </a>
                   </div>
-                  <a
-                    href="/contact"
-                    className="inline-flex items-center justify-center w-full py-2.5 px-4 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors duration-200"
-                  >
-                    Start Project
-                  </a>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
     </motion.div>
   )
 }

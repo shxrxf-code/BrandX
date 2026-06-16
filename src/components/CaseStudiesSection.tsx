@@ -45,7 +45,7 @@ export default function CaseStudiesSection() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 right-1/4 w-[400px] h-[400px] rounded-full bg-cyan/5 blur-[120px] animate-aurora" />
       </div>
-      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
+      <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ export default function CaseStudiesSection() {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 xl:grid-cols-2 gap-6">
           {projects.map((p, i) => (
             <motion.div
               key={p.slug}

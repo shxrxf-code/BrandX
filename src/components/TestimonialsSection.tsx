@@ -23,7 +23,7 @@ const testimonials = [
 export default function TestimonialsSection() {
   return (
     <section className="relative bg-surface py-20 md:py-28 overflow-hidden">
-      <div className="max-w-content mx-auto px-6 md:px-10">
+      <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

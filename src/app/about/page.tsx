@@ -14,8 +14,8 @@ export default function AboutPage() {
           <div className="absolute top-0 right-1/4 w-[450px] h-[450px] rounded-full bg-purple-600/5 blur-[150px] animate-aurora-slow" />
           <div className="absolute bottom-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[100px] animate-aurora" style={{ animationDelay: '-3s' }} />
         </div>
-        <section className="px-6 md:px-10 relative z-10">
-          <div className="max-w-content mx-auto">
+        <section className="px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
+          <div className="w-full">
             <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-4">About</span>
             <h1 className="text-heading-1 font-bold tracking-tight max-w-text">
               We build digital products that drive real growth.
@@ -26,8 +26,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="py-24 md:py-32 px-6 md:px-10 mt-16 border-t border-border">
-          <div className="max-w-content mx-auto grid md:grid-cols-12 gap-10">
+        <section className="py-24 md:py-32 px-6 md:px-12 lg:px-16 xl:px-20 mt-16 border-t border-border">
+          <div className="w-full grid md:grid-cols-12 gap-10">
             <div className="md:col-span-3">
               <p className="text-sm font-semibold text-muted uppercase tracking-wider">Approach</p>
             </div>
@@ -41,8 +41,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="py-24 px-6 md:px-10 border-t border-border">
-          <div className="max-w-content mx-auto grid md:grid-cols-3 gap-10">
+        <section className="py-24 px-6 md:px-12 lg:px-16 xl:px-20 border-t border-border">
+          <div className="w-full grid md:grid-cols-3 gap-10">
             {[
               {
                 title: 'Senior only',
@@ -65,10 +65,10 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="py-24 px-6 md:px-10 border-t border-border">
-          <div className="max-w-content mx-auto text-center">
+        <section className="py-24 px-6 md:px-12 lg:px-16 xl:px-20 border-t border-border">
+          <div className="w-full text-center">
             <h2 className="text-heading-2 font-bold tracking-tight mb-4">Let&apos;s work together.</h2>
-            <p className="text-muted mb-8 max-w-md mx-auto">We take on a small number of new projects each quarter.</p>
+            <p className="text-muted mb-8 max-w-lg mx-auto">We take on a small number of new projects each quarter.</p>
               <Link
                 href="/contact"
                 className="inline-flex px-6 py-3 btn-gradient text-sm"

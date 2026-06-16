@@ -213,7 +213,7 @@ export default function ServicesSection() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full bg-accent/5 blur-[100px] animate-aurora-slow" />
       </div>
-      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
+      <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
         <div className="mb-12 md:mb-16">
           <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-3">
             Services
@@ -221,7 +221,7 @@ export default function ServicesSection() {
           <h2 className="text-heading-2 font-bold tracking-tight mb-3">
             What We Build.
           </h2>
-          <p className="text-muted text-sm max-w-xl">
+          <p className="text-muted text-sm max-w-2xl">
             We help businesses grow through design, development, branding, marketing, and AI-powered solutions.
           </p>
         </div>

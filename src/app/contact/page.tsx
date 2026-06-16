@@ -14,8 +14,8 @@ export default function ContactPage() {
           <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
           <div className="absolute -bottom-40 right-1/4 w-[300px] h-[300px] rounded-full bg-cyan/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
         </div>
-        <section className="px-6 md:px-10 relative z-10">
-          <div className="max-w-content mx-auto">
+        <section className="px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
+          <div className="w-full">
             <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-4">Contact</span>
             <h1 className="text-heading-1 font-bold tracking-tight max-w-text">
               Get in touch.
@@ -26,8 +26,8 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <section className="py-20 md:py-24 px-6 md:px-10 mt-12 border-t border-border">
-          <div className="max-w-content mx-auto grid md:grid-cols-12 gap-12">
+        <section className="py-20 md:py-24 px-6 md:px-12 lg:px-16 xl:px-20 mt-12 border-t border-border">
+          <div className="w-full grid md:grid-cols-12 gap-12">
             <aside className="md:col-span-4 space-y-8">
               <div>
                 <p className="text-xs text-muted font-semibold tracking-wider uppercase mb-2">Email</p>

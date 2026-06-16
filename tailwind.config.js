@@ -34,8 +34,7 @@ module.exports = {
         'heading-3': ['clamp(1.25rem, 2vw, 1.5rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
       },
       maxWidth: {
-        'content': '1280px',
-        'text': '640px',
+        'text': '768px',
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out forwards',

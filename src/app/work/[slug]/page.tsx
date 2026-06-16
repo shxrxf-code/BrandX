@@ -34,8 +34,8 @@ export default async function CaseStudyPage({
           <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
           <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-cyan/5 blur-[100px] animate-aurora" style={{ animationDelay: '-3s' }} />
         </div>
-        <section className="px-6 md:px-10 relative z-10">
-          <div className="max-w-content mx-auto">
+        <section className="px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
+          <div className="w-full">
             <Link
               href="/work"
               className="text-sm text-muted hover:text-foreground transition-colors duration-200"
@@ -57,8 +57,8 @@ export default async function CaseStudyPage({
           </div>
         </section>
 
-        <section className="mt-16 px-6 md:px-10">
-          <div className="max-w-content mx-auto">
+        <section className="mt-16 px-6 md:px-12 lg:px-16 xl:px-20">
+          <div className="w-full">
             <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-secondary border border-border">
               <Image
                 src={project.cover}
@@ -72,7 +72,7 @@ export default async function CaseStudyPage({
           </div>
         </section>
 
-        <section className="py-20 px-6 md:px-10 border-t border-border mt-16">
+        <section className="py-20 px-6 md:px-12 lg:px-16 xl:px-20 border-t border-border mt-16">
           <div className="max-w-text mx-auto">
             <p className="text-xs text-muted font-semibold tracking-wider uppercase mb-4">The project</p>
             <p className="text-base text-foreground leading-relaxed">
@@ -81,7 +81,7 @@ export default async function CaseStudyPage({
           </div>
         </section>
 
-        <section className="py-20 px-6 md:px-10 border-t border-border">
+        <section className="py-20 px-6 md:px-12 lg:px-16 xl:px-20 border-t border-border">
           <div className="max-w-text mx-auto">
             <p className="text-xs text-muted font-semibold tracking-wider uppercase mb-4">The challenge</p>
             <p className="text-base text-foreground leading-relaxed mb-12">
@@ -94,8 +94,8 @@ export default async function CaseStudyPage({
           </div>
         </section>
 
-        <section className="py-20 px-6 md:px-10 border-t border-border">
-          <div className="max-w-content mx-auto text-center">
+        <section className="py-20 px-6 md:px-12 lg:px-16 xl:px-20 border-t border-border">
+          <div className="w-full text-center">
             <h2 className="text-heading-2 font-bold tracking-tight mb-4">Want to work together?</h2>
             <Link
               href="/contact"

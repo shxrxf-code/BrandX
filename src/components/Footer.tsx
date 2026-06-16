@@ -24,7 +24,7 @@ const footerLinks: Record<string, { href: string; label: string; external?: bool
 export default function Footer() {
   return (
     <footer className="relative bg-secondary border-t border-border">
-      <div className="max-w-content mx-auto px-6 md:px-10 py-16 md:py-20">
+      <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 py-16 md:py-20">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block">
@@ -32,7 +32,7 @@ export default function Footer() {
                 Brandex<span className="text-accent">.</span>
               </span>
             </Link>
-            <p className="text-sm text-muted mt-3 leading-relaxed max-w-xs">
+            <p className="text-sm text-muted mt-3 leading-relaxed max-w-sm">
               We build digital products that drive real growth.
             </p>
           </div>

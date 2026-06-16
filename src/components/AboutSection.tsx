@@ -32,7 +32,7 @@ export default function AboutSection() {
         <div className="absolute bottom-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
       </div>
 
-      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
+      <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -73,7 +73,7 @@ export default function AboutSection() {
           <div className="md:col-span-3">
             <p className="text-sm font-semibold text-muted uppercase tracking-wider">Approach</p>
           </div>
-          <div className="md:col-span-9 max-w-text">
+          <div className="md:col-span-9 max-w-3xl">
             <div className="glass rounded-2xl p-6 md:p-8">
               <p className="text-base text-foreground leading-relaxed">
                 We believe great work comes from small teams, deep focus, and a real partnership with the
@@ -107,7 +107,7 @@ export default function AboutSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-center border-t border-white/10 pt-16"
         >
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-3xl mx-auto">
             <p className="text-sm text-muted uppercase tracking-wider font-semibold mb-3">Our Mission</p>
             <p className="text-xl md:text-2xl text-foreground font-display font-bold tracking-tight leading-snug">
               To help ambitious businesses build digital products that create measurable impact — through

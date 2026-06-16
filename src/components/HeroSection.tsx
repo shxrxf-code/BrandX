@@ -31,8 +31,8 @@ export default function HeroSection() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-purple-600/5 blur-[150px] animate-aurora" style={{ animationDelay: '-6s' }} />
       </div>
 
-      <div className="max-w-content mx-auto px-6 md:px-10 w-full relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className="relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-muted text-base md:text-lg leading-relaxed max-w-md mb-8"
+              className="text-muted text-base md:text-lg leading-relaxed max-w-lg mb-8"
             >
               We design and engineer premium digital experiences — from web platforms
               to AI-powered solutions — that transform how businesses connect with their audience.

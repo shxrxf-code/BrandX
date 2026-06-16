@@ -472,7 +472,7 @@ export default function ProcessSection() {
       </div>
 
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="max-w-content mx-auto px-6 md:px-10 w-full py-16 md:py-0">
+        <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 py-16 md:py-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -486,7 +486,7 @@ export default function ProcessSection() {
             <h2 className="text-heading-2 font-bold tracking-tight">
               From idea to impact.
             </h2>
-            <p className="text-muted text-sm mt-2 max-w-md">
+            <p className="text-muted text-sm mt-2 max-w-lg">
               A connected journey from discovery to growth — scroll through each stage.
             </p>
           </motion.div>

@@ -9,14 +9,14 @@ export default function ContactSection() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[400px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
       </div>
-      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
+      <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5 }}
         >
-          <div className="glass-strong rounded-3xl p-10 md:p-16 text-center max-w-2xl mx-auto">
+          <div className="glass-strong rounded-3xl p-10 md:p-16 text-center max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -33,7 +33,7 @@ export default function ContactSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-heading-1 font-bold tracking-tight max-w-xl mx-auto mb-6"
+              className="text-heading-1 font-bold tracking-tight max-w-2xl mx-auto mb-6"
             >
               Ready to build something great?
             </motion.h2>
@@ -43,7 +43,7 @@ export default function ContactSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-muted text-base md:text-lg max-w-md mx-auto mb-10"
+              className="text-muted text-base md:text-lg max-w-lg mx-auto mb-10"
             >
               Tell us about your project and we will get back to you within two business days.
             </motion.p>

@@ -106,7 +106,6 @@ function ServiceCard({
   service: (typeof services)[0]
 }) {
   const [hovered, setHovered] = useState(false)
-  const isFeatured = service.id === 'ai-solutions'
 
   return (
     <div
@@ -126,16 +125,6 @@ function ServiceCard({
             background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(147, 51, 234, 0.03))',
           }}
         />
-
-        {isFeatured && (
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: hovered ? 1 : 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            style={{ transformOrigin: 'left' }}
-            className="absolute top-0 left-0 right-0 h-[2px] bg-accent z-10"
-          />
-        )}
 
         <div className="p-5 sm:p-6">
           <div className="flex items-start justify-between mb-3">

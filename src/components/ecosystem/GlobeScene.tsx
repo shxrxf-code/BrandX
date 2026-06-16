@@ -5,7 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Html, Line } from '@react-three/drei'
 import * as THREE from 'three'
 
-const RADIUS = 3.5
+const RADIUS = 2.2
 const COLORS = {
   accent: '#2563EB',
   accentLight: '#60A5FA',
@@ -102,7 +102,7 @@ function getArcPoints(start: THREE.Vector3, end: THREE.Vector3, radius: number, 
 }
 
 function LatLonLines({ radius, revealed }: { radius: number; revealed: boolean }) {
-  const opacity = revealed ? 0.4 : 0
+  const opacity = revealed ? 0.3 : 0
 
   const latData = useMemo(() => {
     const lines: number[][] = []
@@ -233,7 +233,7 @@ function ConnectionLine({
       color={isActive ? COLORS.purple : COLORS.accent}
       lineWidth={isActive ? 2 : 1}
       transparent
-      opacity={isActive ? 0.7 : 0.25}
+      opacity={isActive ? 0.6 : 0.18}
     />
   )
 }
@@ -300,11 +300,11 @@ function ServiceNode({
   return (
     <group position={position}>
       <mesh ref={glowRef}>
-        <sphereGeometry args={[0.35, 20, 20]} />
+        <sphereGeometry args={[0.18, 20, 20]} />
         <meshBasicMaterial
           color={isHighlighted ? COLORS.purple : COLORS.accent}
           transparent
-          opacity={0.15}
+          opacity={0.1}
         />
       </mesh>
       <mesh
@@ -313,7 +313,7 @@ function ServiceNode({
         onPointerLeave={onLeave}
         onClick={(e) => { e.stopPropagation(); onClick(index) }}
       >
-        <sphereGeometry args={[0.1, 16, 16]} />
+        <sphereGeometry args={[0.055, 16, 16]} />
         <meshStandardMaterial
           color={isHighlighted ? COLORS.accent : COLORS.accentLight}
           emissive={isHighlighted ? COLORS.purple : COLORS.accent}
@@ -324,14 +324,14 @@ function ServiceNode({
         center
         style={{
           pointerEvents: 'none',
-          transform: 'translateY(18px)',
+          transform: 'translateY(14px)',
           opacity: isHighlighted ? 1 : 0.75,
           transition: 'opacity 0.3s',
         }}
       >
         <span
           style={{
-            fontSize: isHighlighted ? '11px' : '10px',
+            fontSize: isHighlighted ? '12px' : '11px',
             fontWeight: 600,
             color: isHighlighted ? COLORS.accent : '#475569',
             whiteSpace: 'nowrap',
@@ -347,7 +347,7 @@ function ServiceNode({
   )
 }
 
-function Particles({ count = 50, revealed }: { count?: number; revealed: boolean }) {
+function Particles({ count = 35, revealed }: { count?: number; revealed: boolean }) {
   const ref = useRef<THREE.Points>(null)
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -379,7 +379,7 @@ function Particles({ count = 50, revealed }: { count?: number; revealed: boolean
 
   return (
     <points ref={ref} geometry={geometry}>
-      <pointsMaterial size={0.025} color={COLORS.accentLight} transparent opacity={0.25} />
+      <pointsMaterial size={0.018} color={COLORS.accentLight} transparent opacity={0.2} />
     </points>
   )
 }
@@ -447,7 +447,7 @@ export function GlobeScene({
         />
       ))}
 
-      <Particles count={50} revealed={revealed} />
+      <Particles count={35} revealed={revealed} />
     </>
   )
 }
@@ -461,7 +461,7 @@ export function GlobeCanvas(props: {
 }) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 4.8], fov: 45 }}
+      camera={{ position: [0, 0, 7.0], fov: 42 }}
       dpr={[1, 1.5]}
       gl={{ antialias: true, alpha: true }}
       style={{ background: 'transparent' }}

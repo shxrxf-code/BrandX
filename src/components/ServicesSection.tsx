@@ -192,8 +192,8 @@ export default function ServicesSection() {
       <div
         className="hidden md:block relative"
         style={{
-          height: '580px',
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.06) 0%, transparent 65%)',
+          height: '600px',
+          background: 'radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.05) 0%, transparent 60%)',
         }}
       >
         <motion.div

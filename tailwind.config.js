@@ -7,19 +7,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#FFFFFF',
-        foreground: '#0F172A',
-        secondary: '#F8FAFC',
-        muted: '#64748B',
-        border: '#E5E7EB',
+        background: '#050816',
+        foreground: '#F8FAFC',
+        secondary: '#0A0F1C',
+        surface: '#0F172A',
+        muted: '#94A3B8',
+        border: 'rgba(255,255,255,0.08)',
         accent: {
-          DEFAULT: '#2563EB',
-          light: '#60A5FA',
-          dark: '#1D4ED8',
+          DEFAULT: '#4F7CFF',
+          light: '#7BA1FF',
+          dark: '#3B5FE0',
         },
         cyan: {
-          DEFAULT: '#06B6D4',
-          light: '#22D3EE',
+          DEFAULT: '#00D4FF',
+          light: '#33DDFF',
         },
       },
       fontFamily: {
@@ -41,6 +42,11 @@ module.exports = {
         'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
         'fade-in-down': 'fadeInDown 0.6s ease-out forwards',
         'scale-in': 'scaleIn 0.5s ease-out forwards',
+        'aurora': 'aurora 8s ease-in-out infinite alternate',
+        'aurora-slow': 'aurora 12s ease-in-out infinite alternate',
+        'aurora-fast': 'aurora 5s ease-in-out infinite alternate',
+        'float': 'float 6s ease-in-out infinite',
+        'shimmer': 'shimmer 3s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -58,6 +64,19 @@ module.exports = {
         scaleIn: {
           '0%': { opacity: '0', transform: 'scale(0.95)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        aurora: {
+          '0%': { transform: 'translate(0, 0) scale(1)', opacity: '0.3' },
+          '50%': { transform: 'translate(30%, -20%) scale(1.2)', opacity: '0.5' },
+          '100%': { transform: 'translate(-20%, 10%) scale(0.9)', opacity: '0.4' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
       },
     },

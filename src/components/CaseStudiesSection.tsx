@@ -42,7 +42,10 @@ const projects = [
 export default function CaseStudiesSection() {
   return (
     <section className="relative py-20 md:py-28 overflow-hidden bg-background scroll-mt-24" id="work">
-      <div className="max-w-content mx-auto px-6 md:px-10">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 right-1/4 w-[400px] h-[400px] rounded-full bg-cyan/5 blur-[120px] animate-aurora" />
+      </div>
+      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -69,7 +72,7 @@ export default function CaseStudiesSection() {
             >
               <Link
                 href={`/work/${p.slug}`}
-                className="group block rounded-xl overflow-hidden border border-border bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                className="group block rounded-xl overflow-hidden glass-card"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Image
@@ -81,9 +84,9 @@ export default function CaseStudiesSection() {
                       e.currentTarget.style.display = 'none'
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute top-4 left-4">
-                    <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold text-foreground rounded-md">
+                    <span className="badge">
                       {p.tag}
                     </span>
                   </div>
@@ -95,7 +98,7 @@ export default function CaseStudiesSection() {
                   <p className="text-xs text-muted font-medium mb-2">
                     {p.type}
                   </p>
-                  <p className="text-sm text-muted leading-relaxed line-clamp-2">
+                  <p className="text-sm text-muted/70 leading-relaxed line-clamp-2">
                     {p.description}
                   </p>
                 </div>

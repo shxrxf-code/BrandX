@@ -126,7 +126,7 @@ function StageDot({
       <motion.span
         className="block rounded-full border-2"
         style={{
-          borderColor: isActive || isPast ? color : 'rgb(226, 232, 240)',
+          borderColor: isActive || isPast ? color : 'rgba(255,255,255,0.2)',
           backgroundColor: isPast ? color : isActive ? color : 'transparent',
         }}
         animate={{
@@ -153,7 +153,7 @@ function Timeline({
     <div className="shrink-0 w-44 pt-1">
       <div className="relative flex flex-col">
         {/* Background track */}
-        <div className="absolute left-[34px] top-3 bottom-3 w-0.5 bg-slate-100 rounded-full" />
+        <div className="absolute left-[34px] top-3 bottom-3 w-0.5 bg-white/10 rounded-full" />
 
         {/* Fill track */}
         <motion.div
@@ -208,7 +208,7 @@ function ContentPanel({ activeStage }: { activeStage: number }) {
           animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
           exit={{ opacity: 0, y: -12, scale: 0.97, filter: 'blur(2px)' }}
           transition={{ duration: 0.55, ease: easeLinear }}
-          className="bg-white rounded-2xl shadow-sm border border-border/50 p-8 md:p-10"
+          className="glass-strong rounded-2xl p-8 md:p-10"
           style={{
             borderColor: stage.borderColor,
           }}
@@ -283,19 +283,19 @@ function ContentPanel({ activeStage }: { activeStage: number }) {
               {stage.number} / 06
             </span>
             <div className="flex gap-1.5">
-              {stages.map((_, i) => (
-                <span
-                  key={i}
-                  className="block w-1.5 h-1.5 rounded-full transition-all duration-500"
-                  style={{
-                    backgroundColor:
-                      i === activeStage
-                        ? stage.color
-                        : i < activeStage
-                          ? 'rgb(203, 213, 225)'
-                          : 'rgb(226, 232, 240)',
-                  }}
-                />
+          {stages.map((_, i) => (
+                  <span
+                    key={i}
+                    className="block w-1.5 h-1.5 rounded-full transition-all duration-500"
+                    style={{
+                      backgroundColor:
+                        i === activeStage
+                          ? stage.color
+                          : i < activeStage
+                            ? 'rgba(255,255,255,0.3)'
+                            : 'rgba(255,255,255,0.12)',
+                    }}
+                  />
               ))}
             </div>
           </motion.div>
@@ -317,7 +317,7 @@ function MobileView({ activeStage, scrollProgress }: { activeStage: number; scro
             className="h-1 rounded-full flex-1 transition-all duration-500"
             style={{
               backgroundColor:
-                i <= activeStage ? stage.color : 'rgb(226, 232, 240)',
+                i <= activeStage ? stage.color : 'rgba(255,255,255,0.15)',
             }}
           />
         ))}
@@ -330,7 +330,7 @@ function MobileView({ activeStage, scrollProgress }: { activeStage: number; scro
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -12, scale: 0.97 }}
           transition={{ duration: 0.45, ease: easeLinear }}
-          className="bg-white rounded-2xl border border-border/50 p-6"
+          className="glass-card rounded-2xl p-6"
           style={{ borderColor: stage.borderColor }}
         >
           <div className="flex items-center gap-3 mb-4">

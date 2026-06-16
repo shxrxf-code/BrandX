@@ -9,8 +9,12 @@ export const metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <main className="pt-32">
-        <section className="px-6 md:px-10">
+      <main className="pt-32 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] rounded-full bg-purple-600/5 blur-[120px] animate-aurora-slow" />
+          <div className="absolute -bottom-40 right-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[100px] animate-aurora" style={{ animationDelay: '-5s' }} />
+        </div>
+        <section className="px-6 md:px-10 relative z-10">
           <div className="max-w-content mx-auto">
             <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-4">Services</span>
             <h1 className="text-heading-1 font-bold tracking-tight max-w-text">
@@ -26,7 +30,7 @@ export default function ServicesPage() {
           <div className="max-w-content mx-auto">
             <div className="grid md:grid-cols-2 gap-6">
               {services.map((service, i) => (
-                <div key={service.id} className="rounded-xl border border-border bg-white p-8">
+                <div key={service.id} className="glass-card rounded-xl p-8">
                   <span className="text-xs text-muted font-semibold tracking-wider uppercase mb-2 block">0{i + 1}</span>
                   <h2 className="text-xl font-display font-bold tracking-tight mb-3">{service.title}</h2>
                   <p className="text-sm text-muted leading-relaxed mb-6">{service.description}</p>

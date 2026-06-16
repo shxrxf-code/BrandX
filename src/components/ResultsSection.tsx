@@ -59,7 +59,7 @@ export default function ResultsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="p-6 rounded-xl border border-border bg-white"
+              className="glass-card rounded-xl p-6"
             >
               <div className="flex items-baseline gap-2 mb-2">
                 <span className="text-2xl font-display font-bold text-accent">{s.value}</span>

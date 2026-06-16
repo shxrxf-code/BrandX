@@ -29,8 +29,12 @@ export default async function CaseStudyPage({
 
   return (
     <>
-      <main className="pt-32">
-        <section className="px-6 md:px-10">
+      <main className="pt-32 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
+          <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-cyan/5 blur-[100px] animate-aurora" style={{ animationDelay: '-3s' }} />
+        </div>
+        <section className="px-6 md:px-10 relative z-10">
           <div className="max-w-content mx-auto">
             <Link
               href="/work"
@@ -95,7 +99,7 @@ export default async function CaseStudyPage({
             <h2 className="text-heading-2 font-bold tracking-tight mb-4">Want to work together?</h2>
             <Link
               href="/contact"
-              className="inline-flex px-6 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200"
+              className="inline-flex px-6 py-3 btn-gradient text-sm"
             >
               Start Your Project
             </Link>

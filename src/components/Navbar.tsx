@@ -80,13 +80,13 @@ export default function Navbar() {
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+          'fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 rounded-2xl',
           scrolled
-            ? 'py-3 bg-white/90 backdrop-blur-md border-b border-border'
-            : 'py-5 bg-transparent'
+            ? 'glass-strong shadow-lg shadow-black/20 w-[calc(100%-2rem)] md:w-auto'
+            : 'bg-transparent border-transparent w-[calc(100%-2rem)] md:w-auto'
         )}
       >
-        <div className="max-w-content mx-auto px-6 md:px-10 flex items-center justify-between">
+        <div className="flex items-center justify-between px-5 py-3 md:px-6 md:py-3">
           <a href="/" className="relative group">
             <span className="text-xl font-display font-bold tracking-tight text-foreground">
               Brandex
@@ -94,7 +94,7 @@ export default function Navbar() {
             </span>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-8 ml-12">
             {navItems.map((item) => {
               const sectionId = item.href.replace('#', '')
               const isActive = isHome && activeSection === sectionId
@@ -124,7 +124,7 @@ export default function Navbar() {
           <a
             href="#contact"
             onClick={(e) => handleNavClick(e, '#contact')}
-            className="hidden md:inline-flex items-center px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200"
+            className="hidden md:inline-flex items-center px-5 py-2.5 btn-gradient text-sm"
           >
             Start Your Project
           </a>
@@ -147,7 +147,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[100] bg-white flex flex-col"
+            className="fixed inset-0 z-[100] bg-background flex flex-col"
           >
             <div className="flex justify-end p-6">
               <button
@@ -187,7 +187,7 @@ export default function Navbar() {
                 <a
                   href="#contact"
                   onClick={(e) => handleNavClick(e, '#contact')}
-                  className="inline-flex px-8 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200"
+                  className="inline-flex px-8 py-3 btn-gradient text-sm"
                 >
                   Start Your Project
                 </a>

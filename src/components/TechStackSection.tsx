@@ -6,28 +6,28 @@ const techGroups = [
   {
     category: 'Frontend',
     items: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
-    color: 'bg-blue-50 border-blue-200 text-accent',
+    color: 'bg-accent/10 border-accent/20 text-accent',
   },
   {
     category: 'Mobile',
     items: ['Flutter', 'React Native'],
-    color: 'bg-cyan-50 border-cyan-200 text-cyan',
+    color: 'bg-cyan/10 border-cyan/20 text-cyan',
   },
   {
     category: 'Backend',
     items: ['Node.js', 'Python', 'PostgreSQL', 'Redis'],
-    color: 'bg-purple-50 border-purple-200 text-purple-600',
+    color: 'bg-[#8B5CF6]/10 border-[#8B5CF6]/20 text-[#8B5CF6]',
   },
   {
     category: 'AI & Cloud',
     items: ['OpenAI', 'AWS', 'Vercel', 'Docker'],
-    color: 'bg-orange-50 border-orange-200 text-orange-600',
+    color: 'bg-[#F59E0B]/10 border-[#F59E0B]/20 text-[#F59E0B]',
   },
 ]
 
 export default function TechStackSection() {
   return (
-    <section className="relative bg-secondary py-20 md:py-28 overflow-hidden">
+    <section className="relative bg-surface py-20 md:py-28 overflow-hidden">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -52,7 +52,7 @@ export default function TechStackSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="rounded-xl border border-border bg-white p-6"
+              className="glass-card rounded-xl p-6"
             >
               <div className={`inline-block px-2.5 py-1 rounded-md text-[10px] font-semibold uppercase tracking-wider mb-4 ${group.color}`}>
                 {group.category}

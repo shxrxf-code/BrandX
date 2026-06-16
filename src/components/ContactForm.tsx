@@ -38,8 +38,8 @@ export default function ContactForm() {
 
   if (status === 'sent') {
     return (
-      <div className="rounded-xl border border-border bg-white p-8">
-        <h3 className="text-lg font-semibold mb-2">Message sent</h3>
+      <div className="glass-strong rounded-xl p-8">
+        <h3 className="text-lg font-semibold mb-2 text-foreground">Message sent</h3>
         <p className="text-sm text-muted">
           Thanks for reaching out. We will get back to you within two business days.
         </p>
@@ -65,7 +65,7 @@ export default function ContactForm() {
           name="message"
           rows={5}
           required
-          className="w-full bg-white border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent transition-colors duration-200 resize-none text-sm"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(79,124,255,0.1)] transition-all duration-200 resize-none text-sm"
           placeholder="Tell us about your project, timeline, and goals."
         />
       </div>
@@ -75,7 +75,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="px-6 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200 disabled:opacity-50"
+        className="px-6 py-3 btn-gradient text-sm disabled:opacity-50"
       >
         {status === 'submitting' ? 'Sending…' : 'Send Message'}
       </button>
@@ -105,7 +105,7 @@ function Field({
         name={name}
         type={type}
         required={required}
-        className="w-full bg-white border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent transition-colors duration-200 text-sm"
+        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(79,124,255,0.1)] transition-all duration-200 text-sm"
       />
     </div>
   )

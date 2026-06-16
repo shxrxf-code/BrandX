@@ -11,8 +11,12 @@ export const metadata = {
 export default function WorkPage() {
   return (
     <>
-      <main className="pt-32">
-        <section className="px-6 md:px-10">
+      <main className="pt-32 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
+          <div className="absolute -bottom-40 left-1/4 w-[300px] h-[300px] rounded-full bg-cyan/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
+        </div>
+        <section className="px-6 md:px-10 relative z-10">
           <div className="max-w-content mx-auto">
             <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-4">Work</span>
             <h1 className="text-heading-1 font-bold tracking-tight max-w-text">
@@ -30,7 +34,7 @@ export default function WorkPage() {
               <Link
                 key={project.slug}
                 href={`/work/${project.slug}`}
-                className="group block rounded-xl overflow-hidden border border-border bg-white hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                className="group block rounded-xl overflow-hidden glass-card"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
                   <Image

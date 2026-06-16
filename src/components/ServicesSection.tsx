@@ -116,13 +116,13 @@ function ServiceCard({
       <motion.div
         animate={{ y: hovered ? -4 : 0 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="relative cursor-default rounded-2xl border border-border bg-white overflow-hidden"
+        className="relative cursor-default rounded-2xl overflow-hidden glass-card"
       >
         <div
           className="absolute inset-0 rounded-2xl transition-opacity duration-[400ms] ease-out pointer-events-none"
           style={{
             opacity: hovered ? 1 : 0,
-            background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(147, 51, 234, 0.03))',
+            background: 'linear-gradient(135deg, rgba(79,124,255,0.08), rgba(0,212,255,0.04))',
           }}
         />
 
@@ -133,7 +133,7 @@ function ServiceCard({
               transition={{ type: 'spring', stiffness: 250, damping: 14 }}
               className={`
                 w-10 h-10 rounded-xl flex items-center justify-center
-                ${hovered ? 'bg-accent text-white' : 'bg-accent/5 text-accent'}
+                ${hovered ? 'bg-accent/20 text-accent' : 'bg-white/5 text-muted'}
               `}
             >
               {service.icon}
@@ -150,7 +150,7 @@ function ServiceCard({
 
           <div className="flex items-center gap-1 text-sm font-medium">
             <motion.span
-              animate={{ color: hovered ? '#2563EB' : '#6B7280' }}
+              animate={{ color: hovered ? '#4F7CFF' : '#94A3B8' }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
               Learn More
@@ -159,7 +159,7 @@ function ServiceCard({
               width="14" height="14" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" strokeWidth="2"
               strokeLinecap="round" strokeLinejoin="round"
-              animate={{ x: hovered ? 12 : 0, color: hovered ? '#2563EB' : '#6B7280' }}
+              animate={{ x: hovered ? 12 : 0, color: hovered ? '#4F7CFF' : '#94A3B8' }}
               transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1 }}
             >
               <path d="M5 12h14M12 5l7 7-7 7" />
@@ -180,7 +180,7 @@ function ServiceCard({
           className="overflow-hidden"
         >
           <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0">
-            <div className="border-t border-border/50 pt-4">
+            <div className="border-t border-white/10 pt-4">
               <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
                 What We Deliver
               </span>
@@ -195,7 +195,7 @@ function ServiceCard({
                     className="flex items-center gap-3"
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                    <span className="text-sm text-foreground">{d}</span>
+                    <span className="text-sm text-muted">{d}</span>
                   </motion.div>
                 ))}
               </div>
@@ -210,7 +210,10 @@ function ServiceCard({
 export default function ServicesSection() {
   return (
     <section className="relative py-20 md:py-28 overflow-hidden bg-background scroll-mt-24" id="services">
-      <div className="max-w-content mx-auto px-6 md:px-10">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] rounded-full bg-accent/5 blur-[100px] animate-aurora-slow" />
+      </div>
+      <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
         <div className="mb-12 md:mb-16">
           <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-3">
             Services

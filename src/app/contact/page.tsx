@@ -9,8 +9,12 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <>
-      <main className="pt-32">
-        <section className="px-6 md:px-10">
+      <main className="pt-32 relative">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
+          <div className="absolute -bottom-40 right-1/4 w-[300px] h-[300px] rounded-full bg-cyan/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
+        </div>
+        <section className="px-6 md:px-10 relative z-10">
           <div className="max-w-content mx-auto">
             <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-4">Contact</span>
             <h1 className="text-heading-1 font-bold tracking-tight max-w-text">

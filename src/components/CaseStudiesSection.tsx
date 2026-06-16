@@ -83,7 +83,7 @@ export default function CaseStudiesSection() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                   <div className="absolute top-4 left-4">
-                    <span className="inline-block px-2.5 py-1 bg-white/90 backdrop-blur-sm text-[10px] font-medium text-foreground rounded-md">
+                    <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold text-foreground rounded-md">
                       {p.tag}
                     </span>
                   </div>

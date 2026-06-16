@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion'
 
 const services = [
   {
@@ -113,6 +113,9 @@ function ServiceCard({
   const smoothX = useSpring(mouseX, { stiffness: 300, damping: 25 })
   const smoothY = useSpring(mouseY, { stiffness: 300, damping: 25 })
 
+  const rotateX = useTransform(smoothY, [-1, 1], [4, -4])
+  const rotateY = useTransform(smoothX, [-1, 1], [-4, 4])
+
   const iconX = useTransform(smoothX, [-1, 1], [-8, 8])
   const iconY = useTransform(smoothY, [-1, 1], [-8, 8])
   const titleX = useTransform(smoothX, [-1, 1], [-5, 5])
@@ -121,6 +124,10 @@ function ServiceCard({
   const descY = useTransform(smoothY, [-1, 1], [-3, 3])
   const arrowX = useTransform(smoothX, [-1, 1], [-10, 10])
   const arrowY = useTransform(smoothY, [-1, 1], [-10, 10])
+
+  const spotlightX = useTransform(smoothX, [-1, 1], [0, 100])
+  const spotlightY = useTransform(smoothY, [-1, 1], [0, 100])
+  const spotlightBg = useMotionTemplate`radial-gradient(circle at ${spotlightX}% ${spotlightY}%, rgba(59,130,246,0.12), transparent 60%)`
 
   const handleMouseMove = (e: React.MouseEvent) => {
     const rect = cardRef.current?.getBoundingClientRect()
@@ -145,24 +152,35 @@ function ServiceCard({
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        style={{ perspective: 1000 }}
       >
         <motion.div
           layout
           onClick={() => setExpanded(!expanded)}
+          whileHover={{ y: -4 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           style={{
-            transition: 'transform 0.25s ease',
+            rotateX,
+            rotateY,
             willChange: 'transform',
           }}
           className={`
             relative cursor-pointer rounded-2xl border overflow-hidden
-            hover:-translate-y-1
             ${expanded
               ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02]'
-              : 'border-border bg-white'
+              : 'border-border bg-white group-hover:border-accent/30'
             }
           `}
         >
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out" />
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileHover={{ opacity: 1 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="absolute inset-0 rounded-2xl pointer-events-none z-10"
+            style={{ background: spotlightBg }}
+          />
+
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out z-20" />
 
           <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/[0.06] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[400ms] ease-out" />
@@ -177,7 +195,7 @@ function ServiceCard({
             </div>
           )}
 
-          <div className="p-5 sm:p-6">
+          <div className="relative p-5 sm:p-6">
             <div className="flex items-start justify-between mb-3">
               <motion.div
                 style={{ x: iconX, y: iconY }}

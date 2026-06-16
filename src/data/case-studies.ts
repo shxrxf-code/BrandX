@@ -40,7 +40,7 @@ export const caseStudies: CaseStudy[] = [
     type: 'Personal Branding',
     tag: 'Education & Branding',
     description: 'Modern Montessori school website designed to showcase admissions, programs, learning philosophy, events, and parent engagement.',
-    cover: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=1600&q=85&auto=format',
+    cover: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=1600&q=85&auto=format',
     challenge: 'The school needed a premium digital presence that reflected its educational philosophy, showcased its modern campus, and made the admissions process engaging for prospective parents.',
     outcome: 'A brand-forward school website with professional campus photography, an intuitive admissions dashboard, and a cohesive brand identity that sets the institution apart.',
   },

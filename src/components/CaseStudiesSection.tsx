@@ -27,7 +27,7 @@ const projects = [
     type: 'Personal Branding',
     description: 'Modern Montessori school website designed to showcase admissions, programs, learning philosophy, events, and parent engagement.',
     tag: 'Education & Branding',
-    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=800&q=80&auto=format',
+    image: 'https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=80&auto=format',
   },
   {
     slug: 'ravelon',
@@ -77,6 +77,9 @@ export default function CaseStudiesSection() {
                     alt={p.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none'
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
                   <div className="absolute top-4 left-4">

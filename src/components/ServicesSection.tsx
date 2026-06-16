@@ -1,6 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+
+const iconAnimations: Record<string, Record<string, number[]>> = {
+  'web-development': { x: [0, -2, 2, 0] },
+  'ui-ux-design': { rotate: [0, 6, -6, 0], scale: [1, 1.08, 1] },
+  'brand-identity': { y: [0, -4, 0] },
+  seo: { y: [0, -5, 0] },
+  'digital-marketing': { y: [0, -3, 0], scaleY: [1, 1.1, 1] },
+  'ai-solutions': { scale: [1, 1.12, 1] },
+}
 
 const services = [
   {
@@ -81,106 +91,129 @@ const services = [
   },
 ]
 
+const featureVariants = {
+  hidden: { opacity: 0, y: 6 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.15 + i * 0.06, duration: 0.25, ease: 'easeOut' },
+  }),
+}
+
 function ServiceCard({
   service,
 }: {
   service: (typeof services)[0]
 }) {
-  const [expanded, setExpanded] = useState(false)
+  const [hovered, setHovered] = useState(false)
   const isFeatured = service.id === 'ai-solutions'
-
-  const handleClick = () => setExpanded(!expanded)
 
   return (
     <div
-      onClick={handleClick}
-      className={`
-        relative cursor-pointer rounded-2xl border overflow-hidden
-        ${expanded
-          ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02]'
-          : 'border-border bg-white'
-        }
-      `}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="group relative"
     >
-      {isFeatured && !expanded && (
+      <motion.div
+        animate={{ y: hovered ? -4 : 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="relative cursor-default rounded-2xl border border-border bg-white overflow-hidden"
+      >
         <div
-          style={{ top: 16, right: 16 }}
-          className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase"
-        >
-          Popular
-        </div>
-      )}
+          className="absolute inset-0 rounded-2xl transition-opacity duration-[400ms] ease-out pointer-events-none"
+          style={{
+            opacity: hovered ? 1 : 0,
+            background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(147, 51, 234, 0.03))',
+          }}
+        />
 
-      <div className="p-5 sm:p-6">
-        <div className="flex items-start justify-between mb-3">
-          <div
-            className={`
-              w-10 h-10 rounded-xl flex items-center justify-center
-              ${expanded
-                ? 'bg-accent text-white'
-                : 'bg-accent/5 text-accent'
-              }
-            `}
-          >
-            {service.icon}
-          </div>
-          {expanded && (
-            <button
-              onClick={(e) => { e.stopPropagation(); setExpanded(false) }}
-              className="w-7 h-7 flex items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-black/5 -mr-1 -mt-1"
+        {isFeatured && (
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: hovered ? 1 : 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            style={{ transformOrigin: 'left' }}
+            className="absolute top-0 left-0 right-0 h-[2px] bg-accent z-10"
+          />
+        )}
+
+        <div className="p-5 sm:p-6">
+          <div className="flex items-start justify-between mb-3">
+            <motion.div
+              animate={hovered ? iconAnimations[service.id] : {}}
+              transition={{ type: 'spring', stiffness: 250, damping: 14 }}
+              className={`
+                w-10 h-10 rounded-xl flex items-center justify-center
+                ${hovered ? 'bg-accent text-white' : 'bg-accent/5 text-accent'}
+              `}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-          )}
-        </div>
+              {service.icon}
+            </motion.div>
+          </div>
 
-        <h3 className="text-base sm:text-lg font-display font-bold tracking-tight text-foreground mb-1.5">
-          {service.title}
-        </h3>
+          <h3 className="text-base sm:text-lg font-display font-bold tracking-tight text-foreground mb-1.5">
+            {service.title}
+          </h3>
 
-        <p className={`text-sm text-muted leading-relaxed mb-3 ${!expanded ? 'line-clamp-2' : ''}`}>
-          {service.description}
-        </p>
+          <p className="text-sm text-muted leading-relaxed mb-3 line-clamp-2">
+            {service.description}
+          </p>
 
-        {!expanded && (
           <div className="flex items-center gap-1 text-sm font-medium">
-            <span>Learn More</span>
-            <svg
+            <motion.span
+              animate={{ color: hovered ? '#2563EB' : '#6B7280' }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+            >
+              Learn More
+            </motion.span>
+            <motion.svg
               width="14" height="14" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" strokeWidth="2"
               strokeLinecap="round" strokeLinejoin="round"
+              animate={{ x: hovered ? 12 : 0, color: hovered ? '#2563EB' : '#6B7280' }}
+              transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1 }}
             >
               <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </div>
-        )}
-      </div>
-
-      {expanded && (
-        <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0 border-t border-border/50 overflow-hidden">
-          <div className="pt-4">
-            <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
-              Key Deliverables
-            </span>
-            <div className="space-y-2 mb-5">
-              {service.deliverables.map((d) => (
-                <div key={d} className="flex items-center gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                  <span className="text-sm text-foreground">{d}</span>
-                </div>
-              ))}
-            </div>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center w-full py-2.5 px-4 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors duration-200"
-            >
-              Start Project
-            </a>
+            </motion.svg>
           </div>
         </div>
-      )}
+
+        <motion.div
+          initial={false}
+          animate={{
+            height: hovered ? 'auto' : 0,
+            opacity: hovered ? 1 : 0,
+          }}
+          transition={{
+            height: { duration: 0.35, ease: 'easeOut' },
+            opacity: { duration: 0.3, ease: 'easeOut', delay: hovered ? 0.1 : 0 },
+          }}
+          className="overflow-hidden"
+        >
+          <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0">
+            <div className="border-t border-border/50 pt-4">
+              <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
+                What We Deliver
+              </span>
+              <div className="space-y-2">
+                {service.deliverables.map((d, i) => (
+                  <motion.div
+                    key={d}
+                    custom={i}
+                    variants={featureVariants}
+                    initial="hidden"
+                    animate={hovered ? 'visible' : 'hidden'}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                    <span className="text-sm text-foreground">{d}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
     </div>
   )
 }

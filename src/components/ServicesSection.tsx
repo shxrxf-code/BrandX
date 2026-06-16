@@ -1,16 +1,7 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion'
-
-const iconHover = {
-  'web-development': { rotate: 10 },
-  'ui-ux-design': { scale: 1.2 },
-  'brand-identity': { scale: [1, 1.12, 1] },
-  seo: { y: -3 },
-  'digital-marketing': { rotate: 15 },
-  'ai-solutions': { scale: 1.15 },
-}
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const services = [
   {
@@ -114,186 +105,133 @@ function ServiceCard({
   service: (typeof services)[0]
 }) {
   const [expanded, setExpanded] = useState(false)
-  const [hovered, setHovered] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
   const isFeatured = service.id === 'ai-solutions'
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const springX = useSpring(mouseX, { stiffness: 200, damping: 18 })
-  const springY = useSpring(mouseY, { stiffness: 200, damping: 18 })
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = cardRef.current?.getBoundingClientRect()
-    if (!rect) return
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    const dx = (e.clientX - centerX) / (rect.width / 2) * 8
-    const dy = (e.clientY - centerY) / (rect.height / 2) * 8
-    mouseX.set(dx)
-    mouseY.set(dy)
-  }
-
-  const handleMouseLeave = () => {
-    mouseX.set(0)
-    mouseY.set(0)
-    setHovered(false)
-  }
 
   return (
     <motion.div
       variants={cardVariants}
       className="group relative"
     >
-      <div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={handleMouseLeave}
-        className="relative"
-        style={{ perspective: 1000 }}
+      <motion.div
+        layout
+        onClick={() => setExpanded(!expanded)}
+        style={{
+          transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
+          willChange: 'transform',
+        }}
+        className={`
+          relative cursor-pointer rounded-2xl border overflow-hidden
+          hover:-translate-y-2 hover:scale-[1.02]
+          ${expanded
+            ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02] shadow-lg shadow-accent/5'
+            : 'border-border bg-white hover:border-accent/30 hover:shadow-[0_20px_50px_-12px_rgba(37,99,235,0.15),0_8px_24px_-6px_rgba(0,0,0,0.06)]'
+          }
+        `}
       >
-        <motion.div
-          style={{ x: springX, y: springY }}
-          layout
-          onClick={() => setExpanded(!expanded)}
-          className={`
-            relative cursor-pointer rounded-2xl border transition-colors duration-300 overflow-hidden
-            ${expanded
-              ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02] shadow-lg shadow-accent/5'
-              : 'border-border bg-white'
-            }
-          `}
-          whileHover={expanded ? {} : {
-            y: -10,
-            scale: 1.02,
-            boxShadow: '0 20px 50px -12px rgba(37, 99, 235, 0.15), 0 8px 24px -6px rgba(0, 0, 0, 0.06)',
-          }}
-          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-          onHoverStart={(e) => {
-            if (expanded) return
-            const el = e.currentTarget as HTMLElement
-            el.animate([
-              { rotate: '0deg', offset: 0 },
-              { rotate: '2deg', offset: 0.25 },
-              { rotate: '-2deg', offset: 0.5 },
-              { rotate: '1deg', offset: 0.75 },
-              { rotate: '0deg', offset: 1 },
-            ], { duration: 400, easing: 'ease-out', fill: 'forwards' })
-          }}
-        >
-          <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+        </div>
+
+        {isFeatured && !expanded && (
+          <div
+            style={{ top: 16, right: 16 }}
+            className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase group-hover:animate-pulse"
+          >
+            Popular
+          </div>
+        )}
+
+        <div className="p-5 sm:p-6">
+          <div className="flex items-start justify-between mb-3">
+            <div
+              className={`
+                w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-250 ease-out
+                group-hover:scale-110
+                ${expanded
+                  ? 'bg-accent text-white shadow-md shadow-accent/20'
+                  : 'bg-accent/5 text-accent group-hover:bg-accent/10'
+                }
+              `}
+            >
+              {service.icon}
+            </div>
+            {expanded && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setExpanded(false) }}
+                className="w-7 h-7 flex items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-black/5 transition-colors duration-200 -mr-1 -mt-1"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
 
-          {isFeatured && hovered && !expanded && (
-            <motion.div
-              initial={{ scale: 1 }}
-              animate={{ scale: [1, 1.06, 1] }}
-              transition={{ duration: 0.5, ease: 'easeInOut' }}
-              style={{ top: 16, right: 16 }}
-              className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase"
+          <h3 className="text-base sm:text-lg font-display font-bold tracking-tight text-foreground mb-1.5">
+            {service.title}
+          </h3>
+
+          <p className={`text-sm text-muted leading-relaxed mb-3 ${!expanded ? 'line-clamp-2' : ''}`}>
+            {service.description}
+          </p>
+
+          {!expanded && (
+            <div
+              style={{
+                transition: 'color 0.25s ease',
+              }}
+              className="flex items-center gap-1 text-sm font-medium group-hover:text-[#2563EB]"
             >
-              Popular
+              <span>Learn More</span>
+              <svg
+                width="14" height="14" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round"
+                style={{
+                  transition: 'transform 0.25s ease',
+                }}
+                className="group-hover:translate-x-2"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </div>
+          )}
+        </div>
+
+        <AnimatePresence initial={false}>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0 border-t border-border/50">
+                <div className="pt-4">
+                  <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
+                    Key Deliverables
+                  </span>
+                  <div className="space-y-2 mb-5">
+                    {service.deliverables.map((d) => (
+                      <div key={d} className="flex items-center gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                        <span className="text-sm text-foreground">{d}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href="/contact"
+                    className="inline-flex items-center justify-center w-full py-2.5 px-4 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors duration-200"
+                  >
+                    Start Project
+                  </a>
+                </div>
+              </div>
             </motion.div>
           )}
-          {isFeatured && !hovered && !expanded && (
-            <div style={{ top: 16, right: 16 }} className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase">
-              Popular
-            </div>
-          )}
-
-          <div className="p-5 sm:p-6">
-            <div className="flex items-start justify-between mb-3">
-              <motion.div
-                whileHover={iconHover[service.id as keyof typeof iconHover]}
-                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                className={`
-                  w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300
-                  ${expanded
-                    ? 'bg-accent text-white shadow-md shadow-accent/20'
-                    : 'bg-accent/5 text-accent group-hover:bg-accent/10'
-                  }
-                `}
-              >
-                {service.icon}
-              </motion.div>
-              {expanded && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); setExpanded(false) }}
-                  className="w-7 h-7 flex items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-black/5 transition-all duration-200 -mr-1 -mt-1"
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
-
-            <h3 className="text-base sm:text-lg font-display font-bold tracking-tight text-foreground mb-1.5">
-              {service.title}
-            </h3>
-
-            <p className={`text-sm text-muted leading-relaxed mb-3 ${!expanded ? 'line-clamp-2' : ''}`}>
-              {service.description}
-            </p>
-
-            {!expanded && (
-              <motion.div
-                className="flex items-center gap-1 text-sm font-medium"
-                initial={false}
-                whileHover={{ color: '#2563EB' }}
-                transition={{ duration: 0.2 }}
-              >
-                <span>Learn More</span>
-                <motion.svg
-                  width="14" height="14" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" strokeWidth="2"
-                  strokeLinecap="round" strokeLinejoin="round"
-                  whileHover={{ x: 8 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </motion.svg>
-              </motion.div>
-            )}
-          </div>
-
-          <AnimatePresence initial={false}>
-            {expanded && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                className="overflow-hidden"
-              >
-                <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0 border-t border-border/50">
-                  <div className="pt-4">
-                    <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
-                      Key Deliverables
-                    </span>
-                    <div className="space-y-2 mb-5">
-                      {service.deliverables.map((d) => (
-                        <div key={d} className="flex items-center gap-3">
-                          <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                          <span className="text-sm text-foreground">{d}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <a
-                      href="/contact"
-                      className="inline-flex items-center justify-center w-full py-2.5 px-4 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors duration-200"
-                    >
-                      Start Project
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </div>
+        </AnimatePresence>
+      </motion.div>
     </motion.div>
   )
 }

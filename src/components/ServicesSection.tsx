@@ -116,20 +116,22 @@ function ServiceCard({
         layout
         onClick={() => setExpanded(!expanded)}
         style={{
-          transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
+          transition: 'transform 0.25s ease',
           willChange: 'transform',
         }}
         className={`
           relative cursor-pointer rounded-2xl border overflow-hidden
-          hover:-translate-y-2 hover:scale-[1.02]
+          hover:-translate-y-1
           ${expanded
-            ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02] shadow-lg shadow-accent/5'
-            : 'border-border bg-white hover:border-accent/30 hover:shadow-[0_20px_50px_-12px_rgba(37,99,235,0.15),0_8px_24px_-6px_rgba(0,0,0,0.06)]'
+            ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02]'
+            : 'border-border bg-white'
           }
         `}
       >
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out" />
+
         <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/[0.04] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/[0.06] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-[400ms] ease-out" />
         </div>
 
         {isFeatured && !expanded && (
@@ -145,10 +147,10 @@ function ServiceCard({
           <div className="flex items-start justify-between mb-3">
             <div
               className={`
-                w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-250 ease-out
-                group-hover:scale-110
+                w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-250 ease-out
+                group-hover:rotate-6
                 ${expanded
-                  ? 'bg-accent text-white shadow-md shadow-accent/20'
+                  ? 'bg-accent text-white'
                   : 'bg-accent/5 text-accent group-hover:bg-accent/10'
                 }
               `}
@@ -180,7 +182,7 @@ function ServiceCard({
               style={{
                 transition: 'color 0.25s ease',
               }}
-              className="flex items-center gap-1 text-sm font-medium group-hover:text-[#2563EB]"
+              className="flex items-center gap-1 text-sm font-medium group-hover:text-accent"
             >
               <span>Learn More</span>
               <svg

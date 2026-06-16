@@ -1,118 +1,220 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { GlobeCanvas, MobileGlobeCanvas, services } from './ecosystem/GlobeScene'
-import { ServiceModal } from './ecosystem/ServiceModal'
-import { BottomSheet } from './ecosystem/BottomSheet'
 
-function SvgFallback() {
-  const cx = 300
-  const cy = 275
-  const r = 170
+const services = [
+  {
+    id: 'web-development',
+    title: 'Web Development',
+    description: 'Custom web applications, headless CMS architectures, and scalable frontends built with modern frameworks like Next.js and React.',
+    deliverables: ['Custom Development', 'Headless CMS', 'API Integration', 'Performance Optimization'],
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+      </svg>
+    ),
+  },
+  {
+    id: 'ui-ux-design',
+    title: 'UI/UX Design',
+    description: 'Research-driven design systems, interactive prototypes, and intuitive user flows crafted for maximum conversion.',
+    deliverables: ['User Research', 'Wireframing', 'Visual Design', 'Prototyping'],
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
+      </svg>
+    ),
+  },
+  {
+    id: 'brand-identity',
+    title: 'Brand Identity',
+    description: 'Strategic brand systems including visual identity, typography, and comprehensive guidelines that communicate unique value.',
+    deliverables: ['Brand Strategy', 'Visual Identity', 'Logo & Wordmark', 'Brand Guidelines'],
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
+      </svg>
+    ),
+  },
+  {
+    id: 'seo',
+    title: 'SEO',
+    description: 'Technical SEO audits, content strategy, and performance engineering for sustainable organic growth.',
+    deliverables: ['Technical Audit', 'Keyword Strategy', 'Content Production', 'Authority Building'],
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="4" y1="20" x2="20" y2="20" />
+        <polyline points="4 12 8 8 12 12 20 4" />
+        <polyline points="16 4 20 4 20 8" />
+      </svg>
+    ),
+  },
+  {
+    id: 'digital-marketing',
+    title: 'Digital Marketing',
+    description: 'Paid media and lifecycle programs that turn traffic into revenue with measurable attribution.',
+    deliverables: ['Paid Search & Social', 'Lifecycle & CRM', 'Analytics & Attribution', 'Creative Production'],
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'ai-solutions',
+    title: 'AI Solutions',
+    description: 'Custom AI agents, LLM-powered features, and intelligent automation that transform business operations.',
+    deliverables: ['AI Strategy', 'Custom Agents', 'LLM Integration', 'Process Automation'],
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a4 4 0 014 4c0 2-2 3-2 5v1h-4v-1c0-2-2-3-2-5a4 4 0 014-4z" />
+        <path d="M12 17v3" />
+        <path d="M8 21h8" />
+      </svg>
+    ),
+  },
+]
 
-  const nodeAngles = [0, 1, 2, 3, 4, 5].map((i) => {
-    const theta = 2 * Math.PI * i / ((1 + Math.sqrt(5)) / 2)
-    const phi = Math.acos(1 - 2 * (i + 0.5) / 6)
-    const x = cx + r * Math.sin(phi) * Math.cos(theta)
-    const y = cy + r * Math.cos(phi)
-    return { x, y, label: services[i].title }
-  })
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 },
+  },
+}
 
-  const connections: [number, number][] = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [0, 2], [1, 3], [2, 4], [3, 5]]
+const cardVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+  },
+}
+
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: (typeof services)[0]
+  index: number
+}) {
+  const [expanded, setExpanded] = useState(false)
+  const isFeatured = service.id === 'ai-solutions'
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <svg viewBox="0 0 600 550" className="w-full max-w-lg h-auto">
-        <defs>
-          <radialGradient id="glow-bg" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#2563EB" stopOpacity="0.08" />
-            <stop offset="100%" stopColor="#2563EB" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <ellipse cx={cx} cy={cy} rx={r * 1.1} ry={r * 1.1} fill="url(#glow-bg)" />
-        {Array.from({ length: 10 }, (_, i) => {
-          const rr = r * (i + 1) / 10
-          return (
-            <ellipse
-              key={`lat-${i}`}
-              cx={cx}
-              cy={cy}
-              rx={rr}
-              ry={rr * 0.45}
-              fill="none"
-              stroke="#2563EB"
-              strokeWidth="0.5"
-              opacity={0.25}
-            />
-          )
-        })}
-        {Array.from({ length: 10 }, (_, i) => {
-          const angle = (i / 10) * Math.PI * 2
-          return (
-            <line
-              key={`lon-${i}`}
-              x1={cx + r * Math.cos(angle) * 0.45}
-              y1={cy - r * Math.sin(angle)}
-              x2={cx + r * Math.cos(angle) * 0.45}
-              y2={cy + r * Math.sin(angle)}
-              stroke="#2563EB"
-              strokeWidth="0.5"
-              opacity={0.25}
-              transform={`rotate(${(angle * 180) / Math.PI}, ${cx}, ${cy})`}
-            />
-          )
-        })}
-        {connections.map(([i, j], idx) => (
-          <line
-            key={`conn-${idx}`}
-            x1={nodeAngles[i].x}
-            y1={nodeAngles[i].y}
-            x2={nodeAngles[j].x}
-            y2={nodeAngles[j].y}
-            stroke="#2563EB"
-            strokeWidth="0.4"
-            opacity={0.15}
-          />
-        ))}
-        {nodeAngles.map((n, i) => (
-          <g key={i}>
-            <circle cx={n.x} cy={n.y} r="5" fill="#2563EB" opacity={0.5} />
-            <circle cx={n.x} cy={n.y} r="2.5" fill="#2563EB" />
-            <text
-              x={n.x}
-              y={n.y + 18}
-              textAnchor="middle"
-              fill="#64748B"
-              fontSize="9"
-              fontFamily="Inter, system-ui, sans-serif"
-              fontWeight={600}
+    <motion.div
+      variants={cardVariants}
+      className={`group relative ${isFeatured ? 'md:col-span-2 md:col-start-2' : ''}`}
+    >
+      <motion.div
+        layout
+        onClick={() => setExpanded(!expanded)}
+        className={`
+          relative cursor-pointer rounded-2xl border transition-all duration-300
+          ${expanded
+            ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02] shadow-lg shadow-accent/5'
+            : 'border-border bg-white hover:border-accent/20 hover:shadow-lg hover:shadow-accent/5 hover:-translate-y-1'
+          }
+        `}
+      >
+        {isFeatured && !expanded && (
+          <div className="absolute -top-2.5 right-4 px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase">
+            Popular
+          </div>
+        )}
+
+        <div className="p-5 sm:p-6">
+          <div className="flex items-start justify-between mb-3">
+            <div className={`
+              w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300
+              ${expanded
+                ? 'bg-accent text-white shadow-md shadow-accent/20'
+                : 'bg-accent/5 text-accent group-hover:bg-accent/10'
+              }
+            `}>
+              {service.icon}
+            </div>
+            {expanded && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setExpanded(false) }}
+                className="w-7 h-7 flex items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-black/5 transition-all duration-200 -mr-1 -mt-1"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+
+          <h3 className="text-base sm:text-lg font-display font-bold tracking-tight text-foreground mb-1.5">
+            {service.title}
+          </h3>
+
+          <p className="text-sm text-muted leading-relaxed mb-3">
+            {expanded ? service.description : (
+              service.description.length > 100
+                ? service.description.slice(0, 100) + '...'
+                : service.description
+            )}
+          </p>
+
+          {!expanded && (
+            <div className="flex items-center gap-1 text-accent text-sm font-medium transition-all duration-300 group-hover:gap-2">
+              <span>Learn More</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-0.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </div>
+          )}
+        </div>
+
+        <AnimatePresence initial={false}>
+          {expanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              className="overflow-hidden"
             >
-              {n.label}
-            </text>
-          </g>
-        ))}
-      </svg>
-    </div>
+              <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0 border-t border-border/50">
+                <div className="pt-4">
+                  <span className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3 block">
+                    Key Deliverables
+                  </span>
+                  <div className="space-y-2 mb-5">
+                    {service.deliverables.map((d) => (
+                      <div key={d} className="flex items-center gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                        <span className="text-sm text-foreground">{d}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <a
+                    href="/contact"
+                    className="inline-flex items-center justify-center w-full py-2.5 px-4 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-accent-dark transition-colors duration-200"
+                  >
+                    Start Project
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
   )
 }
 
 export default function ServicesSection() {
-  const [mounted, setMounted] = useState(false)
-  const [revealed, setRevealed] = useState(false)
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [globeError, setGlobeError] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const handleSetActive = useCallback((i: number | null) => {
-    setActiveIndex(i)
-    setHoveredIndex(null)
-  }, [])
-
   return (
     <section className="relative py-20 md:py-28 overflow-hidden bg-background" id="services">
       <div className="max-w-content mx-auto px-6 md:px-10">
@@ -121,96 +223,30 @@ export default function ServicesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5 }}
-          className="mb-8 md:mb-10"
-          onViewportEnter={() => setRevealed(true)}
+          className="mb-12 md:mb-16"
         >
           <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-3">
             Services
           </span>
-          <h2 className="text-heading-2 font-bold tracking-tight">
-            Explore Our Digital Ecosystem.
+          <h2 className="text-heading-2 font-bold tracking-tight mb-3">
+            What We Build.
           </h2>
-          <p className="text-muted text-sm mt-2 max-w-lg">
-            Discover how Brandex combines strategy, design, development, marketing, and AI to build digital experiences that drive growth.
+          <p className="text-muted text-sm max-w-xl">
+            We help businesses grow through design, development, branding, marketing, and AI-powered solutions.
           </p>
         </motion.div>
-      </div>
 
-      {/* Desktop Globe */}
-      <div
-        className="hidden md:block relative"
-        style={{
-          height: '600px',
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.05) 0%, transparent 60%)',
-        }}
-      >
         <motion.div
-          initial={{ scale: 0.88, opacity: 0 }}
-          animate={revealed ? { scale: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          className="w-full h-full"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-50px' }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6"
         >
-          {mounted && !globeError && (
-            <GlobeCanvas
-              activeIndex={activeIndex}
-              setActiveIndex={handleSetActive}
-              hoveredIndex={hoveredIndex}
-              setHoveredIndex={setHoveredIndex}
-              revealed={revealed}
-            />
-          )}
-          {mounted && globeError && <SvgFallback />}
+          {services.map((service, i) => (
+            <ServiceCard key={service.id} service={service} index={i} />
+          ))}
         </motion.div>
-      </div>
-
-      {/* Mobile Compact Globe */}
-      <div
-        className="md:hidden relative"
-        style={{
-          height: '320px',
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(37, 99, 235, 0.04) 0%, transparent 55%)',
-        }}
-      >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={revealed ? { scale: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-          className="w-full h-full"
-        >
-          {mounted && !globeError && (
-            <MobileGlobeCanvas
-              activeIndex={activeIndex}
-              setActiveIndex={handleSetActive}
-              hoveredIndex={hoveredIndex}
-              setHoveredIndex={setHoveredIndex}
-              revealed={revealed}
-            />
-          )}
-        </motion.div>
-      </div>
-
-      {/* Desktop Modal */}
-      <div className="hidden md:block">
-        <AnimatePresence>
-          {activeIndex !== null && (
-            <ServiceModal
-              service={services[activeIndex]}
-              onClose={() => setActiveIndex(null)}
-            />
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Mobile Bottom Sheet */}
-      <div className="md:hidden">
-        <AnimatePresence>
-          {activeIndex !== null && (
-            <BottomSheet
-              service={services[activeIndex]}
-              onClose={() => setActiveIndex(null)}
-            />
-          )}
-        </AnimatePresence>
       </div>
     </section>
   )

@@ -264,6 +264,7 @@ function ServiceNode({
   const meshRef = useRef<THREE.Mesh>(null)
   const glowRef = useRef<THREE.Mesh>(null)
   const scaleRef = useRef(0)
+  const isLocked = activeIndex !== null
   const isActive = activeIndex === index
   const isHovered = hoveredIndex === index
   const isHighlighted = isHovered || isActive
@@ -302,16 +303,16 @@ function ServiceNode({
       <mesh ref={glowRef}>
         <sphereGeometry args={[0.18, 20, 20]} />
         <meshBasicMaterial
-          color={isHighlighted ? COLORS.purple : COLORS.accent}
+          color={isHighlighted && !isLocked ? COLORS.purple : COLORS.accent}
           transparent
-          opacity={0.1}
+          opacity={isLocked ? 0.06 : 0.1}
         />
       </mesh>
       <mesh
         ref={meshRef}
-        onPointerEnter={() => onHover(index)}
-        onPointerLeave={onLeave}
-        onClick={(e) => { e.stopPropagation(); onClick(index) }}
+        onPointerEnter={() => { if (!isLocked) onHover(index) }}
+        onPointerLeave={() => { if (!isLocked) onLeave() }}
+        onClick={(e) => { e.stopPropagation(); if (!isLocked) onClick(index) }}
       >
         <sphereGeometry args={[0.055, 16, 16]} />
         <meshStandardMaterial
@@ -320,35 +321,37 @@ function ServiceNode({
           emissiveIntensity={isHighlighted ? 0.8 : 0.25}
         />
       </mesh>
-      <Html
-        center
-        style={{
-          pointerEvents: 'none',
-          transform: `translateY(18px) scale(${isActive || isHovered ? 1.1 : 1})`,
-          opacity: isActive ? 1 : isHovered ? 1 : 0.8,
-          transition: 'transform 0.25s ease, opacity 0.25s ease',
-        }}
-      >
-        <span
+      {!isLocked && (
+        <Html
+          center
           style={{
-            fontSize: isActive ? '22px' : isHovered ? '20px' : '18px',
-            fontWeight: 700,
-            color: isActive ? COLORS.accent : isHovered ? '#1D4ED8' : '#0F172A',
-            whiteSpace: 'nowrap',
-            fontFamily: 'Inter, system-ui, sans-serif',
-            transition: 'color 0.25s ease, font-size 0.25s ease',
-            textShadow: '0 1px 4px rgba(255,255,255,0.9)',
-            background: isActive || isHovered ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.7)',
-            backdropFilter: 'blur(4px)',
-            WebkitBackdropFilter: 'blur(4px)',
-            padding: '3px 10px',
-            borderRadius: '8px',
-            border: isActive || isHovered ? '1px solid rgba(37, 99, 235, 0.2)' : '1px solid rgba(0,0,0,0.04)',
+            pointerEvents: 'none',
+            transform: `translateY(18px) scale(${isActive || isHovered ? 1.1 : 1})`,
+            opacity: isActive ? 1 : isHovered ? 1 : 0.8,
+            transition: 'transform 0.25s ease, opacity 0.25s ease',
           }}
         >
-          {label}
-        </span>
-      </Html>
+          <span
+            style={{
+              fontSize: isActive ? '22px' : isHovered ? '20px' : '18px',
+              fontWeight: 700,
+              color: isActive ? COLORS.accent : isHovered ? '#1D4ED8' : '#0F172A',
+              whiteSpace: 'nowrap',
+              fontFamily: 'Inter, system-ui, sans-serif',
+              transition: 'color 0.25s ease, font-size 0.25s ease',
+              textShadow: '0 1px 4px rgba(255,255,255,0.9)',
+              background: isActive || isHovered ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.7)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
+              padding: '3px 10px',
+              borderRadius: '8px',
+              border: isActive || isHovered ? '1px solid rgba(37, 99, 235, 0.2)' : '1px solid rgba(0,0,0,0.04)',
+            }}
+          >
+            {label}
+          </span>
+        </Html>
+      )}
     </group>
   )
 }
@@ -415,9 +418,10 @@ export function GlobeScene({
       <OrbitControls
         enableZoom={false}
         enablePan={false}
+        enableRotate={activeIndex === null}
         rotateSpeed={0.5}
         dampingFactor={0.08}
-        autoRotate
+        autoRotate={activeIndex === null}
         autoRotateSpeed={revealed ? 0.8 : 0}
         minPolarAngle={Math.PI / 4}
         maxPolarAngle={Math.PI * 3 / 4}

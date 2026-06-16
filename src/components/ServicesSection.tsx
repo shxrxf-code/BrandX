@@ -112,7 +112,7 @@ function ServiceCard({
   return (
     <motion.div
       variants={cardVariants}
-      className={`group relative ${isFeatured ? 'md:col-span-2 md:col-start-2' : ''}`}
+      className="group relative"
     >
       <motion.div
         layout
@@ -121,7 +121,7 @@ function ServiceCard({
           relative cursor-pointer rounded-2xl border transition-all duration-300
           ${expanded
             ? 'border-accent/30 bg-gradient-to-br from-accent/[0.03] via-white to-purple-600/[0.02] shadow-lg shadow-accent/5'
-            : 'border-border bg-white hover:border-accent/20 hover:shadow-lg hover:shadow-accent/5 hover:-translate-y-1'
+            : 'border-border bg-white hover:border-accent/20 hover:shadow-xl hover:shadow-accent/5 hover:-translate-y-2'
           }
         `}
       >
@@ -158,12 +158,8 @@ function ServiceCard({
             {service.title}
           </h3>
 
-          <p className="text-sm text-muted leading-relaxed mb-3">
-            {expanded ? service.description : (
-              service.description.length > 100
-                ? service.description.slice(0, 100) + '...'
-                : service.description
-            )}
+          <p className={`text-sm text-muted leading-relaxed mb-3 ${!expanded ? 'line-clamp-2' : ''}`}>
+            {service.description}
           </p>
 
           {!expanded && (
@@ -241,7 +237,7 @@ export default function ServicesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
           {services.map((service, i) => (
             <ServiceCard key={service.id} service={service} index={i} />

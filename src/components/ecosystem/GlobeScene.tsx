@@ -6,6 +6,7 @@ import { OrbitControls, Html, Line } from '@react-three/drei'
 import * as THREE from 'three'
 
 const RADIUS = 2.2
+const MOBILE_RADIUS = 2.0
 const COLORS = {
   accent: '#2563EB',
   accentLight: '#60A5FA',
@@ -249,6 +250,7 @@ function ServiceNode({
   onClick,
   onLeave,
   entryDelay,
+  compact,
 }: {
   position: THREE.Vector3
   label: string
@@ -260,6 +262,7 @@ function ServiceNode({
   onClick: (i: number) => void
   onLeave: () => void
   entryDelay: number
+  compact?: boolean
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
   const glowRef = useRef<THREE.Mesh>(null)
@@ -326,14 +329,16 @@ function ServiceNode({
           center
           style={{
             pointerEvents: 'none',
-            transform: `translateY(18px) scale(${isActive || isHovered ? 1.1 : 1})`,
+            transform: `translateY(${compact ? 14 : 18}px) scale(${isActive || isHovered ? 1.1 : 1})`,
             opacity: isActive ? 1 : isHovered ? 1 : 0.8,
             transition: 'transform 0.25s ease, opacity 0.25s ease',
           }}
         >
           <span
             style={{
-              fontSize: isActive ? '22px' : isHovered ? '20px' : '18px',
+              fontSize: compact
+                ? (isActive ? '16px' : isHovered ? '15px' : '14px')
+                : (isActive ? '22px' : isHovered ? '20px' : '18px'),
               fontWeight: 700,
               color: isActive ? COLORS.accent : isHovered ? '#1D4ED8' : '#0F172A',
               whiteSpace: 'nowrap',
@@ -343,7 +348,7 @@ function ServiceNode({
               background: isActive || isHovered ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.7)',
               backdropFilter: 'blur(4px)',
               WebkitBackdropFilter: 'blur(4px)',
-              padding: '3px 10px',
+              padding: compact ? '2px 8px' : '3px 10px',
               borderRadius: '8px',
               border: isActive || isHovered ? '1px solid rgba(37, 99, 235, 0.2)' : '1px solid rgba(0,0,0,0.04)',
             }}
@@ -356,12 +361,12 @@ function ServiceNode({
   )
 }
 
-function Particles({ count = 35, revealed }: { count?: number; revealed: boolean }) {
+function Particles({ count = 35, revealed, radius = RADIUS }: { count?: number; revealed: boolean; radius?: number }) {
   const ref = useRef<THREE.Points>(null)
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
-      const r = RADIUS * 1.3 + Math.random() * RADIUS * 1.8
+      const r = radius * 1.3 + Math.random() * radius * 1.8
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
@@ -399,14 +404,18 @@ export function GlobeScene({
   hoveredIndex,
   setHoveredIndex,
   revealed,
+  radius = RADIUS,
+  particleCount = 35,
 }: {
   activeIndex: number | null
   setActiveIndex: (i: number | null) => void
   hoveredIndex: number | null
   setHoveredIndex: (i: number | null) => void
   revealed: boolean
+  radius?: number
+  particleCount?: number
 }) {
-  const positions = useMemo(() => getSpherePositions(services.length, RADIUS), [])
+  const positions = useMemo(() => getSpherePositions(services.length, radius), [radius])
   const connections = useMemo(() => getNetworkConnections(positions), [positions])
 
   return (
@@ -427,7 +436,7 @@ export function GlobeScene({
         maxPolarAngle={Math.PI * 3 / 4}
       />
 
-      <WireframeGlobe radius={RADIUS} revealed={revealed} />
+      <WireframeGlobe radius={radius} revealed={revealed} />
 
       {connections.map(([i, j], idx) => (
         <ConnectionLine
@@ -437,7 +446,7 @@ export function GlobeScene({
           isActive={activeIndex === i || activeIndex === j || hoveredIndex === i || hoveredIndex === j}
           revealed={revealed}
           delay={0.3 + 0.04 * idx}
-          radius={RADIUS}
+          radius={radius}
         />
       ))}
 
@@ -454,10 +463,11 @@ export function GlobeScene({
           onClick={setActiveIndex}
           onLeave={() => setHoveredIndex(null)}
           entryDelay={0.2 + 0.08 * i}
+          compact={radius < RADIUS}
         />
       ))}
 
-      <Particles count={35} revealed={revealed} />
+      <Particles count={particleCount} revealed={revealed} radius={radius} />
     </>
   )
 }
@@ -481,4 +491,23 @@ export function GlobeCanvas(props: {
   )
 }
 
-export { services, RADIUS, COLORS }
+export function MobileGlobeCanvas(props: {
+  activeIndex: number | null
+  setActiveIndex: (i: number | null) => void
+  hoveredIndex: number | null
+  setHoveredIndex: (i: number | null) => void
+  revealed: boolean
+}) {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 5.5], fov: 50 }}
+      dpr={[1, 1]}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: 'transparent' }}
+    >
+      <GlobeScene {...props} radius={MOBILE_RADIUS} particleCount={15} />
+    </Canvas>
+  )
+}
+
+export { services, RADIUS, MOBILE_RADIUS, COLORS }

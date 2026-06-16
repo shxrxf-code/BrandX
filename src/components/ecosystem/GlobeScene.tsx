@@ -1,0 +1,466 @@
+'use client'
+
+import { useRef, useMemo, useState, useEffect } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls, Html } from '@react-three/drei'
+import * as THREE from 'three'
+
+const RADIUS = 2.8
+const COLORS = {
+  accent: '#2563EB',
+  accentLight: '#60A5FA',
+  purple: '#8B5CF6',
+  purpleLight: '#A78BFA',
+  text: '#0F172A',
+  muted: '#64748B',
+}
+
+const services = [
+  {
+    title: 'Web Development',
+    description: 'Custom web applications, headless CMS architectures, and scalable frontends built with modern frameworks.',
+    deliverables: ['Full-stack development', 'Headless CMS', 'API Integration', 'Performance Optimization'],
+  },
+  {
+    title: 'UI/UX Design',
+    description: 'Research-driven design systems, interactive prototypes, and intuitive user flows crafted for conversion.',
+    deliverables: ['User Research', 'Wireframing & Prototyping', 'Visual Design', 'Usability Testing'],
+  },
+  {
+    title: 'Brand Identity',
+    description: 'Strategic brand systems including visual identity, typography, and guidelines that communicate unique value.',
+    deliverables: ['Brand Strategy', 'Visual Identity & Logo', 'Typography', 'Brand Guidelines'],
+  },
+  {
+    title: 'SEO',
+    description: 'Technical SEO audits, content strategy, and performance engineering for sustainable organic growth.',
+    deliverables: ['Technical Audit', 'Keyword Strategy', 'Content Production', 'Authority Building'],
+  },
+  {
+    title: 'Digital Marketing',
+    description: 'Paid media, lifecycle programs, and analytics-driven campaigns that turn traffic into revenue.',
+    deliverables: ['Paid Search & Social', 'Lifecycle & CRM', 'Analytics & Attribution', 'Creative Production'],
+  },
+  {
+    title: 'AI Solutions',
+    description: 'Custom AI agents, LLM-powered features, and intelligent automation that transform business operations.',
+    deliverables: ['AI Strategy & Consulting', 'Custom AI Agents', 'LLM Integration', 'Process Automation'],
+  },
+]
+
+function getSpherePositions(count: number, radius: number) {
+  const positions: THREE.Vector3[] = []
+  const goldenRatio = (1 + Math.sqrt(5)) / 2
+  for (let i = 0; i < count; i++) {
+    const theta = 2 * Math.PI * i / goldenRatio
+    const phi = Math.acos(1 - 2 * (i + 0.5) / count)
+    positions.push(new THREE.Vector3(
+      radius * Math.sin(phi) * Math.cos(theta),
+      radius * Math.sin(phi) * Math.sin(theta),
+      radius * Math.cos(phi),
+    ))
+  }
+  return positions
+}
+
+function getNetworkConnections(positions: THREE.Vector3[]) {
+  const connections: [number, number][] = []
+  const k = 3
+  for (let i = 0; i < positions.length; i++) {
+    const dists = positions
+      .map((p, j) => ({ dist: p.distanceTo(positions[i]), j }))
+      .filter(({ j }) => j !== i)
+      .sort((a, b) => a.dist - b.dist)
+    for (let n = 0; n < Math.min(k, dists.length); n++) {
+      const conn: [number, number] = [i, dists[n].j].sort((a, b) => a - b) as [number, number]
+      if (!connections.some(([a, b]) => a === conn[0] && b === conn[1])) {
+        connections.push(conn)
+      }
+    }
+  }
+  return connections
+}
+
+function getArcPoints(start: THREE.Vector3, end: THREE.Vector3, radius: number, segments = 30) {
+  const points: number[] = []
+  const s = start.clone().normalize()
+  const e = end.clone().normalize()
+  const angle = s.angleTo(e)
+  if (angle < 0.001) {
+    for (let i = 0; i <= segments; i++) {
+      points.push(start.x, start.y, start.z)
+    }
+    return points
+  }
+  const axis = new THREE.Vector3().crossVectors(s, e).normalize()
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments
+    const v = s.clone().applyAxisAngle(axis, angle * t).multiplyScalar(radius)
+    points.push(v.x, v.y, v.z)
+  }
+  return points
+}
+
+function WireframeGlobe({ radius, revealed }: { radius: number; revealed: boolean }) {
+  const groupRef = useRef<THREE.Group>(null)
+
+  const latLines = useMemo(() => {
+    const lines: THREE.LineLoop[] = []
+    const segments = 64
+    const count = 12
+    for (let i = 1; i < count; i++) {
+      const phi = (i / count) * Math.PI
+      const pts: number[] = []
+      for (let j = 0; j <= segments; j++) {
+        const theta = (j / segments) * Math.PI * 2
+        pts.push(
+          radius * Math.sin(phi) * Math.cos(theta),
+          radius * Math.cos(phi),
+          radius * Math.sin(phi) * Math.sin(theta),
+        )
+      }
+      const geo = new THREE.BufferGeometry()
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3))
+      const mat = new THREE.LineBasicMaterial({
+        color: COLORS.accent,
+        transparent: true,
+        opacity: 0.08,
+      })
+      lines.push(new THREE.LineLoop(geo, mat))
+    }
+    return lines
+  }, [radius])
+
+  const lonLines = useMemo(() => {
+    const lines: THREE.LineLoop[] = []
+    const segments = 48
+    const count = 12
+    for (let i = 0; i < count; i++) {
+      const theta = (i / count) * Math.PI * 2
+      const pts: number[] = []
+      for (let j = 0; j <= segments; j++) {
+        const phi = (j / segments) * Math.PI
+        pts.push(
+          radius * Math.sin(phi) * Math.cos(theta),
+          radius * Math.cos(phi),
+          radius * Math.sin(phi) * Math.sin(theta),
+        )
+      }
+      const geo = new THREE.BufferGeometry()
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3))
+      const mat = new THREE.LineBasicMaterial({
+        color: COLORS.accent,
+        transparent: true,
+        opacity: 0.08,
+      })
+      lines.push(new THREE.LineLoop(geo, mat))
+    }
+    return lines
+  }, [radius])
+
+  const opacity = revealed ? 1 : 0
+
+  return (
+    <group ref={groupRef}>
+      <mesh>
+        <sphereGeometry args={[radius * 0.97, 32, 32]} />
+        <meshBasicMaterial color={COLORS.accent} transparent opacity={0.02 * opacity} side={THREE.BackSide} />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[radius * 1.03, 32, 32]} />
+        <meshBasicMaterial color={COLORS.purple} transparent opacity={0.015 * opacity} side={THREE.BackSide} />
+      </mesh>
+      {latLines.map((line, i) => (
+        <primitive key={`lat-${i}`} object={line} />
+      ))}
+      {lonLines.map((line, i) => (
+        <primitive key={`lon-${i}`} object={line} />
+      ))}
+    </group>
+  )
+}
+
+function ConnectionLine({
+  start,
+  end,
+  isActive,
+  revealed,
+  delay,
+  radius,
+}: {
+  start: THREE.Vector3
+  end: THREE.Vector3
+  isActive: boolean
+  revealed: boolean
+  delay: number
+  radius: number
+}) {
+  const matRef = useRef<THREE.LineBasicMaterial>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    if (revealed) {
+      const t = setTimeout(() => setVisible(true), delay * 1000)
+      return () => clearTimeout(t)
+    }
+  }, [revealed, delay])
+
+  const line = useMemo(() => {
+    const pts = getArcPoints(start, end, radius)
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3))
+    const mat = new THREE.LineBasicMaterial({
+      transparent: true,
+      opacity: 0.06,
+      color: COLORS.accent,
+    })
+    return new THREE.Line(geo, mat)
+  }, [start, end, radius])
+
+  useFrame(() => {
+    if (matRef.current) {
+      const target = isActive ? 0.45 : 0.06
+      const colorTarget = isActive ? COLORS.purple : COLORS.accent
+      matRef.current.opacity += (target - matRef.current.opacity) * 0.04
+      matRef.current.color.set(colorTarget)
+    }
+  })
+
+  if (!revealed || !visible) return null
+
+  return <primitive ref={matRef} object={line} />
+}
+
+function ServiceNode({
+  position,
+  label,
+  index,
+  activeIndex,
+  hoveredIndex,
+  revealed,
+  onHover,
+  onClick,
+  onLeave,
+  entryDelay,
+}: {
+  position: THREE.Vector3
+  label: string
+  index: number
+  activeIndex: number | null
+  hoveredIndex: number | null
+  revealed: boolean
+  onHover: (i: number) => void
+  onClick: (i: number) => void
+  onLeave: () => void
+  entryDelay: number
+}) {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const glowRef = useRef<THREE.Mesh>(null)
+  const scaleRef = useRef(0)
+  const isActive = activeIndex === index
+  const isHovered = hoveredIndex === index
+  const isHighlighted = isHovered || isActive
+
+  const [entered, setEntered] = useState(false)
+
+  useEffect(() => {
+    if (revealed) {
+      const t = setTimeout(() => setEntered(true), entryDelay * 1000)
+      return () => clearTimeout(t)
+    }
+  }, [revealed, entryDelay])
+
+  useFrame(({ clock }) => {
+    const target = entered ? 1 : 0
+    scaleRef.current += (target - scaleRef.current) * Math.min(0.08, 0.08)
+
+    const pulse = 0.94 + 0.06 * Math.sin(clock.getElapsedTime() * 1.4 + index * 0.7)
+    const scale = isHighlighted ? 1.6 : 1
+    const s = scaleRef.current * scale * pulse
+
+    if (meshRef.current) {
+      meshRef.current.scale.setScalar(s)
+    }
+    if (glowRef.current) {
+      const gs = scaleRef.current * (isHighlighted ? 2.2 : 1) * (0.95 + 0.05 * Math.sin(clock.getElapsedTime() * 0.9))
+      glowRef.current.scale.setScalar(gs)
+      const mat = glowRef.current.material as THREE.MeshBasicMaterial
+      const targetOpacity = isHighlighted ? 0.35 : 0.06
+      mat.opacity += (targetOpacity + 0.02 * Math.sin(clock.getElapsedTime()) - mat.opacity) * 0.04
+    }
+  })
+
+  return (
+    <group position={position}>
+      <mesh ref={glowRef}>
+        <sphereGeometry args={[0.22, 16, 16]} />
+        <meshBasicMaterial
+          color={isHighlighted ? COLORS.purple : COLORS.accent}
+          transparent
+          opacity={0.06}
+        />
+      </mesh>
+      <mesh
+        ref={meshRef}
+        onPointerEnter={() => onHover(index)}
+        onPointerLeave={onLeave}
+        onClick={(e) => { e.stopPropagation(); onClick(index) }}
+      >
+        <sphereGeometry args={[0.07, 16, 16]} />
+        <meshStandardMaterial
+          color={isHighlighted ? COLORS.accent : COLORS.accentLight}
+          emissive={isHighlighted ? COLORS.purple : COLORS.accent}
+          emissiveIntensity={isHighlighted ? 0.8 : 0.15}
+        />
+      </mesh>
+      <Html
+        center
+        style={{
+          pointerEvents: 'none',
+          transform: 'translateY(16px)',
+          opacity: isHighlighted ? 1 : 0.5,
+          transition: 'opacity 0.3s',
+        }}
+      >
+        <span
+          style={{
+            fontSize: isHighlighted ? '11px' : '10px',
+            fontWeight: 600,
+            color: isHighlighted ? COLORS.accent : COLORS.muted,
+            whiteSpace: 'nowrap',
+            fontFamily: 'Inter, system-ui, sans-serif',
+            transition: 'color 0.3s, font-size 0.3s',
+          }}
+        >
+          {label}
+        </span>
+      </Html>
+    </group>
+  )
+}
+
+function Particles({ count = 40, revealed }: { count?: number; revealed: boolean }) {
+  const ref = useRef<THREE.Points>(null)
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3)
+    for (let i = 0; i < count; i++) {
+      const r = RADIUS * 1.2 + Math.random() * RADIUS * 1.5
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.acos(2 * Math.random() - 1)
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+      pos[i * 3 + 2] = r * Math.cos(phi)
+    }
+    return pos
+  }, [count])
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      ref.current.rotation.y = clock.getElapsedTime() * 0.01
+      ref.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.005) * 0.05
+    }
+  })
+
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    return geo
+  }, [positions])
+
+  if (!revealed) return null
+
+  return (
+    <points ref={ref} geometry={geometry}>
+      <pointsMaterial size={0.02} color={COLORS.accentLight} transparent opacity={0.15} />
+    </points>
+  )
+}
+
+export function GlobeScene({
+  activeIndex,
+  setActiveIndex,
+  hoveredIndex,
+  setHoveredIndex,
+  revealed,
+}: {
+  activeIndex: number | null
+  setActiveIndex: (i: number | null) => void
+  hoveredIndex: number | null
+  setHoveredIndex: (i: number | null) => void
+  revealed: boolean
+}) {
+  const positions = useMemo(() => getSpherePositions(services.length, RADIUS), [])
+  const connections = useMemo(() => getNetworkConnections(positions), [positions])
+
+  return (
+    <>
+      <ambientLight intensity={0.4} />
+      <pointLight position={[5, 5, 5]} intensity={0.3} color={COLORS.accent} />
+      <pointLight position={[-4, -3, 5]} intensity={0.2} color={COLORS.purple} />
+
+      <OrbitControls
+        enableZoom={false}
+        enablePan={false}
+        rotateSpeed={0.5}
+        dampingFactor={0.08}
+        autoRotate
+        autoRotateSpeed={revealed ? 0.8 : 0}
+        minPolarAngle={Math.PI / 4}
+        maxPolarAngle={Math.PI * 3 / 4}
+      />
+
+      <WireframeGlobe radius={RADIUS} revealed={revealed} />
+
+      {connections.map(([i, j], idx) => (
+        <ConnectionLine
+          key={`conn-${idx}`}
+          start={positions[i]}
+          end={positions[j]}
+          isActive={activeIndex === i || activeIndex === j || hoveredIndex === i || hoveredIndex === j}
+          revealed={revealed}
+          delay={0.4 + 0.05 * idx}
+          radius={RADIUS}
+        />
+      ))}
+
+      {services.map((service, i) => (
+        <ServiceNode
+          key={service.title}
+          position={positions[i]}
+          label={service.title}
+          index={i}
+          activeIndex={activeIndex}
+          hoveredIndex={hoveredIndex}
+          revealed={revealed}
+          onHover={setHoveredIndex}
+          onClick={setActiveIndex}
+          onLeave={() => setHoveredIndex(null)}
+          entryDelay={0.2 + 0.1 * i}
+        />
+      ))}
+
+      <Particles count={45} revealed={revealed} />
+    </>
+  )
+}
+
+export function GlobeCanvas(props: {
+  activeIndex: number | null
+  setActiveIndex: (i: number | null) => void
+  hoveredIndex: number | null
+  setHoveredIndex: (i: number | null) => void
+  revealed: boolean
+}) {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 6.2], fov: 42 }}
+      dpr={[1, 1.5]}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: 'transparent' }}
+    >
+      <GlobeScene {...props} />
+    </Canvas>
+  )
+}
+
+export { services, RADIUS, COLORS }

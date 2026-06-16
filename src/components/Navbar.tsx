@@ -8,8 +8,8 @@ import { usePathname } from 'next/navigation'
 const navItems = [
   { href: '#work', label: 'Work' },
   { href: '#services', label: 'Services' },
-  { href: '#about', label: 'About' },
   { href: '#contact', label: 'Contact' },
+  { href: '#about', label: 'About' },
 ]
 
 function scrollToSection(id: string) {

@@ -1,74 +1,97 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import type { MotionValue } from 'framer-motion'
+import { useRef, useState } from 'react'
 import {
   motion,
   useScroll,
-  useTransform,
   useMotionValueEvent,
   AnimatePresence,
 } from 'framer-motion'
 
-const stages = [
+interface Stage {
+  number: string
+  title: string
+  description: string
+  detail: string
+  deliverables: string[]
+  outcome: string
+  color: string
+  bgColor: string
+  borderColor: string
+  icon: string
+}
+
+const stages: Stage[] = [
   {
-    title: 'Research',
     number: '01',
+    title: 'Research',
     description: 'Understanding your market, users, and competition before making any decisions.',
     detail: 'We conduct stakeholder interviews, user surveys, competitive analysis, and market research to build a complete picture of your landscape.',
-    color: '#2563EB',
-    bgColor: 'rgba(37, 99, 235, 0.08)',
-    borderColor: 'rgba(37, 99, 235, 0.15)',
+    deliverables: ['Market Analysis', 'User Personas', 'Competitive Audit', 'Opportunity Map'],
+    outcome: 'A complete picture of your market landscape and user needs.',
+    color: '#4F7CFF',
+    bgColor: 'rgba(79,124,255,0.08)',
+    borderColor: 'rgba(79,124,255,0.2)',
     icon: 'M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z',
   },
   {
-    title: 'Strategy',
     number: '02',
+    title: 'Strategy',
     description: 'Turning insights into a clear roadmap with defined goals and milestones.',
     detail: 'We define KPIs, create user personas, map customer journeys, and establish a strategic direction aligned with your business objectives.',
+    deliverables: ['KPI Definition', 'User Journeys', 'Roadmap', 'Go-to-Market Plan'],
+    outcome: 'A clear strategic direction aligned with your business objectives.',
     color: '#6366F1',
-    bgColor: 'rgba(99, 102, 241, 0.08)',
-    borderColor: 'rgba(99, 102, 241, 0.15)',
+    bgColor: 'rgba(99,102,241,0.08)',
+    borderColor: 'rgba(99,102,241,0.2)',
     icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
   },
   {
-    title: 'Design',
     number: '03',
+    title: 'Design',
     description: 'Crafting intuitive interfaces and compelling visual experiences.',
     detail: 'We produce wireframes, interactive prototypes, design systems, and high-fidelity mockups validated through usability testing.',
+    deliverables: ['Wireframes', 'Interactive Prototypes', 'Design System', 'UI Kit'],
+    outcome: 'Pixel-perfect designs validated through usability testing.',
     color: '#8B5CF6',
-    bgColor: 'rgba(139, 92, 246, 0.08)',
-    borderColor: 'rgba(139, 92, 246, 0.15)',
+    bgColor: 'rgba(139,92,246,0.08)',
+    borderColor: 'rgba(139,92,246,0.2)',
     icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z',
   },
   {
-    title: 'Development',
     number: '04',
+    title: 'Development',
     description: 'Building robust, scalable solutions with modern technology.',
     detail: 'We implement using modular architecture, automated testing, continuous integration, and performant front-end and back-end systems.',
+    deliverables: ['Modular Architecture', 'Automated Testing', 'CI/CD Pipeline', 'Performance Tuning'],
+    outcome: 'A robust, scalable solution built for production.',
     color: '#06B6D4',
-    bgColor: 'rgba(6, 182, 212, 0.08)',
-    borderColor: 'rgba(6, 182, 212, 0.15)',
+    bgColor: 'rgba(6,182,212,0.08)',
+    borderColor: 'rgba(6,182,212,0.2)',
     icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
   },
   {
-    title: 'Launch',
     number: '05',
+    title: 'Launch',
     description: 'Deploying, testing, and optimizing for production readiness.',
     detail: 'We manage staging environments, run QA and load testing, configure CI/CD pipelines, and execute a smooth go-live with monitoring.',
+    deliverables: ['Staging Environment', 'QA & Load Testing', 'Go-Live Plan', 'Monitoring Setup'],
+    outcome: 'A smooth, monitored launch with zero-downtime deployment.',
     color: '#10B981',
-    bgColor: 'rgba(16, 185, 129, 0.08)',
-    borderColor: 'rgba(16, 185, 129, 0.15)',
+    bgColor: 'rgba(16,185,129,0.08)',
+    borderColor: 'rgba(16,185,129,0.2)',
     icon: 'M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z',
   },
   {
-    title: 'Growth',
     number: '06',
+    title: 'Growth',
     description: 'Continuous improvement through data-driven iteration and optimization.',
     detail: 'We implement analytics, set up A/B testing, optimize conversion funnels, and iterate based on real user behavior and metrics.',
+    deliverables: ['Analytics Setup', 'A/B Testing', 'Conversion Optimization', 'Iteration Cycle'],
+    outcome: 'Ongoing growth through data-driven iteration and optimization.',
     color: '#F59E0B',
-    bgColor: 'rgba(245, 158, 11, 0.08)',
-    borderColor: 'rgba(245, 158, 11, 0.15)',
+    bgColor: 'rgba(245,158,11,0.08)',
+    borderColor: 'rgba(245,158,11,0.2)',
     icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z',
   },
 ]
@@ -82,230 +105,228 @@ const stageOffsets = [
   { start: 0.80, end: 1.0 },
 ]
 
-function getActiveStage(progress: number): number {
-  for (let i = 0; i < stageOffsets.length; i++) {
-    const { start, end } = stageOffsets[i]
-    if (progress >= start && progress < end) return i
-  }
-  return stageOffsets.length - 1
-}
-
-const easeLinear = [0.16, 1, 0.3, 1] as const
-
-function PulseRing({ color }: { color: string }) {
-  return (
-    <motion.span
-      className="absolute inset-0 rounded-full"
-      style={{ backgroundColor: color, opacity: 0.25 }}
-      animate={{
-        scale: [1, 1.6],
-        opacity: [0.25, 0],
-      }}
-      transition={{
-        duration: 2,
-        ease: 'easeOut',
-        repeat: Infinity,
-        repeatDelay: 0.5,
-      }}
-    />
-  )
-}
-
-function StageDot({
+function StepCard({
+  stage,
   isActive,
   isPast,
-  color,
+  onClick,
 }: {
+  stage: Stage
   isActive: boolean
   isPast: boolean
-  color: string
+  onClick: () => void
 }) {
   return (
-    <div className="relative flex items-center justify-center w-4 h-4">
-      {isActive && <PulseRing color={color} />}
-      <motion.span
-        className="block rounded-full border-2"
+    <motion.button
+      onClick={onClick}
+      className="relative flex flex-col items-center gap-1.5 pt-1 group cursor-pointer"
+      animate={{ y: isActive ? -2 : 0 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+    >
+      <span
+        className="text-xs font-semibold tracking-wider transition-all duration-300"
         style={{
-          borderColor: isActive || isPast ? color : 'rgba(255,255,255,0.2)',
-          backgroundColor: isPast ? color : isActive ? color : 'transparent',
+          color: isActive ? stage.color : isPast ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.12)',
         }}
-        animate={{
-          scale: isActive ? 1 : 0.85,
-          boxShadow: isActive
-            ? `0 0 0 4px ${color}22`
-            : '0 0 0 0px transparent',
-        }}
-        transition={{ duration: 0.6, ease: easeLinear }}
-      />
-    </div>
-  )
-}
+      >
+        {stage.number}
+      </span>
 
-function Timeline({
-  activeStage,
-  scrollProgress,
-}: {
-  activeStage: number
-  scrollProgress: MotionValue<number>
-}) {
-
-  return (
-    <div className="shrink-0 w-44 pt-1">
-      <div className="relative flex flex-col">
-        {/* Background track */}
-        <div className="absolute left-[34px] top-3 bottom-3 w-0.5 bg-white/10 rounded-full" />
-
-        {/* Fill track */}
+      <div className="relative w-3 h-3 flex items-center justify-center">
         <motion.div
-          className="absolute left-[34px] top-3 w-0.5 rounded-full origin-top"
+          className="w-2.5 h-2.5 rounded-full border-2 transition-all duration-300"
           style={{
-            background: `linear-gradient(to bottom, ${stages[activeStage].color}, ${stages[activeStage].color})`,
-            scaleY: scrollProgress,
+            backgroundColor: isActive ? stage.color : isPast ? 'rgba(255,255,255,0.25)' : 'transparent',
+            borderColor: isActive ? stage.color : 'rgba(255,255,255,0.15)',
+            boxShadow: isActive ? `0 0 12px ${stage.color}50` : 'none',
           }}
         />
-
-        {stages.map((stage, i) => {
-          const isActive = i === activeStage
-          const isPast = i < activeStage
-
-          return (
-            <div key={stage.title} className="flex items-center gap-4 py-2.5">
-              <StageDot isActive={isActive} isPast={isPast} color={stage.color} />
-
-              <div className="flex-1 min-w-0">
-                <motion.span
-                  className="block text-sm font-medium leading-tight"
-                  animate={{
-                    color: isActive
-                      ? stage.color
-                      : isPast
-                        ? 'rgb(100, 116, 139)'
-                        : 'rgb(148, 163, 184)',
-                    fontWeight: isActive ? 600 : 400,
-                  }}
-                  transition={{ duration: 0.4, ease: easeLinear }}
-                >
-                  {stage.title}
-                </motion.span>
-              </div>
-            </div>
-          )
-        })}
       </div>
-    </div>
+
+      <span
+        className="text-sm font-display tracking-tight transition-all duration-300"
+        style={{
+          color: isActive ? '#F8FAFC' : isPast ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.25)',
+          fontWeight: isActive ? 700 : isPast ? 500 : 400,
+        }}
+      >
+        {stage.title}
+      </span>
+    </motion.button>
   )
 }
 
-function ContentPanel({ activeStage }: { activeStage: number }) {
+function DesktopView({
+  stages,
+  activeStage,
+  progress,
+  onStageClick,
+}: {
+  stages: Stage[]
+  activeStage: number
+  progress: number
+  onStageClick: (i: number) => void
+}) {
   const stage = stages[activeStage]
 
   return (
-    <div className="flex-1 min-h-0">
-      <AnimatePresence mode="popLayout">
+    <div className="hidden md:block">
+      <div className="relative mb-10 lg:mb-14">
+        <div className="absolute left-[2%] right-[2%] top-[52px] h-px bg-white/[0.04] rounded-full" />
+        <motion.div
+          className="absolute left-[2%] top-[52px] h-px rounded-full origin-left"
+          style={{
+            scaleX: progress,
+            background: `linear-gradient(to right, ${stages[activeStage].color}, ${stages[activeStage].color})`,
+            opacity: progress > 0.01 ? 1 : 0,
+          }}
+        />
+
+        <div
+          className="absolute left-[2%] top-[52px] w-2 h-2 -ml-1 -mt-[3px] rounded-full transition-colors duration-300"
+          style={{
+            backgroundColor: progress > 0.01 ? stages[activeStage].color : 'rgba(255,255,255,0.15)',
+            boxShadow: progress > 0.01 ? `0 0 12px ${stages[activeStage].color}60` : 'none',
+          }}
+        />
+
+        <div className="grid grid-cols-6 gap-0">
+          {stages.map((s, i) => (
+            <StepCard
+              key={s.number}
+              stage={s}
+              isActive={i === activeStage}
+              isPast={i < activeStage}
+              onClick={() => onStageClick(i)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <AnimatePresence mode="wait">
         <motion.div
           key={activeStage}
-          initial={{ opacity: 0, y: 24, scale: 0.97, filter: 'blur(4px)' }}
-          animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, y: -12, scale: 0.97, filter: 'blur(2px)' }}
-          transition={{ duration: 0.55, ease: easeLinear }}
-          className="glass-strong rounded-2xl p-8 md:p-10"
-          style={{
-            borderColor: stage.borderColor,
-          }}
+          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, y: -12, filter: 'blur(2px)' }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="glass-strong rounded-2xl overflow-hidden"
+          style={{ borderColor: stage.borderColor }}
         >
-          <div className="flex items-start gap-5 md:gap-6 mb-6">
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.4, ease: easeLinear, delay: 0.05 }}
-              className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: stage.bgColor, color: stage.color }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-5 h-5 md:w-6 md:h-6"
-              >
-                <path d={stage.icon} />
-              </svg>
-            </motion.div>
-            <div className="min-w-0">
-              <motion.span
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, ease: easeLinear, delay: 0.08 }}
-                className="text-xs font-semibold tracking-wider uppercase block mb-1"
-                style={{ color: stage.color }}
-              >
-                {stage.number}
-              </motion.span>
-              <motion.h3
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: easeLinear, delay: 0.1 }}
-                className="text-2xl md:text-3xl font-display font-bold tracking-tight text-foreground"
-              >
-                {stage.title}
-              </motion.h3>
-            </div>
-          </div>
+          <div className="relative p-6 md:p-8">
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `linear-gradient(135deg, ${stage.color}08, transparent 50%)`,
+              }}
+            />
 
-          <div className="space-y-4">
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: easeLinear, delay: 0.14 }}
-              className="text-sm md:text-base text-foreground leading-relaxed max-w-xl"
-            >
-              {stage.description}
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: easeLinear, delay: 0.2 }}
-              className="text-sm text-muted leading-relaxed max-w-xl"
-            >
-              {stage.detail}
-            </motion.p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.28 }}
-            className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between"
-          >
-            <span className="text-xs text-muted/60 font-medium">
-              {stage.number} / 06
-            </span>
-            <div className="flex gap-1.5">
-          {stages.map((_, i) => (
+            <div className="relative z-10">
+              <div className="flex items-start gap-4 md:gap-6 mb-6">
+                <div
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: stage.bgColor, color: stage.color }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-5 h-5 md:w-6 md:h-6"
+                  >
+                    <path d={stage.icon} />
+                  </svg>
+                </div>
+                <div className="min-w-0">
                   <span
-                    key={i}
-                    className="block w-1.5 h-1.5 rounded-full transition-all duration-500"
-                    style={{
-                      backgroundColor:
-                        i === activeStage
-                          ? stage.color
-                          : i < activeStage
-                            ? 'rgba(255,255,255,0.3)'
-                            : 'rgba(255,255,255,0.12)',
-                    }}
-                  />
-              ))}
+                    className="text-xs font-semibold tracking-wider uppercase block mb-1"
+                    style={{ color: stage.color }}
+                  >
+                    {stage.number} — {stage.title}
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-foreground">
+                    {stage.title}
+                  </h3>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                <div className="space-y-4">
+                  <p className="text-sm md:text-base text-foreground leading-relaxed">
+                    {stage.description}
+                  </p>
+                  <p className="text-sm text-muted leading-relaxed">
+                    {stage.detail}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-3">
+                    Deliverables
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    {stage.deliverables.map((d) => (
+                      <span
+                        key={d}
+                        className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg"
+                        style={{
+                          background: `${stage.color}12`,
+                          color: stage.color,
+                          border: `1px solid ${stage.borderColor}`,
+                        }}
+                      >
+                        {d}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-accent font-semibold tracking-[0.15em] uppercase mb-2">
+                    Outcome
+                  </p>
+                  <p className="text-sm text-muted leading-relaxed">{stage.outcome}</p>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                <span className="text-xs text-muted/60 font-medium">
+                  {stage.number} / 06
+                </span>
+                <div className="flex gap-1.5">
+                  {stages.map((_, i) => (
+                    <span
+                      key={i}
+                      className="block w-1.5 h-1.5 rounded-full transition-all duration-300"
+                      style={{
+                        backgroundColor:
+                          i === activeStage
+                            ? stage.color
+                            : i < activeStage
+                              ? 'rgba(255,255,255,0.25)'
+                              : 'rgba(255,255,255,0.08)',
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       </AnimatePresence>
     </div>
   )
 }
 
-function MobileView({ activeStage, scrollProgress }: { activeStage: number; scrollProgress: number }) {
+function MobileView({
+  stages,
+  activeStage,
+  progress,
+  onStageClick,
+}: {
+  stages: Stage[]
+  activeStage: number
+  progress: number
+  onStageClick: (i: number) => void
+}) {
   const stage = stages[activeStage]
 
   return (
@@ -317,52 +338,98 @@ function MobileView({ activeStage, scrollProgress }: { activeStage: number; scro
             className="h-1 rounded-full flex-1 transition-all duration-500"
             style={{
               backgroundColor:
-                i <= activeStage ? stage.color : 'rgba(255,255,255,0.15)',
+                i <= activeStage ? stages[activeStage].color : 'rgba(255,255,255,0.1)',
             }}
           />
         ))}
       </div>
 
+      <div className="space-y-2">
+        {stages.map((s, i) => {
+          const isActive = i === activeStage
+          const isPast = i < activeStage
+
+          return (
+            <motion.button
+              key={s.number}
+              onClick={() => onStageClick(i)}
+              className="w-full text-left"
+              animate={{
+                opacity: isActive ? 1 : isPast ? 0.6 : 0.35,
+              }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="flex items-center gap-3 py-2.5 px-1">
+                <div className="relative w-3 h-3 flex items-center justify-center shrink-0">
+                  <div
+                    className="w-2.5 h-2.5 rounded-full border-2 transition-all duration-300"
+                    style={{
+                      backgroundColor: isActive ? s.color : isPast ? 'rgba(255,255,255,0.2)' : 'transparent',
+                      borderColor: isActive ? s.color : 'rgba(255,255,255,0.15)',
+                      boxShadow: isActive ? `0 0 10px ${s.color}50` : 'none',
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className="text-[10px] font-semibold tracking-wider"
+                    style={{ color: isActive ? s.color : 'rgba(255,255,255,0.25)' }}
+                  >
+                    {s.number}
+                  </span>
+                  <h3
+                    className="text-sm font-display tracking-tight truncate transition-all duration-300"
+                    style={{
+                      color: isActive ? '#F8FAFC' : 'rgba(255,255,255,0.45)',
+                      fontWeight: isActive ? 700 : 400,
+                    }}
+                  >
+                    {s.title}
+                  </h3>
+                </div>
+              </div>
+            </motion.button>
+          )
+        })}
+      </div>
+
       <AnimatePresence mode="popLayout">
         <motion.div
           key={activeStage}
-          initial={{ opacity: 0, y: 20, scale: 0.97 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -12, scale: 0.97 }}
-          transition={{ duration: 0.45, ease: easeLinear }}
-          className="glass-card rounded-2xl p-6"
-          style={{ borderColor: stage.borderColor }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="rounded-xl overflow-hidden"
+          style={{
+            background: 'rgba(255,255,255,0.04)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: `1px solid ${stage.borderColor}`,
+          }}
         >
-          <div className="flex items-center gap-3 mb-4">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: stage.bgColor, color: stage.color }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                className="w-4 h-4"
-              >
-                <path d={stage.icon} />
-              </svg>
+          <div className="p-4">
+            <p className="text-sm text-foreground leading-relaxed mb-3">
+              {stage.detail}
+            </p>
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {stage.deliverables.map((d) => (
+                <span
+                  key={d}
+                  className="px-2 py-1 text-[10px] font-medium rounded-md"
+                  style={{
+                    background: `${stage.color}15`,
+                    color: stage.color,
+                  }}
+                >
+                  {d}
+                </span>
+              ))}
             </div>
-            <div>
-              <span className="text-[10px] font-semibold tracking-wider uppercase block" style={{ color: stage.color }}>
-                {stage.number}
-              </span>
-              <h3 className="text-base font-display font-bold tracking-tight text-foreground">
-                {stage.title}
-              </h3>
+            <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+              <span className="text-[10px] text-muted/60 font-medium">{stage.number} / 06</span>
+              <span className="text-[10px] text-muted/40 font-medium">{Math.round(progress * 100)}%</span>
             </div>
-          </div>
-          <p className="text-sm text-foreground leading-relaxed mb-3">{stage.description}</p>
-          <p className="text-sm text-muted leading-relaxed">{stage.detail}</p>
-
-          <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
-            <span className="text-[10px] text-muted/60 font-medium">{stage.number} / 06</span>
-            <span className="text-[10px] text-muted/40 font-medium">{Math.round(scrollProgress * 100)}%</span>
           </div>
         </motion.div>
       </AnimatePresence>
@@ -372,44 +439,46 @@ function MobileView({ activeStage, scrollProgress }: { activeStage: number; scro
 
 export default function ProcessSection() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [activeStage, setActiveStage] = useState(0)
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   })
 
-  const [activeStage, setActiveStage] = useState(0)
-
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    setActiveStage(getActiveStage(latest))
+    for (let i = 0; i < stageOffsets.length; i++) {
+      const { start, end } = stageOffsets[i]
+      if (latest >= start && latest < end) {
+        setActiveStage(i)
+        return
+      }
+    }
+    setActiveStage(stageOffsets.length - 1)
   })
 
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
+  const progress = scrollYProgress.get()
 
   return (
     <section
       ref={sectionRef}
       className="relative bg-secondary"
-      style={{ height: isMobile ? 'auto' : '400vh' }}
+      style={{ height: '400vh' }}
       id="process"
     >
-      <div
-        className={isMobile ? 'relative py-20' : 'sticky top-0 h-screen flex items-center overflow-hidden'}
-      >
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 left-1/3 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
+        <div className="absolute -bottom-40 right-1/3 w-[350px] h-[350px] rounded-full bg-purple-600/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
+      </div>
+
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
         <div className="max-w-content mx-auto px-6 md:px-10 w-full py-16 md:py-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.5 }}
-            className="mb-10 md:mb-12"
+            className="mb-8 md:mb-12"
           >
             <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-3">
               How We Work
@@ -418,24 +487,41 @@ export default function ProcessSection() {
               From idea to impact.
             </h2>
             <p className="text-muted text-sm mt-2 max-w-md">
-              Scroll through each stage of our process — a journey from discovery to growth.
+              A connected journey from discovery to growth — scroll through each stage.
             </p>
           </motion.div>
 
-          {isMobile ? (
-            <MobileView
-              activeStage={activeStage}
-              scrollProgress={scrollYProgress.get()}
-            />
-          ) : (
-            <div className="flex gap-12 lg:gap-20">
-              <Timeline
-                activeStage={activeStage}
-                scrollProgress={scrollYProgress}
-              />
-              <ContentPanel activeStage={activeStage} />
-            </div>
-          )}
+          <DesktopView
+            stages={stages}
+            activeStage={activeStage}
+            progress={progress}
+            onStageClick={(i) => {
+              setActiveStage(i)
+              const offsets = stageOffsets[i]
+              const targetProgress = offsets.start + (offsets.end - offsets.start) / 2
+              const section = sectionRef.current
+              if (section) {
+                const scrollTarget = section.offsetTop + targetProgress * (section.scrollHeight - window.innerHeight)
+                window.scrollTo({ top: scrollTarget, behavior: 'smooth' })
+              }
+            }}
+          />
+
+          <MobileView
+            stages={stages}
+            activeStage={activeStage}
+            progress={progress}
+            onStageClick={(i) => {
+              setActiveStage(i)
+              const offsets = stageOffsets[i]
+              const targetProgress = offsets.start + (offsets.end - offsets.start) / 2
+              const section = sectionRef.current
+              if (section) {
+                const scrollTarget = section.offsetTop + targetProgress * (section.scrollHeight - window.innerHeight)
+                window.scrollTo({ top: scrollTarget, behavior: 'smooth' })
+              }
+            }}
+          />
         </div>
       </div>
     </section>

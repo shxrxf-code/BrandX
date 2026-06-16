@@ -1,7 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
+
+const stats = [
+  { value: '200+', label: 'Projects Delivered' },
+  { value: '50+', label: 'Clients' },
+  { value: '98%', label: 'Client Satisfaction' },
+  { value: '8+', label: 'Years in Business' },
+]
 
 const values = [
   {
@@ -22,8 +28,10 @@ export default function AboutSection() {
   return (
     <section className="relative py-24 md:py-32 overflow-hidden bg-background scroll-mt-24" id="about">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 right-1/4 w-[350px] h-[350px] rounded-full bg-purple-600/5 blur-[120px] animate-aurora-slow" />
+        <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full bg-purple-600/5 blur-[150px] animate-aurora-slow" />
+        <div className="absolute bottom-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
       </div>
+
       <div className="max-w-content mx-auto px-6 md:px-10 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -44,6 +52,23 @@ export default function AboutSection() {
           </p>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20"
+        >
+          {stats.map((s) => (
+            <div key={s.label} className="glass-card rounded-2xl p-6 md:p-8 text-center">
+              <span className="text-3xl md:text-4xl font-display font-bold text-accent tracking-tight block">
+                {s.value}
+              </span>
+              <p className="text-sm text-muted mt-1">{s.label}</p>
+            </div>
+          ))}
+        </motion.div>
+
         <div className="grid md:grid-cols-12 gap-10 mb-16">
           <div className="md:col-span-3">
             <p className="text-sm font-semibold text-muted uppercase tracking-wider">Approach</p>
@@ -59,7 +84,7 @@ export default function AboutSection() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 mb-20">
           {values.map((v) => (
             <motion.div
               key={v.title}
@@ -80,18 +105,15 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-20 text-center border-t border-white/10 pt-20"
+          className="text-center border-t border-white/10 pt-16"
         >
-          <h2 className="text-heading-2 font-bold tracking-tight mb-4">Let&apos;s work together.</h2>
-          <p className="text-muted mb-8 max-w-md mx-auto">
-            We take on a small number of new projects each quarter.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-flex px-6 py-3 btn-gradient text-sm"
-          >
-            Start a Project
-          </Link>
+          <div className="max-w-2xl mx-auto">
+            <p className="text-sm text-muted uppercase tracking-wider font-semibold mb-3">Our Mission</p>
+            <p className="text-xl md:text-2xl text-foreground font-display font-bold tracking-tight leading-snug">
+              To help ambitious businesses build digital products that create measurable impact — through
+              strategy, design, and technology delivered by senior practitioners who care.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>

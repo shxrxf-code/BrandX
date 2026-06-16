@@ -6,10 +6,11 @@ import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 
 const navItems = [
-  { href: '#work', label: 'Work' },
   { href: '#services', label: 'Services' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#work', label: 'Work' },
+  { href: '#process', label: 'Process' },
   { href: '#about', label: 'About' },
+  { href: '#contact', label: 'Contact' },
 ]
 
 function scrollToSection(id: string) {

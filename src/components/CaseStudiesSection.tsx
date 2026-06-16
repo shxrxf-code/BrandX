@@ -41,7 +41,7 @@ const projects = [
 
 export default function CaseStudiesSection() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden bg-background">
+    <section className="relative py-20 md:py-28 overflow-hidden bg-background scroll-mt-24" id="work">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

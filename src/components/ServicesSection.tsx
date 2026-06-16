@@ -209,7 +209,7 @@ function ServiceCard({
 
 export default function ServicesSection() {
   return (
-    <section className="relative py-20 md:py-28 overflow-hidden bg-background" id="services">
+    <section className="relative py-20 md:py-28 overflow-hidden bg-background scroll-mt-24" id="services">
       <div className="max-w-content mx-auto px-6 md:px-10">
         <div className="mb-12 md:mb-16">
           <span className="inline-block text-xs text-accent font-semibold tracking-wider uppercase mb-3">

@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 export default function ContactSection() {
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-background">
+    <section className="relative py-24 md:py-32 overflow-hidden bg-background scroll-mt-24" id="contact">
       <div className="max-w-content mx-auto px-6 md:px-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

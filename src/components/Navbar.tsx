@@ -1,20 +1,32 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 const navItems = [
-  { href: '/work', label: 'Work' },
-  { href: '/services', label: 'Services' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '#work', label: 'Work' },
+  { href: '#services', label: 'Services' },
+  { href: '#about', label: 'About' },
+  { href: '#contact', label: 'Contact' },
 ]
+
+function scrollToSection(id: string) {
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' })
+    el.setAttribute('tabindex', '-1')
+    el.focus({ preventScroll: true })
+  }
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
+  const pathname = usePathname()
+  const isHome = pathname === '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -28,6 +40,42 @@ export default function Navbar() {
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
 
+  useEffect(() => {
+    if (!isHome) return
+
+    const sectionIds = navItems.map((item) => item.href.replace('#', ''))
+    const observers: IntersectionObserver[] = []
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id)
+      if (!el) return
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSection(id)
+            }
+          })
+        },
+        { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+      )
+      observer.observe(el)
+      observers.push(observer)
+    })
+
+    return () => observers.forEach((o) => o.disconnect())
+  }, [isHome])
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const id = href.replace('#', '')
+    if (isHome) {
+      e.preventDefault()
+      scrollToSection(id)
+    }
+    setMobileOpen(false)
+  }
+
   return (
     <>
       <header
@@ -39,31 +87,47 @@ export default function Navbar() {
         )}
       >
         <div className="max-w-content mx-auto px-6 md:px-10 flex items-center justify-between">
-          <Link href="/" className="relative group">
+          <a href="/" className="relative group">
             <span className="text-xl font-display font-bold tracking-tight text-foreground">
               Brandex
               <span className="text-accent">.</span>
             </span>
-          </Link>
+          </a>
 
           <nav className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="relative text-sm text-muted hover:text-foreground transition-colors duration-200"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const sectionId = item.href.replace('#', '')
+              const isActive = isHome && activeSection === sectionId
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={cn(
+                    'relative text-sm transition-colors duration-200',
+                    isActive ? 'text-accent' : 'text-muted hover:text-foreground'
+                  )}
+                >
+                  {item.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-indicator"
+                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-accent rounded-full"
+                      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                    />
+                  )}
+                </a>
+              )
+            })}
           </nav>
 
-          <Link
-            href="/contact"
+          <a
+            href="#contact"
+            onClick={(e) => handleNavClick(e, '#contact')}
             className="hidden md:inline-flex items-center px-5 py-2.5 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200"
           >
             Start Your Project
-          </Link>
+          </a>
 
           <button
             onClick={() => setMobileOpen(true)}
@@ -104,13 +168,13 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08, duration: 0.4 }}
                 >
-                  <Link
+                  <a
                     href={item.href}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={(e) => handleNavClick(e, item.href)}
                     className="text-3xl md:text-5xl font-display font-bold tracking-tight text-foreground/80 hover:text-foreground transition-colors duration-200"
                   >
                     {item.label}
-                  </Link>
+                  </a>
                 </motion.div>
               ))}
 
@@ -120,13 +184,13 @@ export default function Navbar() {
                 transition={{ delay: 0.4, duration: 0.4 }}
                 className="mt-8"
               >
-                <Link
-                  href="/contact"
-                  onClick={() => setMobileOpen(false)}
+                <a
+                  href="#contact"
+                  onClick={(e) => handleNavClick(e, '#contact')}
                   className="inline-flex px-8 py-3 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent-dark transition-colors duration-200"
                 >
                   Start Your Project
-                </Link>
+                </a>
               </motion.div>
             </nav>
           </motion.div>

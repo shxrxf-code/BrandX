@@ -191,13 +191,14 @@ function ServiceCard({
               initial={{ scale: 1 }}
               animate={{ scale: [1, 1.06, 1] }}
               transition={{ duration: 0.5, ease: 'easeInOut' }}
-              className="absolute -top-2.5 right-4 px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase"
+              style={{ top: 16, right: 16 }}
+              className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase"
             >
               Popular
             </motion.div>
           )}
           {isFeatured && !hovered && !expanded && (
-            <div className="absolute -top-2.5 right-4 px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase">
+            <div style={{ top: 16, right: 16 }} className="absolute px-2.5 py-0.5 bg-gradient-to-r from-accent to-purple-600 rounded-full text-[10px] font-semibold text-white tracking-wider uppercase">
               Popular
             </div>
           )}

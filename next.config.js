@@ -50,14 +50,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
-  redirects: async () => [
-    {
-      source: '/:path*',
-      has: [{ type: 'host', value: 'www.brandexdigital.in' }],
-      destination: 'https://brandexdigital.in/:path*',
-      permanent: true,
-    },
-  ],
   images: {
     remotePatterns: [
       {

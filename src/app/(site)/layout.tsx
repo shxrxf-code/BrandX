@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Analytics } from '@vercel/analytics/react'
 import Navbar from '@/components/Navbar'
-import AnalyticsTracker from '@/components/AnalyticsTracker'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://brandexdigital.in'),
@@ -45,7 +44,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <>
       <Navbar />
       {children}
-      <AnalyticsTracker />
       <Analytics />
     </>
   )

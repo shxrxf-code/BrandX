@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import AnalyticsTracker from '@/components/AnalyticsTracker'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -82,6 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans bg-background text-foreground antialiased">
         <Navbar />
         {children}
+        <AnalyticsTracker />
         <Analytics />
       </body>
     </html>

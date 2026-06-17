@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { COOKIE_NAME, verifyToken } from '@/lib/auth'
 
 const RATE_LIMIT_WINDOW = 60_000
 const MAX_SUSPICIOUS_REQUESTS = 30
@@ -31,7 +32,6 @@ const SENSITIVE_PATHS = [
   '/package-lock.json',
   '/yarn.lock',
   '/pnpm-lock.yaml',
-  '/admin',
   '/administrator',
   '/wp-admin',
   '/wp-content',
@@ -299,6 +299,18 @@ export function middleware(request: NextRequest) {
 
   if (isEnumeration) {
     return new NextResponse(null, { status: 404 })
+  }
+
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    const token = request.cookies.get(COOKIE_NAME)?.value
+    if (!token || !verifyToken(token)) {
+      if (pathname.startsWith('/api/')) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+      const loginUrl = new URL('/admin/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
   }
 
   const response = NextResponse.next()

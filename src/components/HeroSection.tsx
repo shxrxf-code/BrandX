@@ -14,7 +14,7 @@ export default function HeroSection() {
       </div>
 
       <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid lg:grid-cols-[9fr_11fr] gap-10 lg:gap-14 items-center">
           <div className="relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -86,7 +86,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative hidden lg:block"
+            className="relative hidden lg:block w-full min-h-[480px] xl:min-h-[560px]"
           >
             <HeroVisual />
           </motion.div>

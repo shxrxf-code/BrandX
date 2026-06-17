@@ -60,12 +60,13 @@ function ServiceIcon({ id }: { id: string }) {
   }
 }
 
-/* ─── Orbital Ecosystem (Desktop) ─── */
+/* ─── Desktop Ecosystem (Scaled) ─── */
 
-const ORBIT_RX = 30
-const ORBIT_RY = 22
+const ORBIT_RX = 36
+const ORBIT_RY = 28
 const CX = 50
 const CY = 50
+const FLOAT_DELAYS = [0, 0.6, 1.2, 1.8, 2.4, 3.0, 3.6, 4.2]
 
 function DesktopEcosystem() {
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -88,7 +89,7 @@ function DesktopEcosystem() {
 
   useEffect(() => {
     if (reducedMotion) return
-    const speed = 0.0008
+    const speed = 0.0006
     const loop = () => {
       anglesRef.current = anglesRef.current.map((a) => a + speed)
       setAngles([...anglesRef.current])
@@ -100,7 +101,7 @@ function DesktopEcosystem() {
 
   useEffect(() => {
     if (reducedMotion) return
-    const interval = setInterval(() => setPulseIdx((p) => (p + 1) % CONNECTIONS.length), 1500)
+    const interval = setInterval(() => setPulseIdx((p) => (p + 1) % CONNECTIONS.length), 1400)
     return () => clearInterval(interval)
   }, [reducedMotion])
 
@@ -115,8 +116,8 @@ function DesktopEcosystem() {
 
   const handleLeave = useCallback(() => setMousePos({ x: 0, y: 0 }), [])
 
-  const px = mousePos.x * 3
-  const py = mousePos.y * 3
+  const px = mousePos.x * 4
+  const py = mousePos.y * 4
 
   const nodePositions = useMemo(() => {
     const rotationOffset = reducedMotion ? 0 : -0.15
@@ -125,9 +126,8 @@ function DesktopEcosystem() {
       const x = CX + ORBIT_RX * Math.cos(angle)
       const y = CY + ORBIT_RY * Math.sin(angle)
       const depthFactor = (y - (CY - ORBIT_RY)) / (2 * ORBIT_RY)
-      const scale = 0.82 + depthFactor * 0.18
-      const blur = (1 - depthFactor) * 0.5
-      return { ...svc, x, y, scale, blur }
+      const scale = 0.78 + depthFactor * 0.22
+      return { ...svc, x, y, scale }
     })
   }, [angles, reducedMotion])
 
@@ -141,28 +141,29 @@ function DesktopEcosystem() {
     }))
   }, [nodePositions])
 
-  const activeConnections = hoveredId
-    ? CONNECTIONS.filter(([a, b]) => a === hoveredId || b === hoveredId).flat()
-    : []
-
   const currentPulse = CONNECTIONS[pulseIdx]
   const pulseFrom = nodePositions.find((n) => n.id === currentPulse?.[0])
   const pulseTo = nodePositions.find((n) => n.id === currentPulse?.[1])
 
-  const getScaleClass = (scale: number) => {
-    if (scale > 0.96) return 'z-30'
-    if (scale > 0.9) return 'z-20'
+  const getDepth = (scale: number) => {
+    if (scale > 0.94) return 'z-30'
+    if (scale > 0.88) return 'z-20'
     return 'z-10'
   }
 
   return (
-    <div ref={containerRef} onMouseMove={handleMouse} onMouseLeave={handleLeave} className="relative w-full select-none">
-      {/* Glow background */}
-      <div className="absolute inset-0 pointer-events-none">
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouse}
+      onMouseLeave={handleLeave}
+      className="relative w-full aspect-square select-none"
+    >
+      {/* Ambient glow behind core */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full"
+          className="w-[70%] aspect-square rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 60%)',
           }}
         />
       </div>
@@ -170,30 +171,46 @@ function DesktopEcosystem() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="relative w-full aspect-square max-h-[420px] md:max-h-[480px] mx-auto"
+        transition={{ duration: 0.6, delay: 0.15 }}
+        className="relative w-full h-full flex items-center justify-center"
         style={{
-          transform: `translate(${px * 0.5}px, ${py * 0.5}px)`,
+          transform: `translate(${px * 0.4}px, ${py * 0.4}px)`,
           transition: 'transform 0.15s ease-out',
         }}
       >
+        {/* Orbital ring */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" style={{ filter: 'blur(0.3px)' }}>
+          <ellipse cx={CX} cy={CY} rx={ORBIT_RX} ry={ORBIT_RY} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" strokeDasharray="1.5 5" />
+        </svg>
+
         {/* Connection lines */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100">
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id="line-glow">
+              <feGaussianBlur stdDeviation="0.4" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="pulse-glow">
+              <feGaussianBlur stdDeviation="0.6" result="blur" />
+              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
           {connectionEndpoints.map((conn) => {
-            const isHighlighted =
-              hoveredId && (conn.fromId === hoveredId || conn.toId === hoveredId)
+            const isHighlighted = hoveredId && (conn.fromId === hoveredId || conn.toId === hoveredId)
             return (
-              <line
-                key={`conn-${conn.fromId}-${conn.toId}`}
-                x1={conn.from.x}
-                y1={conn.from.y}
-                x2={conn.to.x}
-                y2={conn.to.y}
-                stroke={isHighlighted ? '#8B5CF6' : 'rgba(255,255,255,0.06)'}
-                strokeWidth={isHighlighted ? '0.4' : '0.15'}
-                strokeOpacity={isHighlighted ? 0.5 : 1}
-                className="transition-all duration-500"
-              />
+              <g key={`conn-${conn.fromId}-${conn.toId}`}>
+                <line
+                  x1={conn.from.x}
+                  y1={conn.from.y}
+                  x2={conn.to.x}
+                  y2={conn.to.y}
+                  stroke={isHighlighted ? '#8B5CF6' : 'rgba(255,255,255,0.06)'}
+                  strokeWidth={isHighlighted ? '0.6' : '0.2'}
+                  strokeOpacity={isHighlighted ? 0.6 : 1}
+                  filter={isHighlighted ? 'url(#line-glow)' : undefined}
+                  className="transition-all duration-500"
+                />
+              </g>
             )
           })}
 
@@ -201,51 +218,48 @@ function DesktopEcosystem() {
           {pulseFrom && pulseTo && !reducedMotion && (
             <motion.circle
               key={`pulse-${pulseIdx}`}
-              r="1.2"
+              r="3"
               fill={SERVICES.find((s) => s.id === currentPulse?.[0])?.color ?? '#8B5CF6'}
+              filter="url(#pulse-glow)"
               initial={{ cx: pulseFrom.x, cy: pulseFrom.y, opacity: 0 }}
               animate={{
                 cx: [pulseFrom.x, (pulseFrom.x + pulseTo.x) / 2, pulseTo.x],
                 cy: [pulseFrom.y, (pulseFrom.y + pulseTo.y) / 2, pulseTo.y],
-                opacity: [0, 0.8, 0],
-                scale: [0.5, 1.5, 0.3],
+                opacity: [0, 0.9, 0],
+                scale: [0.3, 2.5, 0.2],
               }}
-              transition={{ duration: 1.5, ease: 'easeInOut' }}
-              className="z-20"
-              style={{ filter: 'blur(0.5px)' }}
+              transition={{ duration: 1.4, ease: 'easeInOut' }}
             />
           )}
         </svg>
 
-        {/* Brandex Core */}
-        <div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40"
-        >
+        {/* Core */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
           <motion.div
             animate={reducedMotion ? {} : {
-              scale: [1, 1.05, 1],
+              scale: [1, 1.06, 1],
               boxShadow: [
-                '0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05)',
-                '0 0 30px rgba(139,92,246,0.3), 0 0 60px rgba(217,70,239,0.1)',
-                '0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05)',
+                '0 0 30px rgba(139,92,246,0.15), 0 0 60px rgba(139,92,246,0.05)',
+                '0 0 50px rgba(139,92,246,0.3), 0 0 80px rgba(217,70,239,0.1)',
+                '0 0 30px rgba(139,92,246,0.15), 0 0 60px rgba(139,92,246,0.05)',
               ],
             }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-accent to-magenta flex items-center justify-center shadow-xl"
+            className="w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-3xl bg-gradient-to-br from-accent to-magenta flex items-center justify-center shadow-2xl"
           >
-            <span className="text-xs md:text-sm font-display font-bold text-white">Bx</span>
+            <span className="text-sm md:text-lg font-display font-bold text-white tracking-tight">Bx</span>
           </motion.div>
           <motion.div
-            animate={reducedMotion ? {} : { opacity: [0.3, 0.6, 0.3] }}
+            animate={reducedMotion ? {} : { opacity: [0.2, 0.5, 0.2] }}
             transition={{ duration: 2.5, repeat: Infinity }}
-            className="absolute -inset-4 rounded-full bg-accent/10 blur-xl -z-10"
+            className="absolute -inset-6 md:-inset-8 rounded-full bg-accent/10 blur-2xl -z-10"
           />
         </div>
 
         {/* Service modules */}
-        {nodePositions.map((node) => {
+        {nodePositions.map((node, idx) => {
           const isHovered = hoveredId === node.id
-          const isRelated = hoveredId && activeConnections.includes(node.id) && node.id !== hoveredId
+          const isRelated = hoveredId && CONNECTIONS.some(([a, b]) => (a === hoveredId && b === node.id) || (b === hoveredId && a === node.id))
           const isDimmed = hoveredId && !isHovered && !isRelated
 
           return (
@@ -257,55 +271,59 @@ function DesktopEcosystem() {
               onBlur={() => setHoveredId(null)}
               onClick={() => setActiveId(activeId === node.id ? null : node.id)}
               className={cn(
-                'absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 focus:outline-none',
-                getScaleClass(node.scale)
+                'absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5 focus:outline-none',
+                getDepth(node.scale)
               )}
               style={{
                 left: `${node.x}%`,
                 top: `${node.y}%`,
+                animation: reducedMotion ? 'none' : `node-float 4s ease-in-out infinite`,
+                animationDelay: `${FLOAT_DELAYS[idx % FLOAT_DELAYS.length]}s`,
               }}
-              whileHover={{ scale: node.scale * 1.1 }}
+              whileHover={{ scale: node.scale * 1.12 }}
               transition={{ type: 'spring', stiffness: 250, damping: 20 }}
             >
               <motion.div
                 animate={{
-                  opacity: isDimmed ? 0.3 : 1,
-                  scale: isDimmed ? 0.9 : 1,
+                  opacity: isDimmed ? 0.25 : 1,
+                  scale: isDimmed ? 0.85 : 1,
                 }}
                 transition={{ duration: 0.3 }}
                 className={cn(
-                  'rounded-xl backdrop-blur-xl border transition-all duration-300 flex flex-col items-center',
+                  'rounded-xl md:rounded-2xl backdrop-blur-xl border-2 transition-all duration-300 flex flex-col items-center',
                   isHovered
-                    ? 'border-accent/40 bg-accent/[0.06] shadow-lg shadow-accent/10'
+                    ? 'border-accent/50 bg-accent/[0.08] shadow-xl shadow-accent/15'
                     : isRelated
-                      ? 'border-white/20 bg-white/[0.04]'
-                      : 'border-white/[0.08] bg-white/[0.03]'
+                      ? 'border-white/25 bg-white/[0.05] shadow-lg'
+                      : 'border-white/10 bg-white/[0.03] shadow-sm'
                 )}
                 style={{
-                  padding: `${0.5 + node.scale * 0.15}rem`,
-                  filter: `blur(${node.blur}px)`,
+                  padding: `${0.6 + node.scale * 0.2}rem`,
+                  filter: hoveredId && !isHovered && !isRelated ? 'blur(0.3px)' : 'none',
                   willChange: 'transform',
                 }}
               >
                 <div
                   className={cn(
-                    'rounded-lg flex items-center justify-center transition-colors duration-300',
-                    isHovered ? 'text-accent' : 'text-muted/60'
+                    'rounded-xl flex items-center justify-center transition-colors duration-300',
+                    isHovered ? 'text-accent' : 'text-muted/50'
                   )}
                   style={{
-                    width: `${1 + node.scale * 0.4}rem`,
-                    height: `${1 + node.scale * 0.4}rem`,
+                    width: `${1.4 + node.scale * 0.5}rem`,
+                    height: `${1.4 + node.scale * 0.5}rem`,
                   }}
                 >
                   <ServiceIcon id={node.id} />
                 </div>
                 <span
-                  className="text-[7px] md:text-[8px] font-semibold tracking-wide whitespace-nowrap transition-colors duration-300"
+                  className={cn(
+                    'text-[9px] md:text-xs font-semibold tracking-wide whitespace-nowrap transition-colors duration-300 mt-1',
+                  )}
                   style={{
                     color: isHovered
                       ? node.color
                       : isRelated
-                        ? 'rgba(255,255,255,0.55)'
+                        ? 'rgba(255,255,255,0.6)'
                         : 'rgba(255,255,255,0.3)',
                   }}
                 >
@@ -313,32 +331,17 @@ function DesktopEcosystem() {
                 </span>
               </motion.div>
 
-              {/* Active indicator dot */}
               {(isHovered || isRelated) && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="w-1 h-1 rounded-full"
+                  className="w-1.5 h-1.5 rounded-full"
                   style={{ background: node.color }}
                 />
               )}
             </motion.button>
           )
         })}
-
-        {/* Orbital ring guide */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100">
-          <ellipse
-            cx={CX}
-            cy={CY}
-            rx={ORBIT_RX}
-            ry={ORBIT_RY}
-            fill="none"
-            stroke="rgba(255,255,255,0.03)"
-            strokeWidth="0.3"
-            strokeDasharray="1 4"
-          />
-        </svg>
       </motion.div>
 
       {/* Description card */}
@@ -349,26 +352,33 @@ function DesktopEcosystem() {
           return (
             <motion.div
               key={svc.id}
-              initial={{ opacity: 0, y: 6, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 6, scale: 0.95 }}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
               transition={{ duration: 0.2 }}
-              className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] max-w-[260px] rounded-xl border border-white/10 p-3 pointer-events-none z-50"
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[80%] max-w-[300px] rounded-xl border border-white/10 p-3 pointer-events-none z-50"
               style={{
-                background: 'rgba(11,11,15,0.88)',
+                background: 'rgba(11,11,15,0.9)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
               }}
             >
               <div className="flex items-center gap-2 mb-1">
-                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: svc.color }} />
-                <span className="text-xs font-display font-bold text-foreground">{svc.label}</span>
+                <span className="w-2 h-2 rounded-full shrink-0" style={{ background: svc.color }} />
+                <span className="text-sm font-display font-bold text-foreground">{svc.label}</span>
               </div>
-              <p className="text-[10px] text-muted/60 leading-relaxed">{svc.desc}</p>
+              <p className="text-xs text-muted/60 leading-relaxed">{svc.desc}</p>
             </motion.div>
           )
         })()}
       </AnimatePresence>
+
+      <style>{`
+        @keyframes node-float {
+          0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+          50% { transform: translate(-50%, -50%) translateY(-4px); }
+        }
+      `}</style>
     </div>
   )
 }
@@ -381,14 +391,14 @@ function MobileCards() {
   const toggle = (id: string) => setExpanded(expanded === id ? null : id)
 
   return (
-    <div className="flex flex-col gap-2.5 w-full">
+    <div className="flex flex-col gap-3 w-full">
       {SERVICES.map((svc) => {
         const isOpen = expanded === svc.id
         return (
           <motion.button
             key={svc.id}
             onClick={() => toggle(svc.id)}
-            className="w-full text-left rounded-xl border backdrop-blur-xl p-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all duration-200"
+            className="w-full text-left rounded-xl border backdrop-blur-xl p-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all duration-200"
             style={{
               background: `${svc.color}08`,
               borderColor: isOpen ? `${svc.color}40` : 'rgba(255,255,255,0.08)',
@@ -396,10 +406,10 @@ function MobileCards() {
           >
             <div className="flex items-center gap-3">
               <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
                 style={{ background: `${svc.color}15`, color: svc.color }}
               >
-                <span className="w-4 h-4"><ServiceIcon id={svc.id} /></span>
+                <span className="w-5 h-5"><ServiceIcon id={svc.id} /></span>
               </div>
               <span className="text-sm font-display font-semibold text-foreground">{svc.label}</span>
               <motion.span
@@ -434,7 +444,7 @@ function MobileCards() {
 export default function HeroVisual() {
   return (
     <>
-      <div className="hidden lg:flex items-center justify-center h-full">
+      <div className="hidden lg:flex items-center justify-center w-full h-full">
         <DesktopEcosystem />
       </div>
       <div className="block lg:hidden">

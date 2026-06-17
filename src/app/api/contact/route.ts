@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { trackContactSubmission } from '@/lib/analytics'
 
 const RATE_LIMIT_WINDOW = 60 * 1000
 const MAX_REQUESTS_PER_WINDOW = 5
@@ -121,15 +122,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
 
-    console.log(
-      JSON.stringify({
-        level: 'info',
-        event: 'contact_form_submission',
-        ip: ip,
-        email_domain: emailDomain,
-        timestamp: new Date().toISOString(),
-      })
-    )
+    trackContactSubmission(name, email, company)
 
     return NextResponse.json(
       { success: true },

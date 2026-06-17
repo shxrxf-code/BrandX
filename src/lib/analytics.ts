@@ -1,3 +1,5 @@
+// ─── Page Views ──────────────────────────────────
+
 export interface PageView {
   path: string
   timestamp: number
@@ -8,6 +10,8 @@ export interface PageView {
   os: string
   language: string
   isNewVisitor: boolean
+  timezone: string
+  region: string
 }
 
 export interface AnalyticsSnapshot {
@@ -69,10 +73,75 @@ export interface OsStats {
   count: number
 }
 
+// ─── Geographic Data ─────────────────────────────
+
+export interface GeoStats {
+  region: string
+  count: number
+}
+
+export interface TimezoneStats {
+  timezone: string
+  count: number
+}
+
+// ─── Contact Submissions ─────────────────────────
+
+export interface ContactSubmission {
+  name: string
+  email: string
+  company: string
+  timestamp: number
+  read: boolean
+}
+
+// ─── Page Performance ────────────────────────────
+
+export interface PagePerfEntry {
+  path: string
+  timestamp: number
+  loadTime: number
+  domContentLoaded: number
+  sessionId: string
+}
+
+export interface PagePerfStats {
+  avgLoadTime: number
+  avgDomContentLoaded: number
+  slowestPages: { path: string; avgLoadTime: number }[]
+  recentEntries: PagePerfEntry[]
+}
+
+// ─── Error Monitoring ────────────────────────────
+
+export interface ErrorEntry {
+  message: string
+  source: string
+  lineno: number
+  colno: number
+  path: string
+  timestamp: number
+  browser: string
+  os: string
+}
+
+export interface ErrorStats {
+  total: number
+  byMessage: { message: string; count: number }[]
+  byPage: { path: string; count: number }[]
+  recent: ErrorEntry[]
+}
+
+// ─── Store ───────────────────────────────────────
+
 const pageViews: PageView[] = []
+const contactSubmissions: ContactSubmission[] = []
+const perfEntries: PagePerfEntry[] = []
+const errorEntries: ErrorEntry[] = []
 
 const LIVE_WINDOW = 5 * 60 * 1000
-const SESSION_TIMEOUT = 30 * 60 * 1000
+
+// ─── UA Parsing ──────────────────────────────────
 
 function parseBrowser(ua: string): string {
   if (/chrome/i.test(ua) && !/edge|opr/i.test(ua)) return 'Chrome'
@@ -119,18 +188,67 @@ function getDaysAgo(n: number): string {
   return d.toISOString().split('T')[0]
 }
 
+const REGION_MAP: Record<string, string> = {
+  'America/New_York': 'North America',
+  'America/Chicago': 'North America',
+  'America/Denver': 'North America',
+  'America/Los_Angeles': 'North America',
+  'America/Toronto': 'North America',
+  'America/Vancouver': 'North America',
+  'America/Sao_Paulo': 'South America',
+  'America/Argentina': 'South America',
+  'America/Mexico_City': 'South America',
+  'Europe/London': 'Europe',
+  'Europe/Paris': 'Europe',
+  'Europe/Berlin': 'Europe',
+  'Europe/Madrid': 'Europe',
+  'Europe/Rome': 'Europe',
+  'Europe/Amsterdam': 'Europe',
+  'Europe/Stockholm': 'Europe',
+  'Europe/Moscow': 'Europe',
+  'Europe/Istanbul': 'Europe',
+  'Asia/Dubai': 'Middle East',
+  'Asia/Riyadh': 'Middle East',
+  'Asia/Tel_Aviv': 'Middle East',
+  'Asia/Kolkata': 'South Asia',
+  'Asia/Karachi': 'South Asia',
+  'Asia/Dhaka': 'South Asia',
+  'Asia/Shanghai': 'East Asia',
+  'Asia/Tokyo': 'East Asia',
+  'Asia/Seoul': 'East Asia',
+  'Asia/Singapore': 'Southeast Asia',
+  'Asia/Hong_Kong': 'Southeast Asia',
+  'Asia/Bangkok': 'Southeast Asia',
+  'Australia/Sydney': 'Oceania',
+  'Australia/Melbourne': 'Oceania',
+  'Pacific/Auckland': 'Oceania',
+  'Africa/Cairo': 'Africa',
+  'Africa/Lagos': 'Africa',
+  'Africa/Johannesburg': 'Africa',
+  'Africa/Nairobi': 'Africa',
+}
+
+function mapTimezoneToRegion(tz: string): string {
+  return REGION_MAP[tz] || 'Other'
+}
+
+// ─── Track Page View ─────────────────────────────
+
 export function trackPageView(
   path: string,
   referrer: string,
   userAgent: string,
   language: string,
-  ip: string
+  ip: string,
+  timezone?: string
 ): void {
   const device = parseDevice(userAgent)
   const browser = parseBrowser(userAgent)
   const os = parseOS(userAgent)
   const sessionId = getSessionId(ip, userAgent)
   const isNew = isNewVisitor(sessionId)
+  const tz = timezone || 'unknown'
+  const region = mapTimezoneToRegion(tz)
 
   pageViews.push({
     path,
@@ -142,12 +260,150 @@ export function trackPageView(
     os,
     language: language || 'unknown',
     isNewVisitor: isNew,
+    timezone: tz,
+    region,
   })
 
   if (pageViews.length > 100_000) {
     pageViews.splice(0, pageViews.length - 50_000)
   }
 }
+
+// ─── Track Contact Submission ────────────────────
+
+export function trackContactSubmission(
+  name: string,
+  email: string,
+  company: string
+): void {
+  contactSubmissions.push({
+    name,
+    email,
+    company,
+    timestamp: Date.now(),
+    read: false,
+  })
+
+  if (contactSubmissions.length > 10_000) {
+    contactSubmissions.splice(0, contactSubmissions.length - 5_000)
+  }
+}
+
+export function getContactSubmissions(): ContactSubmission[] {
+  return [...contactSubmissions].sort((a, b) => b.timestamp - a.timestamp)
+}
+
+export function markContactRead(index: number): void {
+  if (contactSubmissions[index]) {
+    contactSubmissions[index].read = true
+  }
+}
+
+// ─── Track Page Performance ──────────────────────
+
+export function trackPagePerformance(
+  path: string,
+  loadTime: number,
+  domContentLoaded: number,
+  sessionId: string
+): void {
+  perfEntries.push({
+    path,
+    timestamp: Date.now(),
+    loadTime,
+    domContentLoaded,
+    sessionId,
+  })
+
+  if (perfEntries.length > 20_000) {
+    perfEntries.splice(0, perfEntries.length - 10_000)
+  }
+}
+
+export function getPagePerformanceStats(): PagePerfStats {
+  if (perfEntries.length === 0) {
+    return {
+      avgLoadTime: 0,
+      avgDomContentLoaded: 0,
+      slowestPages: [],
+      recentEntries: [],
+    }
+  }
+
+  const totalLoad = perfEntries.reduce((s, e) => s + e.loadTime, 0)
+  const totalDom = perfEntries.reduce((s, e) => s + e.domContentLoaded, 0)
+
+  const pageMap = new Map<string, { totalLoad: number; count: number }>()
+  for (const e of perfEntries) {
+    if (!pageMap.has(e.path)) pageMap.set(e.path, { totalLoad: 0, count: 0 })
+    const entry = pageMap.get(e.path)!
+    entry.totalLoad += e.loadTime
+    entry.count++
+  }
+
+  const slowestPages = [...pageMap.entries()]
+    .map(([path, data]) => ({ path, avgLoadTime: data.totalLoad / data.count }))
+    .sort((a, b) => b.avgLoadTime - a.avgLoadTime)
+    .slice(0, 10)
+
+  return {
+    avgLoadTime: perfEntries.length > 0 ? totalLoad / perfEntries.length : 0,
+    avgDomContentLoaded: perfEntries.length > 0 ? totalDom / perfEntries.length : 0,
+    slowestPages,
+    recentEntries: [...perfEntries].sort((a, b) => b.timestamp - a.timestamp).slice(0, 20),
+  }
+}
+
+// ─── Track Error ─────────────────────────────────
+
+export function trackError(
+  message: string,
+  source: string,
+  lineno: number,
+  colno: number,
+  path: string,
+  userAgent: string
+): void {
+  errorEntries.push({
+    message,
+    source,
+    lineno,
+    colno,
+    path,
+    timestamp: Date.now(),
+    browser: parseBrowser(userAgent),
+    os: parseOS(userAgent),
+  })
+
+  if (errorEntries.length > 10_000) {
+    errorEntries.splice(0, errorEntries.length - 5_000)
+  }
+}
+
+export function getErrorStats(): ErrorStats {
+  const msgMap = new Map<string, number>()
+  const pageMap = new Map<string, number>()
+
+  for (const e of errorEntries) {
+    msgMap.set(e.message, (msgMap.get(e.message) || 0) + 1)
+    pageMap.set(e.path, (pageMap.get(e.path) || 0) + 1)
+  }
+
+  return {
+    total: errorEntries.length,
+    byMessage: [...msgMap.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 15)
+      .map(([message, count]) => ({ message, count })),
+    byPage: [...pageMap.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 15)
+      .map(([path, count]) => ({ path, count })),
+    recent: [...errorEntries].sort((a, b) => b.timestamp - a.timestamp).slice(0, 20),
+  }
+}
+
+// ─── Aggregation ─────────────────────────────────
 
 function aggregateDayStats(views: PageView[], dateStr: string): DayStats {
   const dayViews = views.filter((v) => getDateString(v.timestamp) === dateStr)
@@ -219,10 +475,10 @@ function getAggregateStats(views: PageView[]): AggregateStats {
   }
 }
 
+// ─── Stats ───────────────────────────────────────
+
 export function getAnalyticsSnapshot(): AnalyticsSnapshot {
   const today = getDateString(Date.now())
-  const sevenDaysAgo = getDaysAgo(6)
-  const thirtyDaysAgo = getDaysAgo(29)
   const now = Date.now()
 
   const weekDays: string[] = []
@@ -247,8 +503,6 @@ export function getAnalyticsSnapshot(): AnalyticsSnapshot {
       timestamp: v.timestamp,
       device: v.device,
     }))
-
-  const todayViews = pageViews.filter((v) => getDateString(v.timestamp) === today)
 
   const topPagesMap = new Map<string, { views: number; unique: Set<string> }>()
   for (const v of pageViews) {
@@ -329,4 +583,23 @@ export function getOsStats(): OsStats[] {
   return [...map.entries()]
     .sort((a, b) => b[1] - a[1])
     .map(([os, count]) => ({ os, count }))
+}
+
+export function getGeoStats(): { regions: GeoStats[]; timezones: TimezoneStats[] } {
+  const regionMap = new Map<string, number>()
+  const tzMap = new Map<string, number>()
+
+  for (const v of pageViews) {
+    regionMap.set(v.region, (regionMap.get(v.region) || 0) + 1)
+    tzMap.set(v.timezone, (tzMap.get(v.timezone) || 0) + 1)
+  }
+
+  return {
+    regions: [...regionMap.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([region, count]) => ({ region, count })),
+    timezones: [...tzMap.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([timezone, count]) => ({ timezone, count })),
+  }
 }

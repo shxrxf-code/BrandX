@@ -5,6 +5,9 @@ import { COOKIE_NAME, verifyToken } from '@/lib/auth'
 const RATE_LIMIT_WINDOW = 60_000
 const MAX_SUSPICIOUS_REQUESTS = 30
 const enumLimitMap = new Map<string, { count: number; resetAt: number }>()
+const ADMIN_RATE_LIMIT_WINDOW = 60_000
+const MAX_ADMIN_REQUESTS = 60
+const adminRateMap = new Map<string, { count: number; resetAt: number }>()
 
 const SENSITIVE_PATHS = [
   '/.env',
@@ -244,17 +247,20 @@ function isSensitivePath(pathname: string): boolean {
 }
 
 function isEnumerationAttempt(pathname: string): boolean {
+  if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+    return false
+  }
+
   const enumerationPatterns = [
     /\/\.\.\//,
     /\/\.\/\./,
     /\/%2e%2e\//i,
     /\/%2e\//i,
     /\/+$/,
-    /\/admin\//i,
     /\/wp-/i,
     /\/\.env/i,
     /\/\.git/i,
-    /\/(config|settings|setup|install|backup|dump|sql|db|private|internal|secret|admin|administrator)/i,
+    /\/(config|settings|setup|install|backup|dump|sql|db|private|internal|secret|administrator)/i,
     /\/(test|tests|staging|dev|development|debug|log|logs|cache|temp|tmp)/i,
     /\/(phpinfo|info|status|health|metrics|swagger|graphql)/i,
     /\/api\/v[12]\//i,
@@ -301,12 +307,28 @@ export function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 404 })
   }
 
+  if (pathname.startsWith('/admin')) {
+    const now = Date.now()
+    const adminRecord = adminRateMap.get(ip)
+    if (!adminRecord || now > adminRecord.resetAt) {
+      adminRateMap.set(ip, { count: 1, resetAt: now + ADMIN_RATE_LIMIT_WINDOW })
+    } else if (adminRecord.count >= MAX_ADMIN_REQUESTS) {
+      return new NextResponse(null, { status: 429 })
+    } else {
+      adminRecord.count++
+    }
+  }
+
+  if (pathname.startsWith('/api/admin')) {
+    const token = request.cookies.get(COOKIE_NAME)?.value
+    if (!token || !verifyToken(token)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+  }
+
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const token = request.cookies.get(COOKIE_NAME)?.value
     if (!token || !verifyToken(token)) {
-      if (pathname.startsWith('/api/')) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-      }
       const loginUrl = new URL('/admin/login', request.url)
       loginUrl.searchParams.set('redirect', pathname)
       return NextResponse.redirect(loginUrl)

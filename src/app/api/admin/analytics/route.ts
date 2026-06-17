@@ -5,6 +5,10 @@ import {
   getDeviceStats,
   getBrowserStats,
   getOsStats,
+  getGeoStats,
+  getContactSubmissions,
+  getPagePerformanceStats,
+  getErrorStats,
 } from '@/lib/analytics'
 
 export async function GET() {
@@ -19,12 +23,20 @@ export async function GET() {
     const devices = getDeviceStats()
     const browsers = getBrowserStats()
     const operatingSystems = getOsStats()
+    const geo = getGeoStats()
+    const contacts = getContactSubmissions()
+    const pagePerf = getPagePerformanceStats()
+    const errors = getErrorStats()
 
     return NextResponse.json({
       snapshot,
       devices,
       browsers,
       operatingSystems,
+      geo,
+      contacts,
+      pagePerf,
+      errors,
       generatedAt: new Date().toISOString(),
     })
   } catch {

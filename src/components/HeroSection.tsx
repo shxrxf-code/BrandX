@@ -2,25 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import Image from 'next/image'
-
-const showcaseProjects = [
-  {
-    title: 'SolarTech Energy',
-    image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80',
-    result: '+340% leads',
-  },
-  {
-    title: 'Drifto',
-    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
-    result: '+260% conversion',
-  },
-  {
-    title: 'FinFlow',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-    result: '$2.4M ARR',
-  },
-]
+import HeroVisual from '@/components/HeroVisual'
 
 export default function HeroSection() {
   return (
@@ -101,38 +83,12 @@ export default function HeroSection() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="relative hidden lg:block"
           >
-            <div className="relative rounded-2xl overflow-hidden glass-card shadow-xl shadow-black/30">
-              <div className="aspect-[4/3]">
-                <Image
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
-                  alt="Dashboard preview"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <div className="flex gap-3">
-                  {showcaseProjects.map((p, i) => (
-                    <div
-                      key={p.title}
-                      className="flex-1 glass rounded-lg p-3"
-                    >
-                      <p className="text-xs font-medium text-foreground truncate">{p.title}</p>
-                      <p className="text-[10px] text-accent font-semibold mt-0.5">{p.result}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -top-4 -left-4 w-32 h-32 bg-cyan/10 rounded-full blur-3xl pointer-events-none" />
+            <HeroVisual />
           </motion.div>
         </div>
       </div>

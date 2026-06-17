@@ -91,6 +91,10 @@ export default function HeroSection() {
             <HeroVisual />
           </motion.div>
         </div>
+
+        <div className="mt-10 lg:hidden">
+          <HeroVisual />
+        </div>
       </div>
     </section>
   )

@@ -46,50 +46,101 @@ const cspString = Object.entries(cspDirectives)
   .join('; ')
 
 const nextConfig = {
-reactStrictMode: true,
-compress: true,
-poweredByHeader: false,
+  reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
   productionBrowserSourceMaps: false,
-images: {
-remotePatterns: [
-{
-@@ -29,6 +76,10 @@ const nextConfig = {
-{
-source: '/(.*)',
-headers: [
+  redirects: async () => [
+    {
+      source: '/:path*',
+      has: [{ type: 'host', value: 'www.brandexdigital.in' }],
+      destination: 'https://brandexdigital.in/:path*',
+      permanent: true,
+    },
+  ],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 768, 1024, 1280, 1536],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+  experimental: {
+    optimizePackageImports: [],
+  },
+  headers: async () => [
+    {
+      source: '/(.*)',
+      headers: [
         {
           key: 'Content-Security-Policy',
           value: cspString,
         },
-{
-key: 'X-Content-Type-Options',
-value: 'nosniff',
-@@ -39,15 +90,19 @@ const nextConfig = {
-},
-{
-key: 'X-XSS-Protection',
-          value: '1; mode=block',
+        {
+          key: 'X-Content-Type-Options',
+          value: 'nosniff',
+        },
+        {
+          key: 'X-Frame-Options',
+          value: 'DENY',
+        },
+        {
+          key: 'X-XSS-Protection',
           value: '0',
-},
-{
-key: 'Referrer-Policy',
-value: 'strict-origin-when-cross-origin',
-},
-{
-key: 'Permissions-Policy',
-          value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+        },
+        {
+          key: 'Referrer-Policy',
+          value: 'strict-origin-when-cross-origin',
+        },
+        {
+          key: 'Permissions-Policy',
           value: 'camera=(), microphone=(), geolocation=(), interest-cohort=(), battery=(), display-capture=(), encrypted-media=(), fullscreen=(self), gamepad=(), hid=(), idle-detection=(), keyboard-map=(), local-fonts=(), magnetometer=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()',
         },
         {
           key: 'Strict-Transport-Security',
           value: 'max-age=63072000; includeSubDomains; preload',
-},
-],
-},
-@@ -78,6 +133,15 @@ const nextConfig = {
-},
-],
-},
+        },
+      ],
+    },
+    {
+      source: '/_next/static/(.*)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
+        },
+      ],
+    },
+    {
+      source: '/images/(.*)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
+        },
+      ],
+    },
+    {
+      source: '/fonts/(.*)',
+      headers: [
+        {
+          key: 'Cache-Control',
+          value: 'public, max-age=31536000, immutable',
+        },
+      ],
+    },
     {
       source: '/api/(.*)',
       headers: [
@@ -99,5 +150,7 @@ key: 'Permissions-Policy',
         },
       ],
     },
-],
+  ],
 }
+
+module.exports = nextConfig

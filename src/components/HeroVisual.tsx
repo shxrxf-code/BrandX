@@ -4,471 +4,105 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-/* ─── Blueprint Grid ─── */
-function BlueprintGrid() {
-  return (
-    <div
-      className="absolute inset-0 pointer-events-none opacity-[0.15]"
-      style={{
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)
-        `,
-        backgroundSize: '28px 28px',
-      }}
-    />
-  )
-}
+/* ─── Service Data ─── */
 
-/* ─── Process Layer Badge ─── */
-const LAYERS = [
-  { id: 'strategy', label: 'Strategy', color: '#8B5CF6', x: 10, y: 12 },
-  { id: 'design', label: 'Design', color: '#D946EF', x: 35, y: 8 },
-  { id: 'engineering', label: 'Engineering', color: '#A78BFA', x: 62, y: 14 },
-  { id: 'ai', label: 'AI', color: '#10B981', x: 85, y: 10 },
+const SERVICES = [
+  { id: 'web', label: 'Web Development', desc: 'High-performance web platforms engineered for scale, speed, and seamless user experiences.', color: '#8B5CF6', baseAngle: 0 },
+  { id: 'mobile', label: 'Mobile Apps', desc: 'Native and cross-platform mobile applications that deliver exceptional user engagement.', color: '#D946EF', baseAngle: 45 },
+  { id: 'uiux', label: 'UI/UX Design', desc: 'User-centered interfaces crafted through research, prototyping, and usability testing.', color: '#A78BFA', baseAngle: 90 },
+  { id: 'branding', label: 'Branding', desc: 'Strategic brand identity systems that communicate your unique value and build recognition.', color: '#7C3AED', baseAngle: 135 },
+  { id: 'seo', label: 'SEO', desc: 'Data-driven search optimization strategies that increase visibility and organic growth.', color: '#10B981', baseAngle: 180 },
+  { id: 'marketing', label: 'Digital Marketing', desc: 'Multi-channel campaigns engineered for measurable ROI and sustainable brand growth.', color: '#F59E0B', baseAngle: 225 },
+  { id: 'ai', label: 'AI Solutions', desc: 'Custom AI integrations and intelligent systems that automate, optimize, and transform.', color: '#E879F9', baseAngle: 270 },
+  { id: 'automation', label: 'Automation', desc: 'Streamlined workflows and automated pipelines that eliminate bottlenecks and reduce costs.', color: '#06B6D4', baseAngle: 315 },
 ]
 
-function ProcessLayers() {
-  const [activeIdx, setActiveIdx] = useState(0)
-
-  useEffect(() => {
-    const t = setInterval(() => setActiveIdx((p) => (p + 1) % LAYERS.length), 2200)
-    return () => clearInterval(t)
-  }, [])
-
-  return (
-    <div className="relative flex items-center justify-between px-4 pt-4 pb-6">
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ padding: '8px 16px' }}>
-        {LAYERS.map((layer, i) => {
-          if (i === LAYERS.length - 1) return null
-          const next = LAYERS[i + 1]
-          return (
-            <motion.line
-              key={`conn-${layer.id}`}
-              x1={`${layer.x}%`}
-              y1="32"
-              x2={`${next.x}%`}
-              y2="32"
-              stroke={activeIdx === i || activeIdx === i + 1 ? '#8B5CF6' : 'rgba(255,255,255,0.08)'}
-              strokeWidth="1"
-              strokeDasharray="3 3"
-              animate={{ strokeOpacity: activeIdx >= i ? 0.6 : 0.15 }}
-              transition={{ duration: 0.4 }}
-            />
-          )
-        })}
-        {LAYERS.map((layer, i) => (
-          <motion.circle
-            key={`dot-${layer.id}`}
-            cx={`${layer.x}%`}
-            cy="32"
-            r="2.5"
-            fill={activeIdx === i ? layer.color : 'rgba(255,255,255,0.15)'}
-            animate={{
-              r: activeIdx === i ? 3.5 : 2.5,
-              fill: activeIdx === i ? layer.color : 'rgba(255,255,255,0.15)',
-            }}
-            transition={{ duration: 0.3 }}
-          />
-        ))}
-      </svg>
-      {LAYERS.map((layer, i) => {
-        const isActive = activeIdx === i
-        return (
-          <motion.div
-            key={layer.id}
-            animate={{
-              y: isActive ? -2 : 0,
-              opacity: isActive ? 1 : 0.5,
-            }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col items-center gap-1.5 z-10"
-          >
-            <motion.span
-              className={cn(
-                'text-[8px] md:text-[9px] font-semibold tracking-wider uppercase transition-colors duration-300',
-              )}
-              style={{ color: isActive ? layer.color : 'rgba(255,255,255,0.3)' }}
-            >
-              {layer.label}
-            </motion.span>
-            {isActive && (
-              <motion.span
-                layoutId="layer-indicator"
-                className="w-4 h-px rounded-full"
-                style={{ background: layer.color }}
-              />
-            )}
-          </motion.div>
-        )
-      })}
-    </div>
-  )
-}
-
-/* ─── Wireframe → UI Animation ─── */
-function WireframeUI() {
-  const [phase, setPhase] = useState(0)
-
-  useEffect(() => {
-    const t = setInterval(() => setPhase((p) => (p + 1) % 4), 2500)
-    return () => clearInterval(t)
-  }, [])
-
-  const wireframes = [
-    { x: 8, y: 10, w: 20, h: 28, label: 'Home' },
-    { x: 32, y: 16, w: 18, h: 22, label: 'About' },
-    { x: 8, y: 42, w: 22, h: 18, label: 'Services' },
-  ]
-
-  return (
-    <div className="relative w-full h-full min-h-[160px] md:min-h-[200px]">
-      <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-        {/* Wireframes */}
-        {wireframes.map((wf, i) => {
-          const isVisible = phase >= 1 || i < phase * 2
-          const shouldFade = phase >= 2 && i === 1
-          return (
-            <motion.g
-              key={`wf-${wf.label}`}
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: isVisible ? (shouldFade ? 0.3 : 1) : 0,
-                x: shouldFade ? 5 : 0,
-              }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-            >
-              <rect
-                x={wf.x}
-                y={wf.y}
-                width={wf.w}
-                height={wf.h}
-                rx="2"
-                fill="none"
-                stroke={phase >= 2 ? 'rgba(139,92,246,0.2)' : 'rgba(255,255,255,0.15)'}
-                strokeWidth="0.5"
-              />
-              {[20, 40, 60, 80].map((pct, li) => (
-                <line
-                  key={li}
-                  x1={wf.x + 3}
-                  y1={wf.y + 5 + pct * 0.15}
-                  x2={wf.x + wf.w - 3}
-                  y2={wf.y + 5 + pct * 0.15}
-                  stroke="rgba(255,255,255,0.08)"
-                  strokeWidth="0.3"
-                />
-              ))}
-              <text x={wf.x + wf.w / 2} y={wf.y + wf.h - 3} textAnchor="middle" fill="rgba(255,255,255,0.15)" fontSize="2.5" fontFamily="var(--font-space-grotesk)">
-                {wf.label}
-              </text>
-            </motion.g>
-          )
-        })}
-
-        {/* Blueprint dimension lines */}
-        {phase >= 1 && (
-          <>
-            <line x1="5" y1="5" x2="5" y2="72" stroke="rgba(139,92,246,0.12)" strokeWidth="0.3" strokeDasharray="1 1" />
-            <line x1="2" y1="72" x2="55" y2="72" stroke="rgba(139,92,246,0.12)" strokeWidth="0.3" strokeDasharray="1 1" />
-            <text x="3" y="40" textAnchor="middle" fill="rgba(139,92,246,0.2)" fontSize="1.8" transform="rotate(-90, 3, 40)">640px</text>
-            <text x="28" y="75" textAnchor="middle" fill="rgba(139,92,246,0.2)" fontSize="1.8">100%</text>
-          </>
-        )}
-
-        {/* Flow arrow from wireframes to UI */}
-        {phase >= 2 && (
-          <motion.g
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <line x1="55" y1="35" x2="68" y2="35" stroke="rgba(139,92,246,0.3)" strokeWidth="0.5" />
-            <polygon points="68,33 72,35 68,37" fill="rgba(139,92,246,0.3)" />
-            <text x="61" y="31" textAnchor="middle" fill="rgba(139,92,246,0.25)" fontSize="2">build</text>
-          </motion.g>
-        )}
-
-        {/* Assembled UI Screen */}
-        {phase >= 2 && (
-          <motion.g
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-            <rect x="68" y="8" width="28" height="52" rx="3" fill="rgba(139,92,246,0.04)" stroke="rgba(139,92,246,0.2)" strokeWidth="0.5" />
-
-            {/* Nav bar */}
-            <rect x="70" y="10" width="24" height="5" rx="1" fill="rgba(139,92,246,0.08)" />
-            <rect x="70" y="11" width="6" height="3" rx="0.5" fill="rgba(139,92,246,0.2)" />
-            <circle cx="91" cy="12.5" r="1" fill="rgba(217,70,239,0.3)" />
-            <circle cx="88" cy="12.5" r="1" fill="rgba(139,92,246,0.3)" />
-
-            {/* Hero section */}
-            <rect x="71" y="17" width="22" height="14" rx="1" fill="rgba(139,92,246,0.03)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.3" />
-            <rect x="73" y="19" width="10" height="2" rx="0.5" fill="rgba(139,92,246,0.15)" />
-            <rect x="73" y="22" width="14" height="1.5" rx="0.5" fill="rgba(255,255,255,0.06)" />
-            <rect x="73" y="24.5" width="12" height="1.5" rx="0.5" fill="rgba(255,255,255,0.06)" />
-            <rect x="73" y="27.5" width="8" height="2" rx="0.5" fill="rgba(217,70,239,0.15)" />
-
-            {/* Cards */}
-            {[0, 1, 2].map((ci) => (
-              <motion.rect
-                key={`card-${ci}`}
-                x={71 + ci * 7.5}
-                y={33}
-                width="6.5"
-                height="9"
-                rx="1"
-                fill="rgba(255,255,255,0.02)"
-                stroke="rgba(255,255,255,0.05)"
-                strokeWidth="0.3"
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + ci * 0.1, duration: 0.3 }}
-              />
-            ))}
-
-            {/* Footer */}
-            <rect x="71" y="44" width="22" height="3" rx="0.5" fill="rgba(255,255,255,0.02)" />
-            <circle cx="76" cy="45.5" r="0.8" fill="rgba(255,255,255,0.08)" />
-            <circle cx="82" cy="45.5" r="0.8" fill="rgba(255,255,255,0.08)" />
-            <circle cx="88" cy="45.5" r="0.8" fill="rgba(217,70,239,0.2)" />
-          </motion.g>
-        )}
-
-        {/* Annotation callout */}
-        {phase >= 3 && (
-          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-            <line x1="82" y1="8" x2="82" y2="3" stroke="rgba(139,92,246,0.15)" strokeWidth="0.3" />
-            <line x1="75" y1="3" x2="88" y2="3" stroke="rgba(139,92,246,0.15)" strokeWidth="0.3" />
-            <rect x="78" y="1" width="8" height="3" rx="0.5" fill="rgba(139,92,246,0.1)" />
-            <text x="82" y="3.2" textAnchor="middle" fill="rgba(139,92,246,0.35)" fontSize="2">UI Screen</text>
-          </motion.g>
-        )}
-      </svg>
-    </div>
-  )
-}
-
-/* ─── Design Tokens ─── */
-function DesignTokens() {
-  const colors = ['#8B5CF6', '#D946EF', '#A78BFA', '#10B981', '#F59E0B']
-  const spacings = [4, 8, 12, 16, 24]
-  return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.015] p-3 md:p-3.5">
-      <span className="text-[8px] md:text-[9px] font-semibold text-muted/40 tracking-wider uppercase mb-2.5 block">
-        Design Tokens
-      </span>
-
-      {/* Colors */}
-      <div className="flex items-center gap-1.5 mb-2.5">
-        {colors.map((c) => (
-          <motion.div
-            key={c}
-            className="w-4 h-4 md:w-5 md:h-5 rounded-md border border-white/10"
-            style={{ background: c }}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3, delay: colors.indexOf(c) * 0.05 }}
-          />
-        ))}
-      </div>
-
-      {/* Typography */}
-      <div className="flex items-center gap-2 mb-2.5">
-        <span className="text-base md:text-lg font-display font-bold text-foreground/50">Aa</span>
-        <div className="flex flex-col">
-          <span className="text-[7px] md:text-[8px] text-muted/30 font-mono">Space Grotesk</span>
-          <span className="text-[7px] md:text-[8px] text-muted/30 font-mono">Inter · System UI</span>
-        </div>
-      </div>
-
-      {/* Spacing */}
-      <div className="flex items-center gap-1.5">
-        {spacings.map((s) => (
-          <motion.div
-            key={s}
-            className="h-2 rounded-sm bg-white/10"
-            style={{ width: `${s * 0.35 + 0.5}rem` }}
-            initial={{ width: 0 }}
-            animate={{ width: `${s * 0.35 + 0.5}rem` }}
-            transition={{ duration: 0.3, delay: spacings.indexOf(s) * 0.05 }}
-          />
-        ))}
-      </div>
-      <span className="text-[7px] md:text-[8px] text-muted/20 mt-1 block">4 · 8 · 12 · 16 · 24</span>
-    </div>
-  )
-}
-
-/* ─── Code → Interface Morph ─── */
-const CODE_LINES = [
-  'const Page = () => {',
-  '  return (',
-  '    <Layout>',
-  '      <Hero />',
-  '      <Features />',
-  '      <CTA />',
-  '    </Layout>',
-  '  )',
-  '}',
+const CONNECTIONS: [string, string][] = [
+  ['web', 'mobile'],
+  ['web', 'uiux'],
+  ['mobile', 'uiux'],
+  ['uiux', 'branding'],
+  ['branding', 'marketing'],
+  ['marketing', 'seo'],
+  ['web', 'seo'],
+  ['ai', 'automation'],
+  ['ai', 'web'],
+  ['ai', 'mobile'],
+  ['automation', 'marketing'],
+  ['seo', 'marketing'],
+  ['branding', 'uiux'],
+  ['automation', 'ai'],
 ]
 
-function CodeBlock() {
-  const [visibleLines, setVisibleLines] = useState(0)
+/* ─── Icons ─── */
 
-  useEffect(() => {
-    const t = setInterval(() => setVisibleLines((p) => (p + 1) % (CODE_LINES.length + 3)), 600)
-    return () => clearInterval(t)
-  }, [])
-
-  return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.015] p-3 md:p-3.5">
-      <span className="text-[8px] md:text-[9px] font-semibold text-muted/40 tracking-wider uppercase mb-2 block">
-        Component Architecture
-      </span>
-      <div className="font-mono text-[8px] md:text-[9px] leading-relaxed">
-        {CODE_LINES.slice(0, Math.min(visibleLines + 1, CODE_LINES.length)).map((line, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -4 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2 }}
-            className="text-muted/50"
-            style={{ paddingLeft: `${line.search(/\S/) * 0.4}rem` }}
-          >
-            <span className="text-muted/20 mr-1.5 select-none">{String(i + 1).padStart(2, '0')}</span>
-            {i === 0 && <span className="text-purple-400/50">const </span>}
-            {i === 0 && <span className="text-accent/60">Page</span>}
-            {i === 0 && <span className="text-purple-400/50"> = </span>}
-            {i === 0 && <span className="text-muted/50">() {'=>'} {'{'}</span>}
-            {(i === 0) || <span className="text-muted/40">{line}</span>}
-          </motion.div>
-        ))}
-        {visibleLines >= CODE_LINES.length && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center gap-1.5 mt-1.5 pt-1.5 border-t border-white/[0.04]"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/50" />
-            <span className="text-[7px] text-emerald-400/40 font-medium">Compiled · 4.2kB gzip</span>
-          </motion.div>
-        )}
-      </div>
-    </div>
-  )
+function ServiceIcon({ id }: { id: string }) {
+  const cls = 'w-full h-full'
+  switch (id) {
+    case 'web':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" /></svg>
+    case 'mobile':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="14" height="20" rx="2" /><line x1="12" y1="18" x2="12.01" y2="18" /></svg>
+    case 'uiux':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" /></svg>
+    case 'branding':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+    case 'seo':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" /></svg>
+    case 'marketing':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38a.857.857 0 01-1.125-.308 20.89 20.89 0 01-1.594-3.318m9.18-9.18c.253-.962.584-1.892.985-2.783.247-.55.06-1.21-.463-1.511l-.657-.38a.857.857 0 00-1.125.308 20.89 20.89 0 00-1.594 3.318M7.5 12h0" /></svg>
+    case 'ai':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+    case 'automation':
+      return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    default:
+      return null
+  }
 }
 
-/* ─── Component Tree ─── */
-const TREE_NODES = [
-  { label: 'App', x: 50, y: 8, children: [
-    { label: 'Layout', x: 50, y: 24, children: [
-      { label: 'Header', x: 25, y: 40 },
-      { label: 'Page', x: 50, y: 40, active: true },
-      { label: 'Footer', x: 75, y: 40 },
-    ]},
-  ]},
-]
+/* ─── Orbital Ecosystem (Desktop) ─── */
 
-function ComponentTree() {
-  const [activePath, setActivePath] = useState('')
+const ORBIT_RX = 30
+const ORBIT_RY = 22
+const CX = 50
+const CY = 50
 
-  useEffect(() => {
-    const t = setInterval(() => {
-      const paths = ['', 'Layout', 'Page', 'Header', 'Footer']
-      setActivePath(paths[Math.floor(Math.random() * paths.length)])
-    }, 1800)
-    return () => clearInterval(t)
-  }, [])
-
-  return (
-    <svg viewBox="0 0 100 48" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
-      <line x1="50" y1="12" x2="50" y2="20" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
-      <line x1="50" y1="28" x2="25" y2="36" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
-      <line x1="50" y1="28" x2="50" y2="36" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
-      <line x1="50" y1="28" x2="75" y2="36" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4" />
-
-      {[
-        { label: 'App', x: 50, y: 8, depth: 0, key: '' },
-        { label: 'Layout', x: 50, y: 22, depth: 1, key: 'Layout' },
-        { label: 'Header', x: 25, y: 36, depth: 2, key: 'Header' },
-        { label: 'Page', x: 50, y: 36, depth: 2, key: 'Page', accent: true },
-        { label: 'Footer', x: 75, y: 36, depth: 2, key: 'Footer' },
-      ].map((node) => {
-        const isMatching = activePath === node.key || (activePath === '' && node.key === '')
-        const isActivePath = activePath === 'Page'
-        return (
-          <motion.g
-            key={node.label}
-            animate={{ opacity: isMatching || !activePath ? 1 : 0.35 }}
-            transition={{ duration: 0.3 }}
-          >
-            <rect
-              x={node.x - (8 - node.depth * 1.5)}
-              y={node.y - 3}
-              width={16 - node.depth * 3}
-              height={6}
-              rx="1.5"
-              fill={node.accent && isActivePath ? 'rgba(139,92,246,0.08)' : 'rgba(255,255,255,0.02)'}
-              stroke={node.accent && isActivePath ? 'rgba(139,92,246,0.2)' : 'rgba(255,255,255,0.06)'}
-              strokeWidth="0.4"
-            />
-            <text
-              x={node.x}
-              y={node.y + 1.2}
-              textAnchor="middle"
-              fill={node.accent && isActivePath ? 'rgba(139,92,246,0.5)' : 'rgba(255,255,255,0.25)'}
-              fontSize={`${3.5 - node.depth * 0.3}`}
-              fontFamily="var(--font-space-grotesk)"
-              fontWeight="600"
-            >
-              {node.label}
-            </text>
-          </motion.g>
-        )
-      })}
-    </svg>
-  )
-}
-
-/* ─── Cursor ─── */
-function Cursor() {
-  const [pos, setPos] = useState({ x: 20, y: 30 })
-
-  useEffect(() => {
-    const points = [
-      { x: 20, y: 30 }, { x: 35, y: 25 }, { x: 50, y: 40 }, { x: 65, y: 20 },
-      { x: 75, y: 45 }, { x: 40, y: 50 }, { x: 25, y: 35 }, { x: 55, y: 15 },
-    ]
-    let idx = 0
-    const t = setInterval(() => {
-      idx = (idx + 1) % points.length
-      setPos(points[idx])
-    }, 3000)
-    return () => clearInterval(t)
-  }, [])
-
-  return (
-    <motion.div
-      className="absolute pointer-events-none z-20"
-      animate={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-      transition={{ duration: 1.5, ease: 'easeInOut' }}
-    >
-      <svg width="14" height="14" viewBox="0 0 14 14" className="opacity-30">
-        <line x1="7" y1="0" x2="7" y2="14" stroke="rgba(139,92,246,0.4)" strokeWidth="0.8" />
-        <line x1="0" y1="7" x2="14" y2="7" stroke="rgba(139,92,246,0.4)" strokeWidth="0.8" />
-        <circle cx="7" cy="7" r="2" fill="none" stroke="rgba(139,92,246,0.3)" strokeWidth="0.5" />
-      </svg>
-    </motion.div>
-  )
-}
-
-/* ───── Desktop Blueprint ───── */
-function DesktopBlueprint() {
+function DesktopEcosystem() {
+  const [activeId, setActiveId] = useState<string | null>(null)
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [angles, setAngles] = useState(() => SERVICES.map((s) => (s.baseAngle * Math.PI) / 180))
+  const [pulseIdx, setPulseIdx] = useState(0)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  const [reducedMotion, setReducedMotion] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const anglesRef = useRef(angles)
+  const animRef = useRef<number>(0)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setReducedMotion(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  useEffect(() => {
+    if (reducedMotion) return
+    const speed = 0.0008
+    const loop = () => {
+      anglesRef.current = anglesRef.current.map((a) => a + speed)
+      setAngles([...anglesRef.current])
+      animRef.current = requestAnimationFrame(loop)
+    }
+    animRef.current = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(animRef.current)
+  }, [reducedMotion])
+
+  useEffect(() => {
+    if (reducedMotion) return
+    const interval = setInterval(() => setPulseIdx((p) => (p + 1) % CONNECTIONS.length), 1500)
+    return () => clearInterval(interval)
+  }, [reducedMotion])
 
   const handleMouse = useCallback((e: React.MouseEvent) => {
     if (!containerRef.current) return
@@ -481,184 +115,330 @@ function DesktopBlueprint() {
 
   const handleLeave = useCallback(() => setMousePos({ x: 0, y: 0 }), [])
 
-  const px = mousePos.x * 2.5
-  const py = mousePos.y * 2.5
+  const px = mousePos.x * 3
+  const py = mousePos.y * 3
+
+  const nodePositions = useMemo(() => {
+    const rotationOffset = reducedMotion ? 0 : -0.15
+    return SERVICES.map((svc, i) => {
+      const angle = angles[i] + rotationOffset
+      const x = CX + ORBIT_RX * Math.cos(angle)
+      const y = CY + ORBIT_RY * Math.sin(angle)
+      const depthFactor = (y - (CY - ORBIT_RY)) / (2 * ORBIT_RY)
+      const scale = 0.82 + depthFactor * 0.18
+      const blur = (1 - depthFactor) * 0.5
+      return { ...svc, x, y, scale, blur }
+    })
+  }, [angles, reducedMotion])
+
+  const connectionEndpoints = useMemo(() => {
+    const nodeMap = new Map(nodePositions.map((n) => [n.id, { x: n.x, y: n.y }]))
+    return CONNECTIONS.map(([from, to]) => ({
+      from: nodeMap.get(from) ?? { x: CX, y: CY },
+      to: nodeMap.get(to) ?? { x: CX, y: CY },
+      fromId: from,
+      toId: to,
+    }))
+  }, [nodePositions])
+
+  const activeConnections = hoveredId
+    ? CONNECTIONS.filter(([a, b]) => a === hoveredId || b === hoveredId).flat()
+    : []
+
+  const currentPulse = CONNECTIONS[pulseIdx]
+  const pulseFrom = nodePositions.find((n) => n.id === currentPulse?.[0])
+  const pulseTo = nodePositions.find((n) => n.id === currentPulse?.[1])
+
+  const getScaleClass = (scale: number) => {
+    if (scale > 0.96) return 'z-30'
+    if (scale > 0.9) return 'z-20'
+    return 'z-10'
+  }
 
   return (
-    <div ref={containerRef} onMouseMove={handleMouse} onMouseLeave={handleLeave} className="relative w-full">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="relative rounded-2xl border border-white/10 overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)',
-          backdropFilter: 'blur(28px)',
-          WebkitBackdropFilter: 'blur(28px)',
-          transform: `translate(${px}px, ${py}px)`,
-          transition: 'transform 0.15s ease-out',
-        }}
-      >
-        <BlueprintGrid />
-
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/[0.015] via-transparent to-magenta/[0.015] pointer-events-none" />
-
-        <div className="relative">
-          {/* ── Header ── */}
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06]">
-            <div className="flex items-center gap-2.5">
-              <div className="flex gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-              </div>
-              <span className="text-[10px] md:text-xs font-medium text-muted/40 tracking-wider uppercase ml-1">
-                Digital Product Blueprint
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <motion.span
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="text-[8px] md:text-[9px] text-muted/30 font-mono"
-              >
-                ● workspace v2.4
-              </motion.span>
-            </div>
-          </div>
-
-          {/* ── Process Layers ── */}
-          <div className="px-4 pt-3">
-            <ProcessLayers />
-          </div>
-
-          {/* ── Main Content Grid ── */}
-          <div className="px-4 md:px-5 pb-4 md:pb-5">
-            <div className="grid grid-cols-5 gap-3 md:gap-4">
-              {/* Left: Wireframe → UI */}
-              <div className="col-span-3 rounded-xl border border-white/[0.06] bg-white/[0.015] p-3 md:p-3.5">
-                <span className="text-[8px] md:text-[9px] font-semibold text-muted/40 tracking-wider uppercase mb-2.5 block">
-                  Wireframes → Interface
-                </span>
-                <WireframeUI />
-              </div>
-
-              {/* Right: Design Tokens + Code */}
-              <div className="col-span-2 flex flex-col gap-3 md:gap-3.5">
-                <DesignTokens />
-                <CodeBlock />
-              </div>
-            </div>
-          </div>
-
-          {/* ── Component Tree ── */}
-          <div className="border-t border-white/[0.06] px-4 md:px-5 py-3 md:py-3.5">
-            <span className="text-[8px] md:text-[9px] font-semibold text-muted/40 tracking-wider uppercase mb-2 block">
-              Component Tree
-            </span>
-            <div className="h-12 md:h-14">
-              <ComponentTree />
-            </div>
-          </div>
-        </div>
-
-        <Cursor />
-      </motion.div>
+    <div ref={containerRef} onMouseMove={handleMouse} onMouseLeave={handleLeave} className="relative w-full select-none">
+      {/* Glow background */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] aspect-square rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)',
+          }}
+        />
+      </div>
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="absolute -bottom-2 -right-2 -z-10 w-full h-full rounded-2xl border border-accent/[0.05] bg-accent/[0.01]"
-        style={{ transform: `translate(${px * 0.4}px, ${py * 0.4}px)` }}
-      />
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="relative w-full aspect-square max-h-[420px] md:max-h-[480px] mx-auto"
+        style={{
+          transform: `translate(${px * 0.5}px, ${py * 0.5}px)`,
+          transition: 'transform 0.15s ease-out',
+        }}
+      >
+        {/* Connection lines */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100">
+          {connectionEndpoints.map((conn) => {
+            const isHighlighted =
+              hoveredId && (conn.fromId === hoveredId || conn.toId === hoveredId)
+            return (
+              <line
+                key={`conn-${conn.fromId}-${conn.toId}`}
+                x1={conn.from.x}
+                y1={conn.from.y}
+                x2={conn.to.x}
+                y2={conn.to.y}
+                stroke={isHighlighted ? '#8B5CF6' : 'rgba(255,255,255,0.06)'}
+                strokeWidth={isHighlighted ? '0.4' : '0.15'}
+                strokeOpacity={isHighlighted ? 0.5 : 1}
+                className="transition-all duration-500"
+              />
+            )
+          })}
+
+          {/* Data pulse */}
+          {pulseFrom && pulseTo && !reducedMotion && (
+            <motion.circle
+              key={`pulse-${pulseIdx}`}
+              r="1.2"
+              fill={SERVICES.find((s) => s.id === currentPulse?.[0])?.color ?? '#8B5CF6'}
+              initial={{ cx: pulseFrom.x, cy: pulseFrom.y, opacity: 0 }}
+              animate={{
+                cx: [pulseFrom.x, (pulseFrom.x + pulseTo.x) / 2, pulseTo.x],
+                cy: [pulseFrom.y, (pulseFrom.y + pulseTo.y) / 2, pulseTo.y],
+                opacity: [0, 0.8, 0],
+                scale: [0.5, 1.5, 0.3],
+              }}
+              transition={{ duration: 1.5, ease: 'easeInOut' }}
+              className="z-20"
+              style={{ filter: 'blur(0.5px)' }}
+            />
+          )}
+        </svg>
+
+        {/* Brandex Core */}
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40"
+        >
+          <motion.div
+            animate={reducedMotion ? {} : {
+              scale: [1, 1.05, 1],
+              boxShadow: [
+                '0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05)',
+                '0 0 30px rgba(139,92,246,0.3), 0 0 60px rgba(217,70,239,0.1)',
+                '0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05)',
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br from-accent to-magenta flex items-center justify-center shadow-xl"
+          >
+            <span className="text-xs md:text-sm font-display font-bold text-white">Bx</span>
+          </motion.div>
+          <motion.div
+            animate={reducedMotion ? {} : { opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity }}
+            className="absolute -inset-4 rounded-full bg-accent/10 blur-xl -z-10"
+          />
+        </div>
+
+        {/* Service modules */}
+        {nodePositions.map((node) => {
+          const isHovered = hoveredId === node.id
+          const isRelated = hoveredId && activeConnections.includes(node.id) && node.id !== hoveredId
+          const isDimmed = hoveredId && !isHovered && !isRelated
+
+          return (
+            <motion.button
+              key={node.id}
+              onHoverStart={() => setHoveredId(node.id)}
+              onHoverEnd={() => setHoveredId(null)}
+              onFocus={() => setHoveredId(node.id)}
+              onBlur={() => setHoveredId(null)}
+              onClick={() => setActiveId(activeId === node.id ? null : node.id)}
+              className={cn(
+                'absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 focus:outline-none',
+                getScaleClass(node.scale)
+              )}
+              style={{
+                left: `${node.x}%`,
+                top: `${node.y}%`,
+              }}
+              whileHover={{ scale: node.scale * 1.1 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 20 }}
+            >
+              <motion.div
+                animate={{
+                  opacity: isDimmed ? 0.3 : 1,
+                  scale: isDimmed ? 0.9 : 1,
+                }}
+                transition={{ duration: 0.3 }}
+                className={cn(
+                  'rounded-xl backdrop-blur-xl border transition-all duration-300 flex flex-col items-center',
+                  isHovered
+                    ? 'border-accent/40 bg-accent/[0.06] shadow-lg shadow-accent/10'
+                    : isRelated
+                      ? 'border-white/20 bg-white/[0.04]'
+                      : 'border-white/[0.08] bg-white/[0.03]'
+                )}
+                style={{
+                  padding: `${0.5 + node.scale * 0.15}rem`,
+                  filter: `blur(${node.blur}px)`,
+                  willChange: 'transform',
+                }}
+              >
+                <div
+                  className={cn(
+                    'rounded-lg flex items-center justify-center transition-colors duration-300',
+                    isHovered ? 'text-accent' : 'text-muted/60'
+                  )}
+                  style={{
+                    width: `${1 + node.scale * 0.4}rem`,
+                    height: `${1 + node.scale * 0.4}rem`,
+                  }}
+                >
+                  <ServiceIcon id={node.id} />
+                </div>
+                <span
+                  className="text-[7px] md:text-[8px] font-semibold tracking-wide whitespace-nowrap transition-colors duration-300"
+                  style={{
+                    color: isHovered
+                      ? node.color
+                      : isRelated
+                        ? 'rgba(255,255,255,0.55)'
+                        : 'rgba(255,255,255,0.3)',
+                  }}
+                >
+                  {node.label}
+                </span>
+              </motion.div>
+
+              {/* Active indicator dot */}
+              {(isHovered || isRelated) && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="w-1 h-1 rounded-full"
+                  style={{ background: node.color }}
+                />
+              )}
+            </motion.button>
+          )
+        })}
+
+        {/* Orbital ring guide */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100">
+          <ellipse
+            cx={CX}
+            cy={CY}
+            rx={ORBIT_RX}
+            ry={ORBIT_RY}
+            fill="none"
+            stroke="rgba(255,255,255,0.03)"
+            strokeWidth="0.3"
+            strokeDasharray="1 4"
+          />
+        </svg>
+      </motion.div>
+
+      {/* Description card */}
+      <AnimatePresence>
+        {hoveredId && (() => {
+          const svc = SERVICES.find((s) => s.id === hoveredId)
+          if (!svc) return null
+          return (
+            <motion.div
+              key={svc.id}
+              initial={{ opacity: 0, y: 6, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 6, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[85%] max-w-[260px] rounded-xl border border-white/10 p-3 pointer-events-none z-50"
+              style={{
+                background: 'rgba(11,11,15,0.88)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+              }}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: svc.color }} />
+                <span className="text-xs font-display font-bold text-foreground">{svc.label}</span>
+              </div>
+              <p className="text-[10px] text-muted/60 leading-relaxed">{svc.desc}</p>
+            </motion.div>
+          )
+        })()}
+      </AnimatePresence>
     </div>
   )
 }
 
-/* ───── Mobile Blueprint ───── */
-function MobileBlueprint() {
+/* ─── Mobile Cards ─── */
+
+function MobileCards() {
   const [expanded, setExpanded] = useState<string | null>(null)
 
   const toggle = (id: string) => setExpanded(expanded === id ? null : id)
 
   return (
-    <div className="flex flex-col gap-3 w-full">
-      {/* Process Layers */}
-      <div className="rounded-xl border border-white/10 glass overflow-hidden">
-        <button onClick={() => toggle('layers')} className="w-full flex items-center justify-between px-4 py-3 text-left">
-          <span className="text-[10px] font-semibold text-muted/50 tracking-wider uppercase">Process</span>
-          <motion.span animate={{ rotate: expanded === 'layers' ? 180 : 0 }} className="text-muted/30 text-xs">▾</motion.span>
-        </button>
-        <AnimatePresence>
-          {expanded === 'layers' && (
-            <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-              <div className="px-4 pb-4"><ProcessLayers /></div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Wireframe → UI */}
-      <div className="rounded-xl border border-white/10 glass overflow-hidden">
-        <button onClick={() => toggle('wireframe')} className="w-full flex items-center justify-between px-4 py-3 text-left">
-          <span className="text-[10px] font-semibold text-muted/50 tracking-wider uppercase">Wireframes → Interface</span>
-          <motion.span animate={{ rotate: expanded === 'wireframe' ? 180 : 0 }} className="text-muted/30 text-xs">▾</motion.span>
-        </button>
-        <AnimatePresence>
-          {expanded === 'wireframe' && (
-            <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-              <div className="px-4 pb-4"><WireframeUI /></div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Design System */}
-      <div className="rounded-xl border border-white/10 glass overflow-hidden">
-        <button onClick={() => toggle('tokens')} className="w-full flex items-center justify-between px-4 py-3 text-left">
-          <span className="text-[10px] font-semibold text-muted/50 tracking-wider uppercase">Design System</span>
-          <motion.span animate={{ rotate: expanded === 'tokens' ? 180 : 0 }} className="text-muted/30 text-xs">▾</motion.span>
-        </button>
-        <AnimatePresence>
-          {expanded === 'tokens' && (
-            <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-              <div className="px-4 pb-4 grid grid-cols-2 gap-2">
-                <DesignTokens />
-                <CodeBlock />
+    <div className="flex flex-col gap-2.5 w-full">
+      {SERVICES.map((svc) => {
+        const isOpen = expanded === svc.id
+        return (
+          <motion.button
+            key={svc.id}
+            onClick={() => toggle(svc.id)}
+            className="w-full text-left rounded-xl border backdrop-blur-xl p-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all duration-200"
+            style={{
+              background: `${svc.color}08`,
+              borderColor: isOpen ? `${svc.color}40` : 'rgba(255,255,255,0.08)',
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: `${svc.color}15`, color: svc.color }}
+              >
+                <span className="w-4 h-4"><ServiceIcon id={svc.id} /></span>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Component Tree */}
-      <div className="rounded-xl border border-white/10 glass overflow-hidden">
-        <button onClick={() => toggle('tree')} className="w-full flex items-center justify-between px-4 py-3 text-left">
-          <span className="text-[10px] font-semibold text-muted/50 tracking-wider uppercase">Component Tree</span>
-          <motion.span animate={{ rotate: expanded === 'tree' ? 180 : 0 }} className="text-muted/30 text-xs">▾</motion.span>
-        </button>
-        <AnimatePresence>
-          {expanded === 'tree' && (
-            <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }} className="overflow-hidden">
-              <div className="px-4 pb-4"><div className="h-16"><ComponentTree /></div></div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              <span className="text-sm font-display font-semibold text-foreground">{svc.label}</span>
+              <motion.span
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                className="ml-auto text-muted/30 text-xs"
+              >
+                ▾
+              </motion.span>
+            </div>
+            <AnimatePresence>
+              {isOpen && (
+                <motion.p
+                  initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                  animate={{ height: 'auto', opacity: 1, marginTop: 10 }}
+                  exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-xs text-muted/60 leading-relaxed overflow-hidden"
+                >
+                  {svc.desc}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        )
+      })}
     </div>
   )
 }
 
-/* ──────────────── Export ──────────────── */
+/* ─── Root Export ─── */
+
 export default function HeroVisual() {
   return (
     <>
-      <div className="hidden lg:block">
-        <DesktopBlueprint />
+      <div className="hidden lg:flex items-center justify-center h-full">
+        <DesktopEcosystem />
       </div>
       <div className="block lg:hidden">
-        <MobileBlueprint />
+        <MobileCards />
       </div>
     </>
   )

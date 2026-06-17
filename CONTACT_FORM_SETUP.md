@@ -9,18 +9,17 @@ The contact form API uses Nodemailer to deliver form submissions directly to ema
 Create a `.env.local` file with the following:
 
 ```bash
-EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST=smtp.example.com
 EMAIL_PORT=587
-EMAIL_USER=brandexdigital.in@gmail.com
+EMAIL_USER=your-email@example.com
 EMAIL_PASS=your-app-password
 ```
 
-## Gmail App Password Setup
+## Email Provider Setup
 
-1. Enable 2FA on your Gmail account
-2. Go to Google Account → Security → 2-Step Verification → App passwords
-3. Generate a new app password for "Mail"
-4. Use this password as `EMAIL_PASS`
+1. Enable 2FA on your email account
+2. Generate an app password (Gmail: Google Account → Security → 2-Step Verification → App passwords)
+3. Use this password as `EMAIL_PASS`
 
 ## API Endpoint
 
@@ -42,7 +41,7 @@ EMAIL_PASS=your-app-password
 
 **Success (200):**
 ```json
-{ "success": true, "message": "Email sent successfully" }
+{ "success": true }
 ```
 
 **Validation Error (400):**
@@ -50,19 +49,19 @@ EMAIL_PASS=your-app-password
 { "error": "Valid email is required" }
 ```
 
-**Service Unavailable (503):**
+**Rate Limited (429):**
 ```json
-{ "error": "Email service not configured" }
+{ "error": "Too many requests. Please try again later." }
 ```
 
 ## Validation Rules
 
 | Field | Requirement |
 |-------|-------------|
-| `name` | Minimum 2 characters |
-| `email` | Valid email format |
-| `subject` | Minimum 3 characters |
-| `message` | Minimum 10 characters |
+| `name` | Minimum 2 characters, maximum 100 |
+| `email` | Valid email format, no disposable domains |
+| `subject` | Optional |
+| `message` | Minimum 10 characters, maximum 5000 |
 
 ## Vercel Deployment
 

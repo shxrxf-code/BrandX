@@ -139,11 +139,13 @@ Key utility classes defined in `globals.css`:
 For contact form email functionality, create a `.env.local` file:
 
 ```env
-EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST=smtp.example.com
 EMAIL_PORT=587
-EMAIL_USER=brandexdigital.in@gmail.com
-EMAIL_PASS=<app-password>
+EMAIL_USER=your-email@example.com
+EMAIL_PASS=your-app-password
 ```
+
+See `CONTACT_FORM_SETUP.md` for detailed setup instructions.
 
 ## Deployment
 

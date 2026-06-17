@@ -1,18 +1,5 @@
 {
   "framework": "nextjs",
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.brandexdigital.in"
-        }
-      ],
-      "destination": "https://brandexdigital.in/$1",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/_next/static/(.*)",

@@ -310,6 +310,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|images|fonts|api).*)',
+    '/((?!api|_next/static|_next/image|images|fonts|favicon.ico|opengraph-image|robots|sitemap).*)',
   ],
 }

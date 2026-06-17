@@ -6,7 +6,7 @@ import HeroVisual from '@/components/HeroVisual'
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-background pt-28">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-background pt-24">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-accent/10 blur-[120px] animate-aurora" />
         <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] rounded-full bg-magenta/10 blur-[100px] animate-aurora" style={{ animationDelay: '-3s' }} />

@@ -122,7 +122,7 @@ function ServiceCard({
           className="absolute inset-0 rounded-2xl transition-opacity duration-[400ms] ease-out pointer-events-none"
           style={{
             opacity: hovered ? 1 : 0,
-            background: 'linear-gradient(135deg, rgba(79,124,255,0.08), rgba(0,212,255,0.04))',
+            background: 'linear-gradient(135deg, rgba(139,92,246,0.08), rgba(217,70,239,0.04))',
           }}
         />
 
@@ -150,7 +150,7 @@ function ServiceCard({
 
           <div className="flex items-center gap-1 text-sm font-medium">
             <motion.span
-              animate={{ color: hovered ? '#4F7CFF' : '#94A3B8' }}
+              animate={{ color: hovered ? '#8B5CF6' : '#94A3B8' }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
               Learn More
@@ -159,7 +159,7 @@ function ServiceCard({
               width="14" height="14" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" strokeWidth="2"
               strokeLinecap="round" strokeLinejoin="round"
-              animate={{ x: hovered ? 12 : 0, color: hovered ? '#4F7CFF' : '#94A3B8' }}
+              animate={{ x: hovered ? 12 : 0, color: hovered ? '#8B5CF6' : '#94A3B8' }}
               transition={{ duration: 0.3, ease: 'easeOut', delay: 0.1 }}
             >
               <path d="M5 12h14M12 5l7 7-7 7" />

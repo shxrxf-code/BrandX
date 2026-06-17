@@ -6,9 +6,9 @@ const services = [
   {
     title: 'Web Development',
     desc: 'High-performance web platforms built with modern frameworks and best practices.',
-    gradient: 'from-blue-500/20 to-purple-500/20',
-    border: 'border-blue-500/30',
-    glow: 'shadow-blue-500/20',
+    gradient: 'from-accent/20 to-violet-500/20',
+    border: 'border-accent/30',
+    glow: 'shadow-accent/20',
     icon: (
       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
@@ -30,9 +30,9 @@ const services = [
   {
     title: 'SEO',
     desc: 'Data-driven search strategies that increase visibility and drive organic traffic.',
-    gradient: 'from-cyan-500/20 to-blue-500/20',
-    border: 'border-cyan-500/30',
-    glow: 'shadow-cyan-500/20',
+    gradient: 'from-magenta/20 to-accent/20',
+    border: 'border-magenta/30',
+    glow: 'shadow-magenta/20',
     icon: (
       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />

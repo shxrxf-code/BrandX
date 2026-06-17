@@ -32,7 +32,7 @@ export default async function CaseStudyPage({
       <main className="pt-32 relative">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
-          <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-cyan/5 blur-[100px] animate-aurora" style={{ animationDelay: '-3s' }} />
+          <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-magenta/5 blur-[100px] animate-aurora" style={{ animationDelay: '-3s' }} />
         </div>
         <section className="px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
           <div className="w-full">

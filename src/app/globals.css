@@ -24,12 +24,12 @@
   }
 
   ::selection {
-    background: #4F7CFF;
+    background: #8B5CF6;
     color: #FFFFFF;
   }
 
   *:focus-visible {
-    outline: 2px solid #4F7CFF;
+    outline: 2px solid #8B5CF6;
     outline-offset: 2px;
   }
 
@@ -79,8 +79,8 @@
 
   .glass-card:hover {
     background: rgba(255,255,255,0.06);
-    border-color: rgba(79,124,255,0.25);
-    box-shadow: 0 0 30px rgba(79,124,255,0.1), 0 0 60px rgba(0,212,255,0.05);
+    border-color: rgba(139,92,246,0.25);
+    box-shadow: 0 0 30px rgba(139,92,246,0.1), 0 0 60px rgba(217,70,239,0.05);
   }
 
   .glass-strong {
@@ -101,37 +101,37 @@
   }
 
   .btn-gradient {
-    background: linear-gradient(135deg, #4F7CFF 0%, #3B5FE0 50%, #4F7CFF 100%);
+    background: linear-gradient(135deg, #8B5CF6 0%, #D946EF 50%, #8B5CF6 100%);
     background-size: 200% 100%;
     color: white;
     font-weight: 500;
     border-radius: 0.5rem;
     transition: all 0.3s ease;
-    box-shadow: 0 0 20px rgba(79,124,255,0.15), 0 0 40px rgba(79,124,255,0.05);
+    box-shadow: 0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05);
   }
 
   .btn-gradient:hover {
     background-position: 100% 0;
-    box-shadow: 0 0 30px rgba(79,124,255,0.25), 0 0 60px rgba(0,212,255,0.1);
+    box-shadow: 0 0 30px rgba(139,92,246,0.25), 0 0 60px rgba(217,70,239,0.1);
   }
 
-  .glow-blue {
-    box-shadow: 0 0 20px rgba(79,124,255,0.15), 0 0 40px rgba(79,124,255,0.05);
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05);
   }
 
-  .glow-cyan {
-    box-shadow: 0 0 20px rgba(0,212,255,0.15), 0 0 40px rgba(0,212,255,0.05);
+  .glow-magenta {
+    box-shadow: 0 0 20px rgba(217,70,239,0.15), 0 0 40px rgba(217,70,239,0.05);
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #F8FAFC 0%, #4F7CFF 50%, #00D4FF 100%);
+    background: linear-gradient(135deg, #FFFFFF 0%, #8B5CF6 50%, #D946EF 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .text-gradient-accent {
-    background: linear-gradient(135deg, #4F7CFF 0%, #00D4FF 50%, #8B5CF6 100%);
+    background: linear-gradient(135deg, #8B5CF6 0%, #D946EF 50%, #A78BFA 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -151,9 +151,9 @@
   }
 
   .badge-accent {
-    background: rgba(79,124,255,0.12);
-    border-color: rgba(79,124,255,0.25);
-    color: #7BA1FF;
+    background: rgba(139,92,246,0.12);
+    border-color: rgba(139,92,246,0.25);
+    color: #A78BFA;
   }
 }
 

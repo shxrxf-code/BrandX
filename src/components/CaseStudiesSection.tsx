@@ -43,7 +43,7 @@ export default function CaseStudiesSection() {
   return (
     <section className="relative py-20 md:py-28 overflow-hidden bg-background scroll-mt-24" id="work">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 right-1/4 w-[400px] h-[400px] rounded-full bg-cyan/5 blur-[120px] animate-aurora" />
+        <div className="absolute -top-40 right-1/4 w-[400px] h-[400px] rounded-full bg-magenta/5 blur-[120px] animate-aurora" />
       </div>
       <div className="w-full px-6 md:px-12 lg:px-16 xl:px-20 relative z-10">
         <motion.div

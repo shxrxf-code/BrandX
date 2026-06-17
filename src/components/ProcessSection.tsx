@@ -29,9 +29,9 @@ const stages: Stage[] = [
     detail: 'We conduct stakeholder interviews, user surveys, competitive analysis, and market research to build a complete picture of your landscape.',
     deliverables: ['Market Analysis', 'User Personas', 'Competitive Audit', 'Opportunity Map'],
     outcome: 'A complete picture of your market landscape and user needs.',
-    color: '#4F7CFF',
-    bgColor: 'rgba(79,124,255,0.08)',
-    borderColor: 'rgba(79,124,255,0.2)',
+    color: '#8B5CF6',
+    bgColor: 'rgba(139,92,246,0.08)',
+    borderColor: 'rgba(139,92,246,0.2)',
     icon: 'M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z',
   },
   {
@@ -65,9 +65,9 @@ const stages: Stage[] = [
     detail: 'We implement using modular architecture, automated testing, continuous integration, and performant front-end and back-end systems.',
     deliverables: ['Modular Architecture', 'Automated Testing', 'CI/CD Pipeline', 'Performance Tuning'],
     outcome: 'A robust, scalable solution built for production.',
-    color: '#06B6D4',
-    bgColor: 'rgba(6,182,212,0.08)',
-    borderColor: 'rgba(6,182,212,0.2)',
+    color: '#D946EF',
+    bgColor: 'rgba(217,70,239,0.08)',
+    borderColor: 'rgba(217,70,239,0.2)',
     icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
   },
   {
@@ -468,7 +468,7 @@ export default function ProcessSection() {
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 left-1/3 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[120px] animate-aurora-slow" />
-        <div className="absolute -bottom-40 right-1/3 w-[350px] h-[350px] rounded-full bg-purple-600/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
+        <div className="absolute -bottom-40 right-1/3 w-[350px] h-[350px] rounded-full bg-magenta/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
       </div>
 
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">

@@ -7,20 +7,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#050816',
-        foreground: '#F8FAFC',
-        secondary: '#0A0F1C',
-        surface: '#0F172A',
-        muted: '#94A3B8',
+        background: '#0B0B0F',
+        foreground: '#FFFFFF',
+        secondary: '#0F0F13',
+        surface: '#16161A',
+        muted: '#9CA3AF',
         border: 'rgba(255,255,255,0.08)',
         accent: {
-          DEFAULT: '#4F7CFF',
-          light: '#7BA1FF',
-          dark: '#3B5FE0',
+          DEFAULT: '#8B5CF6',
+          light: '#A78BFA',
+          dark: '#7C3AED',
         },
-        cyan: {
-          DEFAULT: '#00D4FF',
-          light: '#33DDFF',
+        magenta: {
+          DEFAULT: '#D946EF',
+          light: '#E879F9',
         },
       },
       fontFamily: {

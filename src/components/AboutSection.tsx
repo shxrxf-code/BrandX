@@ -28,7 +28,7 @@ export default function AboutSection() {
   return (
     <section className="relative py-24 md:py-32 overflow-hidden bg-background scroll-mt-24" id="about">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full bg-purple-600/5 blur-[150px] animate-aurora-slow" />
+        <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] rounded-full bg-violet-600/5 blur-[150px] animate-aurora-slow" />
         <div className="absolute bottom-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-accent/5 blur-[100px] animate-aurora" style={{ animationDelay: '-4s' }} />
       </div>
 

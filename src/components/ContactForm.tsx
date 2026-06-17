@@ -122,7 +122,7 @@ export default function ContactForm() {
           rows={5}
           required
           maxLength={5000}
-          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(79,124,255,0.1)] transition-all duration-200 resize-none text-sm"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(139,92,246,0.1)] transition-all duration-200 resize-none text-sm"
           placeholder="Tell us about your project, timeline, and goals."
         />
       </div>
@@ -165,7 +165,7 @@ function Field({
         type={type}
         required={required}
         autoComplete={autoComplete}
-        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(79,124,255,0.1)] transition-all duration-200 text-sm"
+        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-foreground placeholder:text-muted/60 outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(139,92,246,0.1)] transition-all duration-200 text-sm"
       />
     </div>
   )
